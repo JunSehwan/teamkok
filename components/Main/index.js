@@ -1,11 +1,11 @@
 import React from 'react';
 
-const app = () => {
+const index = () => {
   return (
     <div>
-      hello!!
+      하이
     </div>
   );
 };
 
-export default app;
+export default index;
