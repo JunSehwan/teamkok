@@ -3,6 +3,8 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 module.exports = withBundleAnalyzer({
+  // reactStrictMode: false,
+  distDir: 'build',
   compress: true,
   // swcMinify: true,
   compiler: {
@@ -17,17 +19,23 @@ module.exports = withBundleAnalyzer({
     },
   },
 
-  webpack(config, { webpack }) {
+  // webpack(config,options, { webpack }) {
+  webpack(config, options) {
 
-    const prod = process.env.NODE_ENV === 'production';
-    return {
-      ...config,
-      mode: prod ? 'production' : 'development',
-      devtool: prod ? 'hidden-source-map' : 'eval',
-      plugins: [
-        ...config.plugins,
-        new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /^\.\/ko$/),
-      ],
-    };
+    if (!options.dev) {
+      config.devtool = options.isServer ? false : 'eval'
+    }
+    return config
+
+    // const prod = process.env.NODE_ENV === 'production';
+    // return {
+    //   ...config,
+    //   mode: prod ? 'production' : 'development',
+    //   devtool: prod ? 'hidden-source-map' : 'eval',
+    //   plugins: [
+    //     ...config.plugins,
+    //     new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /^\.\/ko$/),
+    //   ],
+    // };
   },
 });

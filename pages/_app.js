@@ -2,16 +2,14 @@ import React from 'react';
 import Head from "next/head"; // Next에서 Head 수정할 수 있는 모듈
 import { ThemeProvider } from "styled-components";
 import GlobalStyle, { theme } from './styles/global';
+import { Provider } from "react-redux";
+import store from "store/index";
+import 'tailwindcss/tailwind.css'
 
-
+import NavbarWithoutUser from 'components/Common/NavbarWithoutUser';
 
 const _app = ({ Component, pageProps }) => {
 
-
-  // if (!firebase.apps.length) {
-  //   firebase.initializeApp(firebaseConfig);
-  //   firebase.analytics();
-  // }
 
   return (
     <>
@@ -39,7 +37,10 @@ const _app = ({ Component, pageProps }) => {
         <meta name="theme-color" content="#ffffff"></meta>
       </Head>
       <ThemeProvider theme={theme}>
-        <Component {...pageProps} />
+        <Provider store={store}>
+          <NavbarWithoutUser />
+          <Component {...pageProps} />
+        </Provider>
       </ThemeProvider>
     </>
   );
