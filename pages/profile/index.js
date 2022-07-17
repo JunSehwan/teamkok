@@ -1,33 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import Main from 'components/Main';
+import React, { useEffect, Suspense } from 'react';
+import Profile from 'components/Profile';
 import Head from 'next/head'
 import NavbarWithoutUser from 'components/Common/NavbarWithoutUser';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { setUser, resetUserState, userLoadingStart, userLoadingEnd, userLoadingEndwithNoone } from "slices/user";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { db } from "firebaseConfig";
 import { wrapper } from 'store/index';
+
 import LoadingPage from 'components/Common/Loading';
-
-
-const index = ({ me }) => {
+import { setCategoryList, getCategoryList } from 'firebaseConfig';
+import CategoryList from 'components/Common/CatgegoryList';
+const index = () => {
 
   const auth = getAuth();
+  const { user, loading } = useSelector(state => state.user);
   const dispatch = useDispatch();
   const router = useRouter();
-  const { loading } = useSelector(state => state.user);
-
   useEffect(() => {
     const authStateListener = onAuthStateChanged(auth, async (user) => {
-      if (!user) return dispatch(userLoadingEndwithNoone());
-
-
+      if (!user) return redirect();
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
-      if (!docSnap.exists())
-        return dispatch(userLoadingEndwithNoone());
+      console.log(CategoryList, "keke");
+      setCategoryList(CategoryList);
+
+      if (!docSnap.exists()) return redirect();
 
       const docData = docSnap.data();
 
@@ -53,6 +54,76 @@ const index = ({ me }) => {
     };
   }, [auth, dispatch]);
 
+
+  useEffect(() => {
+    dispatch(userLoadingStart());
+    if (!user?.userID) return;
+
+    const unsubscribe = onSnapshot(doc(db, "users", user.userID), (doc) => {
+      if (!doc?.exists()) return;
+
+      const docData = doc?.data();
+
+      const currentUser = {
+        userID: user.uid,
+        username: docData.username,
+        email: docData.email,
+        birthday: docData.birthday,
+        gender: docData.gender,
+        avatar: docData.avatar,
+        phonenumber: docData.phonenumber,
+        category: docData.category,
+        tag: docData.tag,
+        about: docData.about,
+        banner: docData.banner,
+      };
+      dispatch(setUser(currentUser));
+      dispatch(userLoadingEnd());
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  // useEffect(() => {
+  //   if (!server.serverID || !user.userID) return;
+
+  //   const docRef = doc(db, "servers", server.serverID, "members", user.userID);
+
+  //   const unsubscribe = onSnapshot(docRef, (doc) => {
+  //     const docData = doc.data();
+
+  //     const roles = {
+  //       userID: doc.id,
+  //       serverOwner: docData?.serverOwner,
+  //       roles: docData?.roles,
+  //       // permissions: docData?.permissions,
+  //     };
+  //     dispatch(setUser({ ...user, roles }));
+  //   });
+  //   return () => {
+  //     unsubscribe();
+  //   };
+  // }, [server]);
+
+  // function redirect() {
+  //   dispatch(rere());
+
+  //   router.push("/login");
+  // }
+  function redirect() {
+    dispatch(resetUserState());
+
+    router.push("/");
+  }
+
+  // 만약 로그아웃시 메인화면으로 이동
+  // useEffect(() => {
+  //   if (!(me && me.id)) {
+  //     router.push('/');
+  //   }
+  // }, [me && me.id]);
+
   return (
     <>
       <title>현업전문가와의 소통기반 채용플랫폼 - TEAMKOK</title>
@@ -76,23 +147,20 @@ const index = ({ me }) => {
       <meta name="twitter:description" content="페이지 설명" />
       <meta name="twitter:image" content="http://www.mysite.com/article/article1.html" />
       <meta name="twitter:domain" content="사이트 명" /> */}
+      <NavbarWithoutUser />
       {loading ?
-        <LoadingPage />
-        :
-        <>
-          <NavbarWithoutUser me={me} />
-          <Main me={me} />
-        </>
-      }
+        <LoadingPage /> :
+        <Profile />}
     </>
 
   );
 };
+
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
     store.dispatch(userLoadingStart());
-    // const auth = getAuth();
 
+    // const auth = getAuth();
     // if (!auth.currentUser) {
     //   return {
     //     redirect: {

@@ -1,22 +1,34 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import {
-  getAuth,
-  updateProfile,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-} from "firebase/auth";
-import { saveUser, saveUserName, setUser } from "slices/user";
-import { auth, createAccount } from 'firebaseConfig';
-import { Router } from 'next/router';
-import { useDispatch } from 'react-redux';
+import React, { useCallback, useState, useEffect } from 'react';
+import { saveUser, saveUserName, signUp } from "slices/user";
+import { createAccount } from 'firebaseConfig';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 
 const Signup = ({ handleCancelModal }) => {
   const dispatch = useDispatch();
+  const { signUpSuccess } = useSelector(state => state.user);
 
-
+  useEffect(() => {
+    if (signUpSuccess) {
+      setUsername("");
+      setEmail("");
+      setForm({
+        year: standardYear,
+        month: "",
+        day: "01",
+      });
+      setTel("");
+      setPassword("");
+      setPasswordCheck("");
+      setUsernameError(false);
+      setEmailError(false);
+      setBirthError(false);
+      setTelError(false);
+      setPasswordLengthError(false);
+      setPasswordError(false);
+    }
+  }, [signUpSuccess])
 
   const [username, setUsername] = useState("");
   const [usernameError, setUsernameError] = useState(false);
@@ -27,7 +39,6 @@ const Signup = ({ handleCancelModal }) => {
 
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(false);
-  const [emailReg, setEmailReg] = useState(false);
   const onChangeEmail = useCallback(
     e => {
       setEmail(e.target.value);
@@ -156,7 +167,6 @@ const Signup = ({ handleCancelModal }) => {
     },
     [password]
   );
-  console.log(username, email, password, parseInt(form.year), parseInt(form.month), parseInt(form.day), tel);
 
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
@@ -183,35 +193,35 @@ const Signup = ({ handleCancelModal }) => {
     }
     const res = await createAccount(email, password, username, form, tel);
     if (res?.uid?.length !== 0) {
-      handleCancelModal();
-      dispatch(setUser(email, password, username, form, tel));
-    }
-    // .then(({ user }) => {
-    //   // 유저정보 업데이트
-    //   // Dispatch
-    //   // dispatch(saveUserName(username));
-    //   // dispatch(saveUser(user.uid));
-    //   // setIsLoading(false);
-    //   router.push("/");
-    //   console.log(auth);
-    // })
-    // .catch((e) => {
-    //   console.log(e);
-    //   // errorBoxRef.current.classList.add(styles.visible);
-    //   // errorBoxRef.current.innerText = e;
-    //   // setIsLoading(false);
-    // });
+      console.log("what", res);
+      // handleCancelModal();
+      // dispatch(signUp({
+      //   email, username,
+      //   birthday: form,
+      //   tel,
+      //   id: res.uid,
+      //   avatar: res.photoURL
+      // }));
 
-    // dispatch({
-    //   type: SIGN_UP_REQUEST,
-    //   data: { username, email, password, form },
-    // });
+      try {
+        //const data = await customerApi.getCustomer(); //works but not what I wanted
+        await dispatch(signUp({
+          email, username,
+          birthday: form,
+          tel,
+          id: res?.uid,
+          avatar: res?.photoURL
+        }));
+        handleCancelModal();
+      } catch (err) {
+        console.error(err);
+      }
+    }
   }, [username, dispatch, handleCancelModal, form, email, tel, password, passwordCheck])
 
 
   return (
     <>
-
 
       <div>
         <div className="container mx-auto">
@@ -220,9 +230,9 @@ const Signup = ({ handleCancelModal }) => {
             <div className="w-full flex">
               {/* <!-- Col --> */}
               {/* <!-- Col --> */}
-              <div className="w-full bg-white rounded-lg lg:rounded-l-none">
+              <div className="w-full rounded-lg lg:rounded-l-none">
                 <form
-                  className="w-full pt-4 pb-2 mb-4 bg-white rounded"
+                  className="w-full pt-4 pb-2 mb-1 rounded"
                   onSubmit={onSubmit}
                 >
                   <div className="mb-4">
@@ -240,7 +250,7 @@ const Signup = ({ handleCancelModal }) => {
                       maxLength={10}
                       placeholder="이름"
                       onChange={onChangeUsername}
-                      valuse={username}
+                      value={username}
                     />
                     {usernameError ? (
                       <p className="text-xs mb-[1.5rem] italic text-red-500">이름을 입력해주세요.</p>
@@ -403,7 +413,7 @@ const Signup = ({ handleCancelModal }) => {
                     적용을 인정하는 것으로 간주합니다.
                   </div>
 
-                  <div className="mb-6 text-center">
+                  <div className="mb-2 text-center">
                     <button
                       className="w-full px-4 py-2 font-bold text-white bg-purple-600 rounded-full hover:bg-purple-700 focus:outline-none focus:shadow-outline"
                       type="submit"
@@ -411,7 +421,6 @@ const Signup = ({ handleCancelModal }) => {
                       회원가입
                     </button>
                   </div>
-                  <hr className="mb-6 border-t" />
                 </form>
               </div>
             </div>

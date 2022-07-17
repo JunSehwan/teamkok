@@ -1,5 +1,3 @@
-// // Import the functions you need from the SDKs you need
-
 import { initializeApp, getApp, getApps } from "firebase/app";
 import {
   getFirestore,
@@ -12,6 +10,7 @@ import {
   DocumentData,
   DocumentReference,
   deleteField,
+  serverTimestamp
 } from "firebase/firestore";
 import {
   getAuth,
@@ -28,6 +27,8 @@ import {
 } from "firebase/auth";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import dayjs from "dayjs";
+
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
@@ -45,10 +46,10 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const db = getFirestore();
 const storage = getStorage();
 
+
+
 export const auth = getAuth();
-export const user = auth.currentUser;
-
-
+export const currentUser = auth.currentUser;
 
 // 로그인/아웃에 따라서 user값이 변경됨(기본설정함수)
 onAuthStateChanged(auth, (user) => {
@@ -56,7 +57,6 @@ onAuthStateChanged(auth, (user) => {
     // User is signed in, see docs for a list of available properties
     // https://firebase.google.com/docs/reference/js/firebase.User
     const uid = user.uid;
-    console.log('what!');
     return user;
     // ...
   } else {
@@ -90,6 +90,16 @@ onAuthStateChanged(auth, (user) => {
 // }
 
 
+export async function getUser(req, res) {
+  const user = await db.collection('users').doc('currentUser.uid').get();
+
+  if (!user.exists) {
+    return res.status(404).json({});
+  }
+
+  return res.status(404).json({ id: user.id, ...user.data() });
+}
+
 export async function createAccount(
   email, password, username, form, tel,
 ) {
@@ -102,12 +112,10 @@ export async function createAccount(
     // Signed in
     const user = userCredential.user;
 
-
-    // await updateProfile(user, {
-    //   displayName: username,
-    //   photoURL:
-    //     "https://firebasestorage.googleapis.com/v0/b/banter-69832.appspot.com/o/assets%2FdefaultAvatar.svg?alt=media&token=2cd07b3e-6ee1-4682-8246-57bb20bc0d1f",
-    // });
+    await updateProfile(user, {
+      displayName: username,
+      photoURL: "",
+    });
     // Profile updated
 
     const now = new Date();
@@ -117,7 +125,7 @@ export async function createAccount(
     await setDoc(doc(db, "users", user.uid), {
       id: user.uid,
       username: username,
-      avatar: "https://firebasestorage.googleapis.com/v0/b/banter-69832.appspot.com/o/assets%2FdefaultAvatar.svg?alt=media&token=2cd07b3e-6ee1-4682-8246-57bb20bc0d1f",
+      avatar: "",
       birthday: form,
       phonenumber: tel,
       // tag: "0000", // Create function to generate unique tag for each username
@@ -126,26 +134,31 @@ export async function createAccount(
       email: user.email,
       timestamp: time,
     })
-    //   // Dispatch
-    //   // dispatch(saveUserName(username));
-    //   // dispatch(saveUser(user.uid));
     //   // setIsLoading(false);
-    //   router.push("/");
     // Database updated
 
     // await joinServer("ke6NqegIvJEOa9cLzUEp");
     // User joins global chat
     return (user);
   } catch (error) {
-    if (error.message.includes("auth/email-already")) {
+    if (error == "auth/email-already-in-use") {
       alert("동일한 이메일 주소가 존재합니다.")
     }
-    // if (error == "auth/email-already-in-use")
-    //   // errorBoxRef.current.classList.add(styles.visible);
-    //   // errorBoxRef.current.innerText = e;
     //   // setIsLoading(false);
   }
 }
+
+// const googleProvider = new auth.GoogleAuthProvider();
+// googleProvider.setCustomParameters({ prompt: 'select_account' });
+// export const googleSignIn = () => auth.signInWithPopup(googleProvider);
+
+// const facebookProvider = new auth.FacebookAuthProvider();
+// facebookProvider.setCustomParameters({
+//   'display': 'popup'
+// });
+// export const facebookSignIn = () => auth.signInWithPopup(facebookProvider);
+
+
 
 async function updateUserDatabase(property, newValue) {
   if (!auth.currentUser) return;
@@ -183,20 +196,53 @@ export async function saveUserProfileChanges(
   }
 }
 
-export async function signIn(email, password) {
-  try {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    // Signed in
-    const user = userCredential.user;
-    return user;
-  } catch (error) {
-    console.error(error);
-  }
+
+export const signIn = async (email, password) => {
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Signed in 
+      const user = userCredential.user;
+      console.log(user);
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(error);
+    });
 }
+
+// export async function signIn(email, password) {
+//   const user = auth.currentUser;
+//   console.log(user);
+//   if (user) {
+//     alert("이미 로그인을 하였습니다.")
+//     return {
+//       redirect: {
+//         destination: '/',
+//         permanent: false,
+//       }
+//     };
+//   }
+//   try {
+//     const userCredential = await signInWithEmailAndPassword(
+//       auth,
+//       email,
+//       password
+//     )
+//     // Signed in
+//     const user = userCredential.user;
+//     // await updateDoc(
+//     //   doc(db, "users", user.uid),
+//     //   {
+//     //     [property]: newValue,
+//     //   }
+//     // );
+//     return user;
+//   } catch (error) {
+//     console.error(error);
+//     alert("로그인에 실패하였습니다.");
+//   }
+// }
 
 async function reauthenticateUser(password) {
   if (!auth.currentUser || !auth.currentUser.email) return;
@@ -216,6 +262,36 @@ export async function logOut() {
   } catch (error) {
     console.error(error);
     // An error happened.
+  }
+}
+
+
+
+
+export async function updateUserBasicInfo(userInfo) {
+  if (!auth.currentUser) return (
+    alert("로그인 후 가능합니다.")
+  );
+  const user = auth.currentUser;
+  try {
+    await updateProfile(user, {
+      displayName: userInfo.username,
+      photoURL: userInfo.avatar,
+    });
+    await updateUserDatabase("username", user.displayName);
+    await updateUserDatabase("email", userInfo.email);
+    await updateUserDatabase("gender", userInfo.gender);
+    await updateUserDatabase("birthday", userInfo.birthday);
+    await updateUserDatabase("avatar", user.photoURL);
+    await updateUserDatabase("phonenumber", userInfo.phonenumber);
+    await updateUserDatabase("category", userInfo.category);
+
+    await updateUserDatabase("about", userInfo.about);
+    await updateUserDatabase("banner", userInfo.banner);
+    await updateUserDatabase("tag", userInfo.tag);
+  } catch (error) {
+    console.error(error);
+    alert("profile update에 문제가 있습니다.");
   }
 }
 
@@ -291,3 +367,104 @@ async function getAvatarURL(userID) {
 }
 
 export { app, db, storage };
+
+
+
+
+// 참고
+
+
+export default async function getRoomsInDB() {
+  // PREPARE users
+  const roomsRef = await db
+    ?.collection("rooms")
+    ?.orderBy("timestamp", "asc")
+    ?.limit(100)
+    ?.get();
+
+  const roomsInDB = await roomsRef?.docs?.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+    timestamp: doc?.data()?.timestamp?.toDate()?.getTime(),
+  }));
+
+  return JSON.stringify(roomsInDB);
+}
+
+export async function getChatsInDB(slug) {
+  // PREPARE chats
+  if (slug) {
+    const chatsRef = await db
+      .collection("rooms")
+      ?.doc(slug)
+      ?.collection("chats")
+      ?.orderBy("timestamp", "asc")
+      ?.limit(100)
+      ?.get();
+
+    const chatsInDB = await chatsRef?.docs?.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+      timestamp: doc?.data()?.timestamp?.toDate()?.getTime(),
+    }));
+
+    return JSON.stringify(chatsInDB);
+  } else {
+    return [];
+  }
+}
+
+//  function to truncate(cut) the string if the length of given string
+//   bigger than  given number(n)
+export function truncate(string, n) {
+  return string?.length > n ? string.substr(0, n - 1) + "...." : string;
+}
+
+export function getRandomNumber() {
+  const rndInt = Math.floor(Math.random() * 10) + 1;
+  return rndInt;
+}
+
+// export async function setCategoryList(CategoryList) {
+// console.log(user)
+
+export const setCategoryList = async (CategoryList) => {
+  const categoryRef = collection(db, "categories");
+  try {
+    const res = await CategoryList?.map((m, index) => (
+      addDoc(categoryRef, { key: index, name: m.name})
+    ))
+
+    // const res = await addDoc(categoryRef, {
+    //   CategoryList
+
+
+    console.log(res);
+    return (res);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+
+
+  // const categoryRef = await setDoc(doc(db, 'categories', "categorylist"), {
+  //   CategoryList
+  // })
+  // await citiesRef.doc('SF').set({
+  //   name: 'San Francisco', state: 'CA', country: 'USA',
+  //   capital: false, population: 860000
+  // });
+  // const res = await categoryRef.doc('categories').add(
+  //   CategoryList
+  // );
+
+
+// }
+// export async function getCategoryList() {
+//   await getDoc(doc(db, "categories"), {
+//   })
+//   return CategoryList;
+// }
+
+

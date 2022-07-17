@@ -5,8 +5,8 @@ import GlobalStyle, { theme } from './styles/global';
 import { Provider } from "react-redux";
 import store from "store/index";
 import 'tailwindcss/tailwind.css'
+import { wrapper } from "store/index";
 
-import NavbarWithoutUser from 'components/Common/NavbarWithoutUser';
 
 const _app = ({ Component, pageProps }) => {
 
@@ -15,7 +15,7 @@ const _app = ({ Component, pageProps }) => {
     <>
       <GlobalStyle />
       <Head>
-        <title>TeamKok</title>
+        <title>팀콕!</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <link rel="apple-touch-icon" sizes="57x57" href="/logo/apple-icon-57x57.png" />
@@ -37,13 +37,12 @@ const _app = ({ Component, pageProps }) => {
         <meta name="theme-color" content="#ffffff"></meta>
       </Head>
       <ThemeProvider theme={theme}>
-        <Provider store={store}>
-          <NavbarWithoutUser />
-          <Component {...pageProps} />
-        </Provider>
+        {/* <Provider store={store}> */}
+        <Component {...pageProps} />
+        {/* </Provider> */}
       </ThemeProvider>
     </>
   );
 };
 
-export default _app;
+export default wrapper.withRedux(_app);
