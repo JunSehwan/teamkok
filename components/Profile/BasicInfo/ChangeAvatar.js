@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { uploadAvatarPreview } from 'firebaseConfig';
+import { uploadAvatar, saveUserAvatarChanges } from 'firebaseConfig';
 import { setChangeAvatarOpen } from 'slices/userSettings';
 import { setUserAvatar, setUserAvatarPreview } from 'slices/user';
 
@@ -22,12 +22,14 @@ const ChangeAvatar = () => {
     if (!e.target.files) return;
 
     const avatarImage = e.target.files[0];
-    const avatarURL = await uploadAvatarPreview(avatarImage, user.userID);
-
+    // const avatarURL = await uploadAvatarPreview(avatarImage, user.userID);
+    const avatarURL = await uploadAvatar(avatarImage, user.userID);
+    await saveUserAvatarChanges(avatarURL);
     closeWindow();
 
     dispatch(setUserAvatar(avatarURL));
     dispatch(setUserAvatarPreview(avatarImage));
+
   }
 
   return (

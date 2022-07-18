@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateBasicInfo } from 'firebaseConfig';
-import Loading from 'components/Common/Loading';
-import { setUser, refresh } from 'slices/user';
+import { auth, updateUserBasicInfo, } from 'firebaseConfig';
+import { refresh, updateBasicProfile } from 'slices/user';
+import AlertModal from 'components/Common/AlertModal';
 import Category from './Category';
+
 
 const PersonalInfo = () => {
   const dispatch = useDispatch();
@@ -34,6 +35,9 @@ const PersonalInfo = () => {
       setEmailError(false);
       setBirthError(false);
       setTelError(false);
+      setGenderError(false);
+      setCategoryError(false);
+      setAddressError(false);
     }
   }, [updateBasicProfileSuccess, user])
 
@@ -160,54 +164,81 @@ const PersonalInfo = () => {
     }
   }, []);
 
+  // 성별
+  const [gender, setGender] = useState(user?.gender || "male");
+  const [genderError, setGenderError] = useState(false);
+  const onChangeGender = useCallback((e) => {
+    setGender(e.target.value);
+    setGenderError(false);
+  }, [gender, genderError]);
+
+  // 주소
+  const [address, setAddress] = useState(user?.address || "");
+  const [addressError, setAddressError] = useState(false);
+  const onChangeAddress = useCallback((e) => {
+    setAddress(e.target.value);
+    setAddressError(false);
+  }, [address, addressError]);
+
+
+  // URL
+  const [url_one, setUrl_one] = useState(user?.url_one || "");
+  const onChangeURL_1 = useCallback((e) => {
+    setUrl_one(e.target.value);
+  }, [url_one]);
+
+  const [url_two, setUrl_two] = useState(user?.url_two || "");
+  const onChangeURL_2 = useCallback((e) => {
+    setUrl_two(e.target.value);
+  }, [url_two])
+
+  const [url_three, setUrl_three] = useState(user?.url_three || "");
+  const onChangeURL_3 = useCallback((e) => {
+    setUrl_three(e.target.value);
+  }, [url_three])
+
   // 카테고리
-  const [category, setCategory] = useState(user?.category);
+  const [checkedCategory, setCheckedCategory] = useState(4);
   const [categoryError, setCategoryError] = useState(false);
-  const onChangeCategory = useCallback((e) => {
-    setTel(e.target.value);
-    setCategoryError(false);
 
-  }, []);
-
+  const [confirm, setConfirm] = useState(false);
+  const closeConfirm = () => { setConfirm(false); }
 
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
 
-    console.log(username, form, email, tel, category)
-    // if (username?.length === 0) {
-    //   return setUsernameError(true);
-    // }
-    // if (email == '') {
-    //   return setEmailError(true);
-    // }
-    // if (!email_check(email)) {
-    //   return setEmailError(true);
-    // }
-    // if (form?.year?.length === 0 || form?.month?.length === 0 || form?.day?.length === 0) {
-    //   return setBirthError(true);
-    // }
-    // if (tel == '') {
-    //   return setTelError(true);
-    // }
-    // const res = await updateBasicInfo({
-    //   email, gender, username, form, tel
-    // });
-    // if (res?.uid?.length !== 0) {
-    //   dispatch(updateBasicProfile({
-    //     email, username,
-    //     birthday: form,
-    //     tel,
-    //     id: res.uid,
-    //     avatar: res.photoURL
-    //   }));
-    // }
-  }, [username, dispatch, form, email, tel, category])
-
+    if (username?.length === 0) {
+      return setUsernameError(true);
+    }
+    if (email == '') {
+      return setEmailError(true);
+    }
+    if (!email_check(email)) {
+      return setEmailError(true);
+    }
+    if (form?.year?.length === 0 || form?.month?.length === 0 || form?.day?.length === 0) {
+      return setBirthError(true);
+    }
+    if (tel == '') {
+      return setTelError(true);
+    }
+    if (gender == '') {
+      return setGenderError(true);
+    }
+    if (checkedCategory == "") {
+      return setCategoryError(true);
+    }
+    if (address == "") {
+      return setAddressError(true);
+    }
+    const res = await updateUserBasicInfo(
+      username, form, email, tel, checkedCategory, gender, url_one, url_two, url_three, address
+    );
+    dispatch(updateBasicProfile({ username, form, email, tel, gender, checkedCategory, url_one, url_two, url_three, address }))
+    setConfirm(true);
+  }, [username, dispatch, form, email, tel, gender, checkedCategory, url_one, url_two, url_three, address])
 
   return (
-
-
-
     <div className="w-full rounded-lg lg:rounded-l-none">
       {isLoading ?
         <span>로딩중</span>
@@ -216,6 +247,20 @@ const PersonalInfo = () => {
           className="w-full pt-4 pb-2 mb-1 rounded"
           onSubmit={onSubmit}
         >
+          <div className="mb-4">
+            <label className="block mb-1 text-sm font-bold text-gray-400" htmlFor="email">
+              이메일계정
+            </label>
+            <input
+              className=
+              'w-full px-3 py-2 mb-2 text-sm leading-tight bg-gray-100 text-gray-800 border rounded appearance-none focus:outline-none focus:shadow-outline'
+              id="e-mail"
+              type="email"
+              placeholder="이메일주소"
+              disabled
+              defaultValue={auth?.currentUser?.email}
+            />
+          </div>
           <div className="mb-4">
             <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="name">
               이름
@@ -240,7 +285,7 @@ const PersonalInfo = () => {
 
           <div className="mb-4">
             <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="email">
-              이메일
+              주로 사용하는 이메일
             </label>
             <input
               className={emailError ?
@@ -256,6 +301,32 @@ const PersonalInfo = () => {
             />
             {emailError ? (
               <p className="text-xs mb-[1.5rem] italic text-red-500">올바른 이메일 형식이 아닙니다.</p>
+            ) : null}
+          </div>
+
+
+          <div className="mb-4">
+            <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="email">
+              성별
+            </label>
+            <select
+              className={genderError ?
+                'w-full px-3 py-2 mb-2 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                :
+                'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+              }
+              id="e-mail"
+              type="gender"
+              name="gender"
+              placeholder="이메일주소"
+              onChange={onChangeGender}
+              defaultValue={user?.gender || gender}
+            >
+              <option value="male" key="man">남자</option>
+              <option value="female" key="woman">여자</option>
+            </select>
+            {genderError ? (
+              <p className="text-xs mb-[1.5rem] italic text-red-500">성별을 선택해주세요.</p>
             ) : null}
           </div>
 
@@ -344,28 +415,92 @@ const PersonalInfo = () => {
 
           <div className="mb-4">
             <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="email">
-              직무 카테고리 선택
+              거주지 주소
             </label>
-            {/* <label key={id} className="category-option input-pill__container">
-              <input
-                type="radio"
-                name="category"
-                className="peer"
-                checked={selectedCategory?.id === id}
-                onChange={() => handleChange(id, name)}
-              />
-              <div className="input-pill__item">
-                {mapCategoryIdToIcon(id)} {name}
-              </div>
+            <input
+              className={addressError ?
+                'w-full px-3 py-2 mb-2 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                :
+                'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+              }
+              id="address"
+              type="address"
+              placeholder="서울시 관악구 봉천로8길 11"
+              onChange={onChangeAddress}
+              defaultValue={user?.address}
+            />
+            {addressError ? (
+              <p className="text-xs mb-[1.5rem] italic text-red-500">거주지를 입력해주세요.</p>
+            ) : null}
+          </div>
+
+          <div className="mb-4">
+            <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="website">
+              Website URL
+            </label>
+            <input
+              className=
+              'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+              id="url1"
+              type="url"
+              htmlFor="website"
+              placeholder="https://teamkok.com"
+              onChange={onChangeURL_1}
+              defaultValue={user?.url_one}
+            />
+            <input
+              className=
+              'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+              id="url1"
+              type="url"
+              htmlFor="website"
+              placeholder="https://teamkok.com"
+              onChange={onChangeURL_2}
+              defaultValue={user?.url_two}
+            />
+            <input
+              className=
+              'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+              id="url1"
+              type="url"
+              htmlFor="website"
+              placeholder="https://teamkok.com"
+              onChange={onChangeURL_3}
+              defaultValue={user?.url_three}
+            />
+          </div>
+
+          <div className="mb-4">
+            {/* <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="email">
+              직무 카테고리 선택
             </label> */}
-<Category/>
-            
-            
+            <Category
+              user={user}
+              checkedCategory={checkedCategory}
+              setCheckedCategory={setCheckedCategory}
+            // handleCategoryChange={handleCategoryChange}
+            />
+
+
             {categoryError ? (
               <p className="text-xs mb-[1.5rem] italic text-red-500">카테고리를 선택해주세요.</p>
             ) : null}
           </div>
+
+
           <div className="mb-2 text-right">
+            {confirm &&
+              <AlertModal
+                title="기본정보 업데이트 완료"
+                // contents="업데이트 완료"
+                closeOutsideClick={true}
+                openModal={confirm}
+                closeModal={closeConfirm}
+                cancelFunc={closeConfirm}
+                twobutton={false}
+              />
+
+            }
             <button type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Save</button>
           </div>
 

@@ -55,10 +55,14 @@ export const user = createSlice({
     updateBasicProfile(state, action) {
       state.user.username = action.payload.username;
       state.user.email = action.payload.email;
-      state.user.birthday = action.payload.birthday;
+      state.user.birthday = action.payload.form;
       state.user.gender = action.payload.gender;
-      state.user.tel = action.payload.tel;
-      state.user.category = action.payload.category;
+      state.user.phonenumber = action.payload.tel;
+      state.user.category = action.payload.checkedCategory;
+      state.user.url_one = action.payload.url_one;
+      state.user.url_two = action.payload.url_two;
+      state.user.url_three = action.payload.url_three;
+      state.user.address = action.payload.address;
     },
     setUserBanner(state, action) {
       state.user.banner = action.payload;
@@ -97,17 +101,15 @@ export const user = createSlice({
       state.user = null;
     }
   },
-  // extraReducers: {
-  //   [HYDRATE]: (state, action) => {
-  //     // console.log('HYDRATE', action.payload);
-
-  //     if (!action.payload.user.name) {
-  //       return state;
-  //     }
-
-  //     state.name = action.payload.user.name;
-  //   }
-  // }
+  extraReducers: {
+    // The HYDRATE function is what manages the state between client and server
+    [HYDRATE]: (state, action) => {
+      return {
+        ...state,
+        ...action.payload.user,
+      };
+    },
+  }
 });
 
 export const {
@@ -125,6 +127,7 @@ export const {
   userLoadingStart,
   userLoadingEnd,
   userLoadingEndwithNoone,
+  updateBasicProfile,
 } = user.actions;
 
 export const useUserState = () => useAppSelector((state) => state.user);

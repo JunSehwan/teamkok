@@ -266,29 +266,42 @@ export async function logOut() {
 }
 
 
-
-
-export async function updateUserBasicInfo(userInfo) {
-  if (!auth.currentUser) return (
+export async function saveUserAvatarChanges(newAvatarURL) {
+  const user = auth.currentUser;
+  if (!user) return (
     alert("로그인 후 가능합니다.")
   );
+  await updateProfile(user, {
+    photoURL: newAvatarURL,
+  });
+  await updateUserDatabase("avatar", user.photoURL);
+}
+
+
+export async function updateUserBasicInfo(username, form, email, tel, checkedCategory, gender, url_one, url_two, url_three, address) {
+
   const user = auth.currentUser;
+
+  if (!user) return (
+    alert("로그인 후 가능합니다.")
+  );
   try {
     await updateProfile(user, {
-      displayName: userInfo.username,
-      photoURL: userInfo.avatar,
+      displayName: username,
     });
     await updateUserDatabase("username", user.displayName);
-    await updateUserDatabase("email", userInfo.email);
-    await updateUserDatabase("gender", userInfo.gender);
-    await updateUserDatabase("birthday", userInfo.birthday);
-    await updateUserDatabase("avatar", user.photoURL);
-    await updateUserDatabase("phonenumber", userInfo.phonenumber);
-    await updateUserDatabase("category", userInfo.category);
+    await updateUserDatabase("email", email);
+    await updateUserDatabase("gender", gender);
+    await updateUserDatabase("birthday", form);
+    await updateUserDatabase("url_one", url_one);
+    await updateUserDatabase("url_two", url_two);
+    await updateUserDatabase("url_three", url_three);
+    await updateUserDatabase("address", address);
 
-    await updateUserDatabase("about", userInfo.about);
-    await updateUserDatabase("banner", userInfo.banner);
-    await updateUserDatabase("tag", userInfo.tag);
+    await updateUserDatabase("phonenumber", tel);
+    await updateUserDatabase("category", checkedCategory);
+
+    return (username, form, email, tel, address,checkedCategory, gender, url_one, url_two, url_three)
   } catch (error) {
     console.error(error);
     alert("profile update에 문제가 있습니다.");
@@ -432,7 +445,7 @@ export const setCategoryList = async (CategoryList) => {
   const categoryRef = collection(db, "categories");
   try {
     const res = await CategoryList?.map((m, index) => (
-      addDoc(categoryRef, { key: index, name: m.name})
+      addDoc(categoryRef, { key: index, name: m.name })
     ))
 
     // const res = await addDoc(categoryRef, {

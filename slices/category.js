@@ -3,7 +3,7 @@ import { HYDRATE } from 'next-redux-wrapper';
 
 
 export const initialState = {
-  category: null,
+  category: [],
   addCategoryDone: false,
   getCategoryDone: false,
 };
@@ -21,7 +21,15 @@ export const category = createSlice({
       state.getCategoryDone = false;
     },
   },
-
+  extraReducers: {
+    // The HYDRATE function is what manages the state between client and server
+    [HYDRATE]: (state, action) => {
+      return {
+        ...state,
+        ...action.payload.category,
+      };
+    },
+  }
 });
 
 export const {
@@ -29,6 +37,7 @@ export const {
   getCategory,
 
 } = category.actions;
+
 
 export default category.reducer;
 

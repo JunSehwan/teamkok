@@ -6,13 +6,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { setUser, resetUserState, userLoadingStart, userLoadingEnd, userLoadingEndwithNoone } from "slices/user";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { db } from "firebaseConfig";
 import { wrapper } from 'store/index';
-
+import { addCategory } from 'slices/category';
 import LoadingPage from 'components/Common/Loading';
-import { setCategoryList, getCategoryList } from 'firebaseConfig';
 import CategoryList from 'components/Common/CatgegoryList';
 const index = () => {
 
@@ -25,8 +23,9 @@ const index = () => {
       if (!user) return redirect();
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
-      console.log(CategoryList, "keke");
-      setCategoryList(CategoryList);
+      // const result = setCategoryList(CategoryList);
+      // console.log(result, "keke");
+
 
       if (!docSnap.exists()) return redirect();
 
@@ -56,7 +55,7 @@ const index = () => {
 
 
   useEffect(() => {
-    dispatch(userLoadingStart());
+    // dispatch(userLoadingStart());
     if (!user?.userID) return;
 
     const unsubscribe = onSnapshot(doc(db, "users", user.userID), (doc) => {
@@ -159,7 +158,7 @@ const index = () => {
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
     store.dispatch(userLoadingStart());
-
+    store.dispatch(addCategory(CategoryList));
     // const auth = getAuth();
     // if (!auth.currentUser) {
     //   return {

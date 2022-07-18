@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { HYDRATE } from 'next-redux-wrapper';
 import { UserData } from "./user";
 
 const initialState = {
@@ -15,7 +16,7 @@ const initialState = {
   loading: "idle",
 };
 
-export const userSettingsSlice = createSlice({
+export const userSettings = createSlice({
   name: "userSettings",
   initialState,
   reducers: {
@@ -60,6 +61,15 @@ export const userSettingsSlice = createSlice({
       state.unsavedChangesError = action.payload;
     },
   },
+  extraReducers: {
+    // The HYDRATE function is what manages the state between client and server
+    [HYDRATE]: (state, action) => {
+      return {
+        ...state,
+        ...action.payload.userSettings,
+      };
+    },
+  }
 });
 
 export const {
@@ -73,9 +83,9 @@ export const {
   setUserChangesMade,
   setUserCopy,
   setUnsavedChangesError,
-} = userSettingsSlice.actions;
+} = userSettings.actions;
 
 export const useUserSettingsState = () =>
   useAppSelector((state) => state.userSettings);
 
-export default userSettingsSlice.reducer;
+export default userSettings.reducer;

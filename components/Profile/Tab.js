@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import AdditionalInfo from './AdditionalInfo';
 import MyCompany from './MyCompany';
 import BasicInfo from './BasicInfo';
+import Education from './Education';
+import Career from './Career';
 
 const Tab = ({ tabIndex, setTabIndex }) => {
   return (
@@ -30,7 +32,7 @@ const Tab = ({ tabIndex, setTabIndex }) => {
                   href="#link1"
                   role="tablist"
                 >
-                  기본프로필
+                  기본정보
                 </a>
               </li>
               <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
@@ -49,7 +51,7 @@ const Tab = ({ tabIndex, setTabIndex }) => {
                   href="#link2"
                   role="tablist"
                 >
-                  부가설문
+                  스타일설문
                 </a>
               </li>
               <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
@@ -68,7 +70,7 @@ const Tab = ({ tabIndex, setTabIndex }) => {
                   href="#link2"
                   role="tablist"
                 >
-                  내 기업
+                  내 기업관리
                 </a>
               </li>
             </ul>
@@ -77,6 +79,8 @@ const Tab = ({ tabIndex, setTabIndex }) => {
                 <div className="tab-content tab-space">
                   <div className={tabIndex === 1 ? "block" : "hidden"} id="link1">
                     <BasicInfo />
+                    <Education />
+                    <Career />
                   </div>
                   <div className={tabIndex === 2 ? "block" : "hidden"} id="link2">
                     <AdditionalInfo />
