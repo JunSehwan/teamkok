@@ -80,7 +80,6 @@ const index = () => {
       dispatch(setUser(currentUser));
       dispatch(userLoadingEnd());
       const educations = getEducationsByUserId();
-      console.log(educations, "feke")
       dispatch(loadEducations(educations));
     });
     return () => {

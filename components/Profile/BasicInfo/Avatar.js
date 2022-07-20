@@ -4,16 +4,17 @@ import { setUserAvatarPreview, setUserAvatar } from 'slices/user';
 import { setChangeAvatarOpen } from 'slices/userSettings';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveUserAvatarChanges } from 'firebaseConfig';
+import profilePic from 'public/image/icon/happiness.png';
 
 const Avatar = () => {
   const { user } = useSelector(state => state.user);
   const dispatch = useDispatch();
 
   function removeAvatar() {
-    saveUserAvatarChanges("https://firebasestorage.googleapis.com/v0/b/banter-69832.appspot.com/o/assets%2FdefaultAvatar.svg?alt=media&token=2cd07b3e-6ee1-4682-8246-57bb20bc0d1f");
+    saveUserAvatarChanges("");
     dispatch(
       setUserAvatar(
-        "https://firebasestorage.googleapis.com/v0/b/banter-69832.appspot.com/o/assets%2FdefaultAvatar.svg?alt=media&token=2cd07b3e-6ee1-4682-8246-57bb20bc0d1f"
+        ""
       )
     );
     dispatch(setUserAvatarPreview(null));
@@ -35,7 +36,7 @@ const Avatar = () => {
           className="object-cover rounded-full cursor-pointer"
           onClick={() => dispatch(setChangeAvatarOpen(true))}
           loader={() => user?.avatar}
-          src={user?.avatar || "https://firebasestorage.googleapis.com/v0/b/banter-69832.appspot.com/o/assets%2FdefaultAvatar.svg?alt=media&token=2cd07b3e-6ee1-4682-8246-57bb20bc0d1f"}
+          src={user?.avatar || profilePic}
           width={80}
           height={80}
           unoptimized

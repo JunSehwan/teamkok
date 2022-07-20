@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import AlertModal from 'components/Common/Modal/AlertModal';
 import { closeSignupConfirmModal } from 'slices/user';
 import { signOut } from 'slices/user';
+import profilePic from 'public/image/icon/happiness.png';
 
 const NavbarWithoutUser = () => {
 
@@ -177,7 +178,7 @@ const NavbarWithoutUser = () => {
                     <Image
                       alt="avatar_user"
                       className="avatar w-7 h-7 rounded-md"
-                      src="/image/icon/happiness.png"
+                      src={profilePic}
                       width={32} height={32}
                     />
                   )}
@@ -194,7 +195,7 @@ const NavbarWithoutUser = () => {
                             {user?.avatar ?
                               <Image className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9" src={user?.avatar} alt="avatar" />
                               :
-                              <Image className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9" src="/image/icon/happiness.png" alt="avatar" />
+                              <Image className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9" src={profilePic} alt="avatar" />
                             }
                             <div className="mx-1">
                               <h1 className="text-sm w-[150px] whitespace-nowrap overflow-hidden overflow-ellipsis break-all font-semibold text-gray-700 dark:text-gray-200">{user?.username}</h1>
