@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { saveUser, saveUserName, signUp } from "slices/user";
+import { signUp } from "slices/user";
 import { createAccount } from 'firebaseConfig';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -193,18 +193,7 @@ const Signup = ({ handleCancelModal }) => {
     }
     const res = await createAccount(email, password, username, form, tel);
     if (res?.uid?.length !== 0) {
-      console.log("what", res);
-      // handleCancelModal();
-      // dispatch(signUp({
-      //   email, username,
-      //   birthday: form,
-      //   tel,
-      //   id: res.uid,
-      //   avatar: res.photoURL
-      // }));
-
-      try {
-        //const data = await customerApi.getCustomer(); //works but not what I wanted
+       try {
         await dispatch(signUp({
           email, username,
           birthday: form,

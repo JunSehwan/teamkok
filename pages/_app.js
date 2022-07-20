@@ -35,6 +35,8 @@ const _app = ({ Component, pageProps }) => {
         <meta name="msapplication-TileColor" content="#ffffff" />
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png"></meta>
         <meta name="theme-color" content="#ffffff"></meta>
+        
+        
       </Head>
       <ThemeProvider theme={theme}>
         {/* <Provider store={store}> */}

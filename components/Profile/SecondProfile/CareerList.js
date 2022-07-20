@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AdditionalInfo = () => {
+const CareerList = () => {
   return (
     <div>
       
@@ -8,4 +8,4 @@ const AdditionalInfo = () => {
   );
 };
 
-export default AdditionalInfo;
+export default CareerList;

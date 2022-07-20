@@ -3,12 +3,14 @@ import Image from 'next/image';
 import { setUserAvatarPreview, setUserAvatar } from 'slices/user';
 import { setChangeAvatarOpen } from 'slices/userSettings';
 import { useDispatch, useSelector } from 'react-redux';
+import { saveUserAvatarChanges } from 'firebaseConfig';
 
 const Avatar = () => {
   const { user } = useSelector(state => state.user);
   const dispatch = useDispatch();
 
   function removeAvatar() {
+    saveUserAvatarChanges("https://firebasestorage.googleapis.com/v0/b/banter-69832.appspot.com/o/assets%2FdefaultAvatar.svg?alt=media&token=2cd07b3e-6ee1-4682-8246-57bb20bc0d1f");
     dispatch(
       setUserAvatar(
         "https://firebasestorage.googleapis.com/v0/b/banter-69832.appspot.com/o/assets%2FdefaultAvatar.svg?alt=media&token=2cd07b3e-6ee1-4682-8246-57bb20bc0d1f"
@@ -28,7 +30,7 @@ const Avatar = () => {
             <span className="text-center flex justify-center" >사진 변경</span>
           </div>
         </div>
-       
+
         <Image
           className="object-cover rounded-full cursor-pointer"
           onClick={() => dispatch(setChangeAvatarOpen(true))}
@@ -42,7 +44,7 @@ const Avatar = () => {
       </div>
 
       <div className='mt-6 pb-6 border-b'>
-        
+
 
         <div className='w-fit mx-auto'>
           <button className='w-fit h-8 px-4 py-0.5 rounded-[24px] bg-indigo-500 text-white text-sm font-medium rounded-middle'

@@ -5,7 +5,7 @@ import RegisterModal from '../Register/RegisterModal';
 import Link from 'next/link';
 import { auth, logOut } from 'firebaseConfig';
 import { useDispatch, useSelector } from 'react-redux';
-import AlertModal from 'components/Common/AlertModal';
+import AlertModal from 'components/Common/Modal/AlertModal';
 import { closeSignupConfirmModal } from 'slices/user';
 import { signOut } from 'slices/user';
 
@@ -96,9 +96,9 @@ const NavbarWithoutUser = () => {
         twobutton={true}
       />
 
-      <nav className="fixed z-10 bg-white w-full">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex justify-between items-center border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
+      <nav className="fixed z-10 bg-white w-full shadow">
+        <div className="mx-auto px-4 sm:px-6">
+          <div className="flex justify-between items-center border-b-2 border-gray-100 py-4 md:justify-start md:space-x-10">
             <div className="flex justify-start lg:w-0 lg:flex-1">
 
               <Link href="/"><a>

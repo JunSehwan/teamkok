@@ -9,7 +9,7 @@ const index = () => {
 
 
   return (
-    <div className='max-w-[24rem] mx-auto w-[100%] mt-[3.2rem]'>
+    <div className='max-w-[32rem] mx-auto w-[100%] mt-[3.2rem]'>
       <Avatar />
       {changeAvatarOpen && <ChangeAvatar />}
       <PersonalInfo />

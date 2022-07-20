@@ -4,6 +4,8 @@ import { createWrapper } from "next-redux-wrapper";
 import userSettingsReducer from "slices/userSettings";
 import userReducer from "slices/user";
 import categoryReducer from "slices/category";
+import educationReducer from "slices/education";
+import careerReducer from "slices/career";
 // import addServerReducer from "slices/addServer";
 // import serverSettingsReducer from "slices/serverSettings";
 // import sendGifReducer from "slices/sendGif";
@@ -16,6 +18,8 @@ const makeStore = () =>
       user: userReducer,
       userSettings: userSettingsReducer,
       category: categoryReducer,
+      education: educationReducer,
+      career: careerReducer,
       // servers: serversReducer,
       // serverSettings: serverSettingsReducer,
       // addServer: addServerReducer,

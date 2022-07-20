@@ -7,10 +7,13 @@ import {
   collection,
   updateDoc,
   getDoc,
+  FieldValue,
   DocumentData,
   DocumentReference,
   deleteField,
-  serverTimestamp
+  serverTimestamp,
+  query, where, getDocs, orderBy,
+  deleteDoc,
 } from "firebase/firestore";
 import {
   getAuth,
@@ -45,11 +48,14 @@ const firebaseConfig = {
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const db = getFirestore();
 const storage = getStorage();
-
-
-
 export const auth = getAuth();
 export const currentUser = auth.currentUser;
+
+export { app, db, storage, FieldValue };
+
+const now = new Date();
+const nowForCopy = dayjs(now);
+const time = nowForCopy?.format('YYYY-MM-DD HH:mm:ss');
 
 // 로그인/아웃에 따라서 user값이 변경됨(기본설정함수)
 onAuthStateChanged(auth, (user) => {
@@ -274,6 +280,9 @@ export async function saveUserAvatarChanges(newAvatarURL) {
   await updateProfile(user, {
     photoURL: newAvatarURL,
   });
+  await updateProfile(user, {
+    photoURL: newAvatarURL,
+  });
   await updateUserDatabase("avatar", user.photoURL);
 }
 
@@ -301,7 +310,7 @@ export async function updateUserBasicInfo(username, form, email, tel, checkedCat
     await updateUserDatabase("phonenumber", tel);
     await updateUserDatabase("category", checkedCategory);
 
-    return (username, form, email, tel, address,checkedCategory, gender, url_one, url_two, url_three)
+    return (username, form, email, tel, address, checkedCategory, gender, url_one, url_two, url_three)
   } catch (error) {
     console.error(error);
     alert("profile update에 문제가 있습니다.");
@@ -379,7 +388,7 @@ async function getAvatarURL(userID) {
   return await getDownloadURL(ref(storage, `users/${userID}/avatar`));
 }
 
-export { app, db, storage };
+
 
 
 
@@ -461,16 +470,16 @@ export const setCategoryList = async (CategoryList) => {
 
 
 
-  // const categoryRef = await setDoc(doc(db, 'categories', "categorylist"), {
-  //   CategoryList
-  // })
-  // await citiesRef.doc('SF').set({
-  //   name: 'San Francisco', state: 'CA', country: 'USA',
-  //   capital: false, population: 860000
-  // });
-  // const res = await categoryRef.doc('categories').add(
-  //   CategoryList
-  // );
+// const categoryRef = await setDoc(doc(db, 'categories', "categorylist"), {
+//   CategoryList
+// })
+// await citiesRef.doc('SF').set({
+//   name: 'San Francisco', state: 'CA', country: 'USA',
+//   capital: false, population: 860000
+// });
+// const res = await categoryRef.doc('categories').add(
+//   CategoryList
+// );
 
 
 // }
@@ -481,3 +490,600 @@ export const setCategoryList = async (CategoryList) => {
 // }
 
 
+export const api = {
+  usersRef: collection(db, "users"),
+
+  userByIdRef: (userId) =>
+    doc(db, "users", `${userId}`),
+
+  // adminUsersRef: query(
+  //   collection(db, "users"),
+  //   where("role", "==", "admin")
+  // ),
+
+  annoynomusUsersRef: collection(db, "annoymous"),
+
+  viewsRef: collection(db, "ViewsData"),
+
+  educationsRef: collection(db, "educations"),
+  blogsRef: collection(db, "blogs"),
+
+  blogByIdRef: (blogId) =>
+    doc(db, "blogs", `${blogId}`),
+
+  blogDescriptionByBloggerIdRef: (bloggerId) =>
+    query(
+      collection(db, "blogsDescription"),
+      where("bloggerId", "==", `${bloggerId}`)
+    ),
+
+  blogsMetaRef: collection(db, "blogsMeta"),
+
+  blogMetaByIdRef: (blogId) =>
+    doc(db, "blogsMeta", `${blogId}`),
+
+  blogsMetaByIdCollRef: (blogId) =>
+    collection(db, "blogsMeta", `${blogId}`),
+
+  commentsRef: collection(db, "comments"),
+
+  commentsByCommentId: (commentId) =>
+    doc(db, `comments`, `${commentId}`),
+
+  commentsByBlogIdRef: (blogId) =>
+    query(
+      collection(db, "comments"),
+      where("blogId", "==", `${blogId}`)
+    ),
+
+  notificationRef: collection(db, "notifications"),
+
+  notificationByIdRef: (notificationId) =>
+    doc(db, "notifications", `${notificationId}`),
+
+  notificationByReceiverIdRef: (receiverId) =>
+    query(
+      collection(db, "notifications"),
+      where("receiverId", "==", `${receiverId}`)
+    ),
+
+  sotrageRef: (file) => ref(storage, "images/" + file?.name),
+};
+
+// addDoc(api.usersRef, {name: "samuel", userName: 'samuel', userId: 'generated from random firestore data'})
+// getDocs(api.usersRef)
+// getDoc(api.userByIdRef('shdajkfha3299'))
+// PROGRESS NOT TO BE USED!!!! WORK
+export const request = {
+  // GET: (collection: DocumentReference<unknown>) => getDoc(collection),
+  // getDocs: (query: Query<unknown>) => getDocs(query),
+  // PATCH: (collection: DocumentReference<unknown>, data: Partial<unknown>) =>
+  //   updateDoc(collection, data),
+  // DELETE: (collection: DocumentReference<unknown>) => deleteDoc(collection),
+  // POST: (reference: CollectionReference<unknown>, data: Partial<unknown>) =>
+  //   addDoc(reference, data),
+};
+
+// request.GET(api.blogDescriptionByIdRef("laskdlas"));
+
+// request.PATCH(api.blogMetaByIdRef("ashf89ksdhfkahfkas"), { hello: false });
+
+// request.DELETE(api.blogDescriptionByIdRef("askjhf289jfhsajkfahsjk"));
+
+// request.POST(api.commentsRef, { title: "newblog" });
+
+
+
+// get all users
+export async function getUsers() {
+  const result = await getDocs(api.usersRef);
+  return result.docs.map((doc) => ({
+    id: doc.data().user,
+    avatar: doc.data().avatar,
+    email: doc.data().email,
+    name: doc.data().name,
+    role: doc.data().role,
+    status: doc.data().status,
+    user: doc.data().user,
+    createdAt: doc.data().createdAt,
+  }));
+}
+
+// get adimn  users
+export async function getAdminUsers() {
+  const result = await getDocs(api.adminUsersRef);
+  return result.docs.map((doc) => ({
+    // docId: doc.id,
+    avatar: doc.data().avatar,
+    email: doc.data().email,
+    name: doc.data().name,
+    role: doc.data().role,
+    status: doc.data().status,
+    user: doc.data().user,
+    createdAt: doc.data().createdAt,
+  }));
+}
+
+// get all annoynomus users
+export async function getAnnoynomusUsers() {
+  const result = await getDocs(api.annoynomusUsersRef);
+  return result.docs.map((doc) => ({
+    ...doc.data(),
+    docId: doc.id,
+  }));
+}
+
+// get a user by ID
+export async function getUserByUserId(userId) {
+  const result = await getDoc(api.userByIdRef(userId));
+  if (result.exists()) {
+    const user = {
+      avatar: result.data().photoURL,
+      email: result.data().email,
+      name: result.data().displayName,
+      role: result.data().role,
+      status: result.data().status,
+      user: result.data().uid,
+      createdAt: result.data().createdAt,
+    };
+    return user;
+  } else {
+    return undefined;
+  }
+}
+
+// get ALL Blogs
+export async function getBlogs() {
+  const result = await getDocs(api.blogsRef);
+
+  const blogs = [];
+
+  result.docs.map(async (data) => {
+    const blog = {
+      id: data.id,
+      title: data?.data().title,
+      coverImage: data?.data().coverImage,
+      blogger: data?.data().blogger,
+      bloggerId: data?.data().bloggerId,
+      bloggerImage: data?.data().bloggerImage,
+      deleted: data?.data().deleted,
+      description: data?.data().description,
+      numComments: data?.data().numComments,
+      numLikes: data?.data().numLikes,
+      numViews: data?.data().numViews,
+      readTime: data?.data().readTime,
+      likes: data?.data().likes,
+      mainBlog: data?.data().mainBlog,
+      status: data?.data().status,
+      createdAt: data?.data().createdAt,
+    };
+    blogs.push(blog);
+  });
+
+  return blogs;
+}
+
+// get Blog BY ID
+export async function getBlogById(
+  blogId
+) {
+  const result = await getDoc(api.blogByIdRef(blogId));
+
+  if (result.exists()) {
+    return {
+      id: result.id,
+      title: result?.data().title,
+      coverImage: result?.data().coverImage,
+      blogger: result?.data().blogger,
+      bloggerId: result?.data().bloggerId,
+      bloggerImage: result?.data().bloggerImage,
+      deleted: result?.data().deleted,
+      description: result?.data().description,
+      numComments: result?.data().numComments,
+      numLikes: result?.data().numLikes,
+      numViews: result?.data().numViews,
+      readTime: result?.data().readTime,
+      likes: result?.data().likes,
+      mainBlog: result?.data().mainBlog,
+      status: result?.data().status,
+      createdAt: result?.data().createdAt,
+    };
+  } else {
+    return undefined;
+  }
+}
+
+export async function getViews() {
+  const result = await getDocs(api.viewsRef);
+  return result.docs.map((doc) => doc.data());
+}
+
+// LIKE A BLOG
+export async function likeBlog(
+  userId,
+  blogId
+) {
+  return await updateDoc(api.blogByIdRef(blogId), {
+    likes: arrayUnion(userId),
+    numLikes: increment(1),
+  });
+}
+
+// UNLIKE A BLOG
+export async function unlikeBlog(
+  userId,
+  blogId
+) {
+  return await updateDoc(api.blogByIdRef(blogId), {
+    likes: arrayRemove(userId),
+    numLikes: increment(-1),
+  });
+}
+
+// Add a comment
+export async function addComment(
+  blogId,
+  userId,
+  userName,
+  commentText,
+  avatar
+) {
+  return await addDoc(api.commentsRef, {
+    blogId: blogId,
+    commentText: commentText,
+    userName: userName,
+    avatar: avatar,
+    userId: userId,
+    reply: [],
+    createdAt: new Date().toISOString(),
+  }).then(() => {
+    return updateDoc(api.blogByIdRef(blogId), {
+      numComments: increment(1),
+    });
+  });
+}
+
+// add a reply
+export async function addReply(
+  userName,
+  userId,
+  commentId,
+  avatar,
+  replyText
+) {
+  return await updateDoc(api.commentsByCommentId(commentId), {
+    reply: arrayUnion({
+      userId: userId,
+      userName: userName,
+      avatar: avatar,
+      reply: replyText,
+      createdAt: new Date().toISOString(),
+    }),
+  });
+}
+
+// get all comments
+export async function getComments(blogId) {
+  const result = await getDocs(api.commentsByBlogIdRef(blogId));
+
+  const comments = [];
+  result.docs
+    .sort((a, b) => {
+      return a.data().createdAt - b.data().createdAt;
+    })
+    // eslint-disable-next-line array-callback-return
+    .map((data) => {
+      const comment = {
+        docId: data.id,
+        commentText: data.data().commentText,
+        blogId: data.data().blogId,
+        avatar: data.data().avatar,
+        userName: data.data().userName,
+        userId: data.data().userId,
+        reply: data.data().reply.map((thread) => ({
+          avatar: thread.avatar,
+          replyText: thread.reply,
+          userId: thread.userId,
+          userName: thread.userName,
+          createdAt: thread.createdAt,
+        })),
+        createdAt: data.data().createdAt,
+      };
+      comments.push(comment);
+    });
+  return comments;
+}
+
+export async function getAllComments() {
+  const result = await getDocs(api.commentsRef);
+  return result.docs.map((doc) => doc.data());
+}
+
+// update number of views
+export async function countNumberOfViews(blogId, userId) {
+  return await addDoc(api.viewsRef, {
+    blogId: blogId,
+    createdAt: new Date().toISOString(),
+  }).then(() => {
+    updateDoc(api.blogByIdRef(blogId), {
+      numViews: increment(1),
+    });
+  });
+}
+
+// create a notifications
+export async function createNotification(
+  type,
+  senderId,
+  receiverId,
+  notificationMessage
+) {
+  return await addDoc(api.notificationRef, {
+    id: doc(api.notificationRef).id,
+    type: type,
+    senderId: senderId,
+    seen: false,
+    receiverId: receiverId,
+    notificationMessage: notificationMessage,
+    createdAt: new Date().toISOString(),
+  });
+}
+
+/**
+ * update notification status to seen
+  */
+export async function updateNotification(notificationId) {
+  return await updateDoc(api.notificationByIdRef(notificationId), {
+    seen: true,
+  });
+}
+
+/**
+ * getNotification
+ * @param userId
+ * @returns
+ */
+export async function getNotifications(
+  receiverId
+) {
+  const result = await getDocs(api.notificationRef);
+  const notifications = [];
+
+  result.docs.map((data) => {
+    const notification = {
+      id: data.id,
+      type: data.data().type,
+      senderId: data.data().senderId,
+      receiverId: data.data().receiverId,
+      notificationMessage: data.data().notificationMessage,
+      seen: data.data().seen,
+      createdAt: data.data().createdAt,
+    };
+    console.log(notification);
+    return notifications.push(notification);
+  });
+
+  return notifications;
+}
+
+/**
+ * suspend a user by setting the status to false
+ * @param userId
+ */
+export async function suspendUser(userId) {
+  return await updateDoc(api.userByIdRef(userId), {
+    status: "suspended",
+  });
+}
+
+export async function updateUser(userId, status) {
+  return await updateDoc(api.userByIdRef(userId), {
+    status: !status,
+  });
+}
+
+/**
+ * TODO: need fix
+ * suspend a blog by setting the status to false
+ * @param blogId
+ */
+export async function updateBlog(blogId, status) {
+  return await updateDoc(api.blogByIdRef(blogId), {
+    status: !status,
+  });
+}
+
+export async function updateBlogDeleted(blogId, status) {
+  return await updateDoc(api.blogByIdRef(blogId), {
+    deleted: !status,
+  });
+}
+
+/**
+ * promote a user by setting the role to blogger
+ * @param userId
+ * @returns
+ */
+export async function promoteUser(userId, role) {
+  return await updateDoc(api.userByIdRef(userId), {
+    role: role,
+  });
+}
+
+/**
+ * get blogs for bloggers by there user UID
+ */
+export async function getBlogByBloggerId(
+  bloggerId
+) {
+  const blogs = await getDocs(api.blogDescriptionByBloggerIdRef(bloggerId));
+
+  const blogsArr = [];
+  // eslint-disable-next-line array-callback-return
+  blogs.docs.map((blog) => {
+    const blogObj = {
+      title: blog.data().title,
+      description: blog.data().description,
+      coverImage: blog.data().coverImage,
+      likes: blog.data().likes,
+      comments: blog.data().comments,
+      bloggerId: blog.data().bloggerId,
+      blogger: blog.data().blogger,
+      bloggerImage: blog.data().bloggerImage,
+      createdAt: blog.data().createdAt,
+      deleted: blog.data().deleted,
+      numComments: blog.data().numComments,
+      numLikes: blog.data().numLikes,
+      numViews: blog.data().numViews,
+      readTime: blog.data().readTime,
+      status: blog.data().status,
+    };
+    blogsArr.push(blogObj);
+  });
+  return blogsArr;
+}
+
+// BLOGGER CREATE BLOG FUNCTIONS
+export async function uploadImage(file) {
+  const uploadTask = uploadBytesResumable(api.sotrageRef(file), file, {
+    contentType: "image/jpeg",
+  });
+  uploadTask
+    .on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log(progress);
+      },
+      (error) => {
+        const errorMessage = error.message;
+        return errorMessage;
+      },
+      async () => {
+        const url = await getDownloadURL(uploadTask.snapshot.ref);
+        return url;
+      }
+    )
+    .toString();
+
+  const imageUrl = await uploadTask.snapshot;
+
+  console.log(imageUrl.metadata.downloadTokens);
+
+  return imageUrl.metadata;
+}
+
+export async function createEducation(education) {
+  const edu = await addDoc(api.educationsRef,
+    { ...education, timestamp: time });
+
+  const docRef = doc(db, "educations", edu.id);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    // console.log("Document data:", docSnap.data());
+    return (docSnap.data())
+  } else {
+    // doc.data() will be undefined in this case
+    console.log("No such document!");
+  }
+}
+
+// 명령 실행시 await 필수!
+export async function getEducationsByUserId(userId) {
+  const user = auth.currentUser;
+  const eduRef = collection(db, "educations");
+  const q = query(eduRef, where("userId", "==", user.uid), orderBy("timestamp", "asc"));
+
+  //결과 검색
+  const querySnapshot = await getDocs(q);
+
+  const result = [];
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    result.push(doc.data());
+    // result.push(item, docs[item]);
+  });
+  return result
+}
+
+export async function deleteEducation(educationId) {
+  const user = auth.currentUser;
+  const eduRef = collection(db, "educations");
+  const q = query(eduRef, where("userId", "==", user.uid));
+
+  await deleteDoc(doc(db, q));
+  const result = educationId;
+  // Remove the 'capital' field from the document
+  // await updateDoc(q, {
+  //   capital: deleteField()
+  // });
+  return result
+}
+
+
+// export class Blogs {
+//   // get all blogs
+//   static async getBlogs() {
+//     const result = await getDocs(api.blogsRef);
+//     return result.docs.map((doc) => {
+//       return {
+//         id: doc.id,
+//         docId: doc.id,
+//         blogger: doc.data().blogger,
+//         bloggerId: doc.data().bloggerId,
+//         bloggerImage: doc.data().bloggerImage,
+//         coverImage: doc.data().coverImage,
+//         createdAt: doc.data().createdAt,
+//         deleted: doc.data().deleted,
+//         description: doc.data().description,
+//         numComments: doc.data().numComments,
+//         numLikes: doc.data().numLikes,
+//         numViews: doc.data().numViews,
+//         readTime: doc.data().readTime,
+//         status: doc.data().status,
+//         title: doc.data().title,
+//         likes: doc.data().likes,
+//         mainBlog: doc.data().mainBlog,
+//         comments: doc.data().comments,
+//       };
+//     });
+//   }
+
+//   // get blog by id
+//   static async getBlogById(id) {
+//     const result = this.getBlogs();
+//     return result.then((res) => {
+//       const blog = res.filter((blog) => blog.id === id)[0];
+//       return blog;
+//     });
+//   }
+
+//   // get blog by bloggerID
+//   static async getBlogByBloggerId(bloggerId) {
+//     const result = this.getBlogs();
+//     return result.then((res) => {
+//       const blog = res.filter((blog) => blog.bloggerId === bloggerId);
+//       return blog;
+//     });
+//   }
+
+//   static async likeBlog(userId, blogId) {
+//     const blog = await this.getBlogById(blogId);
+//     const likes = blog.likes;
+
+//     if (likes?.includes(userId)) {
+//       likes.splice(likes.indexOf(userId), 1);
+//     } else {
+//       likes?.push(userId);
+//     }
+
+//     await updateDoc(api.blogByIdRef(blogId), { likes });
+//   }
+// }
+
+// export const getBlogss = Blogs.getBlogs;
+// export const getBlogByIds = Blogs.getBlogById;
+// export const getBlogByBloggerIds = Blogs.getBlogByBloggerId;
+// export const likeBlogs = Blogs.likeBlog;

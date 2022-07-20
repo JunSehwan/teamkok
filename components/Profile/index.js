@@ -8,16 +8,16 @@ const index = () => {
   const { user } = useSelector(state => state.user);
   return (
     <>
-      <section className="pt-24 pb-12 w-[100%]">
+      <section className="pb-9 sm:pb-12 md:pb-12 sm:pt-[10rem] pt-[8rem] w-[100%]">
         <div className="flex flex-col mx-auto space-y-12 max-w-7xl xl:px-12">
           <div className="relative">
-            <h2 className="w-full text-1xl font-bold text-center sm:text-2xl md:text-3xl">
+            <h1 className="w-full text-2xl font-bold text-center sm:text-3xl md:text-4xl">
               {user?.username}님의 프로필
-            </h2>
+            </h1>
           </div>
         </div>
       </section>
-      <section className="pt-12 pb-12 w-[100%]">
+      <section className="pt-6 pb-12 w-[100%]">
         <div className="flex flex-col mx-auto space-y-12 max-w-7xl xl:px-12">
           <div className="relative">
             <Tab

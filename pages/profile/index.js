@@ -5,9 +5,10 @@ import NavbarWithoutUser from 'components/Common/NavbarWithoutUser';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { setUser, resetUserState, userLoadingStart, userLoadingEnd, userLoadingEndwithNoone } from "slices/user";
+import { loadEducations } from "slices/education";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
-import { db } from "firebaseConfig";
+import { db, getEducationsByUserId } from "firebaseConfig";
 import { wrapper } from 'store/index';
 import { addCategory } from 'slices/category';
 import LoadingPage from 'components/Common/Loading';
@@ -23,14 +24,8 @@ const index = () => {
       if (!user) return redirect();
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
-      // const result = setCategoryList(CategoryList);
-      // console.log(result, "keke");
-
-
       if (!docSnap.exists()) return redirect();
-
       const docData = docSnap.data();
-
       const currentUser = {
         userID: user.uid,
         username: docData.username,
@@ -40,13 +35,17 @@ const index = () => {
         avatar: docData.avatar,
         phonenumber: docData.phonenumber,
         category: docData.category,
-        tag: docData.tag,
+        url_one: docData.url_one,
+        url_two: docData.url_two,
+        url_three: docData.url_three,
         about: docData.about,
-        banner: docData.banner,
+        address: docData.address,
       };
-
       dispatch(setUser(currentUser));
       dispatch(userLoadingEnd());
+      const result = await getEducationsByUserId().then((result) => {
+        dispatch(loadEducations(result));
+      })
     });
     return () => {
       authStateListener();
@@ -72,12 +71,17 @@ const index = () => {
         avatar: docData.avatar,
         phonenumber: docData.phonenumber,
         category: docData.category,
-        tag: docData.tag,
+        url_one: docData.url_one,
+        url_two: docData.url_two,
+        url_three: docData.url_three,
         about: docData.about,
-        banner: docData.banner,
+        address: docData.address,
       };
       dispatch(setUser(currentUser));
       dispatch(userLoadingEnd());
+      const educations = getEducationsByUserId();
+      console.log(educations, "feke")
+      dispatch(loadEducations(educations));
     });
     return () => {
       unsubscribe();

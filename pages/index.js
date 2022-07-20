@@ -40,9 +40,11 @@ const index = ({ me }) => {
         avatar: docData.avatar,
         phonenumber: docData.phonenumber,
         category: docData.category,
-        tag: docData.tag,
+        url_one: docData.url_one,
+        url_two: docData.url_two,
+        url_three: docData.url_three,
         about: docData.about,
-        banner: docData.banner,
+        address: docData.address,
       };
 
       dispatch(setUser(currentUser));
