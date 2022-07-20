@@ -9,11 +9,12 @@ import {
   useSaveCallback
 } from "components/Common/Editor";
 
-const Editor = dynamic(() =>
-  import("components/Common/Editor/editor").then((mod) => mod.EditorContainer),
-  { ssr: false })
 
-const index = () => {
+const Education = () => {
+
+  const Editor = dynamic(() =>
+    import("components/Common/Editor/editor").then((mod) => mod.EditorContainer),
+    { ssr: false })
 
   const dispatch = useDispatch();
   const { addDone, myEducations, mainSchools } = useSelector(state => state.education);
@@ -40,7 +41,7 @@ const index = () => {
 
       dispatch(setAddDoneFalse());
     }
-  }, [addDone, myEducations])
+  }, [addDone, dispatch, myEducations])
 
   // 학력등록폼 Open/Close
   const [eduform, setEduform] = useState(false);
@@ -67,7 +68,7 @@ const index = () => {
     setCategoryError(false);
     setStartError(false);
     setEndError(false);
-  }, [eduform])
+  }, [])
 
   //학교명
   const [name, setName] = useState("");
@@ -75,7 +76,7 @@ const index = () => {
   const onChangeName = useCallback((e) => {
     setName(e.target.value);
     setNameError(false);
-  }, [name, nameError])
+  }, [])
 
   //전공명
   const [major, setMajor] = useState("");
@@ -85,14 +86,14 @@ const index = () => {
       setMajor(e.target.value);
       setMajorError(false);
     },
-    [major, majorError]
+    []
   );
   const [secondmajor, setSecondmajor] = useState("");
   const onChangeSecondMajor = useCallback(
     e => {
       setSecondmajor(e.target.value);
     },
-    [secondmajor]
+    []
   );
 
   // 학사/석사/박사/고등학교 category
@@ -101,13 +102,13 @@ const index = () => {
   const onChangeCategory = useCallback((e) => {
     setCategory(e.target.value);
     setCategoryError(false);
-  }, [category, categoryError])
+  }, [])
 
   // 주경력 ismain
   const [ismain, setIsmain] = useState(false);
   const onChangeIsmain = useCallback((e) => {
     setIsmain(e.target.checked);
-  }, [ismain])
+  }, [])
 
   // 학력설명 description
   const [description, setDescription] = useState("");
@@ -206,10 +207,12 @@ const index = () => {
   };
 
   // 종료 finish
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [finish, setFinish] = useState(true);
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const onChangeFinish = useCallback((e) => {
     setFinish(e.target.checked);
-  }, [finish])
+  }, [])
 
 
 
@@ -265,7 +268,7 @@ const index = () => {
     dispatch(addEducation(con));
 
 
-  }, [user?.userID, name, major, secondmajor, start, end, finish, category, ismain, description])
+  }, [user?.userID, dispatch, name, major, secondmajor, start, end, finish, category, ismain, description])
 
   const [confirm, setConfirm] = useState(false);
   const closeConfirm = () => {
@@ -532,4 +535,4 @@ const index = () => {
 };
 
 
-export default index;
+export default Education;

@@ -998,28 +998,41 @@ export async function getEducationsByUserId(userId) {
 
   //결과 검색
   const querySnapshot = await getDocs(q);
-
-  const result = [];
-  querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-    result.push(doc.data());
-    // result.push(item, docs[item]);
-  });
+  const result = querySnapshot?.docs?.map((doc) => (
+    {
+      ...doc.data(),
+      id: doc.id,
+    }
+  ))
   return result
 }
 
 export async function deleteEducation(educationId) {
   const user = auth.currentUser;
-  const eduRef = collection(db, "educations");
-  const q = query(eduRef, where("userId", "==", user.uid));
+  try {
+    if (!educationId) return alert("삭제에 문제가 있습니다.");
 
-  await deleteDoc(doc(db, q));
-  const result = educationId;
+    const eduRef = collection(db, "educations");
+    const q = query(eduRef, where("userId", "==", user.uid), where("id", "==", educationId));
+    const querySnapshot = await getDocs(q);
+    console.log(q, educationId, "querySnapshot");
+
+    const docRef = doc(db, "educations", educationId);
+    deleteDoc(docRef);
+
+
+
+    // await deleteDoc(doc("educations", q));
+
+    return educationId;
+  } catch (e) {
+    console.error(e)
+  }
+
   // Remove the 'capital' field from the document
   // await updateDoc(q, {
   //   capital: deleteField()
   // });
-  return result
 }
 
 

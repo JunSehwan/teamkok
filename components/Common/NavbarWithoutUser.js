@@ -68,7 +68,7 @@ const NavbarWithoutUser = () => {
   const closeLogoutConformModal = () => { setLogoutConfirmModal(false) };
   const onClickLogout = useCallback(() => {
     setLogoutConfirmModal(true);
-  }, [user])
+  }, [])
 
   const logoutConfirm = useCallback(async () => {
     const res = await logOut();
@@ -76,7 +76,7 @@ const NavbarWithoutUser = () => {
     }));
     setToggle(false);
     setLogoutConfirmModal(false);
-  }, [user])
+  }, [dispatch])
 
   const onClickSignup = useCallback(() => {
     setTabIndex(1);
@@ -96,7 +96,7 @@ const NavbarWithoutUser = () => {
         twobutton={true}
       />
 
-      <nav className="fixed z-10 bg-white w-full shadow">
+      <nav className="fixed z-50 bg-white w-full shadow">
         <div className="mx-auto px-4 sm:px-6">
           <div className="flex justify-between items-center border-b-2 border-gray-100 py-4 md:justify-start md:space-x-10">
             <div className="flex justify-start lg:w-0 lg:flex-1">
@@ -168,13 +168,13 @@ const NavbarWithoutUser = () => {
                   onClick={toggleDropdown}
                 >
                   {user?.avatar ? (
-                    <img
+                    <Image
                       alt="avatar_user"
                       className="avatar w-7 h-7 rounded-md "
                       width={32} height={32}
                       src={user?.avatar} />
                   ) : (
-                    <img
+                    <Image
                       alt="avatar_user"
                       className="avatar w-7 h-7 rounded-md"
                       src="/image/icon/happiness.png"
@@ -189,38 +189,44 @@ const NavbarWithoutUser = () => {
                     <div className="w-[100%] justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
                     >
                       <div ref={modalEl} className="absolute top-[60px] right-[2vw] z-20 w-56 py-2 overflow-hidden bg-white rounded-md shadow-xl dark:bg-gray-800">
-                        <a href="/profile" className="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-                          {user?.avatar ?
-                            <img className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9" src={user?.avatar} alt="avatar" />
-                            :
-                            <img className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9" src="/image/icon/happiness.png" alt="avatar" />
-                          }
-                          <div className="mx-1">
-                            <h1 className="text-sm w-[150px] whitespace-nowrap overflow-hidden overflow-ellipsis break-all font-semibold text-gray-700 dark:text-gray-200">{user?.username}</h1>
-                            <p className="text-sm w-[150px] whitespace-nowrap	overflow-hidden overflow-ellipsis break-all text-gray-500 dark:text-gray-400">{user?.email}</p>
-                          </div>
-                        </a>
+                        <Link href="/profile">
+                          <a className="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                            {user?.avatar ?
+                              <Image className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9" src={user?.avatar} alt="avatar" />
+                              :
+                              <Image className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9" src="/image/icon/happiness.png" alt="avatar" />
+                            }
+                            <div className="mx-1">
+                              <h1 className="text-sm w-[150px] whitespace-nowrap overflow-hidden overflow-ellipsis break-all font-semibold text-gray-700 dark:text-gray-200">{user?.username}</h1>
+                              <p className="text-sm w-[150px] whitespace-nowrap	overflow-hidden overflow-ellipsis break-all text-gray-500 dark:text-gray-400">{user?.email}</p>
+                            </div>
+                          </a>
+                        </Link>
 
                         <hr className="border-gray-200 dark:border-gray-700 " />
-
-                        <a href="/profile" className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-                          내 프로필
-                        </a>
-
+                        <Link href="/profile">
+                          <a className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                            내 프로필
+                          </a>
+                        </Link>
                         <hr className="border-gray-200 dark:border-gray-700 " />
 
-
-                        <a href="/favorite" className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-                          참여기업
-                        </a>
-                        <a href="/board/add" className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-                          기업보드 개설
-                        </a>
+                        <Link href="/favorite">
+                          <a className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                            참여기업
+                          </a>
+                        </Link>
+                        <Link href="/board/add">
+                          <a className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                            기업보드 개설
+                          </a>
+                        </Link>
                         <hr className="border-gray-200 dark:border-gray-700 " />
-
-                        <a href="/about" className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-                          Help
-                        </a>
+                        <Link href="/about">
+                          <a className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                            Help
+                          </a>
+                        </Link>
                         <button onClick={onClickLogout} className="w-[100%] text-left block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
                           로그아웃
                         </button>
@@ -291,39 +297,47 @@ const NavbarWithoutUser = () => {
                   <div>
                     <ul className="mt-2 mb-2 space-y-2 tracking-wide">
                       <li className="min-w-max">
-                        <a href="/profile" aria-label="dashboard" className="bg group flex items-center space-x-4 rounded-full px-4 py-3 text-gray-600">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
-                            <path className="fill-current text-gray-600 group-hover:text-cyan-600" fillRule="evenodd" clipRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" />
-                          </svg>
-                          <span className="group-hover:text-gray-700">내 프로필</span>
-                        </a>
+                        <Link href="/profile">
+                          <a aria-label="dashboard" className="bg group flex items-center space-x-4 rounded-full px-4 py-3 text-gray-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
+                              <path className="fill-current text-gray-600 group-hover:text-cyan-600" fillRule="evenodd" clipRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" />
+                            </svg>
+                            <span className="group-hover:text-gray-700">내 프로필</span>
+                          </a>
+                        </Link>
                       </li>
                       <li className="min-w-max">
-                        <a href="/favorite" className="bg group flex items-center space-x-4 rounded-full px-4 py-3 text-gray-600">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
-                            <path className="fill-current text-gray-300 group-hover:text-cyan-300" fillRule="evenodd" d="M2 6a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1H8a3 3 0 00-3 3v1.5a1.5 1.5 0 01-3 0V6z" clipRule="evenodd" />
-                            <path className="fill-current text-gray-600 group-hover:text-cyan-600" d="M6 12a2 2 0 012-2h8a2 2 0 012 2v2a2 2 0 01-2 2H2h2a2 2 0 002-2v-2z" />
-                          </svg>
-                          <span className="group-hover:text-gray-700">참여기업</span>
-                        </a>
+                        <Link href="/favorite">
+                          <a className="bg group flex items-center space-x-4 rounded-full px-4 py-3 text-gray-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
+                              <path className="fill-current text-gray-300 group-hover:text-cyan-300" fillRule="evenodd" d="M2 6a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1H8a3 3 0 00-3 3v1.5a1.5 1.5 0 01-3 0V6z" clipRule="evenodd" />
+                              <path className="fill-current text-gray-600 group-hover:text-cyan-600" d="M6 12a2 2 0 012-2h8a2 2 0 012 2v2a2 2 0 01-2 2H2h2a2 2 0 002-2v-2z" />
+                            </svg>
+                            <span className="group-hover:text-gray-700">참여기업</span>
+                          </a>
+                        </Link>
                       </li>
                       <li className="min-w-max">
-                        <a href="/board/add" className="group flex items-center space-x-4 rounded-md px-4 py-3 text-gray-600">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
-                            <path className="fill-current text-gray-600 group-hover:text-cyan-600" fillRule="evenodd" d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z" clipRule="evenodd" />
-                            <path className="fill-current text-gray-300 group-hover:text-cyan-300" d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z" />
-                          </svg>
-                          <span className="group-hover:text-gray-700">기업보드 개설</span>
-                        </a>
+                        <Link href="/board/add" >
+                          <a className="group flex items-center space-x-4 rounded-md px-4 py-3 text-gray-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
+                              <path className="fill-current text-gray-600 group-hover:text-cyan-600" fillRule="evenodd" d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z" clipRule="evenodd" />
+                              <path className="fill-current text-gray-300 group-hover:text-cyan-300" d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z" />
+                            </svg>
+                            <span className="group-hover:text-gray-700">기업보드 개설</span>
+                          </a>
+                        </Link>
                       </li>
                       <li className="min-w-max">
-                        <a href="message" className="group flex items-center space-x-4 rounded-md px-4 py-3 text-gray-600">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
-                            <path className="fill-current text-gray-300 group-hover:text-cyan-300" d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                            <path className="fill-current text-gray-600 group-hover:text-cyan-600" fillRule="evenodd" d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" clipRule="evenodd" />
-                          </svg>
-                          <span className="group-hover:text-gray-700">메시지</span>
-                        </a>
+                        <Link href="/message">
+                          <a className="group flex items-center space-x-4 rounded-md px-4 py-3 text-gray-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
+                              <path className="fill-current text-gray-300 group-hover:text-cyan-300" d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                              <path className="fill-current text-gray-600 group-hover:text-cyan-600" fillRule="evenodd" d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" clipRule="evenodd" />
+                            </svg>
+                            <span className="group-hover:text-gray-700">메시지</span>
+                          </a>
+                        </Link>
                       </li>
                     </ul>
                     <div className="flex items-center justify-end md:flex-1 lg:w-0">

@@ -153,7 +153,7 @@ const PersonalInfo = () => {
   const onChangeGender = useCallback((e) => {
     setGender(e.target.value);
     setGenderError(false);
-  }, [gender, genderError]);
+  }, []);
 
   // 주소
   const [address, setAddress] = useState(user?.address || "");
@@ -161,24 +161,24 @@ const PersonalInfo = () => {
   const onChangeAddress = useCallback((e) => {
     setAddress(e.target.value);
     setAddressError(false);
-  }, [address, addressError]);
+  }, []);
 
 
   // URL
   const [url_one, setUrl_one] = useState(user?.url_one || "");
   const onChangeURL_1 = useCallback((e) => {
     setUrl_one(e.target.value);
-  }, [url_one]);
+  }, []);
 
   const [url_two, setUrl_two] = useState(user?.url_two || "");
   const onChangeURL_2 = useCallback((e) => {
     setUrl_two(e.target.value);
-  }, [url_two])
+  }, [])
 
   const [url_three, setUrl_three] = useState(user?.url_three || "");
   const onChangeURL_3 = useCallback((e) => {
     setUrl_three(e.target.value);
-  }, [url_three])
+  }, [])
 
   // 카테고리
   const [checkedCategory, setCheckedCategory] = useState(parseInt(user?.category) || 1);

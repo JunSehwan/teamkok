@@ -86,7 +86,7 @@ const index = () => {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [dispatch, user?.uid, user?.userID]);
 
   // useEffect(() => {
   //   if (!server.serverID || !user.userID) return;
@@ -114,11 +114,13 @@ const index = () => {
 
   //   router.push("/login");
   // }
-  function redirect() {
-    dispatch(resetUserState());
+  useEffect(() => {
+    function redirect() {
+      dispatch(resetUserState());
+      router.push("/");
+    }
+  })
 
-    router.push("/");
-  }
 
   // 만약 로그아웃시 메인화면으로 이동
   // useEffect(() => {

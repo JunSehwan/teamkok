@@ -1,11 +1,11 @@
 import React from 'react';
 
-const index = () => {
+const Career = () => {
   return (
     <div>
-      
+
     </div>
   );
 };
 
-export default index;
+export default Career;

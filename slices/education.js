@@ -13,7 +13,7 @@ export const initialState = {
   loadDone: false,
   loadEducationsDone: false,
   loadSchoolsDone: false,
-  
+
 };
 
 export const education = createSlice({
@@ -41,7 +41,9 @@ export const education = createSlice({
       state.updateDone = true;
     },
     removeEducation(state, action) {
-      state.myEducations.filter(v => v.id !== action.payload);
+      console.log(action.payload, "fuckyou");
+      const newEdu = state.myEducations.filter(v => v.id !== action.payload);
+      state.myEducations = newEdu;
       state.deleteDone = true;
     },
     resetEducationState(state) {
