@@ -11,14 +11,7 @@ const EducationList = () => {
     setViewEdu(prev => !prev);
   }, [])
 
-  // 수정
-  const [onEdit, setOnEdit] = useState(false);
-  const onClickModify = useCallback(() => {
-    setOnEdit(true);
-  }, []);
-  const closeModify = useCallback(() => {
-    setOnEdit(false);
-  }, [])
+
 
   return (
     <>
@@ -27,7 +20,7 @@ const EducationList = () => {
         <div className='w-full rounded-lg lg:rounded-l-none'>
 
           <ul className="flex flex-col">
-            <li className="border-gray-400 flex flex-row mb-2">
+            <li key="1" className="border-gray-400 flex flex-row mb-2">
               <button onClick={onViewEdu} className="w-max transition duration-500 shadow ease-in-out transform hover:-translate-y-1 hover:shadow-lg select-none cursor-pointer bg-[rgba(0,0,0,0.04)] dark:bg-gray-800 rounded-md flex flex-1 items-center p-4">
                 <div className="flex items-center justify-between flex-1 pl-1">
                   <span className="font-bold dark:text-white text-gray-500 hover:text-gray-800">
@@ -43,21 +36,8 @@ const EducationList = () => {
             </li>
           </ul>
           {viewEdu ?
-            <a onClick={onClickModify} className='transition-all ease-in duration-500'>
+            <div className='transition-all ease-in duration-500'>
               {myEducations?.map((v, index) => (
-                <>
-
-                  {/* 수정 */}
-                  {onEdit ?
-                    <EditEducation
-                      onOpen={onClickModify}
-                      onEdit={onEdit}
-                      education={v}
-                      onClose={closeModify}
-                    />
-                    : null}
-
-
                   <div key={index} className="text-left hover:shadow-xl w-[100%] border-2 border-b-4 border-gray-200 rounded-xl hover:bg-gray-50">
                     {/* <!-- Badge --> */}
 
@@ -93,15 +73,21 @@ const EducationList = () => {
                         <p className="text-gray-400 text-[0.78rem]">{`${v?.start?.year}년 ${v?.start?.month}월 ~ ${v?.end?.year}년 ${v?.end?.month}월`}</p>
                       </div>
 
-                      {/* 삭제 */}
-                      <DeleteEducation
-                        id={v?.id}
-                      />
+                      <span className='flex justify-center'>
+                        {/* 수정 */}
+                        <EditEducation
+                          education={v}
+                        />
+
+                        {/* 삭제 */}
+                        <DeleteEducation
+                          id={v?.id}
+                        />
+                      </span>
                     </div>
                   </div>
-                </>
               ))}
-            </a>
+            </div>
             :
 
             null}

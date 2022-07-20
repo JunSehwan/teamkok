@@ -70,18 +70,19 @@ export const useLoadData = () => {
 
   // Mimic async data load
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     const id = setTimeout(() => {
       console.group("EDITOR load data")
       // const saved = localStorage.getItem(dataKey)   // 데이터 저장
       // if (saved) {
       //   const parsed = JSON.parse(saved)
       //   setData(parsed)
+      //   setData(parsed)
       //   console.dir(parsed)
       // } else {
-      //   console.info("No saved data, using initial")
-      //   console.dir(initialData)
-      //   setData(initialData)
+      console.info("No saved data, using initial")
+      console.dir(initialData)
+      setData(initialData)
       // }
       console.groupEnd()
       setLoading(false)

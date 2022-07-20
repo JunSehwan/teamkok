@@ -1012,29 +1012,29 @@ export async function deleteEducation(educationId) {
   try {
     if (!educationId) return alert("삭제에 문제가 있습니다.");
 
-    const eduRef = collection(db, "educations");
-    const q = query(eduRef, where("userId", "==", user.uid), where("id", "==", educationId));
-    const querySnapshot = await getDocs(q);
-    console.log(q, educationId, "querySnapshot");
-
     const docRef = doc(db, "educations", educationId);
     deleteDoc(docRef);
-
-
-
-    // await deleteDoc(doc("educations", q));
 
     return educationId;
   } catch (e) {
     console.error(e)
   }
-
-  // Remove the 'capital' field from the document
-  // await updateDoc(q, {
-  //   capital: deleteField()
-  // });
 }
 
+export async function modifyEducation(educationResult, id) {
+  const user = auth.currentUser;
+  try {
+    if (!user || !id) return alert("업데이트에 문제가 발생했습니다.");
+    await updateDoc(doc(db, "educations", id),
+      educationResult
+    );
+    const docRef = doc(db, "educations", id);
+
+    return docRef;
+  } catch (e) {
+    console.error(e)
+  }
+}
 
 // export class Blogs {
 //   // get all blogs

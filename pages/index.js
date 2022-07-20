@@ -4,13 +4,12 @@ import Head from 'next/head'
 import NavbarWithoutUser from 'components/Common/NavbarWithoutUser';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { setUser, resetUserState, userLoadingStart, userLoadingEnd, userLoadingEndwithNoone } from "slices/user";
+import { setUser, userLoadingStart, userLoadingEnd, userLoadingEndwithNoone } from "slices/user";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "firebaseConfig";
 import { wrapper } from 'store/index';
 import LoadingPage from 'components/Common/Loading';
-
 
 const index = ({ me }) => {
 
@@ -23,8 +22,7 @@ const index = ({ me }) => {
     const authStateListener = onAuthStateChanged(auth, async (user) => {
       if (!user) return dispatch(userLoadingEndwithNoone());
 
-
-      const docRef = doc(db, "users", user.uid);
+      const docRef = doc(db, "users", user?.uid);
       const docSnap = await getDoc(docRef);
       if (!docSnap.exists())
         return dispatch(userLoadingEndwithNoone());
@@ -93,19 +91,6 @@ const index = ({ me }) => {
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
     store.dispatch(userLoadingStart());
-    // const auth = getAuth();
-
-    // if (!auth.currentUser) {
-    //   return {
-    //     redirect: {
-    //       destination: "/",
-    //       permanent: false,
-    //     },
-    //   };
-    // }
-    // return {
-    //   props: {},
-    // };
   }
 );
 

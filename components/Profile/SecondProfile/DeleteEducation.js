@@ -38,12 +38,13 @@ const DeleteEducation = ({ id }) => {
   return (
     <>
       <button onClick={onClickRemoveEdu} className="flex col-start-2 ml-4 md:col-start-auto md:ml-0 md:justify-end items-center" >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 z-10 rounded-lg text-sky-500 hover:text-sky-600 font-bold bg-sky-100  py-1 px-1 text-sm" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" >
+        <svg xmlns="http://www.w3.org/2000/svg" 
+        className="h-8 w-8 rounded-lg text-rose-500 hover:text-rose-600 font-bold bg-rose-100  py-1 px-1 text-sm" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" >
           <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
         </svg>
       </button>
       {removeEduModalOpen ?
-        <div className="min-w-screen h-screen animated fadeIn faster fixed left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover" id="modal-id">
+        <div className="min-w-screen h-screen animated fadeIn faster fixed left-0 top-0 flex justify-center items-center inset-0 outline-none focus:outline-none bg-no-repeat bg-center bg-cover" id="modal-id">
           <div className="absolute bg-black opacity-80 inset-0 z-0"></div>
           <div ref={modalEl} className="w-full  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white ">
             {/* <!--content--> */}

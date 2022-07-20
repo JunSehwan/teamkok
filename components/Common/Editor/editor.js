@@ -51,7 +51,8 @@ export const useEditor = (
         })
         .catch((e) => console.error("ERROR editor cleanup", e))
     }
-  }, [toolsList, data, editorOptions])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [toolsList, data])
 
   // set reference
   useEffect(() => {
@@ -80,6 +81,9 @@ export const EditorContainer = ({ editorRef, children, data, options }) => {
           /* border: 1px solid #c0c0c0; */
           padding: 2px 0;
           padding-left: 8px;
+        }
+        .codex-editor__redactor {
+          padding-bottom: 50px;
         }
       `}</style>
     </React.Fragment>

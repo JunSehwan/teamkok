@@ -13,6 +13,7 @@ import { wrapper } from 'store/index';
 import { addCategory } from 'slices/category';
 import LoadingPage from 'components/Common/Loading';
 import CategoryList from 'components/Common/CatgegoryList';
+
 const index = () => {
 
   const auth = getAuth();
@@ -21,11 +22,12 @@ const index = () => {
   const router = useRouter();
   useEffect(() => {
     const authStateListener = onAuthStateChanged(auth, async (user) => {
-      if (!user) return redirect();
+      if (!user) return redirect("/");
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
-      if (!docSnap.exists()) return redirect();
+      if (!docSnap.exists()) return redirect("/");
       const docData = docSnap.data();
+
       const currentUser = {
         userID: user.uid,
         username: docData.username,
@@ -43,7 +45,7 @@ const index = () => {
       };
       dispatch(setUser(currentUser));
       dispatch(userLoadingEnd());
-      const result = await getEducationsByUserId().then((result) => {
+      await getEducationsByUserId().then((result) => {
         dispatch(loadEducations(result));
       })
     });
@@ -57,13 +59,12 @@ const index = () => {
     // dispatch(userLoadingStart());
     if (!user?.userID) return;
 
-    const unsubscribe = onSnapshot(doc(db, "users", user.userID), (doc) => {
-      if (!doc?.exists()) return;
-
-      const docData = doc?.data();
+    const unsubscribe = onSnapshot(doc(db, "users", user.userID), (user) => {
+      if (!user?.exists()) return;
+      const docData = user?.data();
 
       const currentUser = {
-        userID: user.uid,
+        userID: user.id,
         username: docData.username,
         email: docData.email,
         birthday: docData.birthday,
@@ -79,8 +80,8 @@ const index = () => {
       };
       dispatch(setUser(currentUser));
       dispatch(userLoadingEnd());
-      const educations = getEducationsByUserId();
-      dispatch(loadEducations(educations));
+      // const educations = getEducationsByUserId();
+      // dispatch(loadEducations(educations));
     });
     return () => {
       unsubscribe();

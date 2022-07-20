@@ -39,7 +39,7 @@ class MyDocument extends Document {
       <Html>
         <Head>
           <meta charSet="utf-8" />
-          <style global jsx>
+          {/* <style global jsx>
             {`
        html,
       body
@@ -56,7 +56,7 @@ class MyDocument extends Document {
         background: transparent;
       }
     `}
-          </style>
+          </style> */}
         </Head>
         <body>
           <Main />
