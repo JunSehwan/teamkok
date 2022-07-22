@@ -2,14 +2,12 @@ import React from 'react';
 import Head from "next/head"; // Next에서 Head 수정할 수 있는 모듈
 import { ThemeProvider } from "styled-components";
 import GlobalStyle, { theme } from './styles/global';
-import { Provider } from "react-redux";
-import store from "store/index";
+import { AuthProvider } from './Auth';
 import 'tailwindcss/tailwind.css'
 import { wrapper } from "store/index";
 
 
 const _app = ({ Component, pageProps }) => {
-
 
   return (
     <>
@@ -35,13 +33,11 @@ const _app = ({ Component, pageProps }) => {
         <meta name="msapplication-TileColor" content="#ffffff" />
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png"></meta>
         <meta name="theme-color" content="#ffffff"></meta>
-        
-        
       </Head>
       <ThemeProvider theme={theme}>
-        {/* <Provider store={store}> */}
-        <Component {...pageProps} />
-        {/* </Provider> */}
+        <AuthProvider>
+          <Component {...pageProps} />
+        </AuthProvider>
       </ThemeProvider>
     </>
   );

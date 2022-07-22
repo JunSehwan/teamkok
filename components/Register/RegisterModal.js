@@ -14,12 +14,13 @@ const RegisterModal = ({
     if (openModal === true && !modalEl?.current?.contains(event.target))
       setOpenModal(false);
   };
+
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  });
+  }, []);
 
   return (
     <>
@@ -79,9 +80,7 @@ const RegisterModal = ({
                           setTabIndex={setTabIndex}
                         />
                       </div>
-
                     </div>
-
                   </div>
                 </div>
               </div>

@@ -36,11 +36,10 @@ const Login = ({ handleCancelModal }) => {
     }
     console.log(email, password, "go");
     const res = await signIn(email, password);
-    if (res?.uid?.length !== 0) {
-      dispatch(login({ email, password }));
-      handleCancelModal();
-    }
-  }, [email, dispatch, handleCancelModal, password])
+    console.log("hello", res);
+    handleCancelModal();
+    dispatch(login({ email, password }));
+  }, [email, password])
 
 
 

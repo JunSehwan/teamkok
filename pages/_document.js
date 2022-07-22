@@ -8,8 +8,8 @@ import { ServerStyleSheet } from "styled-components";
 
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
-    const sheet = new ServerStyleSheet();
     const originalRenderPage = ctx.renderPage;
+    const sheet = new ServerStyleSheet();
     try {
       ctx.renderPage = () =>
         originalRenderPage({
@@ -27,8 +27,6 @@ class MyDocument extends Document {
           </>
         ),
       };
-    } catch (error) {
-      console.error(error);
     } finally {
       sheet.seal();
     }
@@ -37,27 +35,7 @@ class MyDocument extends Document {
   render() {
     return (
       <Html>
-        <Head>
-          <meta charSet="utf-8" />
-          <style global jsx>
-            {`
-       html,
-      body
-      {
-        min-height: 100%;
-        min-width: 100%;
-        background: transparent;
-      }
-      ,
-      div#__next
-      {
-        min-height: 100%;
-        min-width: 100%;
-        background: transparent;
-      }
-    `}
-          </style>
-        </Head>
+        <Head />
         <body>
           <Main />
           <NextScript />
