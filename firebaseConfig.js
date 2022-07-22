@@ -152,7 +152,21 @@ export async function saveUserProfileChanges(
 
 
 export const signIn = async (email, password) => {
-  return await signInWithEmailAndPassword(auth, email, password)
+  try {
+    return await signInWithEmailAndPassword(auth, email, password)
+  } catch (e) {
+    if (e.code === "auth/invalid-email")
+      throw "잘못된 이메일입니다."
+    if (e.code === "auth/user-not-found")
+      throw "등록되지 않은 이메일입니다."
+    if (e.code === "auth/wrong-password")
+      throw "잘못된 비밀번호입니다."
+    if (e.code === "auth/too-many-requests")
+      // 틀린 비밀번호로 자꾸 로그인할 시
+      throw "너무 많은 로그인 요청입니다. 잠시 뒤 다시 시도해주세요"
+    console.error(e.code)
+    throw e.code;
+  }
 }
 
 // export async function signIn(email, password) {
