@@ -23,21 +23,28 @@ export const career = createSlice({
       state.myCareers.unshift(action.payload);
       state.addDone = true;
     },
+    setAddDoneFalse: (state) => {
+      state.addDone = false;
+    },
     updateCareer: (state, action) => {
-      state.myCareers.find((v) => v.id === action.payload.CareerId).name = action.payload.name;
-      state.myCareers.find((v) => v.id === action.payload.CareerId).division = action.payload.division;
-      state.myCareers.find((v) => v.id === action.payload.CareerId).position = action.payload.position;
-      state.myCareers.find((v) => v.id === action.payload.CareerId).start = action.payload.start;
-      state.myCareers.find((v) => v.id === action.payload.CareerId).end = action.payload.end;
-      state.myCareers.find((v) => v.id === action.payload.CareerId).finish = action.payload.finish;
-      state.myCareers.find((v) => v.id === action.payload.CareerId).type = action.payload.type;
-      state.myCareers.find((v) => v.id === action.payload.CareerId).job = action.payload.job;
-      state.myCareers.find((v) => v.id === action.payload.CareerId).ismain = action.payload.ismain;
-      state.myCareers.find((v) => v.id === action.payload.CareerId).description = action.payload.description;
+      state.myCareers.find((v) => v.id === action.payload.id).name = action.payload.name;
+      state.myCareers.find((v) => v.id === action.payload.id).section = action.payload.section;
+      state.myCareers.find((v) => v.id === action.payload.id).position = action.payload.position;
+      state.myCareers.find((v) => v.id === action.payload.id).start = action.payload.start;
+      state.myCareers.find((v) => v.id === action.payload.id).end = action.payload.end;
+      state.myCareers.find((v) => v.id === action.payload.id).finish = action.payload.finish;
+      state.myCareers.find((v) => v.id === action.payload.id).type = action.payload.type;
+      state.myCareers.find((v) => v.id === action.payload.id).job = action.payload.job;
+      state.myCareers.find((v) => v.id === action.payload.id).ismain = action.payload.ismain;
+      state.myCareers.find((v) => v.id === action.payload.id).description = action.payload.description;
       state.updateDone = true;
     },
+    setUpdateDoneFalse: (state) => {
+      state.updateDone = false;
+    },
     removeCareer(state, action) {
-      state.myCareers.filter(v => v.id !== action.payload);
+      const newCar = state.myCareers.filter(v => v.id !== action.payload);
+      state.myCareers = newCar;
       state.deleteDone = true;
     },
     resetCareerState(state) {
@@ -45,11 +52,11 @@ export const career = createSlice({
     },
     loadCareers(state, action) {
       state.myCareers = action.payload;
-      loadCareersDone = true;
+      state.loadCareersDone = true;
     },
     loadCompanies(state, action) {
       state.mainCompanies = action.payload;
-      loadCompaniesDone = true;
+      state.loadCompaniesDone = true;
     }
 
   },
@@ -70,7 +77,9 @@ export const {
   removeCareer,
   resetCareerState,
   loadCareers,
-  loadCompanies
+  loadCompanies,
+  setAddDoneFalse,
+  setUpdateDoneFalse
 } = career.actions;
 
 export const useCareerState = () => useAppSelector((state) => state.career);

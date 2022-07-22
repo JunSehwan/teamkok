@@ -287,7 +287,7 @@ export async function saveUserAvatarChanges(newAvatarURL) {
 }
 
 
-export async function updateUserBasicInfo(username, form, email, tel, checkedCategory, gender, url_one, url_two, url_three, address) {
+export async function updateUserBasicInfo(username, newForm, email, tel, checkedCategory, gender, url_one, url_two, url_three, address) {
 
   const user = auth.currentUser;
 
@@ -301,7 +301,7 @@ export async function updateUserBasicInfo(username, form, email, tel, checkedCat
     await updateUserDatabase("username", user.displayName);
     await updateUserDatabase("email", email);
     await updateUserDatabase("gender", gender);
-    await updateUserDatabase("birthday", form);
+    await updateUserDatabase("birthday", newForm);
     await updateUserDatabase("url_one", url_one);
     await updateUserDatabase("url_two", url_two);
     await updateUserDatabase("url_three", url_three);
@@ -310,7 +310,7 @@ export async function updateUserBasicInfo(username, form, email, tel, checkedCat
     await updateUserDatabase("phonenumber", tel);
     await updateUserDatabase("category", checkedCategory);
 
-    return (username, form, email, tel, address, checkedCategory, gender, url_one, url_two, url_three)
+    return (username, newForm, email, tel, address, checkedCategory, gender, url_one, url_two, url_three)
   } catch (error) {
     console.error(error);
     alert("profile update에 문제가 있습니다.");
@@ -506,6 +506,8 @@ export const api = {
   viewsRef: collection(db, "ViewsData"),
 
   educationsRef: collection(db, "educations"),
+  careersRef: collection(db, "careers"),
+  mystyleRef: collection(db, "mystyle"),
   blogsRef: collection(db, "blogs"),
 
   blogByIdRef: (blogId) =>
@@ -982,8 +984,12 @@ export async function createEducation(education) {
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
+    const result = {
+      ...docSnap.data(),
+      id: edu.id,
+    }
     // console.log("Document data:", docSnap.data());
-    return (docSnap.data())
+    return result;
   } else {
     // doc.data() will be undefined in this case
     console.log("No such document!");
@@ -1036,6 +1042,116 @@ export async function modifyEducation(educationResult, id) {
   }
 }
 
+
+
+export async function createCareer(career) {
+  const car = await addDoc(api.careersRef,
+    { ...career, timestamp: time });
+
+  const docRef = doc(db, "careers", car.id);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    const result = {
+      ...docSnap.data(),
+      id: car.id,
+    }
+    return result;
+  } else {
+    // doc.data() will be undefined in this case
+    console.log("No such document!");
+  }
+}
+
+// 명령 실행시 await 필수!
+export async function getCareersByUserId(userId) {
+  const user = auth.currentUser;
+  const carRef = collection(db, "careers");
+  const q = query(carRef, where("userId", "==", user.uid), orderBy("timestamp", "asc"));
+
+  //결과 검색
+  const querySnapshot = await getDocs(q);
+  const result = querySnapshot?.docs?.map((doc) => (
+    {
+      ...doc.data(),
+      id: doc.id,
+    }
+  ))
+  return result
+}
+
+export async function deleteCareer(careerId) {
+  const user = auth.currentUser;
+  try {
+    if (!careerId) return alert("삭제에 문제가 있습니다.");
+
+    const docRef = doc(db, "careers", careerId);
+    deleteDoc(docRef);
+
+    return careerId;
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+export async function modifyCareer(careerResult, id) {
+  const user = auth.currentUser;
+  try {
+    if (!user || !id) return alert("업데이트에 문제가 발생했습니다.");
+    await updateDoc(doc(db, "careers", id),
+      careerResult
+    );
+    const docRef = doc(db, "careers", id);
+
+    return docRef;
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+async function updateUserStyle(property, newValue) {
+  if (!auth.currentUser) return;
+
+  const user = auth.currentUser;
+  await updateDoc(
+    doc(db, "users", user.uid),
+    {
+      [property]: newValue,
+    }
+  );
+}
+
+
+
+export async function updateStyle(category) {
+  const user = auth.currentUser;
+  if (!category) return;
+  if (!user) {
+    return alert("로그인 후 가능합니다.")
+  } else {
+    try {
+      await updateUserDatabase("style", category);
+      return category;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+}
+
+export async function updateSurvey(survey) {
+  if (!survey) return;
+  const user = auth.currentUser;
+  if (!user) {
+    return alert("로그인 후 가능합니다.")
+  } else {
+    try {
+      await updateUserDatabase("survey", survey);
+      return survey;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+}
 // export class Blogs {
 //   // get all blogs
 //   static async getBlogs() {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { auth, updateUserBasicInfo, } from 'firebaseConfig';
-import { refresh, updateBasicProfile } from 'slices/user';
+import { updateBasicProfile } from 'slices/user';
 import AlertModal from 'components/Common/Modal/AlertModal';
 import Category from './Category';
 
@@ -222,12 +222,13 @@ const PersonalInfo = () => {
       document.getElementById('address').focus();
       return setAddressError(true);
     }
+    const newForm = { year: parseInt(form?.year), month: parseInt(form?.month), day: parseInt(form?.day) }
     const res = await updateUserBasicInfo(
-      username, form, email, tel, checkedCategory, gender, url_one, url_two, url_three, address
+      username, newForm, email, tel, checkedCategory, gender, url_one, url_two, url_three, address
     );
-    dispatch(updateBasicProfile({ username, form, email, tel, gender, checkedCategory, url_one, url_two, url_three, address }))
+    dispatch(updateBasicProfile({ username, newForm, email, tel, gender, checkedCategory, url_one, url_two, url_three, address }))
     setConfirm(true);
-  }, [username, dispatch, form, email, tel, gender, checkedCategory, url_one, url_two, url_three, address])
+  }, [username, dispatch, email, tel, gender, checkedCategory, url_one, url_two, url_three, address, form?.year, form?.month, form?.day])
 
   return (
     <div className="w-full rounded-lg lg:rounded-l-none">

@@ -3,7 +3,39 @@ import PropTypes from 'prop-types';
 import Signup from './Signup.js';
 import Login from './Login';
 
+
+const TabButton = ({ tabIndex, text, onClick }) => {
+  const isSignupTab = tabIndex === 1;
+  const isSignupBtn = text === "회원가입";
+
+  const signupBtnColor = isSignupTab
+    ? "text-white bg-purple-600"
+    : "text-purple-600 bg-white";
+  const loginBtnColor = !isSignupTab
+    ? "text-white bg-purple-600"
+    : "text-purple-600 bg-white";
+
+  const color = isSignupBtn ?
+    signupBtnColor : loginBtnColor;
+
+  return <a
+    className={
+      "text-[0.88rem] font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
+      color
+    }
+    onClick={e => {
+      e.preventDefault();
+      onClick();
+    }}
+    data-toggle="tab"
+    role="tablist"
+  >
+    {text}
+  </a>
+}
+
 const RegisterTab = ({ tabIndex, setTabIndex, handleCancelModal }) => {
+
   return (
     <div className="flex flex-wrap">
       <div className="w-full">
@@ -12,58 +44,27 @@ const RegisterTab = ({ tabIndex, setTabIndex, handleCancelModal }) => {
           role="tablist"
         >
           <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
-            <a
-              className={
-                "text-[0.88rem] font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
-                (tabIndex === 1
-                  ? "text-white bg-purple-600"
-                  : "text-purple-600 bg-white")
-              }
-              onClick={e => {
-                e.preventDefault();
-                setTabIndex(1);
-              }}
-              data-toggle="tab"
-              href="#link1"
-              role="tablist"
-            >
-              회원가입
-            </a>
+            <TabButton
+              text="회원가입"
+              tabIndex={tabIndex}
+              onClick={() => setTabIndex(1)}
+            />
           </li>
           <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
-            <a
-              className={
-                "text-[0.88rem] font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
-                (tabIndex === 2
-                  ? "text-white bg-purple-600"
-                  : "text-purple-600 bg-white")
-              }
-              onClick={e => {
-                e.preventDefault();
-                setTabIndex(2);
-              }}
-              data-toggle="tab"
-              href="#link2"
-              role="tablist"
-            >
-              로그인
-            </a>
+            <TabButton
+              text="로그인"
+              tabIndex={tabIndex}
+              onClick={() => setTabIndex(2)} />
           </li>
         </ul>
         <div className="relative flex flex-col min-w-0 break-words bg-white w-full rounded">
           <div className="flex-auto">
             <div className="tab-content tab-space">
-              <div className={tabIndex === 1 ? "block" : "hidden"} id="link1">
-                <Signup
-                  handleCancelModal={handleCancelModal}
-                />
-              </div>
-              <div className={tabIndex === 2 ? "block" : "hidden"} id="link2">
-                <Login
-                  handleCancelModal={handleCancelModal}
-                />
-              </div>
-
+              {
+                tabIndex === 1
+                  ? <Signup handleCancelModal={handleCancelModal} />
+                  : <Login handleCancelModal={handleCancelModal} />
+              }
             </div>
           </div>
         </div>

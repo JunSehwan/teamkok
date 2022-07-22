@@ -27,8 +27,14 @@ const Education = () => {
       setIsmain("");
       setDescription("");
       setFinish("");
-      setStart("");
-      setEnd("");
+      setStart({
+        year: standardYear,
+        month: "1",
+      });
+      setEnd({
+        year: standardYear,
+        month: "1",
+      });
       setNameError(false);
       setMajorError(false);
       setCategoryError(false);
@@ -44,10 +50,10 @@ const Education = () => {
   // 학력등록폼 Open/Close
   const [eduform, setEduform] = useState(false);
   const addForm = () => {
-    setEduform(true)
-    setTimeout(() => {
+    setEduform(prev => !prev)
+    if (eduform === true) {
       document.getElementById('school_name').focus();
-    }, [1000])
+    }
   }
 
   const CancelAdd = useCallback(() => {
@@ -59,8 +65,14 @@ const Education = () => {
     setIsmain("");
     setDescription("");
     setFinish("");
-    setStart("");
-    setEnd("");
+    setStart({
+      year: standardYear,
+      month: "1",
+    });
+    setEnd({
+      year: standardYear,
+      month: "1",
+    });
     setNameError(false);
     setMajorError(false);
     setCategoryError(false);
@@ -125,7 +137,7 @@ const Education = () => {
   const standardYear = 2005;
   const [start, setStart] = useState({
     year: standardYear,
-    month: 1,
+    month: "1",
   });
   const [startError, setStartError] = useState(false);
   const onChangeStartYear = useCallback(
@@ -145,7 +157,7 @@ const Education = () => {
 
   const [end, setEnd] = useState({
     year: standardYear,
-    month: 1,
+    month: "1",
   });
   const [endError, setEndError] = useState(false);
   const onChangeEndYear = useCallback(
@@ -206,7 +218,7 @@ const Education = () => {
 
   // 종료 finish
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [finish, setFinish] = useState(true);
+  const [finish, setFinish] = useState(false);
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const onChangeFinish = useCallback((e) => {
     setFinish(e.target.checked);
@@ -275,14 +287,28 @@ const Education = () => {
   }
 
   return (
-    <div className='max-w-[32rem] mx-auto w-[100%] mt-[3.2rem]'>
-      <div className="w-full rounded-lg lg:rounded-l-none">
-        <button onClick={addForm} type="button" className="flex-col rounded-full items-center inline-flex justify-center border border-gray-300 shadow-md px-3 py-2 text-sm font-medium text-gray-800 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
-          id="menu-button" aria-expanded="true" aria-haspopup="true">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-[4px] text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+    <div className='max-w-[32rem] mx-auto w-[100%] mt-[0.6rem]'>
+      <div className="rounded-lg lg:rounded-l-none">
+        <button
+          onClick={addForm}
+          type="button"
+          className="w-max py-2 px-4 flex justify-center items-center  bg-blue-500 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+            <path d="M12 14l9-5-9-5-9 5 9 5z" />
+            <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
           </svg>
+          학력추가
         </button>
+
+        {/* <button  type="button" className="flex-col rounded-full items-center inline-flex justify-center border border-gray-300 shadow-md px-3 py-2 text-sm font-medium text-gray-800 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+          id="menu-button" aria-expanded="true" aria-haspopup="true">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-Width="2">
+            <path d="M12 14l9-5-9-5-9 5 9 5z" />
+            <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+          </svg>
+        </button> */}
         {eduform ?
           <form
             className="w-full pt-2 pb-2 mb-1 rounded mt-[1.4rem]"
@@ -371,36 +397,9 @@ const Education = () => {
               ) : null}
             </div>
 
-            <div className="mb-4">
+            <div className="mb-4 flex aligns-center">
               <input
-                // className={finishError ?
-                //   'w-full px-3 py-2 mb-2 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-                //   :
-                //   'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-                // }
-                id="finish"
-                name="finish"
-                checked={finish}
-                onChange={onChangeFinish}
-                value={finish}
-                type="checkbox"
-              >
-              </input>
-              <label
-                className="inline-block mb-1 ml-[8px] text-sm font-bold text-gray-700"
-                htmlFor="finish">
-                현재 재학중
-              </label>
-
-            </div>
-
-            <div className="mb-4">
-              <input
-                // className={finishError ?
-                //   'w-full px-3 py-2 mb-2 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-                //   :
-                //   'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-                // }
+                className="form-tick bg-white bg-check h-6 w-6 border border-gray-300 rounded-md checked:bg-blue-500 checked:border-transparent focus:outline-none"
                 id="ismain"
                 name="ismain"
                 checked={ismain}
@@ -410,12 +409,29 @@ const Education = () => {
               >
               </input>
               <label
-                className="inline-block mb-1 ml-[8px] text-sm font-bold text-gray-700"
+                className="inline-block mb-0 leading-relaxed ml-[8px] text-sm font-bold text-gray-700"
                 htmlFor="ismain">
-                최종학력
+                대표학력(내 학력 중 1개만 선택)
               </label>
             </div>
 
+            <div className="mb-4 flex aligns-center">
+              <input
+                className="form-tick bg-white bg-check h-6 w-6 border border-gray-300 rounded-md checked:bg-blue-500 checked:border-transparent focus:outline-none"
+                id="finish"
+                name="finish"
+                checked={finish}
+                onChange={onChangeFinish}
+                value={finish}
+                type="checkbox"
+              >
+              </input>
+              <label
+                className="inline-block mb-0 leading-relaxed ml-[8px] text-sm font-bold text-gray-700"
+                htmlFor="finish">
+                현재 재학중
+              </label>
+            </div>
 
             <div className="mb-4">
               <div className="mb-4 md:mr-2 md:mb-0 w-[100%]">
@@ -513,7 +529,7 @@ const Education = () => {
             <div className="mb-2 text-right">
               {confirm &&
                 <AlertModal
-                  title="학력정보 업데이트 완료"
+                  title="학력정보 업로드 완료"
                   // contents="업데이트 완료"
                   closeOutsideClick={false}
                   openModal={confirm}

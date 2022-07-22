@@ -27,7 +27,6 @@ export const useSetData = (editor, data) => {
     if (!editor || !data) {
       return
     }
-
     editor?.isReady?.then(() => {
       // console.log('Editor.js is ready to work!')
       // fixing an annoying warning in Chrome
@@ -81,8 +80,8 @@ export const useLoadData = () => {
       //   console.dir(parsed)
       // } else {
       console.info("No saved data, using initial")
-      console.dir(initialData)
-      setData(initialData)
+      console.dir(data)
+      setData(data)
       // }
       console.groupEnd()
       setLoading(false)
@@ -92,7 +91,7 @@ export const useLoadData = () => {
       setLoading(false)
       clearTimeout(id)
     }
-  }, [])
+  }, [data])
 
   return { data, loading }
 }

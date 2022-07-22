@@ -1,8 +1,8 @@
 import React, { useCallback, useState, createRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { modifyEducation } from 'firebaseConfig';
-import { updateEducation, setUpdateDoneFalse } from 'slices/education';
+import { modifyCareer } from 'firebaseConfig';
+import { updateCareer, setUpdateDoneFalse } from 'slices/career';
 import AlertModal from 'components/Common/Modal/AlertModal';
 import dynamic from 'next/dynamic'
 import {
@@ -16,7 +16,7 @@ const Editor = dynamic(() =>
   import("components/Common/Editor/editor").then((mod) => mod.EditorContainer),
   { ssr: false })
 
-const EditEducation = ({ education, setViewEdu }) => {
+const EditCareer = ({ career, setViewCar }) => {
   const dispatch = useDispatch();
   // 수정
 
@@ -29,15 +29,17 @@ const EditEducation = ({ education, setViewEdu }) => {
   }, [])
 
   const { user } = useSelector(state => state.user);
-  const { updateDone } = useSelector(state => state.education);
+  const { updateDone } = useSelector(state => state.career);
 
   useEffect(() => {
     if (updateDone) {
       setNameError(false);
-      setMajorError(false);
-      setCategoryError(false);
+      setPositionError(false);
+      setSectionError(false);
+      setJobError(false);
       setStartError(false);
       setEndError(false);
+      setTypeError(false);
       setConfirm(true);
 
       dispatch(setUpdateDoneFalse());
@@ -46,48 +48,62 @@ const EditEducation = ({ education, setViewEdu }) => {
   }, [updateDone, dispatch, onEdit])
 
 
-  //학교명
-  const [name, setName] = useState(education?.name);
+  //직장명
+  const [name, setName] = useState(career?.name);
   const [nameError, setNameError] = useState(false);
   const onChangeName = useCallback((e) => {
     setName(e.target.value);
     setNameError(false);
   }, [])
 
-  //전공명
-  const [major, setMajor] = useState(education?.major);
-  const [majorError, setMajorError] = useState(false);
-  const onChangeMajor = useCallback(
+  //직급명
+  const [position, setPosition] = useState(career?.position);
+  const [positionError, setPositionError] = useState(false);
+  const onChangePosition = useCallback(
     e => {
-      setMajor(e.target.value);
-      setMajorError(false);
-    },
-    []
-  );
-  const [secondmajor, setSecondmajor] = useState(education?.secondmajor);
-  const onChangeSecondMajor = useCallback(
-    e => {
-      setSecondmajor(e.target.value);
+      setPosition(e.target.value);
+      setPositionError(false);
     },
     []
   );
 
-  // 학사/석사/박사/고등학교 category
-  const [category, setCategory] = useState(education?.category);
-  const [categoryError, setCategoryError] = useState(false);
-  const onChangeCategory = useCallback((e) => {
-    setCategory(e.target.value);
-    setCategoryError(false);
+  // 부서명
+  const [section, setSection] = useState(career?.section);
+  const [sectionError, setSectionError] = useState(false);
+  const onChangeSection = useCallback(
+    e => {
+      setSection(e.target.value);
+      setSectionError(false);
+    },
+    []
+  );
+
+  // 직무, 주요업무
+  const [job, setJob] = useState(career?.job);
+  const [jobError, setJobError] = useState(false);
+  const onChangeJob = useCallback((e) => {
+    setJob(e.target.value);
+    setJobError(false);
   }, [])
 
+
+  // 근무형태
+  const [type, setType] = useState(career?.type);
+  const [typeError, setTypeError] = useState(false);
+  const onChangeType = useCallback((e) => {
+    setType(e.target.value);
+    setTypeError(false);
+  }, [])
+
+
   // 주경력 ismain
-  const [ismain, setIsmain] = useState(education?.ismain);
+  const [ismain, setIsmain] = useState(career?.ismain);
   const onChangeIsmain = useCallback((e) => {
     setIsmain(e.target.checked);
   }, [])
 
-  // 학력설명 description
-  const [description, setDescription] = useState(education?.description);
+  // 경력설명 description
+  const [description, setDescription] = useState(career?.description);
   const { data, loading } = useLoadData({ description })
   // useSetData({ description, data });
 
@@ -101,8 +117,8 @@ const EditEducation = ({ education, setViewEdu }) => {
   // 시작일, 종료일
   const standardYear = 2005;
   const [start, setStart] = useState({
-    year: parseInt(education?.start?.year),
-    month: parseInt(education?.start?.month),
+    year: parseInt(career?.start?.year),
+    month: parseInt(career?.start?.month),
   });
   const [startError, setStartError] = useState(false);
   const onChangeStartYear = useCallback(
@@ -121,8 +137,8 @@ const EditEducation = ({ education, setViewEdu }) => {
   );
 
   const [end, setEnd] = useState({
-    year: parseInt(education?.end?.year),
-    month: parseInt(education?.end?.month),
+    year: parseInt(career?.end?.year),
+    month: parseInt(career?.end?.month),
   });
   const [endError, setEndError] = useState(false);
   const onChangeEndYear = useCallback(
@@ -183,7 +199,7 @@ const EditEducation = ({ education, setViewEdu }) => {
 
   // 종료 finish
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [finish, setFinish] = useState(education?.finish);
+  const [finish, setFinish] = useState(career?.finish);
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const onChangeFinish = useCallback((e) => {
     setFinish(e.target.checked);
@@ -198,9 +214,21 @@ const EditEducation = ({ education, setViewEdu }) => {
       document.getElementById('school_name').focus();
       return setNameError(true);
     }
-    if (major == '') {
-      document.getElementById('major').focus();
-      return setMajorError(true);
+    if (position == '') {
+      document.getElementById('position').focus();
+      return setPositionError(true);
+    }
+    if (section == '') {
+      document.getElementById('section').focus();
+      return setSectionError(true);
+    }
+    if (job == '') {
+      document.getElementById('job').focus();
+      return setJobError(true);
+    }
+    if (type == '') {
+      document.getElementById('type').focus();
+      return setTypeError(true);
     }
     if (start?.year?.length === 0 || start?.month?.length === 0) {
       document.getElementById('start').focus();
@@ -214,39 +242,39 @@ const EditEducation = ({ education, setViewEdu }) => {
       (parseInt(start?.year) == parseInt(end?.year) && parseInt(start?.month) > parseInt(end?.month))
     ) { return setEndError(true); }
 
-    if (category == '') {
-      document.getElementById('category').focus();
-      return setCategoryError(true);
-    }
+
+    // console.log(user?.userID, name, position, section, start, end, finish, job, ismain, description)
 
     if (description) {
       const out = await description?.save();
       var JSONresult = JSON.stringify(out);
     }
 
-    const educationResult = {
+    const careerResult = {
       userId: user?.userID,
       name: name,
-      major: major,
+      position: position,
       start: start,
       end: end,
-      secondmajor: secondmajor,
+      section: section,
       finish: finish,
-      category: category,
+      job: job,
+      type: type,
       ismain: ismain,
       description: JSONresult,
-      id: education?.id,
+      id: career?.id,
     };
-    const con = await modifyEducation(educationResult, education?.id);
-    document.getElementById('editor').focus();
-    dispatch(updateEducation(educationResult));
+    const con = await modifyCareer(careerResult, career?.id);
+    console.log(career?.id, "커리어아이디")
+    document?.getElementById('editor')?.focus();
+    dispatch(updateCareer(careerResult));
 
-  }, [dispatch, user?.userID, name, major, secondmajor, start, end, finish, category, ismain, description, education?.id])
+  }, [dispatch, user?.userID, name, position, type, section, start, end, finish, job, ismain, description, career?.id])
 
   const [confirm, setConfirm] = useState(false);
   const closeConfirm = () => {
     setConfirm(false);
-    setViewEdu(false);
+    setViewCar(false);
     closeModify();
 
   }
@@ -272,12 +300,10 @@ const EditEducation = ({ education, setViewEdu }) => {
                   <div className="relative bg-white rounded border">
                     <div className="w-full flex justify-start text-violet-600 mb-3">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                        <path d="M12 14l9-5-9-5-9 5 9 5z" />
-                        <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                       </svg>
                     </div>
-                    <h2 className="text-violet-600 font-lg font-bold tracking-normal leading-tight mb-4">학력정보 수정</h2>
+                    <h2 className="text-violet-600 font-lg font-bold tracking-normal leading-tight mb-4">경력정보 수정</h2>
                   </div>
                   <form
                     className="w-full pt-2 pb-2 mb-1 rounded mt-[1.4rem]"
@@ -285,7 +311,7 @@ const EditEducation = ({ education, setViewEdu }) => {
                   >
                     <div className="mb-4">
                       <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="school_name">
-                        학교명
+                        회사명
                       </label>
                       <input
                         className={nameError ?
@@ -296,7 +322,7 @@ const EditEducation = ({ education, setViewEdu }) => {
                         id="school_name"
                         type="text"
                         maxLength={100}
-                        placeholder="학교명"
+                        placeholder="회사명"
                         onChange={onChangeName}
                         value={name}
                       />
@@ -306,74 +332,95 @@ const EditEducation = ({ education, setViewEdu }) => {
                     </div>
 
                     <div className="mb-4">
-                      <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="major">
-                        전공
+                      <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="position">
+                        직위
                       </label>
                       <input
-                        className={majorError ?
+                        className={positionError ?
                           'w-full px-3 py-2 mb-2 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
                           :
                           'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
                         }
-                        id="major"
+                        id="position"
                         type="text"
                         maxLength={100}
-                        placeholder="ex.경영학과"
-                        onChange={onChangeMajor}
-                        value={major}
+                        placeholder="대리"
+                        onChange={onChangePosition}
+                        value={position}
                       />
+                      {positionError ? (
+                        <p className="text-xs mb-[1.5rem] italic text-red-500">직위명을 입력해주세요.</p>
+                      ) : null}
+                    </div>
+                    <div className="mb-4">
+                      <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="section">
+                        부서명
+                      </label>
                       <input
                         className=
                         'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-                        id="secondmajor"
+                        id="section"
                         type="text"
-                        placeholder='부전공(선택)'
+                        placeholder='인사팀'
                         maxLength={100}
-                        onChange={onChangeSecondMajor}
-                        value={secondmajor}
+                        onChange={onChangeSection}
+                        value={section}
                       />
-                      {majorError ? (
-                        <p className="text-xs mb-[1.5rem] italic text-red-500">전공명을 입력해주세요.(고등학교: ex.문과)</p>
+                      {sectionError ? (
+                        <p className="text-xs mb-[1.5rem] italic text-red-500">직위명을 입력해주세요.</p>
                       ) : null}
                     </div>
 
-
                     <div className="mb-4">
                       <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="category">
-                        학위
+                        근무형태
                       </label>
                       <select
-                        className={categoryError ?
+                        className={typeError ?
                           'w-full px-3 py-2 mb-2 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
                           :
                           'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
                         }
-                        id="category"
-                        name="category"
-                        onChange={onChangeCategory}
-                        value={category}
+                        id="type"
+                        name="type"
+                        onChange={onChangeType}
+                        value={type}
                       >
                         <option value="">선택</option>
-                        <option value={9}>박사</option>
-                        <option value={7}>석사</option>
-                        <option value={5}>학사</option>
-                        <option value={4}>전문학사</option>
-                        <option value={2}>고등학교</option>
+                        <option value={1}>정규직</option>
+                        <option value={2}>계약직</option>
+                        <option value={3}>자영업/개인사업</option>
+                        <option value={4}>프리랜서</option>
+                        <option value={5}>인턴/수습</option>
+                        <option value={6}>아르바이트</option>
                         <option value={99}>기타</option>
                       </select>
-                      {categoryError ? (
-                        <p className="text-xs mb-[1.5rem] italic text-red-500">학위를 선택해주세요.</p>
+                      {typeError ? (
+                        <p className="text-xs mb-[1.5rem] italic text-red-500">근무형태를 선택해주세요.</p>
                       ) : null}
                     </div>
 
+                    <div className="mb-4">
+                      <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="job">
+                        주요업무
+                      </label>
+                      <input
+                        className=
+                        'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                        id="job"
+                        type="text"
+                        placeholder='간단한 업무소개'
+                        maxLength={1000}
+                        onChange={onChangeJob}
+                        value={job}
+                      />
+                      {jobError ? (
+                        <p className="text-xs mb-[1.5rem] italic text-red-500">수행 업무를 작성해주세요.</p>
+                      ) : null}
+                    </div>
 
                     <div className="mb-4 flex aligns-center">
                       <input
-                        // className={finishError ?
-                        //   'w-full px-3 py-2 mb-2 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-                        //   :
-                        //   'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-                        // }
                         className="form-tick bg-white bg-check h-6 w-6 border border-gray-300 rounded-md checked:bg-blue-500 checked:border-transparent focus:outline-none"
                         id="ismain"
                         name="ismain"
@@ -386,17 +433,12 @@ const EditEducation = ({ education, setViewEdu }) => {
                       <label
                         className="inline-block mb-0 leading-relaxed ml-[8px] text-sm font-bold text-gray-700"
                         htmlFor="ismain">
-                        대표학력(내 학력 중 1개만 선택)
+                        대표경력(내 경력 중 1개만 선택)
                       </label>
                     </div>
 
                     <div className="mb-4 flex aligns-center">
                       <input
-                        // className={finishError ?
-                        //   'w-full px-3 py-2 mb-2 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-                        //   :
-                        //   'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-                        // }
                         className="form-tick bg-white bg-check h-6 w-6 border border-gray-300 rounded-md checked:bg-blue-500 checked:border-transparent focus:outline-none"
                         id="finish"
                         name="finish"
@@ -409,11 +451,9 @@ const EditEducation = ({ education, setViewEdu }) => {
                       <label
                         className="inline-block mb-0 leading-relaxed ml-[8px] text-sm font-bold text-gray-700"
                         htmlFor="finish">
-                        현재 재학중
+                        현재 재직중
                       </label>
                     </div>
-
-
 
                     <div className="mb-4">
                       <div className="mb-4 md:mr-2 md:mb-0 w-[100%]">
@@ -494,7 +534,7 @@ const EditEducation = ({ education, setViewEdu }) => {
 
                     <div className="mb-4">
                       <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="description">
-                        부가설명
+                        경력 관련부가설명
                       </label>
                       <div
                         className='bg-slate-50 shadow-inner min-h-[5rem] w-full mb-2 text-sm leading-tight text-gray-700 border rounded appearance-none focus:outline-none focus:shadow-outline'
@@ -517,7 +557,7 @@ const EditEducation = ({ education, setViewEdu }) => {
                     <div className="mb-2 text-right">
                       {confirm &&
                         <AlertModal
-                          title="학력정보 업데이트 완료"
+                          title="경력정보 업데이트 완료"
                           // contents="업데이트 완료"
                           closeOutsideClick={false}
                           openModal={confirm}
@@ -546,9 +586,9 @@ const EditEducation = ({ education, setViewEdu }) => {
 
 
 
-EditEducation.propTypes = {
-  education: PropTypes.object,
-  setViewEdu: PropTypes.func,
+EditCareer.propTypes = {
+  career: PropTypes.object,
+  setViewCar: PropTypes.func,
 };
 
-export default EditEducation;
+export default EditCareer;

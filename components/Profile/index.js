@@ -8,7 +8,7 @@ const index = () => {
   const { user } = useSelector(state => state.user);
   return (
     <>
-      <section className="pb-9 sm:pb-12 md:pb-12 sm:pt-[10rem] pt-[8rem] w-[100%]">
+      <section className="pb-[1rem] sm:pb-[1rem] md:pb-[1rem] sm:pt-[9rem] pt-[8rem] w-[100%]">
         <div className="flex flex-col mx-auto space-y-12 max-w-7xl xl:px-12">
           <div className="relative">
             <h1 className="w-full text-2xl font-bold text-center sm:text-3xl md:text-4xl">

@@ -7,10 +7,13 @@ import CareerList from './CareerList';
 const index = () => {
   return (
     <>
-    <EducationList />
-    <CareerList />
-    <Education />
-    <Career />  
+      <div>
+        
+        <Education />
+        <Career />
+      </div>
+      <EducationList />
+      <CareerList />
     </>
   );
 };

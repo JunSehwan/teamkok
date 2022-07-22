@@ -44,7 +44,6 @@ export const education = createSlice({
       state.updateDone = false;
     },
     removeEducation(state, action) {
-      console.log(action.payload, "fuckyou");
       const newEdu = state.myEducations.filter(v => v.id !== action.payload);
       state.myEducations = newEdu;
       state.deleteDone = true;

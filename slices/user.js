@@ -28,6 +28,8 @@ export const initialState = {
   isLoggedIn: false,
   signUpSuccess: false,
   updateBasicProfileSuccess: false,
+  updateStyleDone: false,
+  updateSurveyDone: false,
 };
 
 export const user = createSlice({
@@ -63,6 +65,14 @@ export const user = createSlice({
       state.user.url_two = action.payload.url_two;
       state.user.url_three = action.payload.url_three;
       state.user.address = action.payload.address;
+    },
+    updateUserStyle(state, action) {
+      state.user.style = action.payload;
+      state.updateStyleDone = true;
+    },
+    updateUserSurvey(state, action) {
+      state.user.survey = action.payload;
+      state.updateSurveyDone = true;
     },
     setUserBanner(state, action) {
       state.user.banner = action.payload;
@@ -128,6 +138,8 @@ export const {
   userLoadingEnd,
   userLoadingEndwithNoone,
   updateBasicProfile,
+  updateUserStyle,
+  updateUserSurvey
 } = user.actions;
 
 export const useUserState = () => useAppSelector((state) => state.user);
