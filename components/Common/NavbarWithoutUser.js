@@ -100,7 +100,7 @@ const NavbarWithoutUser = () => {
         twobutton={true}
       />
 
-      <nav className="fixed z-50 bg-white w-full shadow">
+      <nav className="fixed z-20 bg-white w-full shadow">
         <div className="mx-auto px-4 sm:px-6">
           <div className="flex justify-between items-center border-b-2 border-gray-100 py-4 md:justify-start md:space-x-10">
             <div className="flex justify-start lg:w-0 lg:flex-1">
@@ -181,7 +181,7 @@ const NavbarWithoutUser = () => {
                     <Image
                       alt="avatar_user"
                       className="avatar w-7 h-7 rounded-md"
-                      src="/image/icon/happiness.png"
+                      src={profilePic}
                       width={32} height={32}
                     />
                   )}

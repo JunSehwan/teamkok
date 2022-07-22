@@ -950,11 +950,6 @@ export async function deleteEducation(educationId) {
   try {
     if (!educationId) return alert("삭제에 문제가 있습니다.");
 
-    const eduRef = collection(db, "educations");
-    const q = query(eduRef, where("userId", "==", user.uid), where("id", "==", educationId));
-    const querySnapshot = await getDocs(q);
-    console.log(q, educationId, "querySnapshot");
-
     const docRef = doc(db, "educations", educationId);
     deleteDoc(docRef);
 
@@ -962,5 +957,84 @@ export async function deleteEducation(educationId) {
   } catch (e) {
     console.error(e)
   }
-
 }
+
+export async function modifyEducation(educationResult, id) {
+  const user = auth.currentUser;
+  try {
+    if (!user || !id) return alert("업데이트에 문제가 발생했습니다.");
+    await updateDoc(doc(db, "educations", id),
+      educationResult
+    );
+    const docRef = doc(db, "educations", id);
+
+    return docRef;
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+// export class Blogs {
+//   // get all blogs
+//   static async getBlogs() {
+//     const result = await getDocs(api.blogsRef);
+//     return result.docs.map((doc) => {
+//       return {
+//         id: doc.id,
+//         docId: doc.id,
+//         blogger: doc.data().blogger,
+//         bloggerId: doc.data().bloggerId,
+//         bloggerImage: doc.data().bloggerImage,
+//         coverImage: doc.data().coverImage,
+//         createdAt: doc.data().createdAt,
+//         deleted: doc.data().deleted,
+//         description: doc.data().description,
+//         numComments: doc.data().numComments,
+//         numLikes: doc.data().numLikes,
+//         numViews: doc.data().numViews,
+//         readTime: doc.data().readTime,
+//         status: doc.data().status,
+//         title: doc.data().title,
+//         likes: doc.data().likes,
+//         mainBlog: doc.data().mainBlog,
+//         comments: doc.data().comments,
+//       };
+//     });
+//   }
+
+//   // get blog by id
+//   static async getBlogById(id) {
+//     const result = this.getBlogs();
+//     return result.then((res) => {
+//       const blog = res.filter((blog) => blog.id === id)[0];
+//       return blog;
+//     });
+//   }
+
+//   // get blog by bloggerID
+//   static async getBlogByBloggerId(bloggerId) {
+//     const result = this.getBlogs();
+//     return result.then((res) => {
+//       const blog = res.filter((blog) => blog.bloggerId === bloggerId);
+//       return blog;
+//     });
+//   }
+
+//   static async likeBlog(userId, blogId) {
+//     const blog = await this.getBlogById(blogId);
+//     const likes = blog.likes;
+
+//     if (likes?.includes(userId)) {
+//       likes.splice(likes.indexOf(userId), 1);
+//     } else {
+//       likes?.push(userId);
+//     }
+
+//     await updateDoc(api.blogByIdRef(blogId), { likes });
+//   }
+// }
+
+// export const getBlogss = Blogs.getBlogs;
+// export const getBlogByIds = Blogs.getBlogById;
+// export const getBlogByBloggerIds = Blogs.getBlogByBloggerId;
+// export const likeBlogs = Blogs.likeBlog;

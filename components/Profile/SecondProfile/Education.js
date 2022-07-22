@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createEducation } from 'firebaseConfig';
 import { addEducation, setAddDoneFalse } from 'slices/education';
@@ -6,16 +6,14 @@ import AlertModal from 'components/Common/Modal/AlertModal';
 import dynamic from 'next/dynamic'
 import {
   useLoadData, options, useSetData, useClearDataCallback,
-  useSaveCallback
 } from "components/Common/Editor";
 
 
+const Editor = dynamic(() =>
+  import("components/Common/Editor/editor").then((mod) => mod.EditorContainer),
+  { ssr: false })
+
 const Education = () => {
-
-  const Editor = dynamic(() =>
-    import("components/Common/Editor/editor").then((mod) => mod.EditorContainer),
-    { ssr: false })
-
   const dispatch = useDispatch();
   const { addDone, myEducations, mainSchools } = useSelector(state => state.education);
   const { user } = useSelector(state => state.user);

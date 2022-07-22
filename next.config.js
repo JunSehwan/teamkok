@@ -4,6 +4,10 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 module.exports = withBundleAnalyzer({
   // reactStrictMode: false,
+  images: {
+    domains: ['firebasestorage.googleapis.com'],
+    formats: ['image/avif', 'image/webp'],
+  },
   distDir: 'build',
   compress: true,
   // swcMinify: true,
