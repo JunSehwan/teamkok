@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, createRef } from 'react';
+import React, { useEffect, useState, useCallback, createRef, useContext } from 'react';
 import Image from 'next/image';
 import logo from 'public/logo/teamkok.png';
 import RegisterModal from '../Register/RegisterModal';
@@ -8,15 +8,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import AlertModal from 'components/Common/Modal/AlertModal';
 import { closeSignupConfirmModal } from 'slices/user';
 import { signOut } from 'slices/user';
-import profilePic from 'public/image/icon/happiness.png';
+import { AuthContext } from '../Global/auth';
 
 const NavbarWithoutUser = () => {
+  const user = useContext(AuthContext);
+  console.log(user);
 
   const modalEl = createRef();
   const handleClickOutside = (event) => {
     if (toggle === true && !modalEl?.current?.contains(event.target))
       setToggle(false);
   };
+
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -25,7 +28,7 @@ const NavbarWithoutUser = () => {
   });
 
   const dispatch = useDispatch();
-  const { user, signUpSuccess } = useSelector(state => state.user);
+  /* const { user, signUpSuccess } = useSelector(state => state.user); */
 
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const closeConfirmModal = () => {
@@ -37,14 +40,14 @@ const NavbarWithoutUser = () => {
     setOpenConfirmModal(true);
   }, []);
 
+
   useEffect(() => {
-    if (signUpSuccess) {
+    if (user) {
       startConfirmModal();
     } else {
       setOpenConfirmModal(false);
     }
-
-  }, [setOpenConfirmModal, signUpSuccess, startConfirmModal])
+  }, [setOpenConfirmModal, startConfirmModal])
 
   const [open, setOpen] = useState(false);
   const [tabIndex, setTabIndex] = useState(1);
@@ -106,8 +109,8 @@ const NavbarWithoutUser = () => {
                 <span className="sr-only">TEAMKOK</span>
                 <Image
                   src={logo}
-                  width={32}
                   alt="logo"
+                  width={32}
                   height={32}
                 />
               </a></Link>
@@ -193,9 +196,16 @@ const NavbarWithoutUser = () => {
                         <Link href="/profile">
                           <a className="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
                             {user?.avatar ?
-                              <Image className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9" src={user?.avatar} alt="avatar" />
+                              <Image className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9" src={user?.avatar} alt="avatar"
+                                width={32}
+                                height={32}
+                              />
                               :
-                              <Image className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9" src={profilePic} alt="avatar" />
+                              <Image className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9" src="/image/icon/happiness.png" alt="avatar"
+                                width={32}
+                                height={32}
+
+                              />
                             }
                             <div className="mx-1">
                               <h1 className="text-sm w-[150px] whitespace-nowrap overflow-hidden overflow-ellipsis break-all font-semibold text-gray-700 dark:text-gray-200">{user?.username}</h1>
@@ -235,11 +245,8 @@ const NavbarWithoutUser = () => {
                     </div>
                   </div>
                 }
-
               </div>
             }
-
-
           </div>
         </div>
 
@@ -252,8 +259,8 @@ const NavbarWithoutUser = () => {
                   <div>
                     <Image
                       src={logo}
-                      width={32}
                       alt="TEAMKOK_LOGO"
+                      width={32}
                       height={32}
                     />
                   </div>
@@ -369,8 +376,6 @@ const NavbarWithoutUser = () => {
           </div>
         }
       </nav>
-
-
 
       {openConfirmModal ?
         <AlertModal

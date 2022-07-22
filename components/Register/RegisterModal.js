@@ -14,12 +14,13 @@ const RegisterModal = ({
     if (openModal === true && !modalEl?.current?.contains(event.target))
       setOpenModal(false);
   };
+
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  });
+  }, []);
 
   return (
     <>
@@ -27,21 +28,17 @@ const RegisterModal = ({
         openModal ?
           <>
             <div
-              // onClick={() => handleCancelModal()}
               className="fixed top-0 left-0 z-20 flex h-full w-full items-center justify-center bg-[#00000080]"
             >
               <div
                 className="w-[100%] justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
               >
                 <div
-                  // onClick={(e) => e.stopPropagation()}
                   className="sticky p-[1rem] w-[100%] my-6 mt-auto mb-auto mx-auto max-w-[32rem] min-w-[320px]"
                   ref={modalEl}
                 >
 
-                  {/*content*/}
                   <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                    {/*header*/}
                     <div className="flex items-start justify-between p-5  rounded-t">
                       <button
                         className="p-1 ml-auto bg-transparent border-0 text-black opacity-30 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
@@ -55,7 +52,6 @@ const RegisterModal = ({
                       </button>
                     </div>
 
-                    {/*body*/}
                     <div className="relative p-[1rem] flex-auto">
 
                       <div role="banner" className='flex w-100 justify-center items-center'>
@@ -79,9 +75,7 @@ const RegisterModal = ({
                           setTabIndex={setTabIndex}
                         />
                       </div>
-
                     </div>
-
                   </div>
                 </div>
               </div>

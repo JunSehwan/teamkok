@@ -57,44 +57,14 @@ const now = new Date();
 const nowForCopy = dayjs(now);
 const time = nowForCopy?.format('YYYY-MM-DD HH:mm:ss');
 
-// 로그인/아웃에 따라서 user값이 변경됨(기본설정함수)
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    // User is signed in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/firebase.User
     const uid = user.uid;
     return user;
-    // ...
   } else {
-    // User is signed out
     return user;
-    // ...
   }
 });
-// if (user !== null) {
-//   // The user object has basic properties such as display name, email, etc.
-//   const displayName = user.displayName;
-//   const email = user.email;
-//   const photoURL = user.photoURL;
-//   const emailVerified = user.emailVerified;
-
-//   // 제공업체별 사용자 프로필 정보 가져오기
-//   // if (user !== null) {
-//   //   user.providerData.forEach((profile) => {
-//   //     console.log("Sign-in provider: " + profile.providerId);
-//   //     console.log("  Provider-specific UID: " + profile.uid);
-//   //     console.log("  Name: " + profile.displayName);
-//   //     console.log("  Email: " + profile.email);
-//   //     console.log("  Photo URL: " + profile.photoURL);
-//   //   });
-//   // }
-
-//   // The user's ID, unique to the Firebase project. Do NOT use
-//   // this value to authenticate with your backend server, if
-//   // you have one. Use User.getToken() instead.
-//   const uid = user.uid;
-// }
-
 
 export async function getUser(req, res) {
   const user = await db.collection('users').doc('currentUser.uid').get();
@@ -115,14 +85,12 @@ export async function createAccount(
       email,
       password
     )
-    // Signed in
     const user = userCredential.user;
 
     await updateProfile(user, {
       displayName: username,
       photoURL: "",
     });
-    // Profile updated
 
     const now = new Date();
     const nowForCopy = dayjs(now);
@@ -134,36 +102,16 @@ export async function createAccount(
       avatar: "",
       birthday: form,
       phonenumber: tel,
-      // tag: "0000", // Create function to generate unique tag for each username
-      // about: "",
-      // banner: "#7CC6FE",
       email: user.email,
       timestamp: time,
     })
-    //   // setIsLoading(false);
-    // Database updated
-
-    // await joinServer("ke6NqegIvJEOa9cLzUEp");
-    // User joins global chat
     return (user);
   } catch (error) {
     if (error == "auth/email-already-in-use") {
       alert("동일한 이메일 주소가 존재합니다.")
     }
-    //   // setIsLoading(false);
   }
 }
-
-// const googleProvider = new auth.GoogleAuthProvider();
-// googleProvider.setCustomParameters({ prompt: 'select_account' });
-// export const googleSignIn = () => auth.signInWithPopup(googleProvider);
-
-// const facebookProvider = new auth.FacebookAuthProvider();
-// facebookProvider.setCustomParameters({
-//   'display': 'popup'
-// });
-// export const facebookSignIn = () => auth.signInWithPopup(facebookProvider);
-
 
 
 async function updateUserDatabase(property, newValue) {
@@ -204,17 +152,21 @@ export async function saveUserProfileChanges(
 
 
 export const signIn = async (email, password) => {
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      // Signed in 
-      const user = userCredential.user;
-      console.log(user);
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(error);
-    });
+  try {
+    return await signInWithEmailAndPassword(auth, email, password)
+  } catch (e) {
+    if (e.code === "auth/invalid-email")
+      throw "잘못된 이메일입니다."
+    if (e.code === "auth/user-not-found")
+      throw "등록되지 않은 이메일입니다."
+    if (e.code === "auth/wrong-password")
+      throw "잘못된 비밀번호입니다."
+    if (e.code === "auth/too-many-requests")
+      // 틀린 비밀번호로 자꾸 로그인할 시
+      throw "너무 많은 로그인 요청입니다. 잠시 뒤 다시 시도해주세요"
+    console.error(e.code)
+    throw e.code;
+  }
 }
 
 // export async function signIn(email, password) {
