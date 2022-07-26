@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import CategoryList from 'components/Common/CatgegoryList';
+import CategoryList from 'components/Common/CategoryList';
 import PropTypes from 'prop-types';
 
 const Category = ({ user, checkedCategory, setCheckedCategory }

@@ -7,6 +7,7 @@ import categoryReducer from "slices/category";
 import educationReducer from "slices/education";
 import careerReducer from "slices/career";
 import mystyleReducer from "slices/mystyle";
+import boardReducer from "slices/board";
 // import addServerReducer from "slices/addServer";
 // import serverSettingsReducer from "slices/serverSettings";
 // import sendGifReducer from "slices/sendGif";
@@ -22,6 +23,7 @@ const makeStore = () =>
       education: educationReducer,
       career: careerReducer,
       mystyle: mystyleReducer,
+      board: boardReducer,
       // servers: serversReducer,
       // serverSettings: serverSettingsReducer,
       // addServer: addServerReducer,

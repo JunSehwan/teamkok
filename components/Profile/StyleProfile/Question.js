@@ -1,5 +1,4 @@
 import React from 'react';
-import Survey from 'components/Common/Survey';
 import PropTypes from 'prop-types';
 
 const Question = ({ key, state, value, name, onChangeSurvey }) => {

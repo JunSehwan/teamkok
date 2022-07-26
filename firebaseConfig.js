@@ -208,7 +208,6 @@ export const signIn = async (email, password) => {
     .then((userCredential) => {
       // Signed in 
       const user = userCredential.user;
-      console.log(user);
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -217,38 +216,6 @@ export const signIn = async (email, password) => {
     });
 }
 
-// export async function signIn(email, password) {
-//   const user = auth.currentUser;
-//   console.log(user);
-//   if (user) {
-//     alert("이미 로그인을 하였습니다.")
-//     return {
-//       redirect: {
-//         destination: '/',
-//         permanent: false,
-//       }
-//     };
-//   }
-//   try {
-//     const userCredential = await signInWithEmailAndPassword(
-//       auth,
-//       email,
-//       password
-//     )
-//     // Signed in
-//     const user = userCredential.user;
-//     // await updateDoc(
-//     //   doc(db, "users", user.uid),
-//     //   {
-//     //     [property]: newValue,
-//     //   }
-//     // );
-//     return user;
-//   } catch (error) {
-//     console.error(error);
-//     alert("로그인에 실패하였습니다.");
-//   }
-// }
 
 async function reauthenticateUser(password) {
   if (!auth.currentUser || !auth.currentUser.email) return;
@@ -270,22 +237,6 @@ export async function logOut() {
     // An error happened.
   }
 }
-
-
-export async function saveUserAvatarChanges(newAvatarURL) {
-  const user = auth.currentUser;
-  if (!user) return (
-    alert("로그인 후 가능합니다.")
-  );
-  await updateProfile(user, {
-    photoURL: newAvatarURL,
-  });
-  await updateProfile(user, {
-    photoURL: newAvatarURL,
-  });
-  await updateUserDatabase("avatar", user.photoURL);
-}
-
 
 export async function updateUserBasicInfo(username, newForm, email, tel, checkedCategory, gender, url_one, url_two, url_three, address) {
 
@@ -324,14 +275,11 @@ export async function changeUsername(newUsername, password) {
 
   try {
     if (!user.displayName) return;
-
     await reauthenticateUser(password);
-
     await updateProfile(user, {
       displayName: newUsername,
     });
     // Profile updated!
-
     await updateUserDatabase("username", user.displayName);
   } catch (error) {
     console.error(error);
@@ -340,56 +288,51 @@ export async function changeUsername(newUsername, password) {
 
 export async function changeEmail(newEmail, password) {
   if (!auth.currentUser || !auth.currentUser.email) return;
-
   const user = auth.currentUser;
 
   try {
     if (!user.email) return;
-
     await reauthenticateUser(password);
-
     await updateEmail(user, newEmail);
-
     await updateUserDatabase("email", user.email);
   } catch (error) {
     console.error(error);
   }
 }
 
+export async function saveUserAvatarChanges(newAvatarURL) {
+  const user = auth.currentUser;
+  if (!user) return (
+    alert("로그인 후 가능합니다.")
+  );
+  await updateProfile(user, {
+    photoURL: newAvatarURL,
+  });
+  await updateUserDatabase("avatar", user.photoURL);
+}
+
 export async function uploadAvatarPreview(file, userID) {
   const storage = getStorage();
-
   const avatarRef = ref(storage, `users/${userID}/temp/avatar`);
-
   await uploadBytes(avatarRef, file);
-
   return await getAvatarPreviewURL(userID);
 }
 
 async function getAvatarPreviewURL(userID) {
   const storage = getStorage();
-
   return await getDownloadURL(ref(storage, `users/${userID}/temp/avatar`));
 }
 
 export async function uploadAvatar(file, userID) {
   const storage = getStorage();
-
   const avatarRef = ref(storage, `users/${userID}/avatar`);
-
   await uploadBytes(avatarRef, file);
-
   return await getAvatarURL(userID);
 }
-
 async function getAvatarURL(userID) {
   const storage = getStorage();
-
   return await getDownloadURL(ref(storage, `users/${userID}/avatar`));
 }
-
-
-
 
 
 
@@ -446,7 +389,6 @@ export function getRandomNumber() {
   const rndInt = Math.floor(Math.random() * 10) + 1;
   return rndInt;
 }
-
 // export async function setCategoryList(CategoryList) {
 // console.log(user)
 
@@ -456,12 +398,6 @@ export const setCategoryList = async (CategoryList) => {
     const res = await CategoryList?.map((m, index) => (
       addDoc(categoryRef, { key: index, name: m.name })
     ))
-
-    // const res = await addDoc(categoryRef, {
-    //   CategoryList
-
-
-    console.log(res);
     return (res);
   } catch (e) {
     console.error(e);
@@ -469,30 +405,8 @@ export const setCategoryList = async (CategoryList) => {
 }
 
 
-
-// const categoryRef = await setDoc(doc(db, 'categories', "categorylist"), {
-//   CategoryList
-// })
-// await citiesRef.doc('SF').set({
-//   name: 'San Francisco', state: 'CA', country: 'USA',
-//   capital: false, population: 860000
-// });
-// const res = await categoryRef.doc('categories').add(
-//   CategoryList
-// );
-
-
-// }
-// export async function getCategoryList() {
-//   await getDoc(doc(db, "categories"), {
-//   })
-//   return CategoryList;
-// }
-
-
 export const api = {
   usersRef: collection(db, "users"),
-
   userByIdRef: (userId) =>
     doc(db, "users", `${userId}`),
 
@@ -502,13 +416,12 @@ export const api = {
   // ),
 
   annoynomusUsersRef: collection(db, "annoymous"),
-
   viewsRef: collection(db, "ViewsData"),
-
   educationsRef: collection(db, "educations"),
   careersRef: collection(db, "careers"),
   mystyleRef: collection(db, "mystyle"),
   blogsRef: collection(db, "blogs"),
+  boardsRef: collection(db, "boards"),
 
   blogByIdRef: (blogId) =>
     doc(db, "blogs", `${blogId}`),
@@ -520,7 +433,6 @@ export const api = {
     ),
 
   blogsMetaRef: collection(db, "blogsMeta"),
-
   blogMetaByIdRef: (blogId) =>
     doc(db, "blogsMeta", `${blogId}`),
 
@@ -1109,20 +1021,6 @@ export async function modifyCareer(careerResult, id) {
   }
 }
 
-async function updateUserStyle(property, newValue) {
-  if (!auth.currentUser) return;
-
-  const user = auth.currentUser;
-  await updateDoc(
-    doc(db, "users", user.uid),
-    {
-      [property]: newValue,
-    }
-  );
-}
-
-
-
 export async function updateStyle(category) {
   const user = auth.currentUser;
   if (!category) return;
@@ -1152,67 +1050,158 @@ export async function updateSurvey(survey) {
     }
   }
 }
-// export class Blogs {
-//   // get all blogs
-//   static async getBlogs() {
-//     const result = await getDocs(api.blogsRef);
-//     return result.docs.map((doc) => {
-//       return {
-//         id: doc.id,
-//         docId: doc.id,
-//         blogger: doc.data().blogger,
-//         bloggerId: doc.data().bloggerId,
-//         bloggerImage: doc.data().bloggerImage,
-//         coverImage: doc.data().coverImage,
-//         createdAt: doc.data().createdAt,
-//         deleted: doc.data().deleted,
-//         description: doc.data().description,
-//         numComments: doc.data().numComments,
-//         numLikes: doc.data().numLikes,
-//         numViews: doc.data().numViews,
-//         readTime: doc.data().readTime,
-//         status: doc.data().status,
-//         title: doc.data().title,
-//         likes: doc.data().likes,
-//         mainBlog: doc.data().mainBlog,
-//         comments: doc.data().comments,
-//       };
-//     });
-//   }
 
-//   // get blog by id
-//   static async getBlogById(id) {
-//     const result = this.getBlogs();
-//     return result.then((res) => {
-//       const blog = res.filter((blog) => blog.id === id)[0];
-//       return blog;
-//     });
-//   }
 
-//   // get blog by bloggerID
-//   static async getBlogByBloggerId(bloggerId) {
-//     const result = this.getBlogs();
-//     return result.then((res) => {
-//       const blog = res.filter((blog) => blog.bloggerId === bloggerId);
-//       return blog;
-//     });
-//   }
+export async function createBoard(board) {
+  const user = auth.currentUser;
+  if (!user) {
+    return alert("로그인 후 가능합니다.")
+  }
+  try {
+    const newBoard = await addDoc(api.boardsRef,
+      {
+        ...board,
+        creatorId: user.uid,
+        creatorName: user.displayName,
+        createdAt: time
+      });
+    const docRef = doc(db, "boards", newBoard?.id);
+    const docSnap = await getDoc(docRef);
 
-//   static async likeBlog(userId, blogId) {
-//     const blog = await this.getBlogById(blogId);
-//     const likes = blog.likes;
+    if (docSnap.exists()) {
+      const result = {
+        ...docSnap.data(),
+        id: newBoard.id,
+      }
+      return result;
+    } else {
+      alert("No such document!");
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
 
-//     if (likes?.includes(userId)) {
-//       likes.splice(likes.indexOf(userId), 1);
-//     } else {
-//       likes?.push(userId);
-//     }
+export async function getBoard(boardId) {
+  try {
+    const docRef = doc(db, "boards", boardId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const result = {
+        ...docSnap.data(),
+        id: boardId,
+      }
+      return result;
+    }
+  }
+  catch (e) {
+    console.error(e);
+  }
+}
 
-//     await updateDoc(api.blogByIdRef(blogId), { likes });
-//   }
-// }
+// 명령 실행시 await 필수!
+export async function getBoardsByUserId(userId) {
+  const user = auth.currentUser;
+  const boardRef = collection(db, "boards");
+  const q = query(boardRef, where("creatorId", "==", user.uid), orderBy("createdAt", "asc"));
+  //결과 검색
+  const querySnapshot = await getDocs(q);
+  const result = querySnapshot?.docs?.map((doc) => (
+    {
+      ...doc.data(),
+      id: doc.id,
+    }
+  ))
+  return result
+}
 
-// export const getBlogss = Blogs.getBlogs;
-// export const getBlogByIds = Blogs.getBlogById;
-// export const getBlogByBloggerIds = Blogs.getBlogByBloggerId;
-// export const likeBlogs = Blogs.likeBlog;
+export async function getAllBoards() {
+  const result = await getDocs(api.boardsRef);
+  return result.docs.map((doc) => ({
+    id: doc.id,
+    logo: doc.data().logo,
+    name: doc.data().name,
+    email: doc.data().email,
+    category: doc.data().category,
+    creatorId: doc.data().creatorId,
+    creatorName: doc.data().creatorName,
+    createdAt: doc.data().createdAt,
+  }));
+  //결과 검색
+}
+
+export async function deleteBoard(boardId) {
+  const user = auth.currentUser;
+  try {
+    if (!boardId) return alert("삭제에 문제가 있습니다.");
+
+    const docRef = doc(db, "boards", boardId);
+    deleteDoc(docRef);
+
+    return boardId;
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+export async function modifyBoard(boardResult, id) {
+  const user = auth.currentUser;
+  try {
+    if (!user || !id) return alert("업데이트에 문제가 발생했습니다.");
+    await updateDoc(doc(db, "boards", id),
+      boardResult
+    );
+    const docRef = doc(db, "boards", id);
+
+    return docRef;
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+
+async function updateBoardDatabase(property, newValue, boardId) {
+  if (!auth.currentUser) return;
+  const user = auth.currentUser;
+  await updateDoc(
+    doc(db, "boards", boardId),
+    {
+      [property]: newValue,
+    }
+  );
+}
+
+export async function saveCompanyLogoChanges(newLogoURL, boardId) {
+  const user = auth.currentUser;
+  if (!user) return (
+    alert("로그인 후 가능합니다.")
+  );
+  await updateBoardDatabase("logo", newLogoURL, boardId);
+}
+
+export async function uploadLogoPreview(file, boardID) {
+  const storage = getStorage();
+  const logoRef = ref(storage, `company/${boardID}/temp/logo`);
+  await uploadBytes(logoRef, file);
+  return await getLogoPreviewURL(boardID);
+}
+
+async function getLogoPreviewURL(boardID) {
+  const storage = getStorage();
+  return await getDownloadURL(ref(storage, `company/${boardID}/temp/logo`));
+}
+
+export async function uploadLogo(file, boardID) {
+  const storage = getStorage();
+  const companyRef = ref(storage, `company/${boardID}/logo`);
+  await uploadBytes(companyRef, file);
+  return await getLogoURL(boardID);
+}
+
+async function getLogoURL(boardID) {
+  const storage = getStorage();
+  return await getDownloadURL(ref(storage, `company/${boardID}/logo`));
+}
+
+
+

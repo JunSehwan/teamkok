@@ -1,6 +1,6 @@
 import React from 'react';
 
-const MyCompany = () => {
+const index = () => {
   return (
     <div>
       
@@ -8,4 +8,4 @@ const MyCompany = () => {
   );
 };
 
-export default MyCompany;
+export default index;

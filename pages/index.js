@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Main from 'components/Main';
 import Head from 'next/head'
-import Navbar from 'components/Common/Navbar';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { setUser, userLoadingStart, userLoadingEnd, userLoadingEndwithNoone } from "slices/user";
@@ -82,7 +81,6 @@ const index = ({ me }) => {
         <LoadingPage />
         :
         <>
-          <Navbar me={me} />
           <Main me={me} />
         </>
       }

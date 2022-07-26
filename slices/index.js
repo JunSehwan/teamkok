@@ -7,6 +7,7 @@ import categoryReducer from './category';
 import educationReducer from './education';
 import careerReducer from './career';
 import mystyleReducer from './mystyle';
+import boardReducer from './board';
 
 const rootReducer = combineReducers({
   userReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   educationReducer,
   careerReducer,
   mystyleReducer,
+  boardReducer,
 });
 
 export const reducer = (state, action) => {

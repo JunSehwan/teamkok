@@ -6,7 +6,7 @@ import { Provider } from "react-redux";
 import store from "store/index";
 import 'tailwindcss/tailwind.css'
 import { wrapper } from "store/index";
-
+import Navbar from 'components/Common/Navbar';
 
 const _app = ({ Component, pageProps }) => {
 
@@ -40,6 +40,7 @@ const _app = ({ Component, pageProps }) => {
       </Head>
       <ThemeProvider theme={theme}>
         {/* <Provider store={store}> */}
+        <Navbar />
         <Component {...pageProps} />
         {/* </Provider> */}
       </ThemeProvider>

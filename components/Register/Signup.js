@@ -194,7 +194,7 @@ const Signup = ({ handleCancelModal }) => {
     const res = await createAccount(email, password, username, form, tel);
     if (res?.uid?.length !== 0) {
        try {
-        await dispatch(signUp({
+        dispatch(signUp({
           email, username,
           birthday: form,
           tel,

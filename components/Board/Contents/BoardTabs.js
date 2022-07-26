@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import StyleProfile from './StyleProfile';
-import BasicInfo from './BasicInfo';
-import SecondProfile from './SecondProfile';
+import AdminPage from './AdminPage';
+import TeamStory from './TeamStory';
+import Dialog from './Dialog';
 
 const Tab = ({ tabIndex, setTabIndex }) => {
   return (
-    <div className="flex flex-col px-4 mx-auto space-y-12 max-w-7xl xl:px-12">
+    <div className="flex flex-col w-[95%] px-4 mx-auto space-y-6 max-w-7xl xl:px-6">
       <div className="relative">
         <div className="flex flex-wrap">
           <div className="w-full">
             <ul
-              className="flex mb-0 max-w-[32rem] mx-auto list-none flex-wrap pt-3 pb-4 flex-row"
+              className="flex mb-0 mt-6 max-w-[32rem] mx-auto list-none flex-wrap pt-3 pb-4 flex-row"
               role="tablist"
             >
               <li className="-mb-px mr-1 last:mr-0 flex-auto text-center">
@@ -30,7 +30,7 @@ const Tab = ({ tabIndex, setTabIndex }) => {
                   href="#link1"
                   role="tablist"
                 >
-                  기본정보
+                  팀스토리
                 </a>
               </li>
               <li className="-mb-px mr-1 last:mr-0 flex-auto text-center">
@@ -49,7 +49,7 @@ const Tab = ({ tabIndex, setTabIndex }) => {
                   href="#link2"
                   role="tablist"
                 >
-                  경력/학력관리
+                  1:1대화
                 </a>
               </li>
               <li className="-mb-px mr-1 last:mr-0 flex-auto text-center">
@@ -68,7 +68,7 @@ const Tab = ({ tabIndex, setTabIndex }) => {
                   href="#link2"
                   role="tablist"
                 >
-                  내스타일
+                  채용관리
                 </a>
               </li>
             </ul>
@@ -76,13 +76,13 @@ const Tab = ({ tabIndex, setTabIndex }) => {
               <div className="flex-auto">
                 <div className="tab-content tab-space">
                   <div className={tabIndex === 1 ? "block" : "hidden"} id="link1">
-                    <BasicInfo />
+                    <TeamStory />
                   </div>
                   <div className={tabIndex === 2 ? "block" : "hidden"} id="link2">
-                    <SecondProfile />
+                    <Dialog />
                   </div>
                   <div className={tabIndex === 3 ? "block" : "hidden"} id="link3">
-                    <StyleProfile />
+                    <AdminPage />
                   </div>
                 </div>
               </div>

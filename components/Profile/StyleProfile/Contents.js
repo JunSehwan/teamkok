@@ -4,8 +4,12 @@ import StyleCard from './StyleCard';
 import Question from './Question';
 import Survey from 'components/Common/Survey';
 import StyleList from 'components/Common/StyleList';
-import { updateUserStyle, updateUserSurvey } from 'slices/user';
+import {
+  updateUserStyle, updateUserSurvey,
+  updateSurveyFalse, updateStyleFalse,
+} from 'slices/user';
 import { updateStyle, updateSurvey } from 'firebaseConfig';
+import AlertModal from 'components/Common/Modal/AlertModal';
 
 
 const Contents = () => {
@@ -20,26 +24,40 @@ const Contents = () => {
     setOpenSurvey(prev => !prev);
   }, [])
 
-  useEffect(() => {
-    if (updateSurveyDone) {
-      setSurveyError(false);
-    }
-  }, [updateSurveyDone])
+  const [confirm, setConfirm] = useState(false);
+  const ConfirmModalOpen = useCallback(() => {
+    setConfirm(true);
+    dispatch(updateStyleFalse());
+    dispatch(updateSurveyFalse());
+  }, [dispatch])
+
+  const ConfirmModalClose = () => {
+    setConfirm(false);
+  }
 
   useEffect(() => {
     if (updateStyleDone) {
+      ConfirmModalOpen();
       setCategoryError(false);
     }
-  }, [updateStyleDone])
+  }, [updateStyleDone, ConfirmModalOpen])
 
-  const [category, setCategory] = useState();
+  useEffect(() => {
+    if (updateSurveyDone) {
+      ConfirmModalOpen();
+      setSurveyError(false);
+    }
+  }, [updateSurveyDone, ConfirmModalOpen])
+
+
+
+  const [category, setCategory] = useState(user?.style || "");
   const [categoryError, setCategoryError] = useState(false);
   const onChangeCategory = useCallback((index) => () => {
     setCategory(index + 1);
     setCategoryError(false);
-    console.log(category, "ah");
 
-  }, [category])
+  }, [])
 
   const onCategorySubmit = useCallback(async (e) => {
     if (category === "") {
@@ -53,7 +71,7 @@ const Contents = () => {
 
   const [surveyError, setSurveyError] = useState(false);
   const [state, setState] = useState(
-    {
+    user?.survey || {
       one: "", two: "", three: "", four: "",
       five: "", six: "", seven: "", eight: "",
     }
@@ -66,7 +84,6 @@ const Contents = () => {
   const onChangeSurvey = useCallback((name, e) => () => {
     setState({ ...state, [name]: e });
     setSurveyError(false);
-    console.log("state", state);
   }, [state]);
 
   const onSurveySubmit = useCallback(async (e) => {
@@ -76,62 +93,6 @@ const Contents = () => {
     const surveyRes = await updateSurvey(state);
     dispatch(updateUserSurvey(state));
   }, [dispatch, eight, five, four, one, seven, six, state, three, two])
-
-  // useEffect(() => {
-  //   if (surveyDone) {
-  //     setState({
-  //       name: "", company: "", type: "", leave: "",
-  //     });
-
-  //     setError(false);
-
-  //     // 팝업창 완료
-  //     // setConfirmOpen(true);
-  //   }
-  // }, [surveyDone]);
-
-
-  // const onSubmit = useCallback(async (e) => {
-  //   e.preventDefault();
-
-  //   if (username?.length === 0) {
-  //     document.getElementById('username').focus();
-  //     return setUsernameError(true);
-  //   }
-  //   if (email == '') {
-  //     document.getElementById('e-mail').focus();
-  //     return setEmailError(true);
-  //   }
-  //   if (!email_check(email)) {
-  //     document.getElementById('e-mail').focus();
-  //     return setEmailError(true);
-  //   }
-  //   if (form?.year?.length === 0 || form?.month?.length === 0 || form?.day?.length === 0) {
-  //     document.getElementById('birthyear').focus();
-  //     return setBirthError(true);
-  //   }
-  //   if (tel == '') {
-  //     document.getElementById('phone').focus();
-  //     return setTelError(true);
-  //   }
-  //   if (gender == '') {
-  //     document.getElementById('gender').focus();
-  //     return setGenderError(true);
-  //   }
-  //   if (category == "") {
-  //     document.getElementById('category').focus();
-  //     return setCategoryError(true);
-  //   }
-  //   if (address == "") {
-  //     document.getElementById('address').focus();
-  //     return setAddressError(true);
-  //   }
-  //   const res = await updateUserBasicInfo(
-  //     username, form, email, tel, checkedCategory, gender, url_one, url_two, url_three, address
-  //   );
-  //   dispatch(updateBasicProfile({ username, form, email, tel, gender, checkedCategory, url_one, url_two, url_three, address }))
-  //   setConfirm(true);
-  // }, [username, dispatch, form, email, tel, gender, checkedCategory, url_one, url_two, url_three, address])
 
 
   return (
@@ -176,7 +137,9 @@ const Contents = () => {
                   {categoryError ? (
                     <p className="mt-[6px] w-[100%] font-bold text-xs mb-[1.5rem] italic text-red-500">스타일을 선택해주세요.</p>
                   ) : null}
-                  <button onClick={onCategorySubmit}>확인</button>
+                  <button
+                    className='bg-cyan-500 text-white active:bg-cyan-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+                    onClick={onCategorySubmit}>저장</button>
                 </> : null}
             </div>
 
@@ -213,15 +176,26 @@ const Contents = () => {
                   {surveyError ? (
                     <p className="mt-[6px] w-[100%] font-bold text-xs mb-[1.5rem] italic text-red-500">설문항목을 다 작성하셨나요?</p>
                   ) : null}
-                  <button onClick={onSurveySubmit}>확인</button>
+                  <button
+                    className='bg-cyan-500 text-white active:bg-cyan-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+                    onClick={onSurveySubmit}>저장</button>
                 </> : null}
             </div>
+            <AlertModal
+              title="업데이트 완료"
+              contents="정보등록이 완료되었습니다."
+              contents_second="현업 담당자에게 어필할 수 있는 가능성이 커집니다."
+              closeOutsideClick={true}
+              openModal={confirm}
+              closeModal={ConfirmModalClose}
+              twobutton={false}
 
+            />
           </div>
         </div>
-        <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="school_name">
+        {/* <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="school_name">
           내 MBTI 입력
-        </label>
+        </label> */}
       </div>
     </>
   );

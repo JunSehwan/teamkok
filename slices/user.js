@@ -74,6 +74,12 @@ export const user = createSlice({
       state.user.survey = action.payload;
       state.updateSurveyDone = true;
     },
+    updateStyleFalse(state, action) {
+      state.updateStyleDone = false;
+    },
+    updateSurveyFalse(state, action) {
+      state.updateSurveyDone = false;
+    },
     setUserBanner(state, action) {
       state.user.banner = action.payload;
     },
@@ -139,7 +145,9 @@ export const {
   userLoadingEndwithNoone,
   updateBasicProfile,
   updateUserStyle,
-  updateUserSurvey
+  updateUserSurvey,
+  updateStyleFalse,
+  updateSurveyFalse,
 } = user.actions;
 
 export const useUserState = () => useAppSelector((state) => state.user);

@@ -32,10 +32,10 @@ const AlertModal = ({ title, contents, contents_second, closeOutsideClick, openM
                     {title}
                   </p>)
                   : null}
-                <p className="text-gray-600 dark:text-gray-100 text-md py-1 px-6">
+                <p className="text-left text-gray-600 dark:text-gray-100 text-md py-1 px-6">
                   {contents}
                 </p>
-                <p className="text-purple-600 dark:text-gray-100 text-[14px] py-1 px-6 mt-[6px]">
+                <p className="text-left text-purple-600 dark:text-gray-100 text-[12px] py-1 px-6 mt-[2px]">
                   {contents_second}
                 </p>
                 <div className="flex items-center justify-center gap-4 w-full mt-8">

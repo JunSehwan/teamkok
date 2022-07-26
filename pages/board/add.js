@@ -1,18 +1,22 @@
 import React, { useEffect, Suspense } from 'react';
-import Profile from 'components/Profile';
 import Head from 'next/head'
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
+
 import { setUser, resetUserState, userLoadingStart, userLoadingEnd, userLoadingEndwithNoone } from "slices/user";
 import { loadEducations } from "slices/education";
 import { loadCareers } from "slices/career";
+import { loadAllBoards, loadBoards } from 'slices/board';
+
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
-import { db, getEducationsByUserId, getCareersByUserId } from "firebaseConfig";
+import {
+  db, getEducationsByUserId, getCareersByUserId,
+  getAllBoards, getBoardsByUserId
+} from "firebaseConfig";
 import { wrapper } from 'store/index';
-import { addCategory } from 'slices/category';
 import LoadingPage from 'components/Common/Loading';
-import CategoryList from 'components/Common/CategoryList';
+import AddBoard from 'components/Board/Add';
 
 const index = () => {
 
@@ -59,6 +63,12 @@ const index = () => {
       await getCareersByUserId().then((result) => {
         dispatch(loadCareers(result));
       })
+      await getAllBoards().then((result) => {
+        dispatch(loadAllBoards(result));
+      })
+      await getBoardsByUserId().then((result) => {
+        dispatch(loadBoards(result));
+      })
     });
     return () => {
       authStateListener();
@@ -98,13 +108,48 @@ const index = () => {
     };
   }, [dispatch, user?.uid, user?.userID]);
 
-  
+  // useEffect(() => {
+  //   if (!server.serverID || !user.userID) return;
+
+  //   const docRef = doc(db, "servers", server.serverID, "members", user.userID);
+
+  //   const unsubscribe = onSnapshot(docRef, (doc) => {
+  //     const docData = doc.data();
+
+  //     const roles = {
+  //       userID: doc.id,
+  //       serverOwner: docData?.serverOwner,
+  //       roles: docData?.roles,
+  //       // permissions: docData?.permissions,
+  //     };
+  //     dispatch(setUser({ ...user, roles }));
+  //   });
+  //   return () => {
+  //     unsubscribe();
+  //   };
+  // }, [server]);
+
+  // function redirect() {
+  //   dispatch(rere());
+
+  //   router.push("/login");
+  // }
+
+
+  // 만약 로그아웃시 메인화면으로 이동
+  // useEffect(() => {
+  //   if (!(me && me.id)) {
+  //     router.push('/');
+  //   }
+  // }, [me && me.id]);
+
   return (
     <>
-      <title>현업전문가와의 소통기반 채용플랫폼 - TEAMKOK</title>
-      <meta name="description" content="현업전문가와의 소통기반 채용플랫폼 - TEAMKOK " />
+      <Head>
+        <title>현업전문가와의 소통기반 채용플랫폼 - TEAMKOK</title>
+        <meta name="description" content="현업전문가와의 소통기반 채용플랫폼 - TEAMKOK " />
 
-      {/* <meta name="keywords" content="키워드1, 키워드2, 키워드3" />
+        {/* <meta name="keywords" content="키워드1, 키워드2, 키워드3" />
       <meta name="description" content="페이지 설명" />
 
       <meta name="application-name" content="어플에서 아이콘뺄때 나올 이름" />
@@ -122,9 +167,10 @@ const index = () => {
       <meta name="twitter:description" content="페이지 설명" />
       <meta name="twitter:image" content="http://www.mysite.com/article/article1.html" />
       <meta name="twitter:domain" content="사이트 명" /> */}
+      </Head>
       {loading ?
         <LoadingPage /> :
-        <Profile />}
+        <AddBoard />}
     </>
 
   );
@@ -133,19 +179,6 @@ const index = () => {
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
     store.dispatch(userLoadingStart());
-    store.dispatch(addCategory(CategoryList));    
-    // const auth = getAuth();
-    // if (!auth.currentUser) {
-    //   return {
-    //     redirect: {
-    //       destination: "/",
-    //       permanent: false,
-    //     },
-    //   };
-    // }
-    // return {
-    //   props: {},
-    // };
   }
 );
 
