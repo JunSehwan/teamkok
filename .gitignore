@@ -148,3 +148,5 @@ rootkey.csv
 .env.local
 /front/.env.local
 front/.env.local
+.env.development
+.env.production
