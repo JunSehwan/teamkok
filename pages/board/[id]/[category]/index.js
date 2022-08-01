@@ -7,13 +7,13 @@ import { useRouter } from 'next/router';
 import { setUser, resetUserState, userLoadingStart, userLoadingEnd, userLoadingEndwithNoone } from "slices/user";
 import { loadEducations } from "slices/education";
 import { loadCareers } from "slices/career";
-import { loadAllBoards, loadBoards, loadBoard } from 'slices/board';
+import { loadAllBoards, loadBoards, loadBoard, loadSection } from 'slices/board';
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import {
   db, getEducationsByUserId, getCareersByUserId,
-  getAllBoards, getBoardsByUserId, getBoard
+  getAllBoards, getBoardsByUserId, getBoard, getSection, getPosts
 } from "firebaseConfig";
 import { wrapper } from 'store/index';
 import LoadingPage from 'components/Common/Loading';
@@ -22,6 +22,7 @@ import Contents from 'components/Board/Contents';
 const board = () => {
   const auth = getAuth();
   const { user, loading } = useSelector(state => state.user);
+  const { singleSection } = useSelector(state => state.board);
   const dispatch = useDispatch();
   const router = useRouter();
   const pid = router.query;
@@ -71,9 +72,15 @@ const board = () => {
       await getBoardsByUserId().then((result) => {
         dispatch(loadBoards(result));
       })
-      await getBoard(pid.id).then((result) => {
+      await getBoard(pid?.id).then((result) => {
         dispatch(loadBoard(result));
       })
+      await getSection(pid?.id, pid?.category).then((result) => {
+        dispatch(loadSection(result));
+      })
+      // await getPosts(singleSection?.id).then((result) => {
+      //   dispatch(loadPosts(result));
+      // })
       dispatch(userLoadingEnd());
     });
     return () => {
@@ -174,7 +181,6 @@ const board = () => {
       <meta name="twitter:image" content="http://www.mysite.com/article/article1.html" />
       <meta name="twitter:domain" content="사이트 명" /> */}
       </Head>
-
       {loading ?
         <LoadingPage /> :
         <Contents />

@@ -10,7 +10,7 @@ export default createGlobalStyle`
     line-height: 1.15;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
-    font-family: "Noto Sans KR", sans-serif, "Intel", "Helvetica Neue", Helvetica, Arial, "맑은 고딕", malgun gothic, "돋움", Dotum, sans-serif, "Apple Color Emoji", "Noto Color Emoji";
+    font-family: "나눔고딕", "Noto Sans KR", sans-serif, "Intel", "Helvetica Neue", Helvetica, Arial, "맑은 고딕", malgun gothic, "돋움", Dotum, sans-serif, "Apple Color Emoji", "Noto Color Emoji";
   }
   
   *, :after, :before {
@@ -41,7 +41,7 @@ ul {
     font-size: 16px;
     vertical-align: baseline;
     box-sizing: border-box;
-    font-family: "Noto Sans KR",sans-serif,"Intel", "Helvetica Neue", Helvetica, Arial, "맑은 고딕", malgun gothic, "돋움", Dotum, sans-serif, "Apple Color Emoji", "Noto Color Emoji";
+    font-family: "나눔고딕", "Noto Sans KR",sans-serif,"Intel", "Helvetica Neue", Helvetica, Arial, "맑은 고딕", malgun gothic, "돋움", Dotum, sans-serif, "Apple Color Emoji", "Noto Color Emoji";
   }
 
   article, aside, details, figcaption, figure,

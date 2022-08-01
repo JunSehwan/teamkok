@@ -97,7 +97,7 @@ const Navbar = () => {
         twobutton={true}
       />
 
-      <nav className="fixed z-20 bg-white w-full shadow-sm">
+      <nav className="fixed z-10 bg-white w-full shadow-sm">
         <div className="mx-auto px-4 sm:px-6">
           <div className="flex justify-between items-center border-b-2 border-gray-100 py-4 md:justify-start md:space-x-10">
             <div className="flex justify-start lg:w-0 lg:flex-1">
@@ -171,13 +171,13 @@ const Navbar = () => {
                   {user?.avatar ? (
                     <Image
                       alt="avatar_user"
-                      className="avatar w-7 h-8 ro8nded-md "
+                      className="avatar w-7 h-8 rounded-md object-cover"
                       width={32} height={32}
                       src={user?.avatar} />
                   ) : (
                     <Image
                       alt="avatar_user"
-                      className="avatar w-7 h-8 ro8nded-md"
+                      className="avatar w-7 h-8 rounded-md object-cover"
                       src={profilePic}
                       width={32} height={32}
                     />
@@ -193,9 +193,9 @@ const Navbar = () => {
                         <Link href="/profile">
                           <a className="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
                             {user?.avatar ?
-                              <Image className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9" src={user?.avatar} alt="avatar" />
+                              <Image className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9" src={user?.avatar} alt="avatar" width={32} height={32} />
                               :
-                              <Image className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9" src={profilePic} alt="avatar" />
+                              <Image className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9" src={profilePic} alt="avatar" width={32} height={32} />
                             }
                             <div className="mx-1">
                               <h1 className="text-sm w-[150px] whitespace-nowrap overflow-hidden overflow-ellipsis break-all font-semibold text-gray-700 dark:text-gray-200">{user?.username}</h1>

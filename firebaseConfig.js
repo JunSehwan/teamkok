@@ -11,9 +11,9 @@ import {
   DocumentData,
   DocumentReference,
   deleteField,
-  serverTimestamp,
+  serverTimestamp, limit, arrayUnion, arrayRemove,
   query, where, getDocs, orderBy,
-  deleteDoc,
+  deleteDoc, startAfter, increment,
 } from "firebase/firestore";
 import {
   getAuth,
@@ -28,7 +28,7 @@ import {
   EmailAuthProvider,
   signInAnonymously,
 } from "firebase/auth";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, getStorage, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
 import dayjs from "dayjs";
 
 
@@ -107,7 +107,7 @@ export async function getUser(req, res) {
 }
 
 export async function createAccount(
-  email, password, username, form, tel,
+  email, password, username, form, tel
 ) {
   try {
     const userCredential = await createUserWithEmailAndPassword(
@@ -208,6 +208,7 @@ export const signIn = async (email, password) => {
     .then((userCredential) => {
       // Signed in 
       const user = userCredential.user;
+
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -261,7 +262,7 @@ export async function updateUserBasicInfo(username, newForm, email, tel, checked
     await updateUserDatabase("phonenumber", tel);
     await updateUserDatabase("category", checkedCategory);
 
-    return (username, newForm, email, tel, address, checkedCategory, gender, url_one, url_two, url_three)
+    return ({ username: username, newForm: newForm, email: email, tel: tel, address: address, checkedCategory: checkedCategory, gender: gender, url_one: url_one, url_two: url_two, url_three: url_three })
   } catch (error) {
     console.error(error);
     alert("profile update에 문제가 있습니다.");
@@ -422,9 +423,14 @@ export const api = {
   mystyleRef: collection(db, "mystyle"),
   blogsRef: collection(db, "blogs"),
   boardsRef: collection(db, "boards"),
-
-  blogByIdRef: (blogId) =>
-    doc(db, "blogs", `${blogId}`),
+  sectionsRef: collection(db, "sections"),
+  postsRef: collection(db, "posts"),
+  boardByIdRef: (boardId) =>
+    doc(db, "boards", `${boardId}`),
+  postByIdRef: (postId) =>
+    doc(db, "posts", `${postId}`),
+  commentByIdRef: (commentId) =>
+    doc(db, "comments", `${commentId}`),
 
   blogDescriptionByBloggerIdRef: (bloggerId) =>
     query(
@@ -444,10 +450,10 @@ export const api = {
   commentsByCommentId: (commentId) =>
     doc(db, `comments`, `${commentId}`),
 
-  commentsByBlogIdRef: (blogId) =>
+  commentsByPostIdRef: (postId) =>
     query(
       collection(db, "comments"),
-      where("blogId", "==", `${blogId}`)
+      where("postId", "==", `${postId}`)
     ),
 
   notificationRef: collection(db, "notifications"),
@@ -612,106 +618,7 @@ export async function getViews() {
   return result.docs.map((doc) => doc.data());
 }
 
-// LIKE A BLOG
-export async function likeBlog(
-  userId,
-  blogId
-) {
-  return await updateDoc(api.blogByIdRef(blogId), {
-    likes: arrayUnion(userId),
-    numLikes: increment(1),
-  });
-}
 
-// UNLIKE A BLOG
-export async function unlikeBlog(
-  userId,
-  blogId
-) {
-  return await updateDoc(api.blogByIdRef(blogId), {
-    likes: arrayRemove(userId),
-    numLikes: increment(-1),
-  });
-}
-
-// Add a comment
-export async function addComment(
-  blogId,
-  userId,
-  userName,
-  commentText,
-  avatar
-) {
-  return await addDoc(api.commentsRef, {
-    blogId: blogId,
-    commentText: commentText,
-    userName: userName,
-    avatar: avatar,
-    userId: userId,
-    reply: [],
-    createdAt: new Date().toISOString(),
-  }).then(() => {
-    return updateDoc(api.blogByIdRef(blogId), {
-      numComments: increment(1),
-    });
-  });
-}
-
-// add a reply
-export async function addReply(
-  userName,
-  userId,
-  commentId,
-  avatar,
-  replyText
-) {
-  return await updateDoc(api.commentsByCommentId(commentId), {
-    reply: arrayUnion({
-      userId: userId,
-      userName: userName,
-      avatar: avatar,
-      reply: replyText,
-      createdAt: new Date().toISOString(),
-    }),
-  });
-}
-
-// get all comments
-export async function getComments(blogId) {
-  const result = await getDocs(api.commentsByBlogIdRef(blogId));
-
-  const comments = [];
-  result.docs
-    .sort((a, b) => {
-      return a.data().createdAt - b.data().createdAt;
-    })
-    // eslint-disable-next-line array-callback-return
-    .map((data) => {
-      const comment = {
-        docId: data.id,
-        commentText: data.data().commentText,
-        blogId: data.data().blogId,
-        avatar: data.data().avatar,
-        userName: data.data().userName,
-        userId: data.data().userId,
-        reply: data.data().reply.map((thread) => ({
-          avatar: thread.avatar,
-          replyText: thread.reply,
-          userId: thread.userId,
-          userName: thread.userName,
-          createdAt: thread.createdAt,
-        })),
-        createdAt: data.data().createdAt,
-      };
-      comments.push(comment);
-    });
-  return comments;
-}
-
-export async function getAllComments() {
-  const result = await getDocs(api.commentsRef);
-  return result.docs.map((doc) => doc.data());
-}
 
 // update number of views
 export async function countNumberOfViews(blogId, userId) {
@@ -1065,6 +972,16 @@ export async function createBoard(board) {
         creatorName: user.displayName,
         createdAt: time
       });
+    board.category?.map(async (v) => (
+      await addDoc(api.sectionsRef, {
+        creatorId: user.uid,
+        creatorName: user.displayName,
+        createdAt: time,
+        boardCategoryKey: v?.key,
+        boardCategoryName: v?.name,
+        boardId: newBoard?.id,
+      })
+    ))
     const docRef = doc(db, "boards", newBoard?.id);
     const docSnap = await getDoc(docRef);
 
@@ -1098,6 +1015,9 @@ export async function getBoard(boardId) {
     console.error(e);
   }
 }
+
+
+
 
 // 명령 실행시 await 필수!
 export async function getBoardsByUserId(userId) {
@@ -1203,5 +1123,421 @@ async function getLogoURL(boardID) {
   return await getDownloadURL(ref(storage, `company/${boardID}/logo`));
 }
 
+async function updateSectionDatabase(property, newValue, sectionId) {
+  if (!auth.currentUser) return;
+  const user = auth.currentUser;
+  await updateDoc(
+    doc(db, "sections", sectionId),
+    {
+      [property]: newValue,
+    }
+  );
+}
+
+export async function updateSection(result, sectionId) {
+  const user = auth.currentUser;
+  if (!user) {
+    return alert("로그인 후 가능합니다.")
+  }
+  try {
+    if (!sectionId) {
+      const newSection = await addDoc(api.sectionsRef,
+        {
+          ...result,
+          creatorId: user.uid,
+          creatorName: user.displayName,
+          createdAt: time
+        }
+      );
+      const docRef = doc(db, "sections", newSection?.id);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const resulty = {
+          ...docSnap.data(),
+          sectionId: newSection.id,
+        }
+        return resulty;
+      }
+    } else {
+      await updateDoc(doc(db, "sections", sectionId),
+        result
+      );
+      const docRef = doc(db, "sections", sectionId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const result = {
+          ...docSnap.data(),
+          sectionId: sectionId,
+        }
+        return result;
+      }
+    }
+
+  } catch (e) {
+    console.error(e);
+  }
+}
 
 
+
+export async function getSection(boardId, categoryId) {
+  try {
+    const docRef = collection(db, "sections");
+    const q = query(docRef, where("boardId", "==", boardId), where("boardCategory", "==", parseInt(categoryId)));
+    const docSnap = await getDocs(q);
+    //결과 검색
+    const result = docSnap?.docs?.map((doc) => (
+      {
+        ...doc.data(),
+        id: doc.id,
+      }
+    ))
+    return result[0];
+  }
+  catch (e) {
+    console.error(e);
+  }
+}
+
+export async function uploadPicturePreview(file, postId) {
+  const storage = getStorage();
+  const pictureRef = ref(storage, `section/${postId}/temp/picture`);
+  await uploadBytes(pictureRef, file);
+  return await getPicturePreviewURL(postId);
+}
+
+async function getPicturePreviewURL(postId) {
+  const storage = getStorage();
+  return await getDownloadURL(ref(storage, `section/${postId}/temp/picture`));
+}
+
+export async function uploadPicture(images, postId) {
+  const URLs = [];
+  const storage = getStorage();
+  images?.map((file) => {
+    const storageRef = ref(storage, `section/${postId}/${file?.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    uploadTask.on(
+      "state change",
+      (snapshot) => {
+      },
+      (error) => console.error(error),
+      async () => {
+        await getDownloadURL(uploadTask.snapshot.ref).then((downloadURLs) => {
+          URLs?.push({ url: downloadURLs, })
+        });
+      }
+    );
+  })
+  return URLs;
+}
+
+
+export async function createPost(postResult, URLs) {
+  const user = auth.currentUser;
+  if (!user) {
+    return alert("로그인 후 가능합니다.")
+  }
+  try {
+    const newPost = await addDoc(api.postsRef,
+      {
+        ...postResult,
+        creatorId: user.uid,
+        creatorName: user.displayName,
+        creatorAvatar: user.photoURL,
+        createdAt: time,
+        photo: URLs,
+        likes: [],
+      });
+    const docRef = doc(db, "posts", newPost?.id);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const result = {
+        ...docSnap.data(),
+        id: newPost.id,
+
+      }
+      return result;
+    } else {
+      alert("No such document!");
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export async function getPosts(sectionId) {
+  try {
+    // 첫번째 post 컬렉션의 스냅샷을 작성날짜 기준 내림차순 (orderBy 2번째 인자 생략시 기본 내림차순)으로 정렬해 10개의 문서만 받아오기
+    const q = query(api.postsRef, where("sectionId", "==", sectionId), orderBy("createdAt", "desc"), limit(10));
+    const docSnap = await getDocs(q);
+    // 마지막 문서 스냅샷 기억해해두기 (쿼리결과 스냅샷 크기 - 1 = 마지막 문서 위치)
+    const lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];
+    // 앞서 기억해둔 문서값으로 새로운 쿼리 요청 
+    const next = query(collection(db, "post"),
+      orderBy("createdAt"),
+      startAfter(lastVisible),
+      limit(10));
+
+    //결과 검색
+    const result = docSnap?.docs?.map((doc) => (
+      {
+        ...doc.data(),
+        id: doc.id,
+      }
+    ))
+    return result;
+  }
+  catch (e) {
+    console.error(e);
+  }
+}
+
+
+export async function deletePost(postId) {
+  const user = auth.currentUser;
+  try {
+    if (!user) return alert("로그인이 필요합니다.")
+    if (!postId) return alert("제거에 문제가 있습니다.");
+    const docRef = doc(db, "posts", postId);
+    deleteDoc(docRef);
+    return postId;
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+export async function modifyPost(postResult, id) {
+  const user = auth.currentUser;
+  try {
+    if (!user || !id) return alert("업데이트에 문제가 발생했습니다.");
+    await updateDoc(doc(db, "posts", id),
+      postResult
+    );
+    const docRef = doc(db, "posts", id);
+
+    return docRef;
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+
+// LIKE A POST
+export async function likePost(
+  userId, username,
+  postId
+) {
+  const user = auth.currentUser;
+  await updateDoc(api.postByIdRef(postId), {
+    likes: arrayUnion({ userId: userId, username: username, userAvatar: user?.photoURL }),
+    numLikes: increment(1),
+  });
+  const docRef = doc(db, "posts", postId);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    const result = {
+      ...docSnap.data(),
+    }
+    return result;
+  }
+}
+
+// UNLIKE A POST
+export async function unlikePost(
+  userId, username,
+  postId
+) {
+  const user = auth.currentUser;
+  return await updateDoc(api.postByIdRef(postId), {
+    likes: arrayRemove({ userId: userId, username: username, userAvatar: user?.photoURL }),
+    numLikes: increment(-1),
+  });
+}
+
+// Add a comment
+export async function createComment(
+  postId, userId, userName, commentText, avatar
+) {
+  const good = await addDoc(api.commentsRef, {
+    postId: postId,
+    commentText: commentText,
+    userName: userName,
+    avatar: avatar,
+    userId: userId,
+    reply: [],
+    createdAt: new Date().toISOString(),
+  })
+  await updateDoc(api.postByIdRef(postId), {
+    numComments: increment(1),
+  });
+  const docRef = doc(db, "comments", good.id);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    const result = {
+      ...docSnap.data(),
+    }
+    return result;
+  }
+}
+
+
+
+// get all comments
+export async function getComments(postId) {
+  const result = await getDocs(api.commentsByPostIdRef(postId));
+  const comments = [];
+  result.docs
+    .sort((a, b) => {
+      return a.data().createdAt - b.data().createdAt;
+    })
+    // eslint-disable-next-line array-callback-return
+    .map((data) => {
+      const comment = {
+        docId: data.id,
+        commentText: data.data().commentText,
+        postId: data.data().postId,
+        avatar: data.data().avatar,
+        userName: data.data().userName,
+        userId: data.data().userId,
+        reply: data.data().reply.map((thread) => ({
+          avatar: thread.avatar,
+          replyText: thread.replyText,
+          userId: thread.userId,
+          userName: thread.userName,
+          createdAt: thread.createdAt,
+        })),
+        createdAt: data.data().createdAt,
+      };
+      comments?.push(comment);
+    });
+  return comments;
+}
+
+export async function getAllComments() {
+  const result = await getDocs(api.commentsRef);
+  return result.docs.map((doc) => doc.data());
+}
+
+
+// add a reply
+export async function createReply(
+  userName, userId, commentId, avatar, replyText
+) {
+  await updateDoc(api.commentsByCommentId(commentId), {
+    reply: arrayUnion({
+      userId: userId,
+      userName: userName,
+      avatar: avatar,
+      replyText: replyText,
+      createdAt: new Date().toISOString(),
+    }),
+  });
+  const docRef = doc(db, "comments", commentId);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    const result = docSnap.data().reply
+    return result;
+  }
+}
+
+// Reply Delete
+export async function removeReply(
+  userId, commentId, replyText, createdAt, username
+) {
+  const user = auth.currentUser;
+  return await updateDoc(api.commentByIdRef(commentId), {
+    reply: arrayRemove({
+      userId: userId,
+      avatar: user?.photoURL,
+      replyText: replyText,
+      createdAt: createdAt,
+      username: username,
+
+    }),
+  });
+}
+
+export async function removeComment(commentId, postId) {
+  const user = auth.currentUser;
+  try {
+    if (!user) return alert("로그인이 필요합니다.")
+    if (!commentId) return alert("제거에 문제가 있습니다.");
+    const docRef = doc(db, "comments", commentId);
+    deleteDoc(docRef);
+    await updateDoc(api.postByIdRef(postId), {
+      numComments: increment(-1),
+    });
+    return commentId;
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+
+export async function updateAdminSurvey(survey, sectionId) {
+  if (!survey) return;
+  const user = auth.currentUser;
+  if (!user) {
+    return alert("로그인 후 가능합니다.")
+  } else {
+    try {
+      await updateSectionDatabase("survey", survey, sectionId);
+      return survey;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+}
+
+export async function createSmallIntern(smallintern, sectionId) {
+  if (!smallintern) return;
+  const user = auth.currentUser;
+  const inputContents = { createdAt: time, ...smallintern };
+  if (!user) {
+    return alert("로그인 후 가능합니다.")
+  } else {
+    try {
+      const result = await updateSectionDatabase("smallintern", inputContents, sectionId);
+      return inputContents;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+}
+
+export async function createSections(category, boardId) {
+  const user = auth.currentUser;
+  if (!user) {
+    return alert("로그인 후 가능합니다.")
+  }
+  try {
+    await updateDoc(api.boardByIdRef(boardId), {
+      category: arrayUnion(...category),
+    });
+    category?.map(async (v) => (
+      await addDoc(api.sectionsRef, {
+        creatorId: user.uid,
+        creatorName: user.displayName,
+        createdAt: time,
+        boardCategory: v?.key,
+        boardCategoryName: v?.name,
+        boardId: boardId,
+      })
+    ))
+    const docRef = doc(db, "boards", boardId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const result = {
+        ...docSnap.data().category,
+      }
+      return result;
+    } else {
+      alert("No such document!");
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}

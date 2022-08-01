@@ -226,7 +226,7 @@ const PersonalInfo = () => {
     const res = await updateUserBasicInfo(
       username, newForm, email, tel, checkedCategory, gender, url_one, url_two, url_three, address
     );
-    dispatch(updateBasicProfile({ username, newForm, email, tel, gender, checkedCategory, url_one, url_two, url_three, address }))
+    dispatch(updateBasicProfile(res))
     setConfirm(true);
   }, [username, dispatch, email, tel, gender, checkedCategory, url_one, url_two, url_three, address, form?.year, form?.month, form?.day])
 
@@ -264,6 +264,7 @@ const PersonalInfo = () => {
             id="username"
             type="text"
             maxLength={10}
+            tabIndex={-1}
             placeholder="이름"
             onChange={onChangeUsername}
             defaultValue={user?.username}
@@ -285,6 +286,7 @@ const PersonalInfo = () => {
             }
             id="e-mail"
             type="email"
+            tabIndex={-1}
             placeholder="이메일주소"
             onChange={onChangeEmail}
             defaultValue={user?.email}
@@ -308,6 +310,7 @@ const PersonalInfo = () => {
             id="e-mail"
             type="gender"
             name="gender"
+            tabIndex={-1}
             placeholder="이메일주소"
             onChange={onChangeGender}
             defaultValue={user?.gender || gender}
@@ -335,6 +338,7 @@ const PersonalInfo = () => {
                   }
                   id="birthyear"
                   placeholder="년"
+                  tabIndex={-1}
                   onChange={onChangeYear}
                   defaultValue={parseInt(user?.birthday?.year) || ""}
                 >
@@ -346,6 +350,7 @@ const PersonalInfo = () => {
                     "md:ml-2 w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                   }
                   id="birthmonth"
+                  tabIndex={-1}
                   placeholder="월"
                   onChange={onChangeMonth}
                   defaultValue={parseInt(user?.birthday?.month) || ""}
@@ -361,6 +366,7 @@ const PersonalInfo = () => {
                   onChange={onChangeDay}
                   id="birthday"
                   placeholder="일"
+                  tabIndex={-1}
                 >
                   {days.map(item => (
                     <option value={item} key={item}>
@@ -389,6 +395,7 @@ const PersonalInfo = () => {
             }
             id="phone"
             type="tel"
+            tabIndex={-1}
             maxLength='11'
             placeholder="-없이 입력"
             onChange={onChangeNumber}
@@ -411,6 +418,7 @@ const PersonalInfo = () => {
             }
             id="address"
             type="address"
+            tabIndex={-1}
             placeholder="서울시 관악구 봉천로8길 11"
             onChange={onChangeAddress}
             defaultValue={user?.address}
@@ -429,6 +437,7 @@ const PersonalInfo = () => {
             'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
             id="url1"
             type="url"
+            tabIndex={-1}
             htmlFor="website"
             placeholder="https://sitename1.com"
             onChange={onChangeURL_1}
@@ -440,6 +449,7 @@ const PersonalInfo = () => {
             id="url1"
             type="url"
             htmlFor="website"
+            tabIndex={-1}
             placeholder="https://sitename2.com"
             onChange={onChangeURL_2}
             defaultValue={user?.url_two}
@@ -450,6 +460,7 @@ const PersonalInfo = () => {
             id="url1"
             type="url"
             htmlFor="website"
+            tabIndex={-1}
             placeholder="https://sitename3.com"
             onChange={onChangeURL_3}
             defaultValue={user?.url_three}
@@ -460,6 +471,7 @@ const PersonalInfo = () => {
           <Category
             id="category"
             user={user}
+            tabIndex={-1}
             checkedCategory={checkedCategory}
             setCheckedCategory={setCheckedCategory}
           />

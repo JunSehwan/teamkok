@@ -113,7 +113,6 @@ const EditCareer = ({ career, setViewCar }) => {
   const clearData = useClearDataCallback(description);
   const disabled = description === null || loading;
 
-
   // 시작일, 종료일
   const standardYear = 2005;
   const [start, setStart] = useState({
@@ -265,7 +264,6 @@ const EditCareer = ({ career, setViewCar }) => {
       id: career?.id,
     };
     const con = await modifyCareer(careerResult, career?.id);
-    console.log(career?.id, "커리어아이디")
     document?.getElementById('editor')?.focus();
     dispatch(updateCareer(careerResult));
 

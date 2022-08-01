@@ -9,7 +9,6 @@ import Image from 'next/image';
 import CategoryList from 'components/Common/CategoryList';
 import Empty from 'components/Common/Empty';
 import Link from 'next/link';
-import { debugErrorMap } from 'firebase/auth';
 import { useRouter } from 'next/router'
 import { setAddDoneFalse } from '../../../slices/board';
 

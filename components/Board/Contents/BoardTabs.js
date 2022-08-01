@@ -6,7 +6,7 @@ import Dialog from './Dialog';
 
 const Tab = ({ tabIndex, setTabIndex }) => {
   return (
-    <div className="flex flex-col w-[95%] px-4 mx-auto space-y-6 max-w-7xl xl:px-6">
+    <div className="flex flex-col w-[100%] px-4 mx-auto space-y-6 max-w-7xl xl:px-6">
       <div className="relative">
         <div className="flex flex-wrap">
           <div className="w-full">
@@ -14,10 +14,10 @@ const Tab = ({ tabIndex, setTabIndex }) => {
               className="flex mb-0 mt-6 max-w-[32rem] mx-auto list-none flex-wrap pt-3 pb-4 flex-row"
               role="tablist"
             >
-              <li className="-mb-px mr-1 last:mr-0 flex-auto text-center">
+              <li key="11" className="-mb-px mr-1 last:mr-0 flex-auto text-center">
                 <a
                   className={
-                    "text-[0.88rem] font-bold uppercase px-3 py-3 shadow-lg rounded block leading-normal " +
+                    "text-[1.08rem] font-bold uppercase px-3 py-3 shadow-lg rounded block leading-normal " +
                     (tabIndex === 1
                       ? "text-white bg-purple-600"
                       : "text-purple-600 bg-white")
@@ -33,10 +33,10 @@ const Tab = ({ tabIndex, setTabIndex }) => {
                   팀스토리
                 </a>
               </li>
-              <li className="-mb-px mr-1 last:mr-0 flex-auto text-center">
+              <li key="22" className="-mb-px mr-1 last:mr-0 flex-auto text-center">
                 <a
                   className={
-                    "text-[0.88rem] font-bold uppercase px-3 py-3 shadow-lg rounded block leading-normal " +
+                    "text-[1rem] font-bold uppercase px-3 py-3 shadow-lg rounded block leading-normal " +
                     (tabIndex === 2
                       ? "text-white bg-purple-600"
                       : "text-purple-600 bg-white")
@@ -52,10 +52,10 @@ const Tab = ({ tabIndex, setTabIndex }) => {
                   1:1대화
                 </a>
               </li>
-              <li className="-mb-px mr-1 last:mr-0 flex-auto text-center">
+              <li key="33" className="-mb-px mr-1 last:mr-0 flex-auto text-center">
                 <a
                   className={
-                    "text-[0.88rem] font-bold uppercase px-3 py-3 shadow-lg rounded block leading-normal " +
+                    "text-[1rem] font-bold uppercase px-3 py-3 shadow-lg rounded block leading-normal " +
                     (tabIndex === 3
                       ? "text-white bg-purple-600"
                       : "text-purple-600 bg-white")
@@ -72,7 +72,7 @@ const Tab = ({ tabIndex, setTabIndex }) => {
                 </a>
               </li>
             </ul>
-            <div className="relative flex flex-col min-w-0 break-words bg-white w-full rounded">
+            <div className="relative flex flex-col min-w-0 break-words w-full rounded">
               <div className="flex-auto">
                 <div className="tab-content tab-space">
                   <div className={tabIndex === 1 ? "block" : "hidden"} id="link1">

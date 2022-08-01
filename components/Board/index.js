@@ -6,7 +6,7 @@ import Home from './Home';
 const index = () => {
 
   return (
-    <div className="w-full h-screen pt-[66px]">
+    <div className="w-full h-screen pt-[66px] bg-violet-50">
       <div className="h-full flex flex-col sm:flex-row">
         <SideBar />
         <SideButton/>

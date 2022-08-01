@@ -6,6 +6,9 @@ export const initialState = {
   AllBoards: [],
   singleBoard: null,
   logoPreview: null,
+  selectedCategory: null,
+  singleSection: null,
+
   boardLoading: false,
   loadAllBoardsDone: false,
   addDone: false,
@@ -17,6 +20,11 @@ export const initialState = {
   loadCompaniesDone: false,
   changeLogoOpen: false,
   sidebarIn: true,
+  categorySetDone: false,
+  updateSectionInfoDone: false,
+  loadSectionDone: false,
+  updateTeamSurveyDone: false,
+  addSectionsDone: false,
 };
 
 export const board = createSlice({
@@ -77,16 +85,68 @@ export const board = createSlice({
     sideClose: (state) => {
       state.sidebarIn = false;
     },
+    categorySelect: (state, action) => {
+      state.selectedCategory = action.payload;
+    },
+    categorySet: (state, action) => {
+      state.categorySetDone = true;
+    },
+    updateSectionInfo: (state, action) => {
+      if (state.singleSection) {
+        state.singleSection.advantage = action.payload.advantage;
+        state.singleSection.boardCategory = action.payload.boardCategory;
+        state.singleSection.boardId = action.payload.boardId;
+        state.singleSection.createdAt = action.payload.createdAt;
+        state.singleSection.creatorId = action.payload.creatorId;
+        state.singleSection.creatorName = action.payload.creatorName;
+        state.singleSection.description = action.payload.description;
+        state.singleSection.sectionId = action.payload.sectionId;
+        state.singleSection.intro = action.payload.intro;
+        state.singleSection.peopleCount = action.payload.peopleCount;
+      }
+      if (!state.singleSection) {
+        state.singleSection = action.payload;
+      }
+      state.updateSectionInfoDone = true;
+    },
+    setSectionUpdateDoneFalse: (state) => {
+      state.updateSectionInfoDone = false;
+    },
+    loadSection(state, action) {
+      state.singleSection = action.payload;
+      state.loadSectionDone = true;
+    },
+    updateTeamSurvey(state, action) {
+      state.singleSection.survey = action.payload;
+      state.updateTeamSurveyDone = true;
+    },
+    updateTeamSurveyFalse(state, action) {
+      state.updateTeamSurveyDone = false;
+    },
+    addSmallIntern(state, action) {
+      state.singleSection.smallintern = action.payload;
+      state.addSmallInternDone = true;
+    },
+    addSmallInternFalse(state, action) {
+      state.addSmallInternDone = false;
+    },
+    addSections(state, action) {
+      state.singleBoard.category = state.singleBoard.category.concat(action.payload);
+      state.addSectionsDone = true;
+    },
+    addSectionDoneFalse(state, action) {
+      state.addSectionsDone = false;
+    },
   },
   extraReducers: {
-    // The HYDRATE function is what manages the state between client and server
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.board,
-      };
-    },
-  }
+  // The HYDRATE function is what manages the state between client and server
+  [HYDRATE]: (state, action) => {
+    return {
+      ...state,
+      ...action.payload.board,
+    };
+  },
+},
 });
 
 export const {
@@ -105,6 +165,16 @@ export const {
   setChangeLogoOpen,
   sideOpen,
   sideClose,
+  categorySelect, categorySet,
+  updateSectionInfo,
+  setSectionUpdateDoneFalse,
+  loadSection,
+  updateTeamSurvey,
+  updateTeamSurveyFalse,
+  addSmallIntern,
+  addSmallInternFalse,
+  addSections,
+  addSectionDoneFalse,
 } = board.actions;
 
 export const useBoardState = () => useAppSelector((state) => state.board);

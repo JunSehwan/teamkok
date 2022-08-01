@@ -399,7 +399,7 @@ const Career = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="category">
+              <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="type">
                 근무형태
               </label>
               <select

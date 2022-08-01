@@ -30,6 +30,13 @@ export const initialState = {
   updateBasicProfileSuccess: false,
   updateStyleDone: false,
   updateSurveyDone: false,
+
+  // 권한
+  isExpert: false,
+  isAdmin: false,
+  setExpertState: false,
+  setAdminState: false,
+
 };
 
 export const user = createSlice({
@@ -115,7 +122,16 @@ export const user = createSlice({
     userLoadingEndwithNoone(state) {
       state.loading = false;
       state.user = null;
-    }
+    },
+    // 권한
+    expertSet: (state, action) => {
+      state.isExpert = action.payload;
+      state.setExpertState = true;
+    },
+    adminSet: (state, action) => {
+      state.isAdmin = action.payload;
+      state.setAdminState = true;
+    },
   },
   extraReducers: {
     // The HYDRATE function is what manages the state between client and server
@@ -148,6 +164,9 @@ export const {
   updateUserSurvey,
   updateStyleFalse,
   updateSurveyFalse,
+  expertSet,
+  adminSet,
+  setDone,
 } = user.actions;
 
 export const useUserState = () => useAppSelector((state) => state.user);

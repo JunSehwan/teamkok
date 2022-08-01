@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 import companypic from 'public/image/company.png';
 import { useRouter } from 'next/router';
 import { sideClose } from 'slices/board';
+import AddSection from './AddSection';
 
 const index = () => {
   const dispatch = useDispatch();
@@ -12,7 +13,7 @@ const index = () => {
   const onClickCategory = useCallback((category) => {
     router.push(`/board/${singleBoard?.id}/${category}`);
   }, [router, singleBoard])
-  const onClickHome = useCallback((category) => {
+  const onClickHome = useCallback(() => {
     router.push(`/board/${singleBoard?.id}`);
   }, [router, singleBoard])
   const sideBarClose = useCallback(() => {
@@ -22,7 +23,7 @@ const index = () => {
   return (<>
     {sidebarIn === true ?
 
-      <div className="z-10 w-screen sm:w-64 bg-white border-r px-5 pt-[66px] flex flex-col justify-between h-[100%]">
+      <div className="z-10 w-screen sm:w-[24rem] bg-transparent border-r px-6 pt-[66px] flex flex-col justify-between h-[auto]">
         <div className="mt-15 mb-4">
           <h1 className="hidden md:block font-bold text-sm md:text-xl text-center mb-2">
             {singleBoard?.name}
@@ -37,15 +38,15 @@ const index = () => {
             />
             <div>
               <h2
-                className="font-medium text-xs md:text-sm text-center text-violet-600"
+                className="font-medium text-lg md:text-xl text-center text-violet-600"
               >
                 {singleBoard?.creatorName}
               </h2>
-              <p className="text-xs text-gray-500 text-center">보드제작자</p>
+              <p className="text-base text-gray-500 text-center">보드메이커</p>
             </div>
           </div>
 
-          <p className="text-sm font-medium text-gray-400 mt-9 mb-4">서비스안내</p>
+          <p className="text-base font-medium text-gray-500 mt-9 mb-4">서비스안내</p>
 
           {/* <!-- menu-item --> */}
           <button
@@ -61,21 +62,21 @@ const index = () => {
             홈
           </button>
 
-          <p className="text-sm font-medium text-gray-400 mt-9 mb-4">분야별 섹션</p>
+          <p className="text-base font-medium text-gray-500 mt-9 mb-4">분야별 섹션</p>
           {singleBoard?.category?.map((v) => (
             <button
               key={v?.key}
               type="button"
               onClick={() => onClickCategory(v?.key)}
-              className="pl-[6px] w-[100%] my-1 py-2 text-base font-semibold text-slate-600 hover:text-violet-500 group cursor-pointer flex items-center"
-
+              className="pl-[6px] w-[100%] my-1 py-2 text-lg font-semibold text-slate-600 hover:text-violet-500 group cursor-pointer flex items-center"
             >
               {v?.name}
             </button>
           ))}
+        <AddSection/>
         </div>
         <button
-          className="fixed right-8 bottom-4 shadow z-20 flex justify-end text-gray-400 mb-[2.2rem] p-[0.57rem] rounded-xl w-[fit-content] ml-auto bg-gray-100 hover:text-violet-600 hover:bg-violet-100"
+          className="fixed right-8 bottom-4 shadow z-20 flex justify-end text-lime-500 mb-[2.2rem] p-[0.57rem] rounded-xl w-[fit-content] ml-auto bg-lime-50 hover:text-violet-600 hover:bg-violet-100"
           onClick={sideBarClose}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -84,6 +85,7 @@ const index = () => {
         </button>
       </div>
       : null}
+      
   </>
   );
 };
