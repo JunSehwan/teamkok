@@ -62,7 +62,7 @@ const index = () => {
   const onToggleFold = useCallback(() => { setFold(prev => !prev) }, [])
 
   return (
-    <div className="w-full">
+    <div className="w-full ">
       <div className="mb-4 mx-0 sm:ml-4 xl:mr-4">
         <div className="shadow-lg rounded-2xl bg-white dark:bg-gray-700 w-full p-5 md:p-6">
           <div className="flex flex-row items-center justify-between pb-4">

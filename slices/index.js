@@ -11,6 +11,11 @@ import mystyleReducer from './mystyle';
 import boardReducer from './board';
 import sectionReducer from './section';
 
+import addServerReducer from './addServer';
+import sendGifReducer from './sendGif';
+import serverSettingsReducer from './serverSettings';
+import chatReducer from './chat';
+
 const rootReducer = combineReducers({
   userReducer,
   userSettingsReducer,
@@ -21,6 +26,12 @@ const rootReducer = combineReducers({
   boardReducer,
   sectionReducer,
   sectionSettingsReducer,
+
+  addServerReducer,
+  sendGifReducer,
+  serverSettingsReducer,
+  chatReducer,
+
 });
 
 export const reducer = (state, action) => {

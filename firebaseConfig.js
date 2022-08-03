@@ -411,10 +411,10 @@ export const api = {
   userByIdRef: (userId) =>
     doc(db, "users", `${userId}`),
 
-  // adminUsersRef: query(
-  //   collection(db, "users"),
-  //   where("role", "==", "admin")
-  // ),
+  adminUsersRef: query(
+    collection(db, "users"),
+    where("role", "==", "admin")
+  ),
 
   annoynomusUsersRef: collection(db, "annoymous"),
   viewsRef: collection(db, "ViewsData"),
@@ -425,6 +425,7 @@ export const api = {
   boardsRef: collection(db, "boards"),
   sectionsRef: collection(db, "sections"),
   postsRef: collection(db, "posts"),
+  conversationRef: collection(db, "conversations"),
   boardByIdRef: (boardId) =>
     doc(db, "boards", `${boardId}`),
   postByIdRef: (postId) =>
@@ -498,14 +499,14 @@ export const request = {
 export async function getUsers() {
   const result = await getDocs(api.usersRef);
   return result.docs.map((doc) => ({
-    id: doc.data().user,
+    userID: doc.data().id,
     avatar: doc.data().avatar,
     email: doc.data().email,
-    name: doc.data().name,
-    role: doc.data().role,
-    status: doc.data().status,
-    user: doc.data().user,
-    createdAt: doc.data().createdAt,
+    username: doc.data().username,
+    category: doc.data().category,
+    gender: doc.data().gender,
+    phonenumber: doc.data().phonenumber,
+    timestamp: doc.data().timestamp,
   }));
 }
 
@@ -1536,6 +1537,79 @@ export async function createSections(category, boardId) {
       return result;
     } else {
       alert("No such document!");
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+
+export async function getConversations() {
+  try {
+    const user = auth.currentUser;
+    if (!user) {
+      return alert("로그인 후 가능합니다.")
+    }
+    const q = query(api.conversationRef,
+      // orderBy("updatedAt", "desc"),
+      where("users", "array-contains", user.uid)
+    )
+    const querySnapshot = await getDocs(q)
+    //결과 검색
+    const result = querySnapshot?.docs?.map((doc) => (
+      {
+        ...doc.data(),
+        id: doc.id,
+      }
+    ))
+    return result;
+  }
+  catch (e) {
+    console.error(e);
+  }
+}
+
+export async function createConversation(sorted) {
+  const user = auth.currentUser;
+  if (!user) {
+    return alert("로그인 후 가능합니다.")
+  }
+  try {
+    const q = query(
+      collection(db, "conversations"),
+      where("users", "==", sorted)
+    );
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) {
+      console.log(sorted, "sorted");
+      const created = await addDoc(collection(db, "conversations"), {
+        users: sorted,
+        group:
+          sorted.length > 2 ?
+            {
+              admins: [user.uid],
+              groupName: null,
+              groupImage: null,
+            }
+            : {},
+        updatedAt: time,
+        seen: {},
+        theme: "#0D90F3",
+      });
+      const docRef = doc(db, "conversations", created.id);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const result = {
+          ...docSnap.data(),
+          id: created.id,
+        }
+        // console.log("Document data:", docSnap.data());
+        return result;
+      } else {
+        alert("No such document!");
+      }
+    } else {
+      return { key: "fail", value: querySnapshot.docs[0]?.id }
     }
   } catch (e) {
     console.error(e);

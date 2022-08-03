@@ -33,7 +33,7 @@ const index = () => {
         {loading ? <Loading /> :
           <>
             <ul id="category" className="mt-2 flex flex-row flex-wrap w-[100%] my-4 p-[1rem]">
-              <li className="mr-[6px] border-gray-400 flex flex-row mb-1 mt-1">
+              <li key="all" className="mr-[6px] border-gray-400 flex flex-row mb-1 mt-1">
                 <button onClick={() => onChangeCategory(null)}
                   type='button'
                   className={null === category ? `bg-violet-500 text-white text-center transition duration-500 shadow ease-in-out transform hover:-translate-y-1 hover:shadow-lg select-none cursor-pointer hover:bg-violet-600 click:active:checked:focus:bg-violet-600 dark:bg-gray-800 rounded-full flex flex-1 items-center p-1`

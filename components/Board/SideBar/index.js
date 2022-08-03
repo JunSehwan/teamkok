@@ -9,6 +9,7 @@ import AddSection from './AddSection';
 const index = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const pid = router.query;
   const { singleBoard, sidebarIn } = useSelector(state => state.board);
   const onClickCategory = useCallback((category) => {
     router.push(`/board/${singleBoard?.id}/${category}`);
@@ -23,7 +24,7 @@ const index = () => {
   return (<>
     {sidebarIn === true ?
 
-      <div className="z-10 w-screen sm:w-[24rem] bg-transparent border-r px-6 pt-[66px] flex flex-col justify-between h-[auto]">
+      <div className="z-5 w-screen sm:w-[24rem] bg-transparent border-r px-6 pt-[66px] flex flex-col justify-between h-[auto]">
         <div className="mt-15 mb-4">
           <h1 className="hidden md:block font-bold text-sm md:text-xl text-center mb-2">
             {singleBoard?.name}
@@ -50,7 +51,9 @@ const index = () => {
 
           {/* <!-- menu-item --> */}
           <button
-            className="pl-[6px] w-[100%] my-1 py-2 text-base font-semibold text-slate-600 hover:text-violet-500 group cursor-pointer flex items-center mr-1"
+            className={!pid?.category ? "pl-[6px] w-[100%] my-2 py-2 text-lg font-semibold text-violet-600 bg-violet-200 rounded-xl hover:text-violet-700 group cursor-pointer flex items-center"
+              : "pl-[6px] w-[100%] my-2 py-2 text-lg font-semibold text-slate-600 hover:text-violet-500 group cursor-pointer flex items-center"
+            }
             onClick={onClickHome}
           >
             <svg xmlns="http://www.w3.org/2000/svg"
@@ -68,15 +71,18 @@ const index = () => {
               key={v?.key}
               type="button"
               onClick={() => onClickCategory(v?.key)}
-              className="pl-[6px] w-[100%] my-1 py-2 text-lg font-semibold text-slate-600 hover:text-violet-500 group cursor-pointer flex items-center"
+              className=
+              {parseInt(pid?.category) === parseInt(v?.key) ? "pl-[6px] w-[100%] my-2 py-2 text-lg font-semibold text-violet-600 bg-violet-200 rounded-xl hover:text-violet-700 group cursor-pointer flex items-center"
+                : "pl-[6px] w-[100%] my-2 py-2 text-lg font-semibold text-slate-600 hover:text-violet-500 group cursor-pointer flex items-center"
+              }
             >
               {v?.name}
             </button>
           ))}
-        <AddSection/>
+          <AddSection />
         </div>
         <button
-          className="fixed right-8 bottom-4 shadow z-20 flex justify-end text-lime-500 mb-[2.2rem] p-[0.57rem] rounded-xl w-[fit-content] ml-auto bg-lime-50 hover:text-violet-600 hover:bg-violet-100"
+          className="fixed right-8 bottom-4 shadow z-10 flex justify-end text-sky-700 mb-[2.2rem] p-[0.57rem] rounded-xl w-[fit-content] ml-auto bg-sky-200 hover:text-violet-600 hover:bg-violet-100"
           onClick={sideBarClose}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -85,7 +91,7 @@ const index = () => {
         </button>
       </div>
       : null}
-      
+
   </>
   );
 };

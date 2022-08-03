@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
-import profilePic from 'public/image/icon/happiness.png';
+import holderPicture from 'public/image/holderimage.png';
 import DeleteModal from 'components/Common/Modal/DeleteModal';
 import {
   deletePost, modifyPost, likePost, unlikePost, createComment, getComments,
@@ -13,6 +13,8 @@ import {
 } from 'slices/section';
 import Comments from './Comments';
 import NoticeList from 'components/Common/NoticeList';
+import profilePic from 'public/image/icon/happiness.png';
+import Slider from './Slider';
 
 const PostCard = ({ post }) => {
   const { user } = useSelector(state => state.user);
@@ -39,6 +41,7 @@ const PostCard = ({ post }) => {
   const onCancelRemove = useCallback(() => {
     setRemoveConfirm(false);
   }, [])
+
 
   useEffect(() => {
     if (deleteDone) {
@@ -169,6 +172,15 @@ const PostCard = ({ post }) => {
     post?.category === v?.key ? categoryArr?.push(v?.name) : null
   ))
 
+  // 사진이미지 클릭시 케러셀
+  const [sliderOn, setSliderOn] = useState(false);
+  const onClickSlider = useCallback(() => {
+    setSliderOn(true);
+  }, [])
+  const sliderClose = useCallback(() => {
+    setSliderOn(false);
+  }, [])
+
 
   return (
     <article className="w-full max-w-2xl mx-auto break-inside p-4 rounded-xl bg-white flex flex-col bg-clip-border shadow-md mb-4">
@@ -186,7 +198,7 @@ const PostCard = ({ post }) => {
               <Image
                 alt="avatar_user"
                 className="avatar rounded-lg object-cover shadow-inner bg-slate-100"
-                src={profilePic}
+                  src={profilePic}
                 width={48} height={48}
               />
             )}
@@ -257,37 +269,40 @@ const PostCard = ({ post }) => {
         {post?.photo?.length === 1 &&
           <>
             <div className="flex justify-between  hover:opacity-90">
-              <a className="flex" href="#">
-                <Image width={720} height={720} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[0] || profilePic} />
-              </a>
+              <button className="flex" onClick={onClickSlider}>
+                <Image width={720} height={720} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[0] || holderPicture} />
+              </button>
             </div>
           </>
         }
         {post?.photo?.length === 2 &&
           <>
-            <div className="flex justify-between gap-[4px]  hover:opacity-90">
+            <button
+              className="flex justify-between gap-[4px]  hover:opacity-90"
+              onClick={onClickSlider}
+            >
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[0] || profilePic} />
+                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[0] || holderPicture} />
               </a>
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[1] || profilePic} />
+                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[1] || holderPicture} />
               </a>
-            </div>
+            </button>
           </>
         }
         {post?.photo?.length === 3 &&
           <div className="flex flex-row  hover:opacity-90">
             <div className="flex flex-col justify-between gap-[4px]">
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[0] || profilePic} />
+                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[0] || holderPicture} />
               </a>
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[1] || profilePic} />
+                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[1] || holderPicture} />
               </a>
             </div>
             <div className="flex justify-between gap-[4px]">
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[2] || profilePic} />
+                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[2] || holderPicture} />
               </a>
             </div>
           </div>
@@ -296,18 +311,18 @@ const PostCard = ({ post }) => {
           <div className=" hover:opacity-90 ">
             <div className="flex justify-between gap-[4px] mb-[4px]">
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[0] || profilePic} />
+                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[0] || holderPicture} />
               </a>
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[1] || profilePic} />
+                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[1] || holderPicture} />
               </a>
             </div>
             <div className="flex justify-between gap-[4px]">
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[2] || profilePic} />
+                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[2] || holderPicture} />
               </a>
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[3] || profilePic} />
+                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[3] || holderPicture} />
               </a>
             </div>
           </div>
@@ -316,18 +331,18 @@ const PostCard = ({ post }) => {
           <div className=" hover:opacity-90 ">
             <div className="flex justify-between gap-[4px] mb-[4px]">
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[0] || profilePic} />
+                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[0] || holderPicture} />
               </a>
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[1] || profilePic} />
+                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[1] || holderPicture} />
               </a>
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[2] || profilePic} />
+                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[2] || holderPicture} />
               </a>
             </div>
             <div className="flex justify-between gap-[4px">
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[3] || profilePic} />
+                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[3] || holderPicture} />
               </a>
               <a className="flex relative overflow-hidden rounded-md" >
                 {post?.photo?.length > 5 &&
@@ -336,7 +351,7 @@ const PostCard = ({ post }) => {
                       +{post?.photo?.length - 4}
                     </div>
                   </>}
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[4] || profilePic} />
+                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[4] || holderPicture} />
               </a>
             </div>
           </div>
@@ -449,6 +464,15 @@ const PostCard = ({ post }) => {
           </button>
         </span>
       </form>
+
+      {sliderOn ?
+        <Slider
+          sliderOn={sliderOn}
+          photo={post?.photo}
+          setSliderOn={setSliderOn}
+          sliderClose={sliderClose}
+        />
+        : null}
 
       {/* <!-- Comments content --> */}
       {/* <!-- Comment row --> */}

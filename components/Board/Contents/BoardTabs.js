@@ -6,7 +6,7 @@ import Dialog from './Dialog';
 
 const Tab = ({ tabIndex, setTabIndex }) => {
   return (
-    <div className="flex flex-col w-[100%] px-4 mx-auto space-y-6 max-w-7xl xl:px-6">
+    <div className="flex flex-col w-[100%] px-4 mx-auto space-y-6 xl:px-6">
       <div className="relative">
         <div className="flex flex-wrap">
           <div className="w-full">

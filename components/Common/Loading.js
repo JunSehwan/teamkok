@@ -23,7 +23,7 @@ const LoadingBoxS = styled.div`
     display: block;
   }
   .loading_text {
-    width: 70px;
+    width: 120px;
     height: 0px;
     margin: auto;
     position: absolute;

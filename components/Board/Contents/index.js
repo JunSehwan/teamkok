@@ -13,6 +13,12 @@ const index = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const pid = router.query;
+  useEffect(()=>{
+    if(pid?.cid){
+      setTabIndex(2);
+      dispatch(sideClose());
+    }
+  },[pid?.cid,dispatch])
   const { singleBoard, myBoards, selectedCategory, categorySetDone } = useSelector(state => state.board);
   const { user, setExpertState, setAdminState } = useSelector(state => state.user);
   const { myCareers } = useSelector(state => state.career);

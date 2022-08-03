@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+import { HYDRATE } from 'next-redux-wrapper';
 const initialSelectedChannelState = {
   selectedChannel: null,
   selectedChannelId: null,

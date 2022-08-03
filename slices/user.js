@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { MemberRole } from "./servers";
 import { HYDRATE } from 'next-redux-wrapper';
 
 
 export const initialState = {
   // user: null,
   user: null,
+  users: [],
   // {
   //   username: "",
   //   tag: "",
@@ -57,6 +57,9 @@ export const user = createSlice({
     },
     setUser(state, action) {
       state.user = action.payload;
+    },
+    setUsers(state, action) {
+      state.users = action.payload;
     },
     closeSignupConfirmModal(state, action) {
       state.signUpSuccess = false;
@@ -150,6 +153,7 @@ export const {
   refresh,
   signOut,
   setUser,
+  setUsers,
   setUserAbout,
   setUserBanner,
   setUserAvatar,

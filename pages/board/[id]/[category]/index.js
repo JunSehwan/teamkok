@@ -4,20 +4,22 @@ import Head from 'next/head'
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 
-import { setUser, resetUserState, userLoadingStart, userLoadingEnd, userLoadingEndwithNoone } from "slices/user";
+import { setUser, setUsers, resetUserState, userLoadingStart, userLoadingEnd, userLoadingEndwithNoone } from "slices/user";
 import { loadEducations } from "slices/education";
 import { loadCareers } from "slices/career";
 import { loadAllBoards, loadBoards, loadBoard, loadSection } from 'slices/board';
-
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import {
   db, getEducationsByUserId, getCareersByUserId,
-  getAllBoards, getBoardsByUserId, getBoard, getSection, getPosts
+  getAllBoards, getBoardsByUserId, getBoard, getSection, getPosts,
+
+  getConversations, getUsers
 } from "firebaseConfig";
 import { wrapper } from 'store/index';
 import LoadingPage from 'components/Common/Loading';
 import Contents from 'components/Board/Contents';
+import { loadConversationList } from 'slices/chat';
 
 const board = () => {
   const auth = getAuth();
@@ -81,6 +83,15 @@ const board = () => {
       // await getPosts(singleSection?.id).then((result) => {
       //   dispatch(loadPosts(result));
       // })
+
+      ////////////////// 채팅관련
+      await getConversations().then((result) => {
+        dispatch(loadConversationList(result));
+      })
+      await getUsers().then((result) => {
+        dispatch(setUsers(result));
+      })
+
       dispatch(userLoadingEnd());
     });
     return () => {
