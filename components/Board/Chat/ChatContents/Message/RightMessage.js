@@ -1,42 +1,64 @@
 /* eslint-disable @next/next/no-img-element */
-import { Fragment, useState } from "react";
+import { Fragment, useState,useCallback } from "react";
 import PropTypes from 'prop-types';
-import Link from 'next/link';
+import { doc, updateDoc } from "firebase/firestore";
 import {
   formatDate,
   formatFileSize,
   splitLinkFromMessage,
 } from "hooks/constants";
-import { useSelector } from "react-redux";
-
-import AvatarFromId from "../ChatView/AvatarFromId";
 import ClickAwayListener from "components/Common/ClickAwayListener";
 import { EMOJI_REGEX } from "hooks/constants";
 import FileIcon from "../FileIcon";
 import ImageView from "../ImageView";
+import { useSelector } from "react-redux";
+import { useRouter } from 'next/router';
 import ReactionPopup from "./ReactionPopup";
 import ReactionStatus from "./ReactionStatus";
 import ReplyBadge from "./ReplyBadge";
 import ReplyIcon from "components/Common/Icons/ReplyIcon";
 import SpriteRenderer from "../SpriteRenderer";
+import { db } from "firebaseConfig";
 
-
-const LeftMessage = ({ message, conversation, index, docs, setReplyInfo }) => {
+const RightMessage = ({ message, setReplyInfo }) => {
+  
   const [isSelectReactionOpened, setIsSelectReactionOpened] = useState(false);
   const { user } = useSelector(state => state.user)
 
+  const router = useRouter();
+  const pid = router.query;
+  const conversationId = pid?.cid;
   const [isImageViewOpened, setIsImageViewOpened] = useState(false);
 
+  const removeMessage = (messageId) => {
+    updateDoc(
+      doc(db, "conversations", conversationId, "messages", messageId),
+      {
+        type: "removed",
+        file: null,
+        content: "",
+        reactions: [],
+      }
+    );
+  };
+
+
+  const downloadFile = useCallback((url) => {
+    const link = document.createElement('a');
+    document.body.appendChild(link);
+    link.href = message?.content;
+    link.click();
+    link.remove();
+  }, [message?.content]);
+
+
   const formattedDate = formatDate(
-    message?.createdAt.seconds ? message?.createdAt.seconds * 1000 : Date.now()
+    message?.createdAt?.seconds ? message?.createdAt?.seconds * 1000 : Date.now()
   );
 
   return (
     <div id={`message-${message?.id}`}>
-      <div
-        className={`${conversation?.users?.length === 2 ? "px-8" : "px-[70px]"
-          } -mb-2 flex`}
-      >
+      <div className="-mb-2 flex justify-end px-8">
         {!!message?.replyTo && (
           <ReplyBadge messageId={message?.replyTo} />
         )}
@@ -47,19 +69,9 @@ const LeftMessage = ({ message, conversation, index, docs, setReplyInfo }) => {
             setReplyInfo(message);
           }
         }}
-        className={`group relative flex items-stretch gap-2 px-8 ${Object.keys(message?.reactions || {}).length > 0 ? "mb-2" : ""
+        className={`group relative flex flex-row-reverse items-stretch gap-2 px-8 ${Object.keys(message?.reactions || {}).length > 0 ? "mb-2" : ""
           }`}
       >
-        {conversation?.users?.length > 2 && (
-          <div onClick={(e) => e.stopPropagation()} className="h-full py-1">
-            <div className="h-[30px] w-[30px]">
-              {docs[index - 1]?.data()?.sender !== message?.sender && (
-                <AvatarFromId uid={message?.sender} />
-              )}
-            </div>
-          </div>
-        )}
-
         {message?.type === "text" ? (
           <>
             {EMOJI_REGEX.test(message?.content) ? (
@@ -74,26 +86,21 @@ const LeftMessage = ({ message, conversation, index, docs, setReplyInfo }) => {
               <div
                 onClick={(e) => e.stopPropagation()}
                 title={formattedDate}
-                className={`bg-amber-200 rounded-lg p-2 text-gray-700 ${conversation?.users?.length === 2
-                  ? "after:border-amber-200 relative after:absolute after:right-full after:bottom-[6px] after:border-8 after:border-t-transparent after:border-l-transparent"
-                  : ""
-                  }`}
+                className={`bg-sky-400 after:border-sky-400 relative rounded-lg p-2 px-3 text-white after:absolute after:left-full after:bottom-[6px] after:border-8 after:border-t-transparent after:border-r-transparent`}
               >
                 {splitLinkFromMessage(message?.content).map((item, index) => (
                   <Fragment key={index}>
                     {typeof item === "string" ? (
                       <span>{item}</span>
                     ) : (
-                      <Link
-                        href={item?.link}>
-                        <a
-                          className="mx-1 inline underline"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {item?.link}
-                        </a>
-                      </Link>
+                      <a
+                        className="mx-1 inline underline"
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {item.link}
+                      </a>
                     )}
                   </Fragment>
                 ))}
@@ -102,7 +109,6 @@ const LeftMessage = ({ message, conversation, index, docs, setReplyInfo }) => {
           </>
         ) : message?.type === "image" ? (
           <>
-            {/* // eslint-disable-next-line @next/next/no-img-element */}
             <img
               onClick={(e) => {
                 setIsImageViewOpened(true);
@@ -123,46 +129,48 @@ const LeftMessage = ({ message, conversation, index, docs, setReplyInfo }) => {
           <div
             onClick={(e) => e.stopPropagation()}
             title={formattedDate}
-            className="bg-amber-300 flex items-center gap-2 overflow-hidden rounded-lg py-3 px-5"
+            className="bg-sky-600 flex items-center gap-2 overflow-hidden rounded-lg text-white -lg py-3 px-5"
           >
             <FileIcon
-              className="h-4 w-4 object-cover"
-              extension={message?.file?.name.split(".").slice(-1)[0]}
+              className="h-4 w-4 object-cover text-white"
+              extension={message?.file?.name?.split(".").slice(-1)[0]}
             />
             <div>
               <p className="max-w-[100px] overflow-hidden text-ellipsis whitespace-nowrap">
                 {message?.file?.name}
               </p>
 
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-gray-300">
                 {formatFileSize(message?.file?.size)}
               </p>
             </div>
-            <Link
-              href={message?.content}>
-              <a
-                download
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-              </a>
-            </Link>
+
+            {/* <a
+              href={message?.content}
+              download
+              target="_blank"
+              rel="noopener noreferrer"
+            > */}
+
+                <button onClick={() => downloadFile()} >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="text-2xl text-white ml-1 h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                  </svg>
+                  </button>
+            {/* </a> */}
           </div>
         ) : message?.type === "sticker" ? (
           <SpriteRenderer
             onClick={(e) => e.stopPropagation()}
             title={formattedDate}
-            src={message.content}
+            src={message?.content}
             size={130}
           />
         ) : (
           <div
             onClick={(e) => e.stopPropagation()}
             title={formattedDate}
-            className="border-x-amber-200 rounded-lg border p-3 text-gray-400"
+            className="border-violet-400 rounded-lg border p-3 text-gray-400"
           >
             Message has been removed
           </div>
@@ -170,61 +178,71 @@ const LeftMessage = ({ message, conversation, index, docs, setReplyInfo }) => {
 
         {message?.type !== "removed" && (
           <>
+          {/* //리액션인데 기능 못함 */}
             {/* <button
               onClick={() => setIsSelectReactionOpened(true)}
-              className="text-lg text-gray-500 opacity-0 transition hover:text-gray-300 group-hover:opacity-100"
+              className="text-lg text-gray-400 opacity-0 transition hover:text-gray-600 group-hover:opacity-100"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </button> */}
+
             <button
               onClick={(e) => {
                 setReplyInfo(message);
                 e.stopPropagation();
               }}
-              className="text-gray-500 opacity-0 transition hover:text-gray-300 group-hover:opacity-100"
+              className="text-gray-400 opacity-0 transition hover:text-gray-600 group-hover:opacity-100"
             >
               <ReplyIcon />
             </button>
 
-            {isSelectReactionOpened && (
+            <button
+              onClick={(e) => {
+                removeMessage(message?.id);
+                e.stopPropagation();
+              }}
+              className="text-lg text-gray-400 opacity-0 transition hover:text-gray-600 group-hover:opacity-100"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+
+            {/* {isSelectReactionOpened && (
               <ClickAwayListener
                 onClickAway={() => setIsSelectReactionOpened(false)}
               >
+              
                 {(ref) => (
                   <ReactionPopup
-                    position={"left"}
+                    position="right"
                     forwardedRef={ref}
                     setIsOpened={setIsSelectReactionOpened}
                     messageId={message?.id}
                     currentReaction={
-                      message?.reactions?.[user?.userID] || 0
+                      message?.reactions?.[user?.userID?.uid] || 0
                     }
                   />
                 )}
               </ClickAwayListener>
+            )} */}
+
+            {Object.keys(message?.reactions || {})?.length > 0 && (
+              <ReactionStatus message={message} position="right" />
             )}
           </>
-        )}
-        {Object.keys(message?.reactions || {}).length > 0 && (
-          <ReactionStatus
-            message={message}
-            position={conversation?.users?.length > 2 ? "left-tab" : "left"}
-          />
         )}
       </div>
     </div>
   );
 };
 
-LeftMessage.propTypes = {
+RightMessage.propTypes = {
   message: PropTypes.object,
-  conversation: PropTypes.object,
   replyInfo: PropTypes.any,
-  docs: PropTypes.any,
-  setReplyInfo: PropTypes.any,
-  // conversation: PropTypes.any,
+  setReplyInfo: PropTypes.func,
 };
 
-export default LeftMessage;
+export default RightMessage;

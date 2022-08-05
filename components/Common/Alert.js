@@ -32,7 +32,7 @@ const Alert = ({
 
 Alert.propTypes = {
   isOpened: PropTypes.bool,
-  setIsOpened: PropTypes.bool,
+  setIsOpened: PropTypes.func,
   text: PropTypes.string,
   isError: PropTypes.bool,
   duration: PropTypes.number

@@ -12,7 +12,7 @@ let cache = {};
 
 const useUsersInfo = (userIds) => {
   const [data, setData] = useState(
-    userIds.every((id) => cache[id]) ? userIds.map((id) => cache[id]) : null
+    userIds?.every((id) => cache[id]) ? userIds?.map((id) => cache[id]) : null
   );
   const [loading, setLoading] = useState(!data);
   const [error, setError] = useState(false);
@@ -21,7 +21,7 @@ const useUsersInfo = (userIds) => {
     try {
       (async () => {
         const response = await Promise.all(
-          userIds.map(async (id) => {
+          userIds?.map(async (id) => {
             if (cache[id]) return cache[id];
             const res = await getDoc(doc(db, "users", id));
             cache[id] = res;
@@ -40,7 +40,6 @@ const useUsersInfo = (userIds) => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(userIds)]);
-console.log(data, "시발")
   return { data, loading, error };
 };
 

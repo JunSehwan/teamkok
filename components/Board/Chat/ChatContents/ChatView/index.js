@@ -7,37 +7,31 @@ import {
   query,
   updateDoc,
 } from "firebase/firestore";
+import PropTypes from 'prop-types';
 
 import AvatarFromId from "./AvatarFromId";
 import Spin from "components/Common/Spin";
-
 import InfiniteScroll from "react-infinite-scroll-component";
+
 import LeftMessage from "../Message/LeftMessage";
 import RightMessage from "../Message/RightMessage";
 import { db } from "firebaseConfig";
-import { useCollectionQuery } from "../../hooks/useCollectionQuery";
-import { useStore } from "../../store";
-import PropTypes from 'prop-types';
+
+import { useCollectionQuery } from "hooks/useCollectionQuery";
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useSelector } from "react-redux";
+import styled from 'styled-components';
 
 
-
-const ChatView = ({
-  conversation,
-  inputSectionOffset,
-  replyInfo,
-  setReplyInfo,
-}) => {
+const ChatView = ({ conversation, inputSectionOffset, replyInfo, setReplyInfo }) => {
   const router = useRouter();
   const pid = router.query;
   const conversationId = pid?.cid;
-  const currentUser = useStore((state) => state.currentUser);
-
+  const { user } = useSelector(state => state.user);
   const scrollBottomRef = useRef(null);
 
-  const [limitCount, setLimitCount] = useState(10);
-
+  const [limitCount, setLimitCount] = useState(30);
   const { data, loading, error } = useCollectionQuery(
     `conversation-data-${conversationId}-${limitCount}`,
     query(
@@ -46,19 +40,16 @@ const ChatView = ({
       limitToLast(limitCount)
     )
   );
-
   const dataRef = useRef(data);
   const conversationIdRef = useRef(conversationId);
   const isWindowFocus = useRef(true);
-
   useEffect(() => {
     dataRef.current = data;
   }, [data]);
-
+  console.log(inputSectionOffset,"inputSectionOffset")
   useEffect(() => {
     conversationIdRef.current = conversationId;
   }, [conversationId]);
-
   useEffect(() => {
     if (isWindowFocus.current) updateSeenStatus();
 
@@ -72,20 +63,17 @@ const ChatView = ({
 
   const updateSeenStatus = () => {
     if (dataRef.current?.empty) return;
-
     const lastDoc = dataRef.current?.docs?.slice(-1)?.[0];
-
     if (!lastDoc) return;
 
     updateDoc(doc(db, "conversations", conversationIdRef.current), {
-      [`seen.${currentUser?.uid}`]: lastDoc.id,
+      [`seen.${user?.userID}`]: lastDoc.id,
     });
   };
 
   useEffect(() => {
     const focusHandler = () => {
       isWindowFocus.current = true;
-
       updateSeenStatus();
     };
 
@@ -127,59 +115,76 @@ const ChatView = ({
     );
 
   return (
-    <InfiniteScroll
-      dataLength={data?.size}
-      next={() => setLimitCount((prev) => prev + 10)}
-      inverse
-      hasMore={(data?.size) >= limitCount}
-      loader={
-        <div className="flex justify-center py-3">
-          <Spin />
-        </div>
-      }
-      style={{ display: "flex", flexDirection: "column-reverse" }}
-      height={`calc(100vh - ${144 + inputSectionOffset}px)`}
-    >
-      <div className="flex flex-col items-stretch gap-3 pt-10 pb-1">
-        {data?.docs
-          .map((doc) => ({ id: doc.id, ...doc.data() }))
-          .map((item, index) => (
-            <Fragment key={item.id}>
-              {item.sender === currentUser?.uid ? (
-                <RightMessage
-                  replyInfo={replyInfo}
-                  setReplyInfo={setReplyInfo}
-                  message={item}
-                />
-              ) : (
-                <LeftMessage
-                  replyInfo={replyInfo}
-                  setReplyInfo={setReplyInfo}
-                  message={item}
-                  index={index}
-                  docs={data?.docs}
-                  conversation={conversation}
-                />
-              )}
-              {Object.entries(conversation.seen).filter(
-                ([key, value]) => key !== currentUser?.uid && value === item.id
-              ).length > 0 && (
-                  <div className="flex justify-end gap-[1px] px-8">
-                    {Object.entries(conversation.seen)
-                      .filter(
-                        ([key, value]) =>
-                          key !== currentUser?.uid && value === item.id
-                      )
-                      .map(([key, value]) => (
-                        <AvatarFromId key={key} uid={key} size={14} />
-                      ))}
-                  </div>
+    <div
+      id="scrollableDiv"
+      height="calc(100vh-144px)"
+      width="100%"
+      style={{
+        height: '100vh',
+        overflow: 'auto',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column-reverse',
+      }}>
+      <StyledContainer
+        className="container z-1 w-full mx-auto"
+        dataLength={data?.size}
+        next={() => setLimitCount((prev) => prev + 10)}
+        inverse
+        hasMore={(data?.size) >= limitCount}
+        scrollableTarget="scrollableDiv"
+        loader={
+          <div className="flex justify-center py-3 ">
+            <Spin />
+          </div>
+        }
+        style={{ display: "flex", flexDirection: "column-reverse", height: "100vh" }}
+        height={`calc(100vh - ${inputSectionOffset}px)`}
+      >
+        <div className="flex flex-col items-stretch gap-3 pt-10 pb-1">
+          {data?.docs
+            .map((doc) => ({ id: doc.id, ...doc.data() }))
+            .map((item, index) => (
+              <Fragment key={item.id}>
+                {item.sender === user?.userID ? (
+                  <RightMessage
+                    replyInfo={replyInfo}
+                    setReplyInfo={setReplyInfo}
+                    message={item}
+                  />
+                ) : (
+                  <LeftMessage
+                    replyInfo={replyInfo}
+                    setReplyInfo={setReplyInfo}
+                    message={item}
+                    index={index}
+                    docs={data?.docs}
+                    conversation={conversation}
+                  />
                 )}
-            </Fragment>
-          ))}
-        <div ref={scrollBottomRef}></div>
-      </div>
-    </InfiniteScroll>
+                {conversation?.seen ?
+                  Object?.entries(conversation?.seen)?.filter(
+                    ([key, value]) => key !== user?.userID && value === item.id
+                  )?.length > 0 && (
+                    <div className="flex justify-end gap-[1px] px-8">
+                      {Object.entries(conversation.seen)
+                        .filter(
+                          ([key, value]) =>
+                            key !== user?.userID && value === item.id
+                        )
+                        .map(([key, value]) => (
+                          // <AvatarFromId key={key} uid={key} size={14} />
+                          <div key={key}></div>
+                        ))}
+                    </div>
+                  )
+                  : null}
+              </Fragment>
+            ))}
+          <div ref={scrollBottomRef}></div>
+        </div>
+      </StyledContainer>
+    </div >
   );
 };
 
@@ -190,5 +195,24 @@ ChatView.propTypes = {
   setReplyInfo: PropTypes.func,
   // conversation: PropTypes.any,
 };
+
+
+const StyledContainer = styled(InfiniteScroll)`
+
+ ::-webkit-scrollbar {
+    width: 12px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.16);
+    border-radius: 10px;
+    background-clip: padding-box;
+    border: 2px solid transparent;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 10px;
+    box-shadow: inset 0px 0px 5px white;
+  }
+`
 
 export default ChatView;

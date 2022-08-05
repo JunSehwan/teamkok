@@ -15,8 +15,8 @@ const index = () => {
   return (
     <div className="flex">
       <SideBarList />
-      <div className="hidden flex-grow flex-col items-center justify-center gap-3 md:!flex text-gray-500">
-        <ChatHeader conversation={singleConversation} />
+      <div className="flex-grow flex-col items-end justify-center gap-3 md:!flex text-gray-500 h-[calc(100vh-140px)] ">
+        {/* <ChatHeader conversation={singleConversation} /> */}
         <ChatView
           replyInfo={replyInfo}
           setReplyInfo={setReplyInfo}

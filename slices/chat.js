@@ -69,6 +69,7 @@ const initialState = {
   },
   serverIDs: [],
   loading: "idle",
+  conversationBar:true,
 };
 
 export const chatSlice = createSlice({
@@ -170,6 +171,12 @@ loadSingleConversation(state, action) {
       state.voiceChannel = initialState.voiceChannel;
       state.messages = initialState.messages;
     },
+    showConversationBar(state){
+      state.conversationBar = true;
+    },
+    hideConversationBar(state) {
+      state.conversationBar = false;
+    }
   },
   extraReducers: {
     // The HYDRATE function is what manages the state between client and server
@@ -206,6 +213,8 @@ export const {
   setViewMedia,
   setServerIDs,
   resetServerState,
+  showConversationBar,
+  hideConversationBar,
 } = chatSlice.actions;
 
 export const useChatState = () => useAppSelector((state) => state.chat);

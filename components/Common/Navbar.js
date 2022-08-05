@@ -97,7 +97,7 @@ const Navbar = () => {
         twobutton={true}
       />
 
-      <nav className="fixed z-10 bg-white w-full shadow-sm">
+      <nav className="fixed z-20 bg-white w-full shadow-sm">
         <div className="mx-auto px-4 sm:px-6">
           <div className="flex justify-between items-center border-b-2 border-gray-100 py-4 md:justify-start md:space-x-10">
             <div className="flex justify-start lg:w-0 lg:flex-1">

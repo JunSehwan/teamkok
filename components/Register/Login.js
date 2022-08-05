@@ -18,6 +18,7 @@ const Login = ({ handleCancelModal }) => {
 
   // @ 비밀번호 길이 검토
   const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const onChangePassword = useCallback(
     e => {
       setPassword(e.target.value);
@@ -25,19 +26,20 @@ const Login = ({ handleCancelModal }) => {
     []
   );
 
-  const onSubmit = useCallback(async () => {
+  const onSubmit = useCallback(async (e) => {
+    e.preventDefault();
     // console.log("password", password)
     // console.log("password.length", password.length)
-    if (password == '') {
+    if (password?.length === 0) {
       return setPasswordError(true);
     }
-    if (email == '') {
+    if (email?.length === 0) {
       return setEmailError(true);
     }
-    console.log(email, password, "go");
     const res = await signIn(email, password);
+
     if (res?.uid?.length !== 0) {
-      dispatch(login({ email, password }));
+      dispatch(login({ res }));
       handleCancelModal();
     }
   }, [email, dispatch, handleCancelModal, password])
@@ -53,7 +55,7 @@ const Login = ({ handleCancelModal }) => {
             {/* <!-- Col --> */}
             {/* <!-- Col --> */}
             <div className="w-full bg-white rounded-lg lg:rounded-l-none">
-              <form className="w-full pt-4 pb-2 mb-4 bg-white rounded" onSubmit={onSubmit}>
+              <form className="w-full pt-4 pb-2 mb-4 bg-white rounded">
 
                 <div className="mb-4">
                   <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="email">
@@ -90,12 +92,16 @@ const Login = ({ handleCancelModal }) => {
                     onChange={onChangePassword}
                     value={password}
                   />
+                  {passwordError ? (
+                    <p className="text-xs mb-[1.5rem] italic text-red-500">비밀번호를 입력해주세요.</p>
+                  ) : null}
                 </div>
 
                 <div className="mb-6 text-center">
                   <button
                     className="w-full px-4 py-2 font-bold text-white bg-purple-600 rounded-full hover:bg-purple-700 focus:outline-none focus:shadow-outline"
-                    type="onSubmit"
+                    type="button"
+                    onClick={onSubmit}
                   >
                     로그인
                   </button>

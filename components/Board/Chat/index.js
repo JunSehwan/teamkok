@@ -8,21 +8,21 @@ import { expertSet, adminSet, setDone } from 'slices/user';
 import ChatTabs from './ChatTabs';
 
 const index = () => {
-
+  const { sidebarIn } = useSelector((state) => state.board);
   const [tabIndex, setTabIndex] = useState(1);
   const dispatch = useDispatch();
   const router = useRouter();
   const pid = router.query;
-  useEffect(()=>{
-    if(pid?.cid){
+  useEffect(() => {
+    if (pid?.cid) {
       setTabIndex(2);
       dispatch(sideClose());
     }
-  },[pid?.cid,dispatch])
+  }, [pid?.cid, dispatch])
   const { singleBoard, myBoards, selectedCategory, categorySetDone } = useSelector(state => state.board);
   const { user, setExpertState, setAdminState } = useSelector(state => state.user);
   const { myCareers } = useSelector(state => state.career);
-  
+
   // 권한체크
   function checkCompanyName(element) {
     if (element.name === singleBoard?.name) {
@@ -65,9 +65,11 @@ const index = () => {
     }
     return;
   }, [dispatch, selcategoryArr, categorySetDone])
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
-    <div className="w-full pt-[66px] min-h-screen h-auto bg-violet-50">
+    <div className={`w-full  ${!sidebarIn ? `sm:pl-[0px]` : `sm:pl-[20rem]`} pt-[66px] min-h-screen h-auto `}>
       <div className="h-full flex flex-col sm:flex-row">
         <SideBar />
         <SideButton />

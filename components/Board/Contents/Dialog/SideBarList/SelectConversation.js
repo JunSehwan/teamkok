@@ -24,7 +24,7 @@ const SelectConversation = ({ conversation, conversationId }) => {
     loading: lastMessageLoading,
     error: lastMessageError,
   } = useLastMessage(conversationId);
-console.log(pid.cid, conversationId, "비교")
+  
   if (loading)
     return (
       <div className="flex items-stretch gap-2 py-2 px-5">
@@ -35,7 +35,6 @@ console.log(pid.cid, conversationId, "비교")
         </div>
       </div>
     );
-
   if (conversation.users.length === 2)
     return (
       <Link
@@ -69,7 +68,7 @@ console.log(pid.cid, conversationId, "비교")
               {lastMessage?.lastMessageId !== null &&
                 lastMessage?.lastMessageId !==
                 conversation.seen[user?.userID] && (
-                  <div className="bg-primary absolute top-1/2 right-4 h-[10px] w-[10px] -translate-y-1/2 rounded-full"></div>
+                  <div className="bg-red-500 absolute top-1/2 right-4 h-[10px] w-[10px] -translate-y-1/2 rounded-full"></div>
                 )}
             </>
           )}
@@ -103,7 +102,7 @@ console.log(pid.cid, conversationId, "비교")
               alt=""
             />
             <Image
-              className={`border-dark group-hover:border-dark-lighten absolute top-0 left-10 h-10 w-10 flex-shrink-0 rounded-full border-[3px] object-cover transition duration-300
+              className={`border-slate-400 group-hover:border-slate-400 absolute top-0 left-10 h-10 w-10 flex-shrink-0 rounded-full border-[3px] object-cover transition duration-300
              ${conversationId === pid?.cid ? "!border-[#252F3C]" : ""
                 }`}
               width={40}
@@ -134,7 +133,7 @@ console.log(pid.cid, conversationId, "비교")
             {lastMessage?.lastMessageId !== null &&
               lastMessage?.lastMessageId !==
               conversation.seen[user?.userID] && (
-                <div className="bg-primary absolute top-1/2 right-4 h-[10px] w-[10px] -translate-y-1/2 rounded-full"></div>
+                <div className="bg-red-400 absolute top-1/2 right-4 h-[10px] w-[10px] -translate-y-1/2 rounded-full"></div>
               )}
           </>
         )}

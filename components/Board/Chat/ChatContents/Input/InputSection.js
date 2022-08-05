@@ -242,7 +242,7 @@ const InputSection = ({
 
       for (let i = 0, item; (item = items[i]); ++i) {
         let entry = item.webkitGetAsEntry();
-        if (entry.isFile) {
+        if (entry?.isFile) {
           selectedFiles.push(files[i]);
         }
       }
@@ -268,12 +268,12 @@ const InputSection = ({
   return (
     <>
       {fileDragging && (
-        <div className="pointer-events-none fixed top-0 left-0 z-20 flex h-full w-full select-none items-center justify-center backdrop-blur-sm">
+        <div className="pointer-events-none fixed top-0 left-0 z-5 flex h-full w-full select-none items-center justify-center backdrop-blur-sm">
           <h1 className="text-3xl">Drop file to send</h1>
         </div>
       )}
       {previewFiles?.length > 0 && (
-        <div className="border-dark-lighten flex h-32 items-center gap-2 border-t px-4">
+        <div className="bg-slate-100 border-slate-200 flex h-32 items-center gap-2 border-t px-4">
           {previewFiles?.map((preview) => (
             <div key={preview} className="relative">
               <Image
@@ -297,15 +297,15 @@ const InputSection = ({
         </div>
       )}
       {previewFiles?.length === 0 && !!replyInfo && (
-        <div className="border-dark-lighten flex h-[76px] justify-between border-t p-4">
-          <div>
+        <div className="border-slate-300 flex h-[76px] justify-between border-t p-4">
+          <div className="mr-3">
             <div className="flex items-center gap-2">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
               </svg>
               <p>
-                Replying
-                {user?.userID === replyInfo.sender ? " to yourself" : ""}
+                메시지 답글:
+                {user?.userID === replyInfo.sender ? " 나에게" : ""}
               </p>
             </div>
             {replyInfo.type === "text" ? (
@@ -313,13 +313,13 @@ const InputSection = ({
                 {replyInfo.content}
               </p>
             ) : replyInfo.type === "image" ? (
-              "An image"
+              "(An image)"
             ) : replyInfo.type === "file" ? (
-              "A file"
+              "(A file)"
             ) : replyInfo.type === "sticker" ? (
-              "A sticker"
+              "(A sticker)"
             ) : (
-              "Message has been removed"
+              "삭제된 메시지"
             )}
           </div>
 
@@ -331,7 +331,7 @@ const InputSection = ({
         </div>
       )}
       <div
-        className={`w-full border-dark-lighten flex h-16 items-stretch gap-1 border-t px-4 ${disabled ? "pointer-events-none select-none" : ""
+        className={`py-2 w-full bg-slate-100 shadow border-slate-300 flex h-16 items-stretch gap-1 border-t px-4 ${disabled ? "pointer-events-none select-none" : ""
           }`}
       >
         <button
@@ -381,7 +381,7 @@ const InputSection = ({
               }}
               onKeyDown={handleReplaceEmoji}
               onPaste={handlePaste}
-              className="bg-dark-lighten h-9 w-full rounded-full pl-3 pr-10 outline-none"
+              className="bg-white h-9 w-full rounded-full pl-3 pr-10 outline-none"
               type="text"
               placeholder="Message..."
             />
@@ -423,7 +423,7 @@ const InputSection = ({
             </div>
           ) : (
             <button className="text-primary flex flex-shrink-0 items-center text-2xl">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                 </svg>
             </button>

@@ -1,11 +1,15 @@
 import Image from 'next/image';
 import React from 'react';
 import styled from 'styled-components';
+import {useSelector} from 'react-redux';
 
 const index = () => {
-  return (
-    <>
-      <div className="py-16 mr-1 ">
+
+const { sidebarIn } = useSelector((state) => state.board);
+
+    return (
+      <>
+      <div className={`py-16 mr-1 ${!sidebarIn ? `sm:pl-[0px]` : `sm:pl-[20rem]` }`}>
         <div className="container m-auto px-3 text-gray-500 md:px-6">
           <div className="mx-auto grid gap-6 md:w-full md:grid-cols-2 lg:w-full lg:grid-cols-2 xl:w-full xl:grid-cols-3">
             

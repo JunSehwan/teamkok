@@ -208,7 +208,11 @@ export const signIn = async (email, password) => {
     .then((userCredential) => {
       // Signed in 
       const user = userCredential.user;
-
+      const auth = getAuth();
+      if(!user){
+        return
+      }
+return user;
     })
     .catch((error) => {
       const errorCode = error.code;

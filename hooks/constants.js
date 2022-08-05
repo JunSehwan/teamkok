@@ -50,9 +50,8 @@ export const formatFileName = (name) => {
 export const formatFileSize = (size) => {
   let i = Math.floor(Math.log(size) / Math.log(1024));
 
-  return `${(size / Math.pow(1024, i)).toFixed(1)} ${
-    ["B", "KB", "MB", "GB", "TB"][i]
-  }`;
+  return `${(size / Math.pow(1024, i)).toFixed(1)} ${["B", "KB", "MB", "GB", "TB"][i]
+    }`;
 };
 
 export const formatDate = (timestamp) => {
@@ -70,12 +69,14 @@ export const formatDate = (timestamp) => {
   return formatter.format("DD MMM YYYY h:mm A");
 };
 
+export const FILE_ICON = (extension) =>
+  `https://cdn.jsdelivr.net/gh/napthedev/file-icons/file/${extension}.svg`;
 
 export const splitLinkFromMessage = (message) => {
   const URL_REGEX =
     /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)/gm;
 
-  const result = message.split(" ").reduce((acc, item) => {
+  const result = message?.split(" ").reduce((acc, item) => {
     const isURL = URL_REGEX.test(item);
     if (isURL) acc.push({ link: item });
     else {
@@ -87,9 +88,39 @@ export const splitLinkFromMessage = (message) => {
     }
 
     return acc;
-  }, [] );
+  }, []);
   // as ({ link: string } | string)[]
-  
-
   return result;
+};
+
+
+export const REACTIONS_UI = {
+  Like: {
+    icon: "/reactions-icon/like.svg",
+    gif: "/reactions/like.gif",
+  },
+  Love: {
+    icon: "/reactions-icon/love.svg",
+    gif: "/reactions/love.gif",
+  },
+  Care: {
+    icon: "/reactions-icon/care.svg",
+    gif: "/reactions/care.gif",
+  },
+  Haha: {
+    icon: "/reactions-icon/haha.svg",
+    gif: "/reactions/haha.gif",
+  },
+  Wow: {
+    icon: "/reactions-icon/wow.svg",
+    gif: "/reactions/wow.gif",
+  },
+  Sad: {
+    icon: "/reactions-icon/sad.svg",
+    gif: "/reactions/sad.gif",
+  },
+  Angry: {
+    icon: "/reactions-icon/angry.svg",
+    gif: "/reactions/angry.gif",
+  },
 };
