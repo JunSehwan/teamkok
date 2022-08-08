@@ -109,6 +109,7 @@ export async function getUser(req, res) {
 export async function createAccount(
   email, password, username, form, tel,
 ) {
+  const auth = getAuth();
   try {
     const userCredential = await createUserWithEmailAndPassword(
       auth,
@@ -145,12 +146,13 @@ export async function createAccount(
 
     // await joinServer("ke6NqegIvJEOa9cLzUEp");
     // User joins global chat
-    return (user);
+    return user;
   } catch (error) {
-    if (error == "auth/email-already-in-use") {
-      alert("동일한 이메일 주소가 존재합니다.")
+    if (error.code === "auth/email-already-in-use") {
+      return alert("동일한 이메일 주소가 존재합니다.")
     }
-    //   // setIsLoading(false);
+    console.error(error);
+    return alert("예상치 못한 에러가 발생했습니다. 고객센터에 연락주시면 빠르게 해결하겠습니다.");
   }
 }
 
@@ -202,20 +204,50 @@ export async function saveUserProfileChanges(
   }
 }
 
-
-export const signIn = async (email, password) => {
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      // Signed in 
-      const user = userCredential.user;
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(error);
-    });
+export const signIn = async (email, password, setError) => {
+  try {
+    const auth = getAuth();
+    const {user} = await signInWithEmailAndPassword(auth, email, password);
+    const userRef = doc(db, "users", user.uid);
+    const docSnap = await getDoc(userRef);
+    const docData = docSnap.data();
+        const currentUser = {
+            userID: docData.id,
+            username: docData.username,
+            email: docData.email,
+            birthday: docData.birthday,
+            gender: docData.gender,
+            avatar: docData.avatar,
+            phonenumber: docData.phonenumber,
+            category: docData.category,
+            url_one: docData.url_one,
+            url_two: docData.url_two,
+            url_three: docData.url_three,
+            about: docData.about,
+            address: docData.address,
+            style: docData.style,
+            survey: docData.survey,
+        }
+      localStorage.setItem(docData.id, currentUser);
+      console.log("CurrentUser",currentUser);
+      return currentUser;
+  } catch (error) {
+      const code = error.code;
+    // 에러 코드 모음
+    // https://stackoverflow.com/questions/39152004/list-of-all-auth-errors-for-firebase-web-api
+    if (code === "auth/user-not-found") {
+      return setError("등록된 사용자가 없습니다.");
+    }
+    if (code === "auth/wrong-password") {
+      return setError("잘못된 비밀번호입니다.")
+    }
+    if (code === "auth/too-many-requests") {
+      return setError("너무 잦은 로그인 시도로 인해 잠시 비활성화 되었습니다.\n비밀번호를 변경하시거나 잠시 후에 다시 시도해 주십시오.")
+    }
+    console.error(error);
+    return setError("예상치 못한 문제가 있습니다. 고객센터에 연락주시면 빠르게 헤결하겠습니다.")
+  }
 }
-
 
 async function reauthenticateUser(password) {
   if (!auth.currentUser || !auth.currentUser.email) return;
@@ -231,6 +263,7 @@ async function reauthenticateUser(password) {
 export async function logOut() {
   try {
     await signOut(auth);
+      localStorage.removeItem(auth.uid)
     // Sign-out successful.
   } catch (error) {
     console.error(error);

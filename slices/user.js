@@ -1,30 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { MemberRole } from "./servers";
+import { createSlice } from '@reduxjs/toolkit';
+import { MemberRole } from './servers';
 import { HYDRATE } from 'next-redux-wrapper';
 
-
 export const initialState = {
-  // user: null,
   user: null,
-  // {
-  //   username: "",
-  //   tag: "",
-  //   avatar:
-  //     "",
-  //   about: "",
-  //   banner: "",
-  //   userID: "",
-  //   email: "",
-  //   birthday: "",
-  //   serverOwner: false,
-  //   roles: {
-  //     userID: "",
-  //     serverOwner: false,
-  //     roles: [],
-  //   },
-  //   // permissions: {},
-  // },
-  loading: false,
   isLoggedIn: false,
   signUpSuccess: false,
   updateBasicProfileSuccess: false,
@@ -33,7 +12,7 @@ export const initialState = {
 };
 
 export const user = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {
     login: (state, action) => {
@@ -47,9 +26,6 @@ export const user = createSlice({
     signUp(state, action) {
       state.user = action.payload;
       state.signUpSuccess = true;
-    },
-    setUser(state, action) {
-      state.user = action.payload;
     },
     closeSignupConfirmModal(state, action) {
       state.signUpSuccess = false;
@@ -80,14 +56,15 @@ export const user = createSlice({
     updateSurveyFalse(state, action) {
       state.updateSurveyDone = false;
     },
+    setUser(state, action) {
+      state.user = action.payload;
+    },
     setUserBanner(state, action) {
       state.user.banner = action.payload;
     },
-
     setUserAvatar(state, action) {
       state.user.avatar = action.payload;
     },
-
     setUserAvatarPreview(state, action) {
       state.avatarPreview = action.payload;
     },
@@ -115,7 +92,7 @@ export const user = createSlice({
     userLoadingEndwithNoone(state) {
       state.loading = false;
       state.user = null;
-    }
+    },
   },
   extraReducers: {
     // The HYDRATE function is what manages the state between client and server
@@ -125,14 +102,14 @@ export const user = createSlice({
         ...action.payload.user,
       };
     },
-  }
+  },
 });
 
 export const {
   login,
   signUp,
-  refresh,
   signOut,
+  refresh,
   setUser,
   setUserAbout,
   setUserBanner,
@@ -152,4 +129,3 @@ export const {
 
 export const useUserState = () => useAppSelector((state) => state.user);
 export default user.reducer;
-

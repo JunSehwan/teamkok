@@ -2,6 +2,7 @@ import { combineReducers } from '@reduxjs/toolkit';
 
 import { HYDRATE } from 'next-redux-wrapper';
 import userReducer from './user';
+import authReducer from './auth';
 import userSettingsReducer from './userSettings';
 import categoryReducer from './category';
 import educationReducer from './education';
@@ -10,6 +11,7 @@ import mystyleReducer from './mystyle';
 import boardReducer from './board';
 
 const rootReducer = combineReducers({
+  authReducer,
   userReducer,
   userSettingsReducer,
   categoryReducer,
