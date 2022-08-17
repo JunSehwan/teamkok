@@ -14,7 +14,6 @@ import {
   db, getEducationsByUserId, getCareersByUserId,
   getAllBoards, getBoardsByUserId
 } from "firebaseConfig";
-import { wrapper } from 'store/index';
 import LoadingPage from 'components/Common/Loading';
 import AddBoard from 'components/Board/Add';
 
@@ -26,6 +25,7 @@ const index = () => {
   const router = useRouter();
   useEffect(() => {
     const authStateListener = onAuthStateChanged(auth, async (user) => {
+      dispatch(userLoadingStart());
       if (!user) {
         dispatch(resetUserState());
         return router.push("/");
@@ -42,6 +42,7 @@ const index = () => {
         userID: user.uid,
         username: docData.username,
         email: docData.email,
+        email_using: docData.email_using,
         birthday: docData.birthday,
         gender: docData.gender,
         avatar: docData.avatar,
@@ -54,6 +55,14 @@ const index = () => {
         address: docData.address,
         style: docData.style,
         survey: docData.survey,
+        favorites: docData.favorites,
+        favLikes: docData.favLikes,
+        experts: docData.experts,
+        expertNum: docData.expertNum,
+        point: docData.point,
+        points: docData.points,
+        givePoint: docData.givePoint,
+        infoseen: docData.infoseen,
       };
       dispatch(setUser(currentUser));
       dispatch(userLoadingEnd());
@@ -87,6 +96,7 @@ const index = () => {
         userID: user.id,
         username: docData.username,
         email: docData.email,
+        email_using: docData.email_using,
         birthday: docData.birthday,
         gender: docData.gender,
         avatar: docData.avatar,
@@ -99,6 +109,14 @@ const index = () => {
         address: docData.address,
         style: docData.style,
         survey: docData.survey,
+        favorites: docData.favorites,
+        favLikes: docData.favLikes,
+        experts: docData.experts,
+        expertNum: docData.expertNum,
+        point: docData.point,
+        points: docData.points,
+        givePoint: docData.givePoint,
+        infoseen: docData.infoseen,
       };
       dispatch(setUser(currentUser));
       dispatch(userLoadingEnd());
@@ -108,65 +126,29 @@ const index = () => {
     };
   }, [dispatch, user?.uid, user?.userID]);
 
-  // useEffect(() => {
-  //   if (!server.serverID || !user.userID) return;
-
-  //   const docRef = doc(db, "servers", server.serverID, "members", user.userID);
-
-  //   const unsubscribe = onSnapshot(docRef, (doc) => {
-  //     const docData = doc.data();
-
-  //     const roles = {
-  //       userID: doc.id,
-  //       serverOwner: docData?.serverOwner,
-  //       roles: docData?.roles,
-  //       // permissions: docData?.permissions,
-  //     };
-  //     dispatch(setUser({ ...user, roles }));
-  //   });
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, [server]);
-
-  // function redirect() {
-  //   dispatch(rere());
-
-  //   router.push("/login");
-  // }
-
-
-  // 만약 로그아웃시 메인화면으로 이동
-  // useEffect(() => {
-  //   if (!(me && me.id)) {
-  //     router.push('/');
-  //   }
-  // }, [me && me.id]);
 
   return (
     <>
       <Head>
-        <title>현업전문가와의 소통기반 채용플랫폼 - TEAMKOK</title>
-        <meta name="description" content="현업전문가와의 소통기반 채용플랫폼 - TEAMKOK " />
+        <title>TeamZ - 팀기반 채용플랫폼</title>
 
-        {/* <meta name="keywords" content="키워드1, 키워드2, 키워드3" />
-      <meta name="description" content="페이지 설명" />
+        <meta name="keywords" content="teamz, 팀즈, 채용공고, 현업담당자와 대화, 업무문의, 채용문의, 팀기반 소통플랫폼" />
+        <meta name="description" content="원하는 기업에 입사하기 위해 팀별 현업담당자에게 적극적으로 나를 어필을 할 수 있습니다." />
 
-      <meta name="application-name" content="어플에서 아이콘뺄때 나올 이름" />
-      <meta name="msapplication-tooltip" content="ms 작업표시줄" />
-      <meta name="description" content="페이지 설명" />
+        <meta name="application-name" content="TeamZ - 관심있는 기업보드에 참여 후 현업자담당자와 소통해보세요." />
+        <meta name="msapplication-tooltip" content="TeamZ" />
 
-      <meta property="og:type" content="website" />
-      <meta property="og:title" content="페이지 제목" />
-      <meta property="og:description" content="페이지 설명" />
-      <meta property="og:image" content="http://www.mysite.com/myimage.jpg" />
-      <meta property="og:url" content="http://www.mysite.com" />
+        <meta property="og:type" content="TeamZ - 기업보드 제작페이지" />
+        <meta property="og:title" content="TeamZ - 내가 현재 재직중인 회사에 대한 기업보드를 생성할 수 있습니다.(채용관리자)" />
+        <meta property="og:description" content="기업보드를 제작하여 많은 입사희망자들을 끌어 모아보세요." />
+        <meta property="og:image" content="https://teamz.co.kr/logo/teamz.png" />
+        <meta property="og:url" content="https://teamz.co.kr/board/add" />
 
-      <meta name="twitter:card" content="summary" />
-      <meta name="twitter:title" content="페이지 제목" />
-      <meta name="twitter:description" content="페이지 설명" />
-      <meta name="twitter:image" content="http://www.mysite.com/article/article1.html" />
-      <meta name="twitter:domain" content="사이트 명" /> */}
+        <meta name="twitter:card" content="TeamZ - 기업보드 제작페이지" />
+        <meta name="twitter:title" content="TeamZ - 내가 현재 재직중인 회사에 대한 기업보드를 생성할 수 있습니다.(채용관리자)" />
+        <meta name="twitter:description" content="기업보드를 제작하여 많은 입사희망자들을 끌어 모아보세요." />
+        <meta name="twitter:image" content="https://teamz.co.kr/logo/teamz.png" />
+        <meta name="twitter:domain" content="https://teamz.co.kr/board/add" />
       </Head>
       {loading ?
         <LoadingPage /> :
@@ -176,10 +158,5 @@ const index = () => {
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps(
-  (store) => async (context) => {
-    store.dispatch(userLoadingStart());
-  }
-);
 
 export default index;

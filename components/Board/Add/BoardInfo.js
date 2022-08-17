@@ -1,23 +1,21 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import BoardLogo from './BoardLogo'
 import ChangeLogo from './ChangeLogo'
 import AlertModal from 'components/Common/Modal/AlertModal';
 import { createBoard, saveCompanyLogoChanges } from 'firebaseConfig';
-import { addBoard, setBoardLogo, addDone } from 'slices/board';
+import { addBoard, setBoardLogo, setAddDoneFalse } from 'slices/board';
 import Image from 'next/image';
 import CategoryList from 'components/Common/CategoryList';
 import Empty from 'components/Common/Empty';
-import Link from 'next/link';
 import { useRouter } from 'next/router'
-import { setAddDoneFalse } from '../../../slices/board';
 
 const BoardInfo = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const { AllBoards, changeLogoOpen, logoPreview } = useSelector(state => state.board);
+  const { addDone, AllBoards, changeLogoOpen, logoPreview } = useSelector(state => state.board);
   const { myCareers } = useSelector(state => state.career);
-
 
   useEffect(() => {
     if (addDone) {
@@ -31,7 +29,7 @@ const BoardInfo = () => {
       setCategoryError(false);
       dispatch(setAddDoneFalse());
     }
-  }, [dispatch])
+  }, [dispatch, addDone])
 
   // 학사/석사/박사/고등학교 category
   const [name, setName] = useState("");
@@ -39,10 +37,12 @@ const BoardInfo = () => {
   const onChangeCompany = useCallback((e) => {
     setName(e?.name);
     setNameError(false);
+    setDubError(false);
   }, [])
+
   const ConfirmArr = [];
   myCareers?.map(v => (
-    v?.finish === true && ConfirmArr?.push(true)
+    v?.finish !== true && ConfirmArr?.push(true)
   ))
 
   const [dubError, setDubError] = useState(false);
@@ -75,6 +75,11 @@ const BoardInfo = () => {
   const [category, setCategory] = useState([]);
   const [categoryError, setCategoryError] = useState(false);
 
+  const uniqueArr = Array.from(new Set(category?.map(a => a?.key)))
+    ?.map(key => {
+      return category?.find(a => a?.key === key)
+    })
+
   const onChangeCategory = useCallback((index, value) => {
     setCategory([{ key: index, name: value }, ...category]);
   }, [category]);
@@ -85,11 +90,18 @@ const BoardInfo = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uniqueArr, category]);
 
-  const uniqueArr = Array.from(new Set(category.map(a => a.key)))
-    ?.map(key => {
-      return category?.find(a => a.key === key)
-    })
 
+  const [id, setId] = useState("");
+  
+  const [confirm, setConfirm] = useState(false);
+  const cancelConfirm = () => {
+    setConfirm(false);
+  }
+  const closeConfirm = () => {
+    router.push(`/board/${id}`);
+    setConfirm(false);
+    // router.push();
+  }
 
 
   const onSubmit = useCallback(async (e) => {
@@ -100,6 +112,7 @@ const BoardInfo = () => {
       return setNameError(true);
     }
     const req = companyDubCheck(name);
+
     if (req === true) {
       document.getElementById('company_name').focus();
       return setDubError(true);
@@ -127,25 +140,14 @@ const BoardInfo = () => {
     await saveCompanyLogoChanges(logoPreview, con?.id);
     dispatch(addBoard({ ...con, logo: logoPreview }));
     // dispatch(setBoardLogo(logoPreview));
-    openConfirm(con?.id);
+    // openConfirm(con?.id);
+    setId(con?.id);
+    setConfirm(true);
   }, [
-    dispatch, email, email_check, openConfirm,
+    dispatch, email, email_check,
     name, category, logoPreview, companyDubCheck
   ])
-  const [id, setId] = useState("");
-  const openConfirm = useCallback((id) => {
-    setId(id);
-    setConfirm(true);
-  }, [])
-  const [confirm, setConfirm] = useState(false);
-  const cancelConfirm = () => {
-    setConfirm(false);
-  }
-  const closeConfirm = () => {
-    router.push(`/board/${id}`);
-    setConfirm(false);
-    // router.push();
-  }
+  
 
   return (
     <div>
@@ -182,7 +184,7 @@ const BoardInfo = () => {
               <div tabIndex="-1" role="listbox" aria-labelledby="listbox-label" aria-activedescendant="listbox-item-3" className="max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
                 {myCareers?.length !== 0 ?
                   myCareers?.map((m) => (
-                    m?.finish == true &&
+                    m?.finish !== true &&
                     <button key={m?.id} id="listbox-item-0"
                       type="button"
                       className="w-[100%] cursor-pointer text-gray-700 hover:bg-fuchsia-500 hover:text-white select-none relative py-2 pl-3 pr-9"

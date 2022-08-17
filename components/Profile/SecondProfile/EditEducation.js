@@ -1,20 +1,9 @@
-import React, { useCallback, useState, createRef, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { modifyEducation } from 'firebaseConfig';
 import { updateEducation, setUpdateDoneFalse } from 'slices/education';
 import AlertModal from 'components/Common/Modal/AlertModal';
-import dynamic from 'next/dynamic'
-import {
-  useLoadData,
-  useSetData,
-  useClearDataCallback,
-} from "./profileHooks";
-import { options } from "components/Common/Editor";
-
-const Editor = dynamic(() =>
-  import("components/Common/Editor/editor").then((mod) => mod.EditorContainer),
-  { ssr: false })
 
 const EditEducation = ({ education, setViewEdu }) => {
   const dispatch = useDispatch();
@@ -88,15 +77,9 @@ const EditEducation = ({ education, setViewEdu }) => {
 
   // 학력설명 description
   const [description, setDescription] = useState(education?.description);
-  const { data, loading } = useLoadData({ description })
-  // useSetData({ description, data });
-
-  // save handler
-  // const onSave = useSaveCallback(description)
-  // clear data callback
-  const clearData = useClearDataCallback(description);
-  const disabled = description === null || loading;
-
+  const onChangeDescription = useCallback((e) => {
+    setDescription(e.currentTarget.value);
+  }, [])
 
   // 시작일, 종료일
   const standardYear = 2005;
@@ -186,14 +169,19 @@ const EditEducation = ({ education, setViewEdu }) => {
   const [finish, setFinish] = useState(education?.finish);
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const onChangeFinish = useCallback((e) => {
-    setFinish(e.target.checked);
+    setFinish(!e.target.checked);
   }, [])
 
 
 
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
-
+    if (!finish) {
+      setEnd({
+        year: 9999,
+        month: 12,
+      });
+    }
     if (name?.length === 0) {
       document.getElementById('school_name').focus();
       return setNameError(true);
@@ -219,10 +207,6 @@ const EditEducation = ({ education, setViewEdu }) => {
       return setCategoryError(true);
     }
 
-    if (description) {
-      const out = await description?.save();
-      var JSONresult = JSON.stringify(out);
-    }
 
     const educationResult = {
       userId: user?.userID,
@@ -234,11 +218,10 @@ const EditEducation = ({ education, setViewEdu }) => {
       finish: finish,
       category: category,
       ismain: ismain,
-      description: JSONresult,
+      description: description,
       id: education?.id,
     };
     const con = await modifyEducation(educationResult, education?.id);
-    document.getElementById('editor').focus();
     dispatch(updateEducation(educationResult));
 
   }, [dispatch, user?.userID, name, major, secondmajor, start, end, finish, category, ismain, description, education?.id])
@@ -400,7 +383,7 @@ const EditEducation = ({ education, setViewEdu }) => {
                         className="form-tick bg-white bg-check h-6 w-6 border border-gray-300 rounded-md checked:bg-blue-500 checked:border-transparent focus:outline-none"
                         id="finish"
                         name="finish"
-                        checked={finish}
+                        checked={!finish}
                         onChange={onChangeFinish}
                         value={finish}
                         type="checkbox"
@@ -417,9 +400,14 @@ const EditEducation = ({ education, setViewEdu }) => {
 
                     <div className="mb-4">
                       <div className="mb-4 md:mr-2 md:mb-0 w-[100%]">
-                        <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="start">
-                          기간
-                        </label>
+                        {finish ?
+                          <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="start">
+                            기간
+                          </label>
+                          :
+                          <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="start">
+                            입학일
+                          </label>}
                         <div className="flex">
                           {/* <div className=''>
                     <input className=''
@@ -456,6 +444,7 @@ const EditEducation = ({ education, setViewEdu }) => {
                               {months()}
                             </select>
 
+                            {finish && <>
                             <span
                               className='mx-[4px] flex items-center mb-[10px]'
                             >~</span>
@@ -484,6 +473,7 @@ const EditEducation = ({ education, setViewEdu }) => {
                             >
                               {months()}
                             </select>
+                            </>}
                           </>
                         </div>
                       </div>
@@ -496,21 +486,15 @@ const EditEducation = ({ education, setViewEdu }) => {
                       <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="description">
                         부가설명
                       </label>
-                      <div
-                        className='bg-slate-50 shadow-inner min-h-[5rem] w-full mb-2 text-sm leading-tight text-gray-700 border rounded appearance-none focus:outline-none focus:shadow-outline'
-                        id="editor"
+                      <textarea
+                        id="description"
+                        tabIndex={-1}
+                        placeholder="부가적으로 설명할 내용을 작성해주세요."
+                        className="w-full px-3 py-2 mb-2 resize-none h-52 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                        onChange={onChangeDescription}
+                        value={description}
                       >
-
-
-                        <Editor
-                          editorRef={setDescription}
-                          options={options}
-                          // {data}는 초기새팅값
-                          data={data} />
-                        <a href="#" onClick={clearData}>
-                          Clear data
-                        </a>
-                      </div>
+                      </textarea>
                     </div>
 
 

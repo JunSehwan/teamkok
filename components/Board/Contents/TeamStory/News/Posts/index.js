@@ -7,11 +7,11 @@ import CategoryCapsule from './CategoryCapsule';
 import NoticeList from "components/Common/NoticeList";
 import Empty from 'components/Common/Empty';
 import { categorySelect } from 'slices/sectionSettings';
-
+import { nanoid } from 'nanoid'
 const index = () => {
   const dispatch = useDispatch();
   const [target, setTarget] = useState(null);
-  const INITIAL_FETCH_COUNT = 5;
+  const INITIAL_FETCH_COUNT = 10;
   const { mainPosts, addDone } = useSelector(state => state.section);
   const { loading } = useSelector(state => state.user);
 
@@ -19,14 +19,12 @@ const index = () => {
   } = usePagination("posts", INITIAL_FETCH_COUNT, target, setTarget);
   // .... 컨텐츠 (피드 목록) 생략
 
-
   // 카테고리 검색
   const [category, setCategory] = useState(null);
   const onChangeCategory = useCallback((e) => {
     setCategory(e);
     dispatch(categorySelect(e));
   }, [dispatch])
-
   return (
     <>
       <>
@@ -48,7 +46,7 @@ const index = () => {
                 </button>
               </li>
               {NoticeList?.map((v, i) => (
-                <React.Fragment key={v?.key}>
+                <React.Fragment key={nanoid()}>
                   <CategoryCapsule
                     name={v?.name}
                     number={v?.key}
@@ -86,7 +84,7 @@ const index = () => {
                   )}
                 </div>
               </div>)
-              
+
 
               :
               <div className="py-12 w-[100%]">
@@ -100,9 +98,10 @@ const index = () => {
       </>
 
       <div className="" ref={setTarget}>
-        {loadingMore && <Loading />}</div>
+        {loadingMore && <Loading />}
+      </div>
       {postLoading && <div className="" ref={setTarget}>loading</div>
-    }
+      }
     </>
   );
 };

@@ -37,7 +37,11 @@ const AddSection = () => {
       m?.key === v && resulty.push({ key: v, name: m.name })
     ))
   ))
-
+  
+  const uniqueArr = Array.from(new Set(category?.map(a => a.key)))
+    ?.map(key => {
+      return category?.find(a => a.key === key)
+    })
 
   const onChangeCategory = useCallback((index, value) => {
     setCategory([{ key: index, name: value }, ...category]);
@@ -49,10 +53,7 @@ const AddSection = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uniqueArr, category]);
 
-  const uniqueArr = Array.from(new Set(category?.map(a => a.key)))
-    ?.map(key => {
-      return category?.find(a => a.key === key)
-    })
+  
 
   useEffect(() => {
     if (addSectionsDone) {

@@ -86,7 +86,7 @@ const RightMessage = ({ message, setReplyInfo }) => {
               <div
                 onClick={(e) => e.stopPropagation()}
                 title={formattedDate}
-                className={`bg-sky-400 after:border-sky-400 relative rounded-lg p-2 px-3 text-white after:absolute after:left-full after:bottom-[6px] after:border-8 after:border-t-transparent after:border-r-transparent`}
+                className={`bg-blue-400 after:border-blue-400 relative rounded-lg p-2 px-3 text-white after:absolute after:left-full after:bottom-[6px] after:border-8 after:border-t-transparent after:border-r-transparent`}
               >
                 {splitLinkFromMessage(message?.content).map((item, index) => (
                   <Fragment key={index}>
@@ -129,7 +129,7 @@ const RightMessage = ({ message, setReplyInfo }) => {
           <div
             onClick={(e) => e.stopPropagation()}
             title={formattedDate}
-            className="bg-sky-600 flex items-center gap-2 overflow-hidden rounded-lg text-white -lg py-3 px-5"
+            className="bg-blue-600 flex items-center gap-2 overflow-hidden rounded-lg text-white -lg py-3 px-5"
           >
             <FileIcon
               className="h-4 w-4 object-cover text-white"

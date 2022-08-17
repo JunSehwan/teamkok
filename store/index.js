@@ -12,6 +12,7 @@ import sectionReducer from "slices/section";
 
 import addServerReducer from "slices/addServer";
 import chatReducer from "slices/chat";
+import jobofferReducer from "slices/joboffer";
 import serverSettingsReducer from "slices/serverSettings";
 import sendGifReducer from "slices/sendGif";
 
@@ -31,6 +32,7 @@ const makeStore = () =>
       section: sectionReducer,
       
       chat: chatReducer,
+      joboffer: jobofferReducer,
       serverSettings: serverSettingsReducer,
       addServer: addServerReducer,
       sendGif: sendGifReducer,

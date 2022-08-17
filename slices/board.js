@@ -5,10 +5,12 @@ export const initialState = {
   myBoards: [],
   AllBoards: [],
   singleBoard: null,
+  showDetailCareers: null,
+  showDetailInfo: null,
   logoPreview: null,
   selectedCategory: null,
   singleSection: null,
-
+  searchTerm: "",
   boardLoading: false,
   loadAllBoardsDone: false,
   addDone: false,
@@ -25,6 +27,8 @@ export const initialState = {
   loadSectionDone: false,
   updateTeamSurveyDone: false,
   addSectionsDone: false,
+  boardSearchCategory: null,
+
 };
 
 export const board = createSlice({
@@ -39,10 +43,10 @@ export const board = createSlice({
       state.addDone = false;
     },
     updateBoard: (state, action) => {
-      state.myBoards.find((v) => v.id === action.payload.id).name = action.payload.name;
-      state.myBoards.find((v) => v.id === action.payload.id).email = action.payload.email;
-      state.myBoards.find((v) => v.id === action.payload.id).category = action.payload.category;
-      state.myBoards.find((v) => v.id === action.payload.id).description = action.payload.description;
+      // state.myBoards.find((v) => v.id === action.payload.id).name = action.payload.name;
+      // state.myBoards.find((v) => v.id === action.payload.id).email = action.payload.email;
+      // state.myBoards.find((v) => v.id === action.payload.id).category = action.payload.category;
+      // state.myBoards.find((v) => v.id === action.payload.id).description = action.payload.description;
       state.myBoards.find((v) => v.id === action.payload.id).logo = action.payload.logo;
       state.updateDone = true;
     },
@@ -69,7 +73,13 @@ export const board = createSlice({
       state.AllBoards = action.payload;
       state.loadAllBoardsDone = true;
     },
-
+    setBoardSearchCategory(state, action) {
+      state.boardSearchCategory = action.payload;
+    },
+    setLoadBoardsEmpty(state, action) {
+      state.AllBoards = [];
+      state.loadAllBoardsDone = true;
+    },
     setBoardLogo(state, action) {
       state.myBoards.logo = action.payload;
     },
@@ -137,16 +147,41 @@ export const board = createSlice({
     addSectionDoneFalse(state, action) {
       state.addSectionsDone = false;
     },
+    updateFavoriteBoard(state, action) {
+      state.AllBoards.find((v) => v.id === action.payload.id).favorites = action.payload?.favorites;
+      state.AllBoards.find((v) => v.id === action.payload.id).favLikes = action.payload?.favLikes;
+    },
+    updateUnfavoriteBoard(state, action) {
+      state.AllBoards.find((v) => v.id === action.payload.id).favorites = action.payload?.favorites;
+      state.AllBoards.find((v) => v.id === action.payload.id).favLikes = action.payload?.favLikes;
+    },
+    updateExpertBoard(state, action) {
+      state.AllBoards.find((v) => v.id === action.payload.id).experts = action.payload?.experts;
+      state.AllBoards.find((v) => v.id === action.payload.id).expertNum = action.payload?.expertNum;
+    },
+    updateUnexpertBoard(state, action) {
+      state.AllBoards.find((v) => v.id === action.payload.id).experts = action.payload?.experts;
+      state.AllBoards.find((v) => v.id === action.payload.id).expertNum = action.payload?.expertNum;
+    },
+    setSearchTerm(state, action) {
+      state.searchTerm = action.payload;
+    },
+    showDetailMemberCareers(state, action) {
+      state.showDetailCareers = action.payload;
+    },
+    showDetailMemberInformation(state, action) {
+      state.showDetailInfo = action.payload;
+    },
   },
   extraReducers: {
-  // The HYDRATE function is what manages the state between client and server
-  [HYDRATE]: (state, action) => {
-    return {
-      ...state,
-      ...action.payload.board,
-    };
+    // The HYDRATE function is what manages the state between client and server
+    [HYDRATE]: (state, action) => {
+      return {
+        ...state,
+        ...action.payload.board,
+      };
+    },
   },
-},
 });
 
 export const {
@@ -175,6 +210,15 @@ export const {
   addSmallInternFalse,
   addSections,
   addSectionDoneFalse,
+  setLoadBoardsEmpty,
+  setBoardSearchCategory,
+  updateFavoriteBoard,
+  setSearchTerm,
+  updateExpertBoard,
+  showDetailMemberInformation,
+  showDetailMemberCareers,
+  updateUnfavoriteBoard,
+updateUnexpertBoard,
 } = board.actions;
 
 export const useBoardState = () => useAppSelector((state) => state.board);

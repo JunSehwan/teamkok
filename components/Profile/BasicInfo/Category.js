@@ -8,8 +8,7 @@ const Category = ({ user, checkedCategory, setCheckedCategory }
   const { category } = useSelector(state => state.category);
   const handleCategoryChange = useCallback((e) => {
     setCheckedCategory(e.target.value);
-    console.log("checkd", checkedCategory);
-  }, [checkedCategory, setCheckedCategory]);
+  }, [setCheckedCategory]);
 
   const [toggleDrop, setToggleDrop] = useState(false);
   const toggleDropdown = useCallback(() => {

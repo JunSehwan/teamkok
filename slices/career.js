@@ -5,7 +5,7 @@ import { HYDRATE } from 'next-redux-wrapper';
 export const initialState = {
   myCareers: [],
   mainCompanies: [],
-
+  userCareers: [],
   careersLoading: false,
   updateDone: false,
   addDone: false,
@@ -57,6 +57,9 @@ export const career = createSlice({
     loadCompanies(state, action) {
       state.mainCompanies = action.payload;
       state.loadCompaniesDone = true;
+    },
+    setUsersCareers(state, action) {
+      state.userCareers = action.payload;
     }
 
   },
@@ -79,7 +82,8 @@ export const {
   loadCareers,
   loadCompanies,
   setAddDoneFalse,
-  setUpdateDoneFalse
+  setUpdateDoneFalse,
+  setUsersCareers
 } = career.actions;
 
 export const useCareerState = () => useAppSelector((state) => state.career);

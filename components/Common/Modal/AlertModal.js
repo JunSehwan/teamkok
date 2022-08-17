@@ -6,7 +6,7 @@ const AlertModal = ({ title, contents, contents_second, closeOutsideClick, openM
   const modalEl = createRef();
   const handleClickOutside = (event) => {
     if (openModal === true && closeOutsideClick === true && !modalEl?.current?.contains(event.target))
-      closeModal();
+      cancelFunc();
   };
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -18,10 +18,10 @@ const AlertModal = ({ title, contents, contents_second, closeOutsideClick, openM
   return (
     <>
       {openModal ?
-        <div className="fixed top-0 left-0 z-20 flex h-full w-full items-center justify-center bg-[#00000080]">
+        <div className="fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-[#00000090]">
           <div className="w-[100%] justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-            ref={modalEl}>
-            <div className="sticky p-[1rem] w-[100%] my-6 mt-auto mb-auto mx-auto max-w-[32rem] min-w-[320px]" >
+            >
+            <div className="sticky p-4 w-[100%] my-6 mt-auto mb-auto mx-auto max-w-[32rem] min-w-[320px]" ref={modalEl}>
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 <svg className="h-[18%] w-[18%] mt-4 m-auto text-green-500" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7">
@@ -32,10 +32,10 @@ const AlertModal = ({ title, contents, contents_second, closeOutsideClick, openM
                     {title}
                   </p>)
                   : null}
-                <p className="text-left text-gray-600 dark:text-gray-100 text-md py-1 px-6">
+                <p className="whitespace-normal leading-normal w-full overflow-hidden text-left text-gray-600 dark:text-gray-100 text-md py-1 px-6">
                   {contents}
                 </p>
-                <p className="text-left text-purple-600 dark:text-gray-100 text-[12px] py-1 px-6 mt-[2px]">
+                <p className="text-left text-purple-600 dark:text-gray-100 text-sm py-1 px-6 mt-[2px]">
                   {contents_second}
                 </p>
                 <div className="flex items-center justify-center gap-4 w-full mt-8">

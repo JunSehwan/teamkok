@@ -73,7 +73,7 @@ export const StyledA = styled.a`
 export const LogoImg = styled.img`
   display: block;
   border-style: none;
-  width: 128px;
+  width: 81.26px;
   height: 34px;
 `
 

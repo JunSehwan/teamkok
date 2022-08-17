@@ -5,7 +5,9 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 module.exports = withBundleAnalyzer({
   // reactStrictMode: false,
   images: {
-    domains: ['firebasestorage.googleapis.com','cdn.jsdelivr.net'],
+    loader: 'akamai',
+    path: '',
+    domains: ['teamz.co.kr','localhost:3060','firebasestorage.googleapis.com', 'upload.wikimedia.org', 'lh3.googleusercontent.com', 'cdn.jsdelivr.net'],
     formats: ['image/avif', 'image/webp'],
   },
   distDir: 'build',

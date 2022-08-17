@@ -1,6 +1,7 @@
 import React from 'react';
 import emptyicon from 'public/image/icon/empty.png';
 import Image from 'next/image';
+import PropTypes from 'prop-types';
 
 const Empty = ({ title, text }) => {
   return (
@@ -30,4 +31,8 @@ const Empty = ({ title, text }) => {
   );
 };
 
+Empty.propTypes = {
+  title: PropTypes.string,
+  text: PropTypes.string,
+};
 export default Empty;

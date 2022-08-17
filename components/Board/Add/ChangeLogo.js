@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { uploadLogoPreview, saveCompanyLogoPreviewChanges } from 'firebaseConfig';
 import { setChangeLogoOpen } from 'slices/board';
 import { setBoardLogo, setBoardLogoPreview, setBoardLogoPreviewURL } from 'slices/board';
+import { nanoid } from 'nanoid'
 
 const ChangeLogo = () => {
 
@@ -22,11 +23,9 @@ const ChangeLogo = () => {
     if (!e.target.files) return;
 
     const logoImage = e.target.files[0];
-    const logoPreviewURL = await uploadLogoPreview(logoImage, user?.userID);
-    console.log("logoImage", logoImage)
+    const logoPreviewURL = await uploadLogoPreview(logoImage, nanoid());
     closeWindow();
     dispatch(setBoardLogoPreview(logoPreviewURL));
-
   }
 
   return (

@@ -15,7 +15,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 import LeftMessage from "../Message/LeftMessage";
 import RightMessage from "../Message/RightMessage";
-import { db } from "firebaseConfig";
+import { db,getMessages } from "firebaseConfig";
 
 import { useCollectionQuery } from "hooks/useCollectionQuery";
 import Image from 'next/image';
@@ -32,21 +32,46 @@ const ChatView = ({ conversation, inputSectionOffset, replyInfo, setReplyInfo })
   const scrollBottomRef = useRef(null);
 
   const [limitCount, setLimitCount] = useState(30);
-  const { data, loading, error } = useCollectionQuery(
-    `conversation-data-${conversationId}-${limitCount}`,
-    query(
-      collection(db, "conversations", conversationId, "messages"),
-      orderBy("createdAt"),
-      limitToLast(limitCount)
-    )
-  );
+
+
+  // const { data, loading, error } = useCollectionQuery(
+  //   `conversation-data-${conversationId}-${limitCount}`,
+  //   query(
+  //     collection(db, "conversations", conversationId, "messages"),
+  //     orderBy("createdAt"),
+  //     limitToLast(limitCount)
+  //   )
+  // );
+
+  const [data,setData] = useState();
+const [loading,setLoading] = useState(false);
+const [error,setError] = useState(false);
+  useEffect(() => {
+    if(user && conversationId){
+    setLoading(true);
+    async function fetchAndSetUser() {
+      try{
+        await getMessages(conversationId, limitCount).then((result)=>{
+          setData(result);
+        })
+      }catch(e){
+        setData(null)
+        console.error(e)
+        setError(true);
+      }
+    }
+    fetchAndSetUser();
+    setLoading(false);
+    }
+  }, [conversationId, limitCount, user]);
+  
+
   const dataRef = useRef(data);
   const conversationIdRef = useRef(conversationId);
   const isWindowFocus = useRef(true);
   useEffect(() => {
     dataRef.current = data;
   }, [data]);
-  console.log(inputSectionOffset,"inputSectionOffset")
   useEffect(() => {
     conversationIdRef.current = conversationId;
   }, [conversationId]);
@@ -70,7 +95,6 @@ const ChatView = ({ conversation, inputSectionOffset, replyInfo, setReplyInfo })
       [`seen.${user?.userID}`]: lastDoc.id,
     });
   };
-
   useEffect(() => {
     const focusHandler = () => {
       isWindowFocus.current = true;
@@ -127,8 +151,8 @@ const ChatView = ({ conversation, inputSectionOffset, replyInfo, setReplyInfo })
         flexDirection: 'column-reverse',
       }}>
       <StyledContainer
-        className="container z-1 w-full mx-auto"
-        dataLength={data?.size}
+        className="z-1 w-full mx-auto"
+        dataLength={data?.size || 0}
         next={() => setLimitCount((prev) => prev + 10)}
         inverse
         hasMore={(data?.size) >= limitCount}
@@ -138,7 +162,7 @@ const ChatView = ({ conversation, inputSectionOffset, replyInfo, setReplyInfo })
             <Spin />
           </div>
         }
-        style={{ display: "flex", flexDirection: "column-reverse", height: "100vh" }}
+        style={{ display: "flex", flexDirection: "column-reverse", height: "72vh" }}
         height={`calc(100vh - ${inputSectionOffset}px)`}
       >
         <div className="flex flex-col items-stretch gap-3 pt-10 pb-1">

@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import SideBarList from "components/Board/Contents/Dialog/SideBarList";
+import SideBarList from "./SideBarList";
 import { useSelector } from 'react-redux';
 import InputSection from "./Input/InputSection";
 import ChatView from './ChatView';

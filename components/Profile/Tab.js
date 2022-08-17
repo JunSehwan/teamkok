@@ -4,20 +4,23 @@ import StyleProfile from './StyleProfile';
 import BasicInfo from './BasicInfo';
 import SecondProfile from './SecondProfile';
 
+
 const Tab = ({ tabIndex, setTabIndex }) => {
+ 
+ 
   return (
     <div className="flex flex-col px-4 mx-auto space-y-12 max-w-7xl xl:px-12">
       <div className="relative">
         <div className="flex flex-wrap">
           <div className="w-full">
             <ul
-              className="flex mb-0 max-w-[32rem] mx-auto list-none flex-wrap pt-3 pb-4 flex-row"
+              className="flex mb-0 max-w-[38rem] mx-auto list-none flex-wrap pt-3 pb-4 flex-row"
               role="tablist"
             >
               <li className="-mb-px mr-1 last:mr-0 flex-auto text-center">
                 <a
                   className={
-                    "text-[0.88rem] font-bold uppercase px-3 py-3 shadow-lg rounded block leading-normal " +
+                    "text-[1rem] font-bold uppercase px-3 py-3 shadow-lg rounded block leading-normal " +
                     (tabIndex === 1
                       ? "text-white bg-purple-600"
                       : "text-purple-600 bg-white")
@@ -36,7 +39,7 @@ const Tab = ({ tabIndex, setTabIndex }) => {
               <li className="-mb-px mr-1 last:mr-0 flex-auto text-center">
                 <a
                   className={
-                    "text-[0.88rem] font-bold uppercase px-3 py-3 shadow-lg rounded block leading-normal " +
+                    "text-[1rem] font-bold uppercase px-3 py-3 shadow-lg rounded block leading-normal " +
                     (tabIndex === 2
                       ? "text-white bg-purple-600"
                       : "text-purple-600 bg-white")
@@ -55,7 +58,7 @@ const Tab = ({ tabIndex, setTabIndex }) => {
               <li className="-mb-px mr-1 last:mr-0 flex-auto text-center">
                 <a
                   className={
-                    "text-[0.88rem] font-bold uppercase px-3 py-3 shadow-lg rounded block leading-normal " +
+                    "text-[1rem] font-bold uppercase px-3 py-3 shadow-lg rounded block leading-normal " +
                     (tabIndex === 3
                       ? "text-white bg-purple-600"
                       : "text-purple-600 bg-white")
@@ -76,7 +79,7 @@ const Tab = ({ tabIndex, setTabIndex }) => {
               <div className="flex-auto">
                 <div className="tab-content tab-space">
                   <div className={tabIndex === 1 ? "block" : "hidden"} id="link1">
-                    <BasicInfo />
+                    <BasicInfo setTabIndex={setTabIndex} />
                   </div>
                   <div className={tabIndex === 2 ? "block" : "hidden"} id="link2">
                     <SecondProfile />

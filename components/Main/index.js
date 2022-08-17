@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import Explain from './Explain';
 import Search from './Search';
-import Category from './Category';
 import Boards from './Boards';
+import Footer from './Footer';
 
 const index = () => {
 
   return (
-    <>
+    <div className="min-h-[100vh] flex flex-col justify-between">
+      <div>
       <Explain />
       <Search />
-      <Category />
       <Boards/>
-    </>
+      </div>
+      <Footer/>
+    </div>
 
   );
 

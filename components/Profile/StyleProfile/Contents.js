@@ -53,10 +53,9 @@ const Contents = () => {
 
   const [category, setCategory] = useState(user?.style || "");
   const [categoryError, setCategoryError] = useState(false);
-  const onChangeCategory = useCallback((index) => () => {
-    setCategory(index + 1);
+  const onChangeCategory = useCallback((number) => () => {
+    setCategory(number);
     setCategoryError(false);
-
   }, [])
 
   const onCategorySubmit = useCallback(async (e) => {
@@ -99,15 +98,16 @@ const Contents = () => {
     <>
       <div className="mb-4">
         <div className="px-[2px] md:lg:xl:px-[4px] border-t border-b py-[12px]">
-          <div className=" bg-white shadow-xl shadow-neutral-100 border ">
+          <div className=" border">
 
             <div className="container flex flex-col mx-auto w-full items-center justify-center">
               <button
                 onClick={toggleList}
                 className="border-t-[6px] border-blue-400 border-solid default:from-gray-400 via-gray-100 default:to-white flex flex-row justify-between text-left items-center px-4 py-5 sm:px-6 w-full border dark:bg-gray-800 bg-white shadow mb-2 rounded-md">
                 <div className="">
-                  <h3 className="text-blue-500 text-base leading-6 font-bold dark:text-white">
+                  <h3 className="text-blue-400 text-base leading-6 font-bold dark:text-white">
                     스타일 선택
+                    {user?.style ? <span className="ml-2 text-gray-400 text-sm font-normal">(작성완료)</span> : <span className="ml-2 text-gray-400 text-sm font-normal">(미작성)</span>}
                   </h3>
                 </div>
                 <div>
@@ -129,7 +129,8 @@ const Contents = () => {
                           onChangeCategory={onChangeCategory}
                           src={v?.src}
                           tag={v?.tag}
-                          index={i}
+                          number={v?.number}
+                          index={v?.key}
                         />
                       </React.Fragment>
                     ))}
@@ -138,8 +139,8 @@ const Contents = () => {
                     <p className="mt-[6px] w-[100%] font-bold text-xs mb-[1.5rem] italic text-red-500">스타일을 선택해주세요.</p>
                   ) : null}
                   <button
-                    className='bg-cyan-500 text-white active:bg-cyan-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
-                    onClick={onCategorySubmit}>저장</button>
+                    className='mt-2 mb-8 bg-sky-500 w-full text-white active:bg-sky-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 ease-linear transition-all duration-150'
+                    onClick={onCategorySubmit}>스타일 저장</button>
                 </> : null}
             </div>
 
@@ -149,8 +150,9 @@ const Contents = () => {
                 onClick={toggleSurvey}
                 className="border-t-[6px] border-blue-400 border-solid default:from-gray-400  via-gray-100 default:to-white flex flex-row justify-between text-left items-center px-4 py-5 sm:px-6 w-full border dark:bg-gray-800 bg-white shadow mb-2 rounded-md">
                 <div className="">
-                  <h3 className="text-base leading-6 font-bold  text-blue-500 dark:text-white">
+                  <h3 className="text-base leading-6 font-bold  text-blue-400 dark:text-white">
                     설문항목 작성
+                    {user?.survey ? <span className="ml-2 text-gray-400 text-sm font-normal">(작성완료)</span> : <span className="ml-2 text-gray-400 text-sm font-normal">(미작성)</span>}
                   </h3>
                 </div>
                 <div>
@@ -177,8 +179,8 @@ const Contents = () => {
                     <p className="mt-[6px] w-[100%] font-bold text-xs mb-[1.5rem] italic text-red-500">설문항목을 다 작성하셨나요?</p>
                   ) : null}
                   <button
-                    className='bg-cyan-500 text-white active:bg-cyan-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
-                    onClick={onSurveySubmit}>저장</button>
+                    className='bg-sky-500 w-full my-2 text-white active:bg-sky-600 font-bold uppercase py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 ease-linear transition-all duration-150'
+                    onClick={onSurveySubmit}>설문 저장</button>
                 </> : null}
             </div>
             <AlertModal

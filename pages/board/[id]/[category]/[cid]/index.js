@@ -14,9 +14,8 @@ import {
   db, getEducationsByUserId, getCareersByUserId,
   getAllBoards, getBoardsByUserId, getBoard, getSection, getPosts,
 
-  getConversations, getUsers
+  getConversations, getUsers, getConversation
 } from "firebaseConfig";
-import { wrapper } from 'store/index';
 import LoadingPage from 'components/Common/Loading';
 import Chat from 'components/Board/Chat';
 import { loadConversationList, loadSingleConversation } from 'slices/chat';
@@ -26,20 +25,15 @@ import InputSection from 'components/Board/Chat/ChatContents/Input/InputSection'
 const board = () => {
   const auth = getAuth();
   const { user, loading } = useSelector(state => state.user);
+
+  const { singleBoard } = useSelector(state => state.board);
   const dispatch = useDispatch();
   const router = useRouter();
   const pid = router.query;
-  const { data, docuLoading, error } = useDocumentQuery(
-    `conversation-${pid.cid}`,
-    doc(db, "conversations", pid.cid)
-  );
-  const conversation = data?.data();
-  
-  useEffect(() => {
-    if (!router.isReady) return;
-  }, [router.isReady, pid])
+
   useEffect(() => {
     const authStateListener = onAuthStateChanged(auth, async (user) => {
+      dispatch(userLoadingStart());
       if (!user) {
         dispatch(resetUserState());
         return router.push("/");
@@ -50,11 +44,12 @@ const board = () => {
         dispatch(resetUserState());
         return router.push("/");
       }
-      const docData = docSnap.data();
+      const docData = docSnap?.data();
       const currentUser = {
         userID: user.uid,
         username: docData.username,
         email: docData.email,
+        email_using: docData.email_using,
         birthday: docData.birthday,
         gender: docData.gender,
         avatar: docData.avatar,
@@ -67,6 +62,14 @@ const board = () => {
         address: docData.address,
         style: docData.style,
         survey: docData.survey,
+        favorites: docData.favorites,
+        favLikes: docData.favLikes,
+        experts: docData.experts,
+        expertNum: docData.expertNum,
+        point: docData.point,
+        points: docData.points,
+        givePoint: docData.givePoint,
+        infoseen: docData.infoseen,
       };
       dispatch(setUser(currentUser));
       await getEducationsByUserId().then((result) => {
@@ -81,10 +84,10 @@ const board = () => {
       await getBoardsByUserId().then((result) => {
         dispatch(loadBoards(result));
       })
-      await getBoard(pid?.id).then((result) => {
+      await getBoard(pid.id).then((result) => {
         dispatch(loadBoard(result));
       })
-      await getSection(pid?.id, pid?.category).then((result) => {
+      await getSection(pid.id, pid.category).then((result) => {
         dispatch(loadSection(result));
       })
       // await getPosts(singleSection?.id).then((result) => {
@@ -95,16 +98,19 @@ const board = () => {
       await getConversations().then((result) => {
         dispatch(loadConversationList(result));
       })
+      await getConversation(pid.cid).then((result) => {
+        dispatch(loadSingleConversation(result));
+      })
       await getUsers().then((result) => {
         dispatch(setUsers(result));
       })
-      dispatch(loadSingleConversation(data?.data()));
+      // dispatch(loadSingleConversation(data?.data()));
       dispatch(userLoadingEnd());
     });
     return () => {
       authStateListener();
     };
-  }, [auth, data, dispatch, pid, router]);
+  }, [auth, dispatch, pid, router]);
 
 
   useEffect(() => {
@@ -118,6 +124,7 @@ const board = () => {
         userID: user.id,
         username: docData.username,
         email: docData.email,
+        email_using: docData.email_using,
         birthday: docData.birthday,
         gender: docData.gender,
         avatar: docData.avatar,
@@ -130,6 +137,14 @@ const board = () => {
         address: docData.address,
         style: docData.style,
         survey: docData.survey,
+        favorites: docData.favorites,
+        favLikes: docData.favLikes,
+        experts: docData.experts,
+        expertNum: docData.expertNum,
+        point: docData.point,
+        points: docData.points,
+        givePoint: docData.givePoint,
+        infoseen: docData.infoseen,
       };
       dispatch(setUser(currentUser));
       dispatch(userLoadingEnd());
@@ -139,92 +154,39 @@ const board = () => {
     };
   }, [dispatch, user?.uid, user?.userID]);
 
-  // useEffect(() => {
-  //   if (!server.serverID || !user.userID) return;
-
-  //   const docRef = doc(db, "servers", server.serverID, "members", user.userID);
-
-  //   const unsubscribe = onSnapshot(docRef, (doc) => {
-  //     const docData = doc.data();
-
-  //     const roles = {
-  //       userID: doc.id,
-  //       serverOwner: docData?.serverOwner,
-  //       roles: docData?.roles,
-  //       // permissions: docData?.permissions,
-  //     };
-  //     dispatch(setUser({ ...user, roles }));
-  //   });
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, [server]);
-
-  // function redirect() {
-  //   dispatch(rere());
-
-  //   router.push("/login");
-  // }
-
-
-  // 만약 로그아웃시 메인화면으로 이동
-  // useEffect(() => {
-  //   if (!(me && me.id)) {
-  //     router.push('/');
-  //   }
-  // }, [me && me.id]);
 
   return (
     <>
       <Head>
-        <title>현업전문가와의 소통기반 채용플랫폼 - TEAMKOK</title>
-        <meta name="description" content="현업전문가와의 소통기반 채용플랫폼 - TEAMKOK " />
+        <title>TeamZ - 팀기반 채용플랫폼</title>
 
-        {/* <meta name="keywords" content="키워드1, 키워드2, 키워드3" />
-      <meta name="description" content="페이지 설명" />
+        <meta name="keywords" content={`teamz, ${singleBoard?.name || ""} 팀즈, 채용공고, 현업담당자와 대화, 업무문의, 채용문의, 팀기반 소통플랫폼`} />
+        <meta name="description" content="원하는 기업에 입사하기 위해 팀별 현업담당자에게 적극적으로 나를 어필을 할 수 있습니다." />
 
-      <meta name="application-name" content="어플에서 아이콘뺄때 나올 이름" />
-      <meta name="msapplication-tooltip" content="ms 작업표시줄" />
-      <meta name="description" content="페이지 설명" />
+        <meta name="application-name" content="TeamZ - 관심있는 기업보드에 참여 후 현업자담당자와 소통해보세요." />
+        <meta name="msapplication-tooltip" content="TeamZ" />
 
-      <meta property="og:type" content="website" />
-      <meta property="og:title" content="페이지 제목" />
-      <meta property="og:description" content="페이지 설명" />
-      <meta property="og:image" content="http://www.mysite.com/myimage.jpg" />
-      <meta property="og:url" content="http://www.mysite.com" />
+        <meta property="og:type" content={`TeamZ - ${singleBoard?.name || ""} 기업보드`} />
+        <meta property="og:title" content={`${singleBoard?.name || ""} 기업의 현직자, 채용담당자와 즐거운 커뮤니케이션을 통해 팀에 합류할 수 있습니다.`} />
+        <meta property="og:description" content="기업보드에는 일대일 대화뿐만 아니라 채용공고(Small Intern)를 통해 채용이 이루어지고, 관련분야의 소식까지 확인할 수 있습니다.." />
+        <meta property="og:image" content="https://teamz.co.kr/logo/teamz.png" />
+        <meta property="og:url" content={`https://teamz.co.kr/board/${pid?.id}/${pid?.category}/${pid?.cid}`} />
 
-      <meta name="twitter:card" content="summary" />
-      <meta name="twitter:title" content="페이지 제목" />
-      <meta name="twitter:description" content="페이지 설명" />
-      <meta name="twitter:image" content="http://www.mysite.com/article/article1.html" />
-      <meta name="twitter:domain" content="사이트 명" /> */}
+        <meta name="twitter:card" content={`TeamZ - ${singleBoard?.name || ""} 기업보드`} />
+        <meta name="twitter:title" content={`${singleBoard?.name || ""} 기업의 현직자, 채용담당자와 즐거운 커뮤니케이션을 통해 팀에 합류할 수 있습니다.`} />
+        <meta name="twitter:description" content="기업보드에는 일대일 대화뿐만 아니라 채용공고(Small Intern)를 통해 채용이 이루어지고, 관련분야의 소식까지 확인할 수 있습니다.." />
+        <meta name="twitter:image" content="https://teamz.co.kr/logo/teamz.png" />
+        <meta name="twitter:domain" content={`https://teamz.co.kr/board/${pid?.id}/${pid?.category}/${pid?.cid}`} />
       </Head>
       {loading ?
         <LoadingPage /> :
-        docuLoading ?
-           ( <>
-            <div className="border-dark-lighten h-20 border-b"></div>
-            <div className="flex-grow"></div>
-            <InputSection disabled />
-          </>)
-          : !conversation ||
-            error ||
-            !conversation?.users?.includes(user?.userID) ? (
-          <div className="flex h-full w-full flex-col items-center justify-center gap-6">
-            <p className="text-center text-lg">Conversation does not exists</p>
-          </div>
-            ):(
+        (
           <Chat />
-            )
+        )
       }
     </>
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps(
-  (store) => async (context) => {
-    store.dispatch(userLoadingStart());
-  }
-);
 
 export default board;

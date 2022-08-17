@@ -36,7 +36,8 @@ export const initialState = {
   isAdmin: false,
   setExpertState: false,
   setAdminState: false,
-
+  addPointDone: false,
+  updateInfoSeen: false,
 };
 
 export const user = createSlice({
@@ -79,6 +80,10 @@ export const user = createSlice({
     updateUserStyle(state, action) {
       state.user.style = action.payload;
       state.updateStyleDone = true;
+    },
+    patchServiceInfoSeen(state, action) {
+      state.user.infoseen = action.payload;
+      state.updateInfoSeen = true;
     },
     updateUserSurvey(state, action) {
       state.user.survey = action.payload;
@@ -135,6 +140,65 @@ export const user = createSlice({
       state.isAdmin = action.payload;
       state.setAdminState = true;
     },
+    updateUserFavorites(state, action) {
+      state.user.favorites?.unshift({
+        boardId: action.payload?.id,
+        boardname: action.payload?.name,
+        boardlogo: action.payload?.logo || "",
+      });
+      state.user.favLikes = state.user.favLikes + 1;
+    },
+    updateUserUnfavorites(state, action) {
+      state.user.favorites?.filter(v => v.name !== action.payload?.name);
+      state.user.favLikes = state.user.favLikes - 1;
+    },
+    updateUserExperts(state, action) {
+      state.user.experts?.unshift({
+        boardId: action.payload?.id,
+        boardname: action.payload?.name,
+        boardlogo: action.payload?.logo || "",
+      });
+      state.user.expertNum = state.user.expertNum + 1;
+    },
+    updateUserUnexperts(state, action) {
+      state.user.experts?.filter(v => v.name !== action.payload?.name);
+      state.user.expertNum = state.user.expertNum - 1;
+    },
+    pointGive(state, action) {
+      state.user.givePoint?.unshift({
+        targetId: action.payload?.targetId,
+        targetName: action.payload?.targetName,
+        targetAvatar: action.payload?.targetAvatar,
+        sectionId: action.payload?.sectionId,
+        point: parseInt(action.payload?.point),
+        description: action.payload?.description,
+        boardName: action.payload?.boardName,
+        createdAt: action.payload?.createdAt,
+      });
+      state.users.find((v) => v.userID === action.payload?.targetId)?.points?.unshift({
+        giverId: action.payload?.userId,
+        giverName: action.payload?.username,
+        giverAvatar: action.payload?.avatar,
+        sectionId: action.payload?.sectionId,
+        point: parseInt(action.payload?.point),
+        description: action.payload?.description,
+        boardName: action.payload?.boardName,
+        createdAt: action.payload?.createdAt,
+      });
+      const myScore = state.users.find((v) => v.userID === action.payload?.targetId)
+      myScore.point = state.users.find((v) => v.userID === action.payload?.targetId)?.point + parseInt(action.payload?.point);
+      state.addPointDone = true;
+    },
+    addPointFalse(state) {
+      state.addPointDone = false;
+    },
+    cancelPointGive(state, action) {
+      const myScore = state.users.find((v) => v.userID === action.payload?.targetId)
+      myScore.point = state.users.find((v) => v.userID === action.payload?.targetId)?.point - parseInt(action.payload?.point);
+      myScore.points = myScore.points.filter((v) => v.createdAt !== action.payload?.createdAt)
+      state.user.givePoint = state.user.givePoint?.filter(v => v.createdAt !== action.payload?.createdAt)
+      state.addPointDone = true;
+    },
   },
   extraReducers: {
     // The HYDRATE function is what manages the state between client and server
@@ -171,6 +235,14 @@ export const {
   expertSet,
   adminSet,
   setDone,
+  updateUserFavorites,
+  updateUserExperts,
+  pointGive,
+  addPointFalse,
+  cancelPointGive,
+  updateUserUnfavorites,
+  updateUserUnexperts,
+  patchServiceInfoSeen,
 } = user.actions;
 
 export const useUserState = () => useAppSelector((state) => state.user);

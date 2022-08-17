@@ -7,8 +7,8 @@ const index = () => {
       <ABOUT_Wrapper>
         <ABOUT_Title>개인정보처리방침</ABOUT_Title>
         <ABOUT_SecondTitle>넥스트퍼스는 회원 정보의 보안을 철저히 유지하기 위해 노력하고 있습니다.</ABOUT_SecondTitle>
-        <ABOUT_Text>ChooNo는 사용자가 원하는 직장으로의 이직에 대한 꿈을 실현시키기 위해 설립되었습니다.
-          <br />그리고 ChooNo에서 수집하는 회원 데이터, 이러한 정보의 사용과 공유 대상을 투명히 하기 위해 노력합니다.</ABOUT_Text>
+        <ABOUT_Text>TEAMZ는 사용자가 원하는 직장으로의 이직에 대한 꿈을 실현시키기 위해 설립되었습니다.
+          <br />그리고 TEAMZ에서 수집하는 회원 데이터, 이러한 정보의 사용과 공유 대상을 투명히 하기 위해 노력합니다.</ABOUT_Text>
         <ABOUT_SecondTitle>가. 개인정보의 처리목적, 개인정보의 처리 및 보유기간, 처리하는 개인정보의 항목</ABOUT_SecondTitle>
         <ABOUT_Text>개인정보 처리목적</ABOUT_Text>
         <ABOUT_Sub>개인정보입력을 통한 이직가능성과 상대적 직무능력 비교치 산출(유용한 정보제공)</ABOUT_Sub>
@@ -17,10 +17,10 @@ const index = () => {
         <ABOUT_Text>1. 일반회원 기본정보</ABOUT_Text>
         <ABOUT_Sub>필수입력: 이름, 이메일주소, 비밀번호</ABOUT_Sub>
         <ABOUT_Text>2. 일반회원 학력, 경력정보</ABOUT_Text>
-        <ABOUT_Sub>기본정보(선택): 개인사진, 관심기업 및 부서, 성별, 이직을 원하는지 여부, 거주지주소, 생년월일, 희망연봉</ABOUT_Sub>
-        <ABOUT_Sub>경력정보(선택): 기업명, 근무기간, 부서, 고용형태, 직급, 관련직업(직무), 대략적인 연봉</ABOUT_Sub>
+        <ABOUT_Sub>기본정보(선택): 개인사진, 관심기업 및 부서, 성별, 이직을 원하는지 여부, 거주지주소, 생년월일, 연락처</ABOUT_Sub>
+        <ABOUT_Sub>경력정보(선택): 기업명, 근무기간, 부서, 고용형태, 직급, 관련직업(직무)</ABOUT_Sub>
         <ABOUT_Sub>학력정보(선택): 학교명, 기간, 전공, 복수/부전공, 학점</ABOUT_Sub>
-        <ABOUT_Sub>기타정보(선택): 보유스킬, 자격증 취득내역, 어학능력, 프로젝트 경험, 대외활동, 외부교육</ABOUT_Sub>
+        <ABOUT_Sub>기타정보(선택): 보유스킬, 자격증 취득내역, 어학능력, 프로젝트 경험, 대외활동, 외부교육 등</ABOUT_Sub>
         <ABOUT_Text>3. 기업관련정보</ABOUT_Text>
         <ABOUT_Sub>기업명, 부서(포지션)명, 평균연봉, 필요역량, 필요스킬</ABOUT_Sub>
         <ABOUT_Sub>팀리뷰: 팀명, 평가항목, 장/단점 및 기타의견</ABOUT_Sub>

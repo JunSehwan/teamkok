@@ -211,7 +211,6 @@ const PostCard = ({ post }) => {
               <span className="text-gray-400 text-sm ml-1">
                 {post?.isAdmin === true && "보드메이커"}
                 {post?.isExpert === true && "현업담당자"}
-                {post?.isExpert === true && post?.isExpert === true && "(보드장)"}
               </span>
 
             </div>

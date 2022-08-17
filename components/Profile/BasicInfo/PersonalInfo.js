@@ -4,9 +4,9 @@ import { auth, updateUserBasicInfo, } from 'firebaseConfig';
 import { updateBasicProfile } from 'slices/user';
 import AlertModal from 'components/Common/Modal/AlertModal';
 import Category from './Category';
+import PropTypes from 'prop-types';
 
-
-const PersonalInfo = () => {
+const PersonalInfo = ({ setTabIndex }) => {
   const dispatch = useDispatch();
   const { user, updateBasicProfileSuccess } = useSelector(state => state.user);
 
@@ -31,7 +31,7 @@ const PersonalInfo = () => {
     setUsernameError(false);
   }, [])
 
-  const [email, setEmail] = useState(user?.email || "");
+  const [email, setEmail] = useState(user?.email_using || user?.email || "");
   const [emailError, setEmailError] = useState(false);
   const onChangeEmail = useCallback(
     e => {
@@ -185,7 +185,10 @@ const PersonalInfo = () => {
   const [categoryError, setCategoryError] = useState(false);
 
   const [confirm, setConfirm] = useState(false);
-  const closeConfirm = () => { setConfirm(false); }
+  const closeConfirm = () => {
+    setTabIndex(2);
+    setConfirm(false);
+  }
 
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
@@ -275,7 +278,7 @@ const PersonalInfo = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="email">
+          <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="email_using">
             주로 사용하는 이메일
           </label>
           <input
@@ -284,12 +287,12 @@ const PersonalInfo = () => {
               :
               'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
             }
-            id="e-mail"
+            id="email_using"
             type="email"
             tabIndex={-1}
             placeholder="이메일주소"
             onChange={onChangeEmail}
-            defaultValue={user?.email}
+            defaultValue={user?.email_using || user?.email || ""}
           />
           {emailError ? (
             <p className="text-xs mb-[1.5rem] italic text-red-500">올바른 이메일 형식이 아닙니다.</p>
@@ -298,7 +301,7 @@ const PersonalInfo = () => {
 
 
         <div className="mb-4">
-          <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="email">
+          <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="gender">
             성별
           </label>
           <select
@@ -307,7 +310,7 @@ const PersonalInfo = () => {
               :
               'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
             }
-            id="e-mail"
+            id="gender"
             type="gender"
             name="gender"
             tabIndex={-1}
@@ -419,7 +422,7 @@ const PersonalInfo = () => {
             id="address"
             type="address"
             tabIndex={-1}
-            placeholder="서울시 관악구 봉천로8길 11"
+            placeholder="ex. 서울시 관악구 봉천로8길 11"
             onChange={onChangeAddress}
             defaultValue={user?.address}
           />
@@ -446,7 +449,7 @@ const PersonalInfo = () => {
           <input
             className=
             'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-            id="url1"
+            id="url2"
             type="url"
             htmlFor="website"
             tabIndex={-1}
@@ -457,7 +460,7 @@ const PersonalInfo = () => {
           <input
             className=
             'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-            id="url1"
+            id="url3"
             type="url"
             htmlFor="website"
             tabIndex={-1}
@@ -496,11 +499,18 @@ const PersonalInfo = () => {
             />
 
           }
-          <button type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">업데이트</button>
+          <button type="submit" 
+          className="inline-flex justify-center py-3 px-4 w-full border border-transparent shadow-sm text-md font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            업데이트</button>
         </div>
       </form>
     </div >
   );
 };
+
+PersonalInfo.propTypes = {
+  setTabIndex: PropTypes.func,
+};
+
 
 export default PersonalInfo;

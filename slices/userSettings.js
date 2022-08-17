@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { HYDRATE } from 'next-redux-wrapper';
-import { UserData } from "./user";
 
 const initialState = {
   userSettingsOpen: false,
@@ -11,7 +10,7 @@ const initialState = {
   changeAvatarOpen: false,
   memberListOpen: true,
   userChangesMade: false,
-  userCopy: UserData || null,
+  userCopy: null,
   unsavedChangesError: false,
   loading: "idle",
 };

@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 import AdminPage from './AdminPage';
 import TeamStory from './TeamStory';
 import Dialog from './Dialog';
+import { useSelector } from 'react-redux';
 
 const Tab = ({ tabIndex, setTabIndex }) => {
+
+  const { isExpert, isAdmin } = useSelector(state => state.user);
   return (
     <div className="bg-slate-50 flex flex-col w-[100%] mx-auto space-y-6 xl:px-0">
       <div className="relative">
@@ -52,25 +55,29 @@ const Tab = ({ tabIndex, setTabIndex }) => {
                   1:1대화
                 </a>
               </li>
-              <li key="33" className="mr-1 max-w-[12rem] last:mr-0 flex-auto text-center">
-                <a
-                  className={
-                    "text-[1rem] font-bold uppercase h-full py-3 shadow w-full rounded block leading-normal " +
-                    (tabIndex === 3
-                      ? "text-white bg-purple-600"
-                      : "text-purple-600 bg-white")
-                  }
-                  onClick={e => {
-                    e.preventDefault();
-                    setTabIndex(3);
-                  }}
-                  data-toggle="tab"
-                  href="#link2"
-                  role="tablist"
-                >
-                  채용관리
-                </a>
-              </li>
+
+              {!!isAdmin || !!isExpert ?
+                <li key="33" className="mr-1 max-w-[12rem] last:mr-0 flex-auto text-center">
+                  <a
+                    className={
+                      "text-[1rem] font-bold uppercase h-full py-3 shadow w-full rounded block leading-normal " +
+                      (tabIndex === 3
+                        ? "text-white bg-purple-600"
+                        : "text-purple-600 bg-white")
+                    }
+                    onClick={e => {
+                      e.preventDefault();
+                      setTabIndex(3);
+                    }}
+                    data-toggle="tab"
+                    href="#link2"
+                    role="tablist"
+                  >
+                    채용관리
+                  </a>
+                </li>
+              :null }
+
             </ul>
             <div className="relative flex flex-col min-w-0 break-words w-full rounded">
               <div className="flex-auto">

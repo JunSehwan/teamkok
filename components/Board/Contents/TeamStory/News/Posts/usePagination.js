@@ -180,7 +180,7 @@ const usePagination = (collectionName, limitCount, target, setTarget) => {
           limit(loadCount)
         );
         const snap = await getDocs(queryRef);
-        snap?.empty === 0
+        !!snap?.empty
           ? setNoMore(true) // 만약 스냅샷이 존재 하지 않는다면 더이상 불러올수 없다는 flag 설정
           : setKey(snap?.docs[snap?.docs?.length - 1]); // 존재한다면 처음과 마찬가지고 마지막 커서 저장
         const docsArray = snap?.docs?.map((doc) => ({
@@ -205,7 +205,9 @@ const usePagination = (collectionName, limitCount, target, setTarget) => {
       if (entry.isIntersecting && !loadingMore) {
         observer.unobserve(entry.target);
         setLoadingMore(true);
-        await loadMore(3);
+        setTimeout(async()=>{
+          await loadMore(5);
+        },[500])
         setLoadingMore(false);
       }
     },

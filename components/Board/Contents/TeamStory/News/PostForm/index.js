@@ -4,15 +4,11 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import NoticeList from 'components/Common/NoticeList';
 import NoticeTag from './NoticeTag';
-import { setChangePictureOpen, loadingUpload, loadingUploadDone } from 'slices/sectionSettings';
+import { loadingUpload, loadingUploadDone } from 'slices/sectionSettings';
 import { addPost, setAddDoneFalse } from 'slices/section';
 import { createPost } from 'firebaseConfig'
-import Loading from 'components/Common/Loading';
 
 import { ref, getDownloadURL, uploadBytesResumable, getStorage } from "firebase/storage";
-import { doc, addDoc, getDoc, collection, getFirestore } from "firebase/firestore";
-import { storage } from "firebaseConfig";
-import { getAuth } from "firebase/auth";
 import dayjs from "dayjs";
 
 const index = ({ onCloseForm, openForm }) => {

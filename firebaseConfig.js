@@ -13,7 +13,7 @@ import {
   deleteField,
   serverTimestamp, limit, arrayUnion, arrayRemove,
   query, where, getDocs, orderBy,
-  deleteDoc, startAfter, increment,
+  deleteDoc, startAfter, increment, limitToLast
 } from "firebase/firestore";
 import {
   getAuth,
@@ -21,6 +21,8 @@ import {
   signOut,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
   updateProfile,
   updateEmail,
   AuthCredential,
@@ -30,7 +32,7 @@ import {
 } from "firebase/auth";
 import { getDownloadURL, getStorage, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
 import dayjs from "dayjs";
-
+import { nanoid } from 'nanoid'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -96,12 +98,22 @@ onAuthStateChanged(auth, (user) => {
 // }
 
 
-export async function getUser(req, res) {
-  const user = await db.collection('users').doc('currentUser.uid').get();
+export async function getUser(userId) {
+  const userRef = collection(db, "users", userId);
+  const docSnap = await getDoc(userRef);
 
-  if (!user.exists) {
-    return res.status(404).json({});
+  // const user = await userRef.doc('currentUser.uid').get();
+  // if (!user.exists) {
+  //   return res.status(404).json({});
+  // }
+
+  if (docSnap.exists()) {
+    return { id: docSnap.id, ...docSnap.data() }
+  } else {
+    // doc.data() will be undefined in this case
+    console.log("No such document!");
   }
+
 
   return res.status(404).json({ id: user.id, ...user.data() });
 }
@@ -115,6 +127,8 @@ export async function createAccount(
       email,
       password
     )
+
+
     // Signed in
     const user = userCredential.user;
 
@@ -154,9 +168,44 @@ export async function createAccount(
   }
 }
 
-// const googleProvider = new auth.GoogleAuthProvider();
-// googleProvider.setCustomParameters({ prompt: 'select_account' });
-// export const googleSignIn = () => auth.signInWithPopup(googleProvider);
+
+
+const googleProvider = new GoogleAuthProvider();
+export const googleSignIn = () => {
+  try {
+    signInWithPopup(auth, googleProvider) // popup을 이용한 signup
+      .then((data) => {
+        const user = data?.user;
+        const auth = getAuth();
+        if (!user) {
+          return alert("존재하지 않는 계정입니다.")
+        }
+        return user
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  catch (e) {
+    console.error(e);
+  }
+};
+
+// 명령 실행시 await 필수!
+export async function emailDubCheck(email) {
+  const userRef = collection(db, "users");
+  const q = query(userRef, where("email", "==", email));
+  //결과 검색
+  const querySnapshot = await getDocs(q);
+  const result = querySnapshot?.docs?.map((doc) => (
+    {
+      ...doc.data(),
+      id: doc.id,
+    }
+  ))
+  return result
+}
+
 
 // const facebookProvider = new auth.FacebookAuthProvider();
 // facebookProvider.setCustomParameters({
@@ -206,23 +255,23 @@ export async function saveUserProfileChanges(
 export const signIn = async (email, password) => {
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      // Signed in 
       const user = userCredential.user;
-      const auth = getAuth();
-      if(!user){
-        return
+      if (!user) {
+        throw new Error(
+          "Email is not verified. We have sent the verification link again. Please check your inbox/spam."
+        );
       }
-return user;
+      return user;
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
-      console.log(error);
+      return errorCode
     });
 }
 
 
-async function reauthenticateUser(password) {
+export async function reauthenticateUser(password) {
   if (!auth.currentUser || !auth.currentUser.email) return;
 
   const credential = EmailAuthProvider.credential(
@@ -230,7 +279,13 @@ async function reauthenticateUser(password) {
     password
   );
 
-  await reauthenticateWithCredential(auth.currentUser, credential);
+  await reauthenticateWithCredential(auth.currentUser, credential).then(() => {
+    // User re-authenticated.
+  }).catch((error) => {
+    // An error ocurred
+    // ...
+    console.error(error);
+  });
 }
 
 export async function logOut() {
@@ -255,7 +310,7 @@ export async function updateUserBasicInfo(username, newForm, email, tel, checked
       displayName: username,
     });
     await updateUserDatabase("username", user.displayName);
-    await updateUserDatabase("email", email);
+    await updateUserDatabase("email_using", email);
     await updateUserDatabase("gender", gender);
     await updateUserDatabase("birthday", newForm);
     await updateUserDatabase("url_one", url_one);
@@ -270,6 +325,20 @@ export async function updateUserBasicInfo(username, newForm, email, tel, checked
   } catch (error) {
     console.error(error);
     alert("profile update에 문제가 있습니다.");
+  }
+}
+
+export async function updateServiceInfoSeen(input) {
+  const user = auth.currentUser;
+  if (!user) return (
+    alert("로그인 후 가능합니다.")
+  );
+  try {
+    await updateUserDatabase("infoseen", input);
+    return input;
+  } catch (error) {
+    console.error(error);
+    alert("update에 문제가 있습니다.");
   }
 }
 
@@ -423,6 +492,7 @@ export const api = {
   annoynomusUsersRef: collection(db, "annoymous"),
   viewsRef: collection(db, "ViewsData"),
   educationsRef: collection(db, "educations"),
+  jobofferRef: collection(db, "joboffers"),
   careersRef: collection(db, "careers"),
   mystyleRef: collection(db, "mystyle"),
   blogsRef: collection(db, "blogs"),
@@ -432,11 +502,12 @@ export const api = {
   conversationRef: collection(db, "conversations"),
   boardByIdRef: (boardId) =>
     doc(db, "boards", `${boardId}`),
+  sectionByIdRef: (sectionId) =>
+    doc(db, "sections", `${sectionId}`),
   postByIdRef: (postId) =>
     doc(db, "posts", `${postId}`),
   commentByIdRef: (commentId) =>
     doc(db, "comments", `${commentId}`),
-
   blogDescriptionByBloggerIdRef: (bloggerId) =>
     query(
       collection(db, "blogsDescription"),
@@ -511,6 +582,15 @@ export async function getUsers() {
     gender: doc.data().gender,
     phonenumber: doc.data().phonenumber,
     timestamp: doc.data().timestamp,
+    survey: doc.data().survey,
+    style: doc.data().style,
+    url_one: doc.data().url_one,
+    url_two: doc.data().url_two,
+    url_three: doc.data().url_three,
+    birthday: doc.data().birthday,
+    point: doc.data().point,
+    points: doc.data().points,
+    givePoint: doc.data().givePoint,
   }));
 }
 
@@ -685,7 +765,6 @@ export async function getNotifications(
       seen: data.data().seen,
       createdAt: data.data().createdAt,
     };
-    console.log(notification);
     return notifications.push(notification);
   });
 
@@ -780,7 +859,6 @@ export async function uploadImage(file) {
       (snapshot) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log(progress);
       },
       (error) => {
         const errorMessage = error.message;
@@ -795,7 +873,6 @@ export async function uploadImage(file) {
 
   const imageUrl = await uploadTask.snapshot;
 
-  console.log(imageUrl.metadata.downloadTokens);
 
   return imageUrl.metadata;
 }
@@ -816,7 +893,7 @@ export async function createEducation(education) {
     return result;
   } else {
     // doc.data() will be undefined in this case
-    console.log("No such document!");
+    alert("No such document!");
   }
 }
 
@@ -883,7 +960,7 @@ export async function createCareer(career) {
     return result;
   } else {
     // doc.data() will be undefined in this case
-    console.log("No such document!");
+    alert("No such document!");
   }
 }
 
@@ -903,6 +980,39 @@ export async function getCareersByUserId(userId) {
   ))
   return result
 }
+
+
+// 명령 실행시 await 필수!
+export async function getCareersAndEducationsByUserId(userId) {
+  const user = auth.currentUser;
+  try {
+    const carRef = collection(db, "careers");
+    const carQ = query(carRef, where("userId", "==", userId), orderBy("timestamp", "asc"));
+    const careerQuerySnapshot = await getDocs(carQ);
+    const careerResult = careerQuerySnapshot?.docs?.map((doc) => (
+      {
+        ...doc.data(),
+        id: doc.id,
+      }
+    ))
+    const eduRef = collection(db, "educations");
+    const eduQ = query(eduRef, where("userId", "==", userId), orderBy("timestamp", "asc"));
+    const eduQuerySnapshot = await getDocs(eduQ);
+    const educationresult = eduQuerySnapshot?.docs?.map((doc) => (
+      {
+        ...doc.data(),
+        id: doc.id,
+      }
+    ))
+
+    const result = [...careerResult, ...educationresult];
+    return result;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+
 
 export async function deleteCareer(careerId) {
   const user = auth.currentUser;
@@ -1006,7 +1116,7 @@ export async function createBoard(board) {
 
 export async function getBoard(boardId) {
   try {
-    const docRef = doc(db, "boards", boardId);
+    const docRef =  doc(db, "boards", boardId);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       const result = {
@@ -1051,6 +1161,8 @@ export async function getAllBoards() {
     creatorId: doc.data().creatorId,
     creatorName: doc.data().creatorName,
     createdAt: doc.data().createdAt,
+    favorites: doc.data().favorites,
+    favLikes: doc.data().favLikes,
   }));
   //결과 검색
 }
@@ -1182,8 +1294,6 @@ export async function updateSection(result, sectionId) {
     console.error(e);
   }
 }
-
-
 
 export async function getSection(boardId, categoryId) {
   try {
@@ -1573,6 +1683,54 @@ export async function getConversations() {
   }
 }
 
+export async function getConversation(cid) {
+  try {
+    const user = auth.currentUser;
+    if (!user) {
+      return alert("로그인 후 가능합니다.")
+    }
+    const docRef = doc(db, "conversations", cid);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const result = {
+        ...docSnap.data(),
+        id: cid,
+      }
+      return result;
+    }
+  }
+  catch (e) {
+    console.error(e);
+  }
+}
+
+export async function getMessages(cid, limitCount) {
+  try {
+    const user = auth.currentUser;
+    if (!user) {
+      return 
+    }
+    const q = query(
+      collection(db, "conversations", cid, "messages"),
+      orderBy("createdAt"),
+      limitToLast(limitCount)
+    )
+    const docSnap = await getDocs(q);
+    // if (docSnap.exists()) {
+    //   const result = {
+    //     ...docSnap.data(),
+    //     id: cid,
+    //   }
+    //   // return result;
+      return docSnap;
+    // }
+  }
+  catch (e) {
+    console.error(e);
+  }
+}
+
+
 export async function createConversation(sorted) {
   const user = auth.currentUser;
   if (!user) {
@@ -1585,7 +1743,6 @@ export async function createConversation(sorted) {
     );
     const querySnapshot = await getDocs(q);
     if (querySnapshot.empty) {
-      console.log(sorted, "sorted");
       const created = await addDoc(collection(db, "conversations"), {
         users: sorted,
         group:
@@ -1617,5 +1774,342 @@ export async function createConversation(sorted) {
     }
   } catch (e) {
     console.error(e);
+  }
+}
+
+
+// 기업보드 참여
+export async function favoriteBoard(
+  userId, username,
+  boardId, boardname, boardlogo
+) {
+  const user = auth.currentUser;
+  try {
+    await updateDoc(api.boardByIdRef(boardId), {
+      favorites: arrayUnion({ userId: userId, username: username, userAvatar: user?.photoURL }),
+      favLikes: increment(1),
+    });
+    await updateDoc(api.userByIdRef(userId), {
+      favorites: arrayUnion({ boardId: boardId, boardname: boardname, boardlogo: boardlogo ? boardlogo : "", }),
+      favLikes: increment(1),
+    });
+    const docRef = doc(db, "boards", boardId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const result = {
+        ...docSnap.data(),
+        id: boardId,
+      }
+      return result;
+    }
+  }
+  catch (e) {
+    console.error(e);
+  }
+}
+
+// 기업보드 참여
+export async function unfavoriteBoard(
+  userId, username,
+  boardId, boardname, boardlogo
+) {
+  const user = auth.currentUser;
+  try {
+    await updateDoc(api.boardByIdRef(boardId), {
+      favorites: arrayRemove({ userId: userId, username: username, userAvatar: user?.photoURL }),
+      favLikes: increment(-1),
+    });
+    await updateDoc(api.userByIdRef(userId), {
+      favorites: arrayRemove({ boardId: boardId, boardname: boardname, boardlogo: boardlogo ? boardlogo : "", }),
+      favLikes: increment(-1),
+    });
+    const docRef = doc(db, "boards", boardId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const result = {
+        ...docSnap.data(),
+        id: boardId,
+      }
+      return result;
+    }
+  }
+  catch (e) {
+    console.error(e);
+  }
+}
+
+// 기업보드 참여(전문가)
+export async function exportBoard(
+  userId, username,
+  boardId, boardname, boardlogo
+) {
+  const user = auth.currentUser;
+  try {
+    await updateDoc(api.boardByIdRef(boardId), {
+      experts: arrayUnion({ userId: userId, username: username, userAvatar: user?.photoURL }),
+      expertNum: increment(1),
+    });
+    await updateDoc(api.userByIdRef(userId), {
+      experts: arrayUnion({ boardId: boardId, boardname: boardname, boardlogo: boardlogo }),
+      expertNum: increment(1),
+    });
+    const docRef = doc(db, "boards", boardId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const result = {
+        ...docSnap.data(),
+        id: boardId,
+      }
+      return result;
+    }
+  }
+  catch (e) {
+    console.error(e);
+  }
+}
+
+// 기업보드 참여
+export async function unexpertBoard(
+  userId, username,
+  boardId, boardname, boardlogo
+) {
+  const user = auth.currentUser;
+  try {
+    await updateDoc(api.boardByIdRef(boardId), {
+      experts: arrayRemove({ userId: userId, username: username, userAvatar: user?.photoURL }),
+      expertNum: increment(-1),
+    });
+    await updateDoc(api.userByIdRef(userId), {
+      experts: arrayRemove({ boardId: boardId, boardname: boardname, boardlogo: boardlogo ? boardlogo : "", }),
+      expertNum: increment(-1),
+    });
+    const docRef = doc(db, "boards", boardId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const result = {
+        ...docSnap.data(),
+        id: boardId,
+      }
+      return result;
+    }
+  }
+  catch (e) {
+    console.error(e);
+  }
+}
+
+// 포인트 부여
+export async function givePoint(
+  userId, username, avatar, point, description,
+  sectionId, targetId, targetName, targetAvatar, boardName
+) {
+  const user = auth.currentUser;
+  try {
+
+    await updateDoc(api.userByIdRef(targetId), {
+      points: arrayUnion({
+        giverId: userId,
+        giverName: username,
+        giverAvatar: avatar,
+        sectionId: sectionId,
+        point: parseInt(point),
+        description: description,
+        boardName: boardName,
+        createdAt: new Date().toISOString(),
+      }),
+      point: increment(point),
+    });
+    await updateDoc(api.userByIdRef(userId), {
+      givePoint: arrayUnion({
+        targetId: targetId,
+        targetName: targetName,
+        targetAvatar: targetAvatar,
+        sectionId: sectionId,
+        point: parseInt(point),
+        description: description,
+        boardName: boardName,
+        createdAt: new Date().toISOString(),
+      }),
+    });
+    return {
+      createdAt: new Date().toISOString()
+    }
+  }
+  catch (e) {
+    console.error(e);
+  }
+}
+
+
+// 포인트 내역삭제
+export async function cancelGivePoint(
+  userId, username, avatar, point, description,
+  sectionId, targetId, targetName, targetAvatar, boardName, createdAt
+) {
+  const user = auth.currentUser;
+  try {
+    await updateDoc(api.userByIdRef(targetId), {
+      points: arrayRemove({
+        giverId: userId,
+        giverName: username,
+        giverAvatar: avatar,
+        sectionId: sectionId,
+        point: parseInt(point),
+        description: description,
+        boardName: boardName,
+        createdAt: createdAt,
+      }),
+      point: increment(-point),
+    });
+    await updateDoc(api.userByIdRef(userId), {
+      givePoint: arrayRemove({
+        targetId: targetId,
+        targetName: targetName,
+        targetAvatar: targetAvatar,
+        sectionId: sectionId,
+        point: parseInt(point),
+        description: description,
+        boardName: boardName,
+        createdAt: createdAt,
+      }),
+    });
+    const docRef = doc(db, "users", targetId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const final = {
+        ...docSnap.data(),
+        id: targetId,
+      }
+      return final;
+    }
+  }
+  catch (e) {
+    console.error(e);
+  }
+}
+
+// 명령 실행시 await 필수!
+export async function getUserInformations(userID) {
+  const user = auth.currentUser;
+  try {
+    const carRef = collection(db, "careers");
+    const carQ = query(carRef, where("userId", "==", userID), orderBy("timestamp", "desc"));
+    const careerQuerySnapshot = await getDocs(carQ);
+    const careerResult = careerQuerySnapshot?.docs?.map((doc) => (
+      {
+        ...doc.data(),
+        id: doc.id,
+      }
+    ))
+
+    const result = [...careerResult];
+    return result;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export async function createOffer(offer) {
+  const created = await addDoc(api.jobofferRef,
+    { ...offer, timestamp: new Date().toISOString() });
+
+  const docRef = doc(db, "joboffers", created.id);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    const result = {
+      ...docSnap.data(),
+      id: created.id,
+    }
+    // console.log("Document data:", docSnap.data());
+    return result;
+  } else {
+    // doc.data() will be undefined in this case
+    alert("No such document!");
+  }
+}
+
+// 내가 제안한 리스트 불러오기
+export async function getJoboffersByUserId(userId) {
+  try {
+    const user = auth.currentUser;
+    const jobofferRef = collection(db, "joboffers");
+    const q = query(jobofferRef,
+      where("userId", "==", user.uid),
+      orderBy("timestamp", "desc"),
+    )
+
+    //결과 검색
+    const querySnapshot = await getDocs(q);
+    const result = querySnapshot?.docs?.map((doc) => (
+      {
+        ...doc.data(),
+        id: doc.id,
+      }
+    ))
+    return result
+  } catch (e) {
+  }
+}
+// 내가 오퍼받은 리스트 불러오기
+export async function getJobofferedByUserId(userId) {
+  try {
+    const user = auth.currentUser;
+    if (!user) return;
+    const jobofferRef = collection(db, "joboffers");
+    const q = query(jobofferRef, where("targetId", "==", user.uid), orderBy("timestamp", "desc"));
+
+    //결과 검색
+    const querySnapshot = await getDocs(q);
+    const result = querySnapshot?.docs?.map((doc) => (
+      {
+        ...doc.data(),
+        id: doc.id,
+      }
+    ))
+    return result
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export async function deleteJoboffer(jobofferId) {
+  const user = auth.currentUser;
+  try {
+    if (!user) return (alert("로그인이 필요합니다."))
+    if (!jobofferId) return alert("삭제에 문제가 있습니다.");
+
+    const docRef = doc(db, "joboffers", jobofferId);
+    deleteDoc(docRef);
+
+    return jobofferId;
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+export async function modifyJoboffer(jobofferResult, id) {
+  const user = auth.currentUser;
+  try {
+    if (!user || !id) return alert("업데이트에 문제가 발생했습니다.");
+    const myOffer = await updateDoc(doc(db, "joboffers", id),
+      {
+        answer: jobofferResult,
+        read: true,
+        readtime: new Date().toISOString()
+      }
+    );
+    const docRef = doc(db, "joboffers", id);
+    // const docSnap = await getDoc(docRef);
+    // if (docSnap.exists()) {
+    //   const result = {
+    //     ...docSnap.data(),
+    //     id: myOffer.id,
+    //   }
+    // }
+
+    return new Date().toISOString();
+  } catch (e) {
+    console.error(e)
   }
 }

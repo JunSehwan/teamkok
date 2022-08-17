@@ -1,10 +1,7 @@
 import React from 'react';
-
 import BoardInfo from './BoardInfo'
 
 const index = () => {
-
-  
 
   return (
     <>
@@ -21,7 +18,6 @@ const index = () => {
         <div className="flex flex-col mx-auto space-y-12 max-w-7xl px-4 xl:px-12">
           <div className="relative">
             <div className='max-w-[32rem] mx-auto w-[100%] mt-[2.4rem]'>
-
               <BoardInfo />
             </div>
           </div>

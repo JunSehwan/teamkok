@@ -29,7 +29,7 @@ const BoardLogo = () => {
         </div>
 
         <Image
-          className="object-cover rounded-[12px] cursor-pointer"
+          className="object-contain rounded-[12px] cursor-pointer"
           onClick={() => dispatch(setChangeLogoOpen(true))}
           loader={() => board?.logo}
           src={logoPreview || companyPic}

@@ -2,39 +2,17 @@ import { createSlice } from "@reduxjs/toolkit";
 import { HYDRATE } from 'next-redux-wrapper';
 
 const initialState = {
-  servers: [],
-
-  server: {
-    name: "",
-    img: "",
-    path: "",
-    serverID: "",
-    defaultChannel: "",
-    roles: [],
-    contentFilter: "off",
-  },
-
   mainConversations: [],
-  singleConversation:{},
-  // singleConversation: {
-  //   user: [],
-  //   name: "",
-  //   topic: "",
-  //   type: "text",
-  //   path: "",
-  //   channelID: "",
-  // },
-
+  singleConversation: {},
+  notRead: false,
   voiceChannel: {
     name: "",
     type: "voice",
     path: "",
     channelID: "",
   },
-
   messages: [],
   members: [],
-
   member: {
     username: "",
     tag: "",
@@ -69,7 +47,7 @@ const initialState = {
   },
   serverIDs: [],
   loading: "idle",
-  conversationBar:true,
+  conversationBar: false,
 };
 
 export const chatSlice = createSlice({
@@ -83,27 +61,10 @@ export const chatSlice = createSlice({
     addConversation(state, action) {
       state.mainConversations.unshift(action.payload);
     },
-loadSingleConversation(state, action) {
+    loadSingleConversation(state, action) {
       state.singleConversation = action.payload;
     },
-
-
-    setServers(state, action) {
-      state.servers = action.payload;
-    },
-
-    setServer(state, action) {
-      state.server = action.payload;
-    },
-
-    setServerName(state, action) {
-      state.server.name = action.payload;
-    },
-
-    setServerImage(state, action) {
-      state.server.img = action.payload;
-    },
-
+    
     updateServerRole(state, action) {
       state.server.roles[action.payload.index] = action.payload.newRole;
     },
@@ -171,12 +132,18 @@ loadSingleConversation(state, action) {
       state.voiceChannel = initialState.voiceChannel;
       state.messages = initialState.messages;
     },
-    showConversationBar(state){
+    showConversationBar(state) {
       state.conversationBar = true;
     },
     hideConversationBar(state) {
       state.conversationBar = false;
-    }
+    },
+    messageNotRead(state) {
+      state.notRead = true;
+    },
+    messageRead(state) {
+      state.notRead = false;
+    },
   },
   extraReducers: {
     // The HYDRATE function is what manages the state between client and server
@@ -193,10 +160,6 @@ export const {
   loadConversationList,
   loadSingleConversation,
   addConversation,
-  setServers,
-  setServer,
-  setServerName,
-  setServerImage,
   updateServerRole,
   setServerContentFilter,
   setChannels,
@@ -215,6 +178,8 @@ export const {
   resetServerState,
   showConversationBar,
   hideConversationBar,
+  messageNotRead,
+  messageRead
 } = chatSlice.actions;
 
 export const useChatState = () => useAppSelector((state) => state.chat);

@@ -15,6 +15,7 @@ import addServerReducer from './addServer';
 import sendGifReducer from './sendGif';
 import serverSettingsReducer from './serverSettings';
 import chatReducer from './chat';
+import jobofferReducer from './joboffer';
 
 const rootReducer = combineReducers({
   userReducer,
@@ -31,6 +32,7 @@ const rootReducer = combineReducers({
   sendGifReducer,
   serverSettingsReducer,
   chatReducer,
+  jobofferReducer,
 
 });
 

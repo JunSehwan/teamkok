@@ -15,7 +15,7 @@ const _app = ({ Component, pageProps }) => {
     <>
       <GlobalStyle />
       <Head>
-        <title>팀콕!</title>
+        <title>Welcome to TEAMZ!</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <link rel="apple-touch-icon" sizes="57x57" href="/logo/apple-icon-57x57.png" />
@@ -35,8 +35,8 @@ const _app = ({ Component, pageProps }) => {
         <meta name="msapplication-TileColor" content="#ffffff" />
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png"></meta>
         <meta name="theme-color" content="#ffffff"></meta>
-        
-        
+
+
       </Head>
       <ThemeProvider theme={theme}>
         {/* <Provider store={store}> */}

@@ -9,7 +9,7 @@ const index = ({ children }) => {
       <Body className="nav__body">
         <Link href="/about">
           <StyledA>
-            <LogoImg src="/logo/choono_logo_182x34.svg" alt="" />
+            <LogoImg src="/logo/teamz.png" alt="" />
           </StyledA>
         </Link>
         <NavCollapse>
@@ -18,10 +18,10 @@ const index = ({ children }) => {
               <Link href="/about"><a className="signup__a">넥스트퍼스 소개</a></Link>
             </NavLi>
             <NavLi>
-              <Link href="/about/knowledgelist"><a className="login__a">이용약관</a></Link>
+              <Link href="/about/Service"><a className="login__a">이용약관</a></Link>
             </NavLi>
             <NavLi>
-              <Link href="/about/privacy"><a className="login__a">개인정보 취급방침</a></Link>
+              <Link href="/about/Privacy"><a className="login__a">개인정보 취급방침</a></Link>
             </NavLi>
             {/* <NavLi>
             <Link href="/login"><a>쿠키정책</a></Link>

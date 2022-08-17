@@ -21,7 +21,7 @@ const EducationList = () => {
 
   return (
     <>
-      <div className='max-w-[32rem] mx-auto w-[100%] mt-[1.2rem]'>
+      <div className='max-w-[38rem] mx-auto w-[100%] mt-[1.2rem]'>
         <div className='w-full rounded-lg lg:rounded-l-none'>
 
           <ul className="flex flex-col">
@@ -30,6 +30,13 @@ const EducationList = () => {
                 <div className="flex items-center justify-between flex-1 pl-1">
                   <span className="font-bold dark:text-white text-gray-500 hover:text-gray-800">
                     내 학력리스트
+                    {myEducations?.length > 0 ?
+                      <span className="ml-2 text-gray-400 text-sm font-normal">
+                        ({myEducations?.length}건 등록)</span>
+                      :
+                      <span className="ml-2 text-gray-400 text-sm font-normal">
+                        미등록
+                      </span>}
                   </span>
                   <span className="text-right flex justify-end focus:rotate-180">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" fill="currentColor" height="24" className="hover:text-gray-800 dark:hover:text-white dark:text-gray-200 text-gray-500" stroke="currentColor" strokeWidth="2">
@@ -75,8 +82,11 @@ const EducationList = () => {
                         <p className="text-gray-700 font-bold mb-[4px]">{v?.name}
                           <span className="text-gray-500 text-[0.88rem]">&nbsp;{v?.major}</span>
                         </p>
-
-                        <p className="text-gray-400 text-[0.78rem]">{`${v?.start?.year}년 ${v?.start?.month}월 ~ ${v?.end?.year}년 ${v?.end?.month}월`}</p>
+                        {v?.finish ?
+                          <p className="text-gray-400 text-[0.78rem]">{`${v?.start?.year}년 ${v?.start?.month}월 ~ ${v?.end?.year}년 ${v?.end?.month}월`}</p>
+                          :
+                          <p className="text-gray-400 text-[0.78rem]">{`${v?.start?.year}년 ${v?.start?.month}월 ~ 재학중`}</p>
+                        }
                       </div>
 
                       <span className='flex justify-center'>

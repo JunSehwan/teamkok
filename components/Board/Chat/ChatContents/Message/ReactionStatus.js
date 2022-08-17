@@ -1,8 +1,8 @@
-import { FC, useState } from "react";
-import { IMAGE_PROXY, REACTIONS_UI } from "hooks/constants";
+import { useState } from "react";
+import { REACTIONS_UI } from "hooks/constants";
 import PropTypes from 'prop-types';
 import Spin from "components/Common/Spin";
-import { useUsersInfo } from "hooks/useUsersInfo";
+import useUsersInfo from "hooks/useUsersInfo";
 import Image from "next/image";
 
 const ReactionStatus = ({ message, position }) => {
@@ -18,13 +18,12 @@ const ReactionStatus = ({ message, position }) => {
     <>
       <div
         onClick={() => setIsReactionStatusOpened(true)}
-        className={`bg-dark-lighten border-dark absolute top-full flex -translate-y-1/2 cursor-pointer items-center gap-[2px] rounded-lg border px-2 text-sm ${
-          position === "right"
-            ? "right-8"
-            : position === "left-tab"
+        className={`bg-dark-lighten border-dark absolute top-full flex -translate-y-1/2 cursor-pointer items-center gap-[2px] rounded-lg border px-2 text-sm ${position === "right"
+          ? "right-8"
+          : position === "left-tab"
             ? "left-[70px]"
             : "left-8"
-        }`}
+          }`}
       >
         {Object.entries(
           Object.entries(message?.reactions).reduce((acc, [key, value]) => {
@@ -95,17 +94,12 @@ const ReactionStatus = ({ message, position }) => {
                           className="h-10 w-10 rounded-full object-cover"
                           width={72}
                           height={72}
-                          src={IMAGE_PROXY(
-                            usersInfo?.find((user) => user.id === key)?.data()
-                              ?.photoURL
-                          )}
+                          src={
+                            usersInfo?.find((user) => user.id === key)?.data()?.photoURL}
                           alt=""
                         />
                         <p>
-                          {
-                            usersInfo?.find((user) => user.id === key)?.data()
-                              ?.displayName
-                          }
+                          {usersInfo?.find((user) => user.id === key)?.data()?.displayName}
                         </p>
                       </div>
 

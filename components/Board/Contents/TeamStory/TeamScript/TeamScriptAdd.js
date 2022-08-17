@@ -2,20 +2,8 @@ import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import AlertModal from 'components/Common/Modal/AlertModal';
 import { useDispatch, useSelector } from 'react-redux';
-// import {
-//   useLoadData,
-//   useSetData,
-//   useClearDataCallback,
-// } from "./editorHooks";
-// import { options } from "components/Common/Editor";
-// import dynamic from 'next/dynamic'
 import { setSectionUpdateDoneFalse, updateSectionInfo } from 'slices/board';
 import { updateSection } from 'firebaseConfig';
-
-
-// const Editor = dynamic(() =>
-//   import("components/Common/Editor/editor").then((mod) => mod.EditorContainer),
-//   { ssr: false })
 
 
 const TeamScriptAdd = ({ addOpen, onAddClose, singleSection }) => {

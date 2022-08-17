@@ -2,10 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { HYDRATE } from 'next-redux-wrapper';
 
 export const initialState = {
-  mainPosts: [
-    { likes: [] },
-    { comments: [] }
-  ],
+  mainPosts:[],
   addDone: false,
   updateDone: false,
   deleteDone: false,

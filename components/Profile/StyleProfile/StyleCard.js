@@ -2,13 +2,13 @@ import React from 'react';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
 
-const StyleCard = ({ title, onChangeCategory, sub, src, tag, category, setCategory, index }) => {
+const StyleCard = ({ title, onChangeCategory, sub, src, tag, category, setCategory, index, number }) => {
 
 
   return (
     <li key={index} className="mx-[auto] border-gray-400 flex flex-row mb-2 w-[100%]">
-      <button onClick={onChangeCategory(index)}
-        className={index + 1 === category ? `bg-sky-300 text-left transition duration-500 shadow ease-in-out transform hover:-translate-y-1 hover:shadow-lg select-none cursor-pointer hover:bg-sky-200 click:active:checked:focus:bg-sky-300 dark:bg-gray-800 rounded-md flex flex-1 items-center p-4`
+      <button onClick={onChangeCategory(number)}
+        className={number === category ? `bg-sky-300 text-left transition duration-500 shadow ease-in-out transform hover:-translate-y-1 hover:shadow-lg select-none cursor-pointer hover:bg-sky-200 click:active:checked:focus:bg-sky-300 dark:bg-gray-800 rounded-md flex flex-1 items-center p-4`
           : `text-left transition duration-500 shadow ease-in-out transform hover:-translate-y-1 hover:shadow-lg select-none cursor-pointer bg-white hover:bg-sky-200 click:active:checked:focus:bg-sky-300 dark:bg-gray-800 rounded-md flex flex-1 items-center p-4`
         }>
         <div className="flex flex-col h-10 justify-center items-center mr-1">
@@ -53,6 +53,7 @@ StyleCard.propTypes = {
   category: PropTypes.number,
   setCategory: PropTypes.func,
   index: PropTypes.number,
+  number: PropTypes.number,
 }
 
 export default StyleCard;

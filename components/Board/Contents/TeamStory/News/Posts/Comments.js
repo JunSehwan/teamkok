@@ -75,7 +75,7 @@ const Comments = ({ comment,post }) => {
         }
       </div>
       <div className="media-body w-full">
-        <div className="rounded-xl bg-gray-100 p-2 mb-2">
+        <div className="rounded-xl bg-gray-100 py-2 px-4 mb-2 w-fit">
         <div className='flex justify-between'>
           <div>
             <p className="inline-block text-base font-medium text-slate-500 mr-2">
