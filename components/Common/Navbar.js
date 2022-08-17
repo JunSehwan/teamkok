@@ -203,9 +203,10 @@ const Navbar = () => {
               </div>
               :
               <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-                {findNotRead?.length !== 0 && <button onClick={onClickFavorite} className='p-0.5 text-white bg-red-500 flex mr-[-41px] mt-[-20px] z-10 text-center font-xs rounded-full w-[18px] h-[18px] items-center justify-center'>
+                {findNotRead && findNotRead?.length !== 0 && 
+                <button onClick={onClickFavorite} className='p-0.5 text-white bg-red-500 flex mr-[-41px] mt-[-20px] z-10 text-center font-xs rounded-full w-[18px] h-[18px] items-center justify-center'>
                   {findNotRead?.length}</button>}
-      
+
                 <button className="mr-2" onClick={onClickFavorite}>
                   <svg xmlns="http://www.w3.org/2000/svg" className="ml-[8px] h-8 w-8 active:hover:fill-violet-600 fill-violet-200 stroke-violet-500 active:hover:stroke-violet-600 " viewBox="0 0 20 20" fill="currentColor">
                     <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
@@ -232,12 +233,14 @@ const Navbar = () => {
                       alt="avatar_user"
                       className="avatar w-7 h-8 rounded-md object-cover"
                       width={32} height={32}
+                      unoptimized
                       src={user?.avatar} />
                   ) : (
                     <Image
                       alt="avatar_user"
                       className="shadow-inner avatar w-7 h-8 rounded-md object-cover"
                       src={profilePic}
+                        unoptimized
                       width={32} height={32}
                     />
                   )}
@@ -251,9 +254,17 @@ const Navbar = () => {
                       <div ref={modalEl} className="absolute top-[60px] right-[2vw] z-20 w-72 py-2 overflow-hidden bg-white rounded-md shadow-xl dark:bg-gray-800">
                         <button onClick={onClickProfile} className="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white text-left w-full">
                           {user?.avatar ?
-                            <Image className="flex-shrink-0 object-cover mx-1 mr-3 rounded-lg w-9 h-9" src={user?.avatar} alt="avatar" width={40} height={40} />
+                            <Image
+                              className="flex-shrink-0 object-cover mx-1 mr-3 rounded-lg w-9 h-9 shadow-inner "
+                              src={user?.avatar}
+                              loader={() => user?.avatar || profilePic}
+                              unoptimized
+                              alt="avatar" width={40} height={40} />
                             :
-                            <Image className="flex-shrink-0 object-cover mx-1 mr-3 rounded-lg w-9 h-9" src={profilePic} alt="avatar" width={40} height={40} />
+                            <Image
+                              className="flex-shrink-0 object-cover mx-1 mr-3 rounded-lg w-9 h-9"
+                              src={profilePic}
+                              alt="avatar" width={40} height={40} />
                           }
                           <div className="mx-1 w-full ml-3">
                             <h1 className="text-sm w-full whitespace-nowrap overflow-hidden overflow-ellipsis break-all font-semibold text-gray-700 dark:text-gray-200">{user?.username}</h1>
@@ -315,7 +326,7 @@ const Navbar = () => {
                   <div>
                     <Image
                       src={logo}
-                      width={32}
+                      width={76.48}
                       alt="TEAMZ_LOGO"
                       height={32}
                     />

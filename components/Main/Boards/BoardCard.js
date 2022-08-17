@@ -55,7 +55,7 @@ const BoardCard = ({ board }) => {
   }, [])
 
   const onClickFavorite = useCallback(() => {
-    if(!user){
+    if (!user) {
       return alert("로그인이 필요합니다.");
     }
     if (!!noInformation) {
@@ -65,7 +65,7 @@ const BoardCard = ({ board }) => {
       return setExpertConfirm(true);
     }
     return setOpenConfirm(true);
-  }, [isMyCareer, user,noInformation])
+  }, [isMyCareer, user, noInformation])
 
   const onOk = useCallback(async () => {
     // 보드정보에 참석자 정보 array 추가
@@ -116,7 +116,7 @@ const BoardCard = ({ board }) => {
             {user && !isNaN(surveyResult) ?
               <span className='border-2 border-solid border-white shadow-inner absolute rounded-tl-lg rounded-b-sm overflow-hidden bg-gradient-to-r to-green-800 from-green-500 z-10  text-white px-2 py-1  text-sm dark:text-white font-medium'>🧬매칭: {surveyResult.toFixed(1)}%</span>
               :
-              !user?.survey ?
+              !user?.survey && user ?
                 <Link href="/profile">
                   <a className='shadow-inner absolute rounded-tl-lg rounded-b-sm overflow-hidden bg-gray-100 z-10  text-gray-600 px-2 py-1  text-sm dark:text-white font-medium'>내스타일 등록</a>
                 </Link>
@@ -194,20 +194,20 @@ const BoardCard = ({ board }) => {
 
                 <span className="text-right  text-gray-500 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-sm py-1 border-r-2 border-gray-200">
                   {!!myFavorite && myFavorite?.length !== 0 ||
-                    !!myBoard  && myBoard?.length !== 0 ||
-                  !!myExBoard && myExBoard?.length !== 0 ?
-                  <>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
-                      <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-                    </svg>
+                    !!myBoard && myBoard?.length !== 0 ||
+                    !!myExBoard && myExBoard?.length !== 0 ?
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                      </svg>
                       <span className="text-lg text-blue-500 ml-1">{board?.favorites?.length || 0}</span>
-                      </>
+                    </>
                     :
                     <>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                  <span className="text-lg ml-1">{board?.favorites?.length || 0}</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                      </svg>
+                      <span className="text-lg ml-1">{board?.favorites?.length || 0}</span>
                     </>
                   }
                 </span>
