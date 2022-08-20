@@ -59,10 +59,12 @@ const index = () => {
         ))
       }
       {final?.length === 0 &&
+      <div className="w-full h-full my-[4rem] sm:my-[8rem]">
         <Empty
           title="아직 참여자가 없습니다."
           text="적극적인 팀 어필을 통해 참여자를 모아보세요!"
         />
+        </div>
       }
     </div>
   );

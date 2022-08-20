@@ -18,6 +18,7 @@ const AvatarFromId = ({ uid, size = 30 }) => {
   if (error)
     return (
       <Image
+      unoptimized
         width={30}
         height={30}
         alt="avatar"
@@ -29,6 +30,7 @@ const AvatarFromId = ({ uid, size = 30 }) => {
 
   return (
     <Image
+    unoptimized
       width={30}
       height={30}
       alt="avatar"

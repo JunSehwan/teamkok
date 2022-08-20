@@ -9,7 +9,7 @@ const index = () => {
 
   return (
     <>
-      <div className={`flex flex-col w-full justify-center py-16 mr-1 ${!sidebarIn ? `sm:pl-[0px]` : `sm:pl-[20rem]`}`}>
+      <div className={`flex flex-col w-full items-center py-16 mr-1 ${!sidebarIn ? `sm:pl-[0px]` : `sm:pl-[20rem]`}`}>
         <div className="container m-auto px-3 text-gray-500 md:px-6">
           <div className="flex flex-col w-full">
 
@@ -30,6 +30,7 @@ const index = () => {
                   src="/image/communication.png"
                   alt="communication" loading="lazy"
                   layout="fill"
+                  unoptimized
                 />
               </ImageWrapper>
             </div>
@@ -44,6 +45,7 @@ const index = () => {
               <ImageWrapper className="w-[100%] flex justify-end">
                 <StyledImage
                   className="autoimage"
+                  unoptimized
                   src="/image/intern.png"
                   alt="intern" loading="lazy" layout="fill" />
               </ImageWrapper>
@@ -56,6 +58,7 @@ const index = () => {
               <ImageWrapper className="w-[100%] flex justify-end">
                 <StyledImage
                   className="autoimage"
+                  unoptimized
                   src="/image/now.png"
                   alt="now" loading="lazy" layout="fill" />
               </ImageWrapper>
@@ -82,7 +85,6 @@ margin: 0 auto;
   }
 }
 `
-
 
 const StyledImage = styled(Image)`
   margin-right: -10px!important;

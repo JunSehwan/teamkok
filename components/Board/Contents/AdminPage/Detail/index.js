@@ -24,15 +24,15 @@ const index = () => {
         // <div className="w-full h-64 rounded border-dashed border-2 border-gray-300">
         <div className="flex flex-col rounded-xl text-center">
 
-          <h2 className="font-bold text-3xl text-gray-600 ml-10 mt-8">
+          <h2 className="font-bold text-3xl text-gray-600 mx-5 mt-8">
             참여자 상세보기
           </h2>
 
-          <p className="font-light text-gray-400 text-sm ml-10 mt-5">
+          <p className="font-light text-gray-400 text-sm mx-5 mt-5">
             아래의 리스트에서 리스트를 선택해주세요.
           </p>
 
-          <div className="text-gray-700 font-semibold ml-10 mt-5 mb-8 group ">
+          <div className="text-gray-700 font-semibold mx-5 mt-5 mb-8 group ">
             정보 조회
             <svg xmlns="http://www.w3.org/2000/svg" className="rotate-90 inline-block h-6 w-6 group-hover:translate-x-2 transition delay-100 transition-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -53,6 +53,7 @@ const index = () => {
                       src={showDetailInfo?.avatar || profilePicture}
                       width={92}
                       height={92}
+                      unoptimized
                       alt="profilePicture"
                     />
                   </div>

@@ -59,7 +59,9 @@ const EducationList = () => {
                     <div className="grid grid-cols-6 p-5 gap-y-2">
                       {/* <!-- Profile Picture --> */}
                       <div>
-                        <Image src={`/image/school.png`} alt="school" width={60}
+                        <Image 
+                        unoptimized
+                        src={`/image/school.png`} alt="school" width={60}
                           height={60} className="max-w-16 max-h-16 rounded-full" />
                       </div>
                       {/* <!-- Description --> */}

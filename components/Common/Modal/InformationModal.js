@@ -30,10 +30,10 @@ const index = ({ infoConfirm, closeInfoConfirm }) => {
     <>
       {isView
         ?
-        <div className="relative z-20" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div className="relative z-30" aria-labelledby="modal-title" role="dialog" aria-modal="true">
           <div className="fixed inset-0 bg-gray-800 bg-opacity-80 transition-opacity"></div>
           <div className="fixed w-[100%] z-50 inset-0 overflow-y-auto">
-            <div className="flex items-cebter justify-center min-h-full text-center sm:p-0">
+            <div className="flex items-center justify-center min-h-full text-center sm:p-0">
               <div className="border-solid border-t-8 border-violet-400 relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 max-h-[87vh] max-w-4xl w-[90%]">
                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
 
@@ -80,11 +80,16 @@ const index = ({ infoConfirm, closeInfoConfirm }) => {
                               <span className="ml-1 text-2xl text-gray-700">관심기업 등록(취업희망자)</span>
                             </h3>
                             <div className="rounded-lg bg-purple-100 p-4 my-14 w-full flex md:flex-row flex-col text-lg items-center justify-between">
-                              <div className="text-purple-600 my-2 font-semibold basis-2/3">
-                                시작 전, <br /> 내 프로필페이지에서 기본정보, 이력 및 학력정보를 등록해주세요. 👉
+                              <div className="text-gray-700 text-md my-2 font-semibold basis-2/3">
+                                시작 전, <br /> 프로필페이지에서<br />
+                                <p className="text-purple-600 font-bold text-lg ">기본정보, 이력 및 학력정보</p>
+                                를 등록해주세요. ✏️
+                                <br />
+                                <span className="text-gray-600 text-sm font-normal">(재직중인 기업만 기업보드 개설가능)</span>
                               </div>
                               <ImageWrapper className="max-w-[420px] basis-1/3">
                                 <Image
+                                unoptimized
                                   className="autoimage"
                                   src="/image/screenshot/profile.png"
                                   alt="communication" loading="lazy"
@@ -99,6 +104,7 @@ const index = ({ infoConfirm, closeInfoConfirm }) => {
                               </div>
                               <ImageWrapper className="max-w-[320px] basis-1/3">
                                 <Image
+                                unoptimized
                                   className="autoimage rounded-xl shadow-lg "
                                   src="/image/screenshot/post.png"
                                   alt="communication" loading="lazy"
@@ -114,6 +120,7 @@ const index = ({ infoConfirm, closeInfoConfirm }) => {
                               </div>
                               <ImageWrapper className="max-w-[420px] basis-2/4">
                                 <Image
+                                unoptimized
                                   className="autoimage rounded-xl shadow-lg "
                                   src="/image/screenshot/joboffer.png"
                                   alt="communication" loading="lazy"
@@ -129,6 +136,7 @@ const index = ({ infoConfirm, closeInfoConfirm }) => {
                               </div>
                               <ImageWrapper className="max-w-[360px] basis-2/4">
                                 <Image
+                                unoptimized
                                   className="autoimage rounded-xl shadow-lg "
                                   src="/image/screenshot/matching2.png"
                                   alt="communication" loading="lazy"
@@ -143,8 +151,10 @@ const index = ({ infoConfirm, closeInfoConfirm }) => {
                               <span className="ml-1 text-2xl text-gray-700">기업보드 개설(채용담당자)</span>
                             </h3>
                             <div className="rounded-lg bg-purple-100 p-4 my-14 w-full flex md:flex-row flex-col text-lg items-center justify-between">
-                              <div className="text-purple-600 my-2 font-semibold basis-2/3">
-                                시작 전, <br /> 내 프로필페이지에서 기본정보, 이력 및 학력정보를 등록해주세요. 👉
+                              <div className="text-gray-700 text-md my-2 font-semibold basis-2/3">
+                                시작 전, <br /> 프로필페이지에서<br /> 
+                                <p className="text-purple-600 font-bold text-lg ">기본정보, 이력 및 학력정보</p>
+                                를 등록해주세요. ✏️
                                 <br />
                                 <span className="text-gray-600 text-sm font-normal">(재직중인 기업만 기업보드 개설가능)</span>
                               </div>
@@ -154,6 +164,7 @@ const index = ({ infoConfirm, closeInfoConfirm }) => {
                                   src="/image/screenshot/profile.png"
                                   alt="communication" loading="lazy"
                                   layout="fill"
+                                  unoptimized
                                 />
                               </ImageWrapper>
                             </div>
@@ -168,6 +179,7 @@ const index = ({ infoConfirm, closeInfoConfirm }) => {
                                   src="/image/screenshot/makeboard.png"
                                   alt="communication" loading="lazy"
                                   layout="fill"
+                                  unoptimized
                                 />
                               </ImageWrapper>
                             </div>
@@ -183,6 +195,7 @@ const index = ({ infoConfirm, closeInfoConfirm }) => {
                                   src="/image/screenshot/post.png"
                                   alt="communication" loading="lazy"
                                   layout="fill"
+                                  unoptimized
                                 />
                               </ImageWrapper>
                             </div>
@@ -198,6 +211,7 @@ const index = ({ infoConfirm, closeInfoConfirm }) => {
                                   src="/image/screenshot/lists.png"
                                   alt="communication" loading="lazy"
                                   layout="fill"
+                                  unoptimized
                                 />
                               </ImageWrapper>
                             </div>
@@ -214,6 +228,7 @@ const index = ({ infoConfirm, closeInfoConfirm }) => {
                                   src="/image/screenshot/hire.png"
                                   alt="communication" loading="lazy"
                                   layout="fill"
+                                  unoptimized
                                 />
                               </ImageWrapper>
                             </div>

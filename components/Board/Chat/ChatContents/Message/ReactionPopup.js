@@ -51,6 +51,7 @@ const ReactionPopup = ({
             }}
             width={40}
             height={40}
+            unoptimized
             title={key}
             className={`h-7 w-7 origin-bottom cursor-pointer transition duration-300 hover:scale-[115%]`}
             src={value?.gif}

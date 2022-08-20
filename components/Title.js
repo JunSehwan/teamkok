@@ -35,6 +35,7 @@ export default function Title() {
         <StyledImage
           onClick={toggleMembersList}
           src={memberListIcon}
+          unoptimized
           width={24}
           height={24}
         />

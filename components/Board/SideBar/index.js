@@ -15,10 +15,13 @@ const index = () => {
   const { singleBoard, sidebarIn } = useSelector(state => state.board);
   const onClickCategory = useCallback((category) => {
     router.push(`/board/${singleBoard?.id}/${category}`);
-  }, [router, singleBoard])
+    dispatch(sideClose());
+
+  }, [router, singleBoard,dispatch])
   const onClickHome = useCallback(() => {
     router.push(`/board/${singleBoard?.id}`);
-  }, [router, singleBoard])
+    dispatch(sideClose());
+  }, [router,singleBoard, dispatch])
   const sideBarClose = useCallback(() => {
     dispatch(sideClose());
   }, [dispatch])
@@ -58,6 +61,7 @@ const index = () => {
                   layout="fill"
                   // height={62}
                   src={singleBoard?.logo}
+                  unoptimized
                   alt="CompanyLogo"
                   className="rounded-lg mx-auto autoimage lg:h-14 md:h-14 w-full object-cover object-center"
                 />
@@ -68,6 +72,7 @@ const index = () => {
                   // width={62}
                   layout="fill"
                   // height={62}
+                  unoptimized
                   src={companypic}
                   alt="CompanyLogo"
                   className="rounded-lg mx-auto autoimage lg:h-14 md:h-14 w-full object-cover object-center"

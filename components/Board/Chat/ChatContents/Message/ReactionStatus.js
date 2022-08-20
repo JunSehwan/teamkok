@@ -36,6 +36,7 @@ const ReactionStatus = ({ message, position }) => {
           .map(([key, value]) => (
             <Image
               key={key}
+              unoptimized
               width={24}
               height={24}
               className="h-3 w-3"
@@ -94,6 +95,7 @@ const ReactionStatus = ({ message, position }) => {
                           className="h-10 w-10 rounded-full object-cover"
                           width={72}
                           height={72}
+                          unoptimized
                           src={
                             usersInfo?.find((user) => user.id === key)?.data()?.photoURL}
                           alt=""
@@ -105,6 +107,7 @@ const ReactionStatus = ({ message, position }) => {
 
                       <Image
                         className="h-5 w-5"
+                        unoptimized
                         width={32}
                         height={32}
                         src={Object.values(REACTIONS_UI)[value - 1]?.icon}

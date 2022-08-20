@@ -12,6 +12,7 @@ const FileIcon = ({ extension, className }) => {
   </svg>
   return (
     <Image
+    unoptimized
       width={20}
       height={20}
       alt="file_icon"

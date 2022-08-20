@@ -89,6 +89,7 @@ const List = ({ user, index, key }) => {
               src={user?.avatar || profilePicture}
               width={62}
               height={62}
+              unoptimized
               alt="profilePicture"
             />
           </div>

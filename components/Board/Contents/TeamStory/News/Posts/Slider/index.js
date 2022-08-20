@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback, createRef } from "react";
 import PropTypes from 'prop-types';
 import holderPicture from 'public/image/holderimage.png';
-import Image,{ImageProps} from 'next/image';
+import Image, { ImageProps } from 'next/image';
 import styled from "styled-components";
 
 function Slider({ photo, setSliderOn, sliderClose, sliderOn }) {
@@ -56,7 +56,12 @@ function Slider({ photo, setSliderOn, sliderClose, sliderOn }) {
         {/* <!--content--> */}
         <div className="h-full w-full relative">
           <section className="flex h-full w-full bg-gray-300 py-4 px-2  justify-center items-center relative overflow-hidden">
-            
+            <button onClick={sliderClose} 
+            className="text-gray-800 p-2 hover:bg-gray-200 rounded-full absolute right-4 top-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
             {/* 이전버튼 */}
             <div className="absolute h-5 w-2 left-0 ml-2 z-10 text-5xl cursor-pointer select-none text-white">
               <svg
@@ -105,13 +110,13 @@ function Slider({ photo, setSliderOn, sliderClose, sliderOn }) {
                 >
                   {index === current && (
                     <AutoHeightImageWrapper>
-                    <img
-                      // layout="fill"
-                      // className="autoImage"
-                      src={slide || holderPicture}
-                      alt="slides"
-                      className="max-h-[654px] h-auto w-full autoImage object-center  bg-cover shadow"
-                    />
+                      <img
+                        // layout="fill"
+                        // className="autoImage"
+                        src={slide || holderPicture}
+                        alt="slides"
+                        className="max-h-[654px] h-auto w-full autoImage object-center  bg-cover shadow"
+                      />
                     </AutoHeightImageWrapper>
                   )}
                 </div>

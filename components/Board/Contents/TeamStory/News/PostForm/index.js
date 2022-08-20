@@ -10,6 +10,7 @@ import { createPost } from 'firebaseConfig'
 
 import { ref, getDownloadURL, uploadBytesResumable, getStorage } from "firebase/storage";
 import dayjs from "dayjs";
+import Spin from 'components/Common/Spin';
 
 const index = ({ onCloseForm, openForm }) => {
   const dispatch = useDispatch();
@@ -92,6 +93,7 @@ const index = ({ onCloseForm, openForm }) => {
               prevState.push(downloadURLs);
               setTimeout(() => {
                 setConvert(true);
+                setLoading(false);
               }, [1500])
               return prevState;
             })
@@ -104,15 +106,18 @@ const index = ({ onCloseForm, openForm }) => {
 
 
   const [convert, setConvert] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const uploadImageDB = useCallback(async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (description?.length === 0) {
       document.getElementById('description').focus();
+      setLoading(false);
       return setDescriptionError(true);
     }
     if (!category) {
       document.getElementById('category').focus();
+      setLoading(false);
       return setCategoryError(true);
     }
     const results = await onFirebaseImage(images);
@@ -138,12 +143,10 @@ const index = ({ onCloseForm, openForm }) => {
       category: category,
       // description: JSONresult,
     };
-    dispatch(loadingUpload);
 
     const con = await createPost(postResult, URLs);
     // const imageCon = await uploadPicture(images, con?.id);
     dispatch(addPost(con));
-    dispatch(loadingUploadDone);
 
   }, [dispatch, URLs, isAdmin, isExpert, singleSection?.id, category, description])
 
@@ -250,12 +253,12 @@ const index = ({ onCloseForm, openForm }) => {
                 <div className="ml-3 flex flex-col w-full">
                 </div>
               </div>
-              {selectedImages.length > 0 &&
-                (selectedImages.length > 10 ? (
+              {selectedImages?.length > 0 &&
+                (selectedImages?.length > 10 ? (
                   <p className="error mb-4 text-center text-red-600">
                     10개를 초과한 이미지를 업로드할 수 없습니다. <br />
                     <span>
-                      please delete <b> {selectedImages.length - 10} </b> of them{" "}
+                      please delete <b> {selectedImages?.length - 10} </b> of them{" "}
                     </span>
                   </p>
                 ) : (
@@ -263,7 +266,7 @@ const index = ({ onCloseForm, openForm }) => {
                 ))}
               <div className="images flex flex-row gap-2 px-6 flex-wrap">
                 {selectedImages &&
-                  selectedImages.map((image, index) => {
+                  selectedImages?.map((image, index) => {
                     return (
                       <div key={index} className="image basis-1/4">
                         <div className='flex justify-between'>
@@ -286,6 +289,7 @@ const index = ({ onCloseForm, openForm }) => {
                             layout="fill"
                             objectFit='contain'
                             alt="upload"
+                            unoptimized
                           />
                         </div>
                       </div>
@@ -294,34 +298,41 @@ const index = ({ onCloseForm, openForm }) => {
               </div>
 
               <div className="flex items-center text-blue-600 justify-between py-4 px-4 border-t">
-                <div className="flex text-2xl">
+                <div className="flex items-center">
+                  <div className="flex text-2xl">
+                    <label className="flex items-center justify-center p-3 hover:bg-blue-100 rounded-full cursor-pointer" htmlFor="upload">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </label>
+                    <input onChange={changePicture}
+                      type="file"
+                      className='hidden'
+                      multiple={true}
+                      accept="image/png , image/jpeg, image/webp"
+                      id="upload"
+                    // style="display:none"
+                    />
 
-                  <label className="flex items-center justify-center p-3 hover:bg-blue-100 rounded-full cursor-pointer" htmlFor="upload">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </label>
-                  <input onChange={changePicture}
-                    type="file"
-                    className='hidden'
-                    multiple={true}
-                    accept="image/png , image/jpeg, image/webp"
-                    id="upload"
-                  // style="display:none"
-                  />
-
+                  </div>
+                  <span className="ml-2">{progress}%</span>
                 </div>
-                {progress}%
                 <div>
-                  <button
-                    className="inline-flex items-center px-4 py-2 rounded-full font-bold text-white bg-blue-600 hover:bg-blue-700 cursor-pointer"
-                    type="submit"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="mr-[4px] h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                    게시하기
-                  </button>
+                  {!!loading ?
+                    <div className="ml-[-2.4rem] mt-[-1.3rem]">
+                      <Spin />
+                    </div>
+                    :
+                    <button
+                      className="inline-flex items-center px-4 py-2 rounded-full font-bold text-white bg-blue-600 hover:bg-blue-700 cursor-pointer"
+                      type="submit"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="mr-[4px] h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                      게시하기
+                    </button>
+                  }
                 </div>
               </div>
             </form>

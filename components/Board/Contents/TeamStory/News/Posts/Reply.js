@@ -25,9 +25,9 @@ const Reply = ({ reply, comment }) => {
     <div className="media flex py-2 w-full">
       <div className="mr-3">
         {reply?.avatar ?
-          <Image width={30} height={30} alt="pic" className="object-cover rounded-xl max-w-none w-12 h-12" src={reply?.avatar} />
+          <Image unoptimized width={30} height={30} alt="pic" className="object-cover rounded-xl max-w-none w-12 h-12" src={reply?.avatar} />
           :
-          <Image width={30} height={30} alt="pic" className="object-cover rounded-xl max-w-none w-12 h-12" src={profilePic} />
+          <Image unoptimized width={30} height={30} alt="pic" className="object-cover rounded-xl max-w-none w-12 h-12" src={profilePic} />
         }
       </div>
       <div className="media-body w-full">

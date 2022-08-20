@@ -15,6 +15,7 @@ import {
   setDoc, getFirestore
 } from "firebase/firestore";
 import Image from 'next/image';
+import LoadingPage from 'components/Common/Loading';
 
 const Signup = ({ handleCancelModal }) => {
 
@@ -187,8 +188,12 @@ const Signup = ({ handleCancelModal }) => {
     [password]
   );
 
+  const [loading, setLoading] = useState(false);
+
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
+
+    setLoading(true);
     if (username?.length === 0) {
       return setUsernameError(true);
     }
@@ -236,6 +241,7 @@ const Signup = ({ handleCancelModal }) => {
         console.error(err);
       }
     }
+    setLoading(false);
   }, [username, email, emailDubError, form, tel, password, passwordCheck, dispatch, handleCancelModal])
 
   const nowForCopy = dayjs(now);
@@ -302,7 +308,6 @@ const Signup = ({ handleCancelModal }) => {
 
   return (
     <>
-
       <div>
         <div className="container mx-auto">
           <div className="flex justify-center my-3">
@@ -311,217 +316,224 @@ const Signup = ({ handleCancelModal }) => {
               {/* <!-- Col --> */}
               {/* <!-- Col --> */}
               <div className="mt-6 w-full rounded-lg lg:rounded-l-none">
-
-                <button
-                  onClick={signInWithGoogleHandler}
-                  className="flex min-w-full cursor-pointer items-center gap-3 rounded-md bg-white p-2 text-black transition duration-300 disabled:!cursor-default disabled:!brightness-75"
-                >
-                  <div className="hover:bg-slate-100 google-btn flex flex-row items-center justify-center w-[70%] mx-auto p-2 bg-white shadow-lg">
-                    <div className="google-icon-wrapper mr-3">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <Image width={34} height={34} alt="google" className="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" />
-                    </div>
-                    <p className="btn-text"><b>Sign in with google</b></p>
+                {loading ?
+                  <div className="min-h-[50vh] w-full">
+                    <LoadingPage />
                   </div>
-                </button>
-
-                <div className="w-[90%] mx-auto h-[4px] py-4 my-4 border-b-[1px] border-solid border-slate-200"></div>
-                <div className="w-fit bg-white mt-[-24px] px-6 mx-auto text-sm text-gray-500">또는</div>
-
-                <form
-                  className="w-full pt-4 pb-2 mb-1 rounded"
-                  onSubmit={onSubmit}
-                >
-                  <div className="mb-4">
-                    <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="name">
-                      이름
-                    </label>
-                    <input
-                      className={usernameError ?
-                        'w-full px-3 py-2 mb-2 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-                        :
-                        'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-                      }
-                      id="name"
-                      type="text"
-                      maxLength={10}
-                      placeholder="이름"
-                      onChange={onChangeUsername}
-                      value={username}
-                    />
-                    {usernameError ? (
-                      <p className="text-xs mb-[1.5rem] italic text-red-500">이름을 입력해주세요.</p>
-                    ) : null}
-                  </div>
-
-                  <div className="mb-4">
-                    <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="email">
-                      이메일
-                    </label>
-                    <input
-                      className={emailError || emailDubError ?
-                        'w-full px-3 py-2 mb-2 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-                        :
-                        'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-                      }
-                      id="e-mail"
-                      type="email"
-                      placeholder="이메일주소"
-                      onChange={onChangeEmail}
-                      value={email}
-                    />
-                    {emailError ? (
-                      <p className="text-xs mb-[1.5rem] italic text-red-500">올바른 이메일 형식이 아닙니다.</p>
-                    ) : null}
-                    {emailDubError ? (
-                      <p className="text-xs mb-[1.5rem] italic text-red-500">이미 동일한 이메일 계정이 존재합니다.</p>
-                    ) : null}
-                  </div>
-
-                  <div className="mb-4">
-                    <div className="mb-4 md:mr-2 md:mb-0 w-[100%]">
-                      <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="firstName">
-                        생년월일
-                      </label>
-                      <div className="flex">
-                        <select
-                          className={birthError ? "w-full px-3 py-2 mb-2 border-red-500 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                            :
-                            "w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                          }
-                          id="birthyear"
-                          type="text"
-                          placeholder="년"
-                          onChange={onChangeYear}
-                          value={form?.year}
-                        >
-                          {years()}
-                        </select>
-                        <select
-                          className={birthError ? "md:ml-2 w-full border-red-500 px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                            :
-                            "md:ml-2 w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                          }
-                          id="birthmonth"
-                          type="text"
-                          placeholder="월"
-                          onChange={onChangeMonth}
-                          value={form?.month}
-                        >
-                          {months()}
-                        </select>
-                        <select
-                          className={birthError ? "border-red-500 md:ml-2 w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                            :
-                            "md:ml-2 w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                          }
-                          value={form?.day}
-                          onChange={onChangeDay
-                          }
-                          id="birthday"
-                          type="text"
-                          placeholder="일"
-                        >
-                          {days.map(item => (
-                            <option value={item} key={item}>
-                              {item}일
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                    {birthError ? (
-                      <p className="text-xs mb-[1.5rem] italic text-red-500">생년월일을 입력해주세요.</p>
-                    ) : null}
-                  </div>
-
-                  <div className="mb-4">
-                    <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="email">
-                      연락처
-                    </label>
-                    <input
-                      className={telError ?
-                        'w-full px-3 py-2 mb-2 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-                        :
-                        'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-                      }
-                      id="phone"
-                      type="tel"
-                      maxLength='11'
-                      placeholder="-없이 입력"
-                      onChange={onChangeNumber}
-                      value={tel}
-                    />
-                    {telError ? (
-                      <p className="text-xs mb-[1.5rem] italic text-red-500">연락처를 입력해주세요.</p>
-                    ) : null}
-                  </div>
-
-                  <div className="mb-4">
-                    <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="password">
-                      비밀번호(8자이상)
-                    </label>
-                    <input
-                      className={passwordLengthError ?
-                        'w-full px-3 py-2 mb-3 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-                        :
-                        'w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-                      }
-                      id="password"
-                      type="password"
-                      placeholder="********"
-                      onChange={onChangePassword}
-                      value={password}
-                    />
-                    {passwordLengthError ? (
-                      <p className="text-xs mb-[1.5rem] mt-[-0.5rem] italic text-red-500">비밀번호는 8자 이상이어야 합니다.</p>
-                    ) : null}
-                  </div>
-                  <div className="mb-4">
-                    <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="c_password">
-                      비밀번호 확인
-                    </label>
-                    <input
-                      className={passwordError ?
-                        'w-full px-3 py-2 mb-3 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-                        :
-                        'w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-                      }
-                      onChange={onChangePasswordCheck}
-                      value={passwordCheck}
-                      id="c_password"
-                      type="password"
-                      placeholder="********"
-                    />
-                    {passwordError ? (
-                      <p className="text-xs mt-[-0.5rem] mb-[1.5rem] italic text-red-500">비밀번호가 일치하지 않습니다.</p>
-                    ) : null}
-                  </div>
-
-
-                  <div className="text-center mt-[1rem] mb-[1rem] text-[0.88rem] text-gray-500">
-                    회원가입을 클릭하면 TEAMZ의
-                    <a
-                      className="inline-block text-blue-500 align-baseline hover:text-blue-800"
-                      href="/about/Service" target="_blank" rel="noreferrer noopener"
-                    >&nbsp;서비스 약관</a>
-                    에 동의하고
-                    <a
-                      className="inline-block text-blue-500 align-baseline hover:text-blue-800"
-                      href="/about/Privacy" target="_blank" rel="noreferrer noopener"
-                    >&nbsp;개인정보 처리방침&nbsp;</a>
-                    적용을 인정하는 것으로 간주합니다.
-                  </div>
-
-                  <div className="mb-2 text-center">
+                  :
+                  <>
                     <button
-                      className="w-full px-4 text-md py-4 font-bold text-white bg-purple-600 rounded-lg hover:bg-purple-700 focus:outline-none focus:shadow-outline"
-                      type="submit"
+                      onClick={signInWithGoogleHandler}
+                      className="flex min-w-full cursor-pointer items-center gap-3 rounded-md bg-white p-2 text-black transition duration-300 disabled:!cursor-default disabled:!brightness-75"
                     >
-                      회원가입
+                      <div className="hover:bg-slate-100 google-btn flex flex-row items-center justify-center w-[70%] mx-auto p-2 bg-white shadow-lg">
+                        <div className="google-icon-wrapper mr-3">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <Image unoptimized width={34} height={34} alt="google" className="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" />
+                        </div>
+                        <p className="btn-text"><b>Sign in with google</b></p>
+                      </div>
                     </button>
-                  </div>
-                </form>
+
+                    <div className="w-[90%] mx-auto h-[4px] py-4 my-4 border-b-[1px] border-solid border-slate-200"></div>
+                    <div className="w-fit bg-white mt-[-24px] px-6 mx-auto text-sm text-gray-500">또는</div>
+
+                    <form
+                      className="w-full pt-4 pb-2 mb-1 rounded"
+                      onSubmit={onSubmit}
+                    >
+                      <div className="mb-4">
+                        <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="name">
+                          이름
+                        </label>
+                        <input
+                          className={usernameError ?
+                            'w-full px-3 py-2 mb-2 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                            :
+                            'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                          }
+                          id="name"
+                          type="text"
+                          maxLength={10}
+                          placeholder="이름"
+                          onChange={onChangeUsername}
+                          value={username}
+                        />
+                        {usernameError ? (
+                          <p className="text-xs mb-[1.5rem] italic text-red-500">이름을 입력해주세요.</p>
+                        ) : null}
+                      </div>
+
+                      <div className="mb-4">
+                        <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="email">
+                          이메일
+                        </label>
+                        <input
+                          className={emailError || emailDubError ?
+                            'w-full px-3 py-2 mb-2 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                            :
+                            'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                          }
+                          id="e-mail"
+                          type="email"
+                          placeholder="이메일주소"
+                          onChange={onChangeEmail}
+                          value={email}
+                        />
+                        {emailError ? (
+                          <p className="text-xs mb-[1.5rem] italic text-red-500">올바른 이메일 형식이 아닙니다.</p>
+                        ) : null}
+                        {emailDubError ? (
+                          <p className="text-xs mb-[1.5rem] italic text-red-500">이미 동일한 이메일 계정이 존재합니다.</p>
+                        ) : null}
+                      </div>
+
+                      <div className="mb-4">
+                        <div className="mb-4 md:mr-2 md:mb-0 w-[100%]">
+                          <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="firstName">
+                            생년월일
+                          </label>
+                          <div className="flex">
+                            <select
+                              className={birthError ? "w-full px-3 py-2 mb-2 border-red-500 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                                :
+                                "w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                              }
+                              id="birthyear"
+                              type="text"
+                              placeholder="년"
+                              onChange={onChangeYear}
+                              value={form?.year}
+                            >
+                              {years()}
+                            </select>
+                            <select
+                              className={birthError ? "md:ml-2 w-full border-red-500 px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                                :
+                                "md:ml-2 w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                              }
+                              id="birthmonth"
+                              type="text"
+                              placeholder="월"
+                              onChange={onChangeMonth}
+                              value={form?.month}
+                            >
+                              {months()}
+                            </select>
+                            <select
+                              className={birthError ? "border-red-500 md:ml-2 w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                                :
+                                "md:ml-2 w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                              }
+                              value={form?.day}
+                              onChange={onChangeDay
+                              }
+                              id="birthday"
+                              type="text"
+                              placeholder="일"
+                            >
+                              {days.map(item => (
+                                <option value={item} key={item}>
+                                  {item}일
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+                        {birthError ? (
+                          <p className="text-xs mb-[1.5rem] italic text-red-500">생년월일을 입력해주세요.</p>
+                        ) : null}
+                      </div>
+
+                      <div className="mb-4">
+                        <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="email">
+                          연락처
+                        </label>
+                        <input
+                          className={telError ?
+                            'w-full px-3 py-2 mb-2 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                            :
+                            'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                          }
+                          id="phone"
+                          type="tel"
+                          maxLength='11'
+                          placeholder="-없이 입력"
+                          onChange={onChangeNumber}
+                          value={tel}
+                        />
+                        {telError ? (
+                          <p className="text-xs mb-[1.5rem] italic text-red-500">연락처를 입력해주세요.</p>
+                        ) : null}
+                      </div>
+
+                      <div className="mb-4">
+                        <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="password">
+                          비밀번호(8자이상)
+                        </label>
+                        <input
+                          className={passwordLengthError ?
+                            'w-full px-3 py-2 mb-3 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                            :
+                            'w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                          }
+                          id="password"
+                          type="password"
+                          placeholder="********"
+                          onChange={onChangePassword}
+                          value={password}
+                        />
+                        {passwordLengthError ? (
+                          <p className="text-xs mb-[1.5rem] mt-[-0.5rem] italic text-red-500">비밀번호는 8자 이상이어야 합니다.</p>
+                        ) : null}
+                      </div>
+                      <div className="mb-4">
+                        <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="c_password">
+                          비밀번호 확인
+                        </label>
+                        <input
+                          className={passwordError ?
+                            'w-full px-3 py-2 mb-3 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                            :
+                            'w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                          }
+                          onChange={onChangePasswordCheck}
+                          value={passwordCheck}
+                          id="c_password"
+                          type="password"
+                          placeholder="********"
+                        />
+                        {passwordError ? (
+                          <p className="text-xs mt-[-0.5rem] mb-[1.5rem] italic text-red-500">비밀번호가 일치하지 않습니다.</p>
+                        ) : null}
+                      </div>
+
+
+                      <div className="text-center mt-[1rem] mb-[1rem] text-[0.88rem] text-gray-500">
+                        회원가입을 클릭하면 TEAMZ의
+                        <a
+                          className="inline-block text-blue-500 align-baseline hover:text-blue-800"
+                          href="/about/Service" target="_blank" rel="noreferrer noopener"
+                        >&nbsp;서비스 약관</a>
+                        에 동의하고
+                        <a
+                          className="inline-block text-blue-500 align-baseline hover:text-blue-800"
+                          href="/about/Privacy" target="_blank" rel="noreferrer noopener"
+                        >&nbsp;개인정보 처리방침&nbsp;</a>
+                        적용을 인정하는 것으로 간주합니다.
+                      </div>
+
+                      <div className="mb-2 text-center">
+                        <button
+                          className="w-full px-4 text-md py-4 font-bold text-white bg-purple-600 rounded-lg hover:bg-purple-700 focus:outline-none focus:shadow-outline"
+                          type="submit"
+                        >
+                          회원가입
+                        </button>
+                      </div>
+                    </form>
+                  </>
+                }
               </div>
             </div>
           </div>

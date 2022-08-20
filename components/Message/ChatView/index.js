@@ -61,7 +61,7 @@ const [error,setError] = useState(false);
     fetchAndSetUser();
     setLoading(false);
     }
-  }, [conversationId, limitCount, user]);
+  }, [conversationId, limitCount, user, data]);
   
   
   const dataRef = useRef(data);

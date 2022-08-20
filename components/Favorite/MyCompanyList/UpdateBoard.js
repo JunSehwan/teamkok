@@ -112,25 +112,25 @@ const UpdateBoard = ({ board }) => {
                   <div className='relative flex bg-slate-200 justify-center shadow-inner border-[7px] border-white rounded-[12px] group'>
                     <div className="w-[192px] h-[192px]">
                       <ImageWrapper>
-                      <Image
-                        className="absolute object-contain rounded-[12px] mx-auto z-10 cursor-pointer w-[192px] h-[192px]"
-                      loader={() => board?.logo}
-                      src={logoPreview || board?.logo || companyPic}
-                      width={180}
-                      height={180}
-                      unoptimized
-                      alt="BoardLogo picture">
-                    </Image>
-                      <label className='absolute top-0 left-0 w-full mt-2 ml-2 text-sm text-left text-gray-600 cursor-pointer h-[192px] mx-auto font-semibold z-20' htmlFor="fileInput">
-                        Upload File
-                      </label>
-                      <input
-                        className='absolute hidden top-0 left-0 w-full h-full text-[0px] cursor-pointer pointer-events-auto rounded file:w-full file:h-full file:border-0'
-                        onChange={changeLogo}
-                        type="file"
-                        accept=".svg, .png, .jpg, .jpeg"
-                        id="fileInput"
-                      />
+                        <Image
+                          className="absolute object-contain rounded-[12px] mx-auto z-10 cursor-pointer w-[192px] h-[192px]"
+                          loader={() => board?.logo}
+                          src={logoPreview || board?.logo || companyPic}
+                          width={180}
+                          height={180}
+                          unoptimized
+                          alt="BoardLogo picture">
+                        </Image>
+                        <label className='absolute top-0 left-0 w-full mt-2 ml-2 text-sm text-left text-gray-600 cursor-pointer h-[192px] mx-auto font-semibold z-20' htmlFor="fileInput">
+                          Upload File
+                        </label>
+                        <input
+                          className='absolute hidden top-0 left-0 w-full h-full text-[0px] cursor-pointer pointer-events-auto rounded file:w-full file:h-full file:border-0'
+                          onChange={changeLogo}
+                          type="file"
+                          accept=".svg, .png, .jpg, .jpeg"
+                          id="fileInput"
+                        />
                       </ImageWrapper>
                     </div>
                   </div>

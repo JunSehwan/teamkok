@@ -15,7 +15,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 import LeftMessage from "../Message/LeftMessage";
 import RightMessage from "../Message/RightMessage";
-import { db,getMessages } from "firebaseConfig";
+import { db, getMessages } from "firebaseConfig";
 
 import { useCollectionQuery } from "hooks/useCollectionQuery";
 import Image from 'next/image';
@@ -43,28 +43,28 @@ const ChatView = ({ conversation, inputSectionOffset, replyInfo, setReplyInfo })
   //   )
   // );
 
-  const [data,setData] = useState();
-const [loading,setLoading] = useState(false);
-const [error,setError] = useState(false);
+  const [data, setData] = useState();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   useEffect(() => {
-    if(user && conversationId){
-    setLoading(true);
-    async function fetchAndSetUser() {
-      try{
-        await getMessages(conversationId, limitCount).then((result)=>{
-          setData(result);
-        })
-      }catch(e){
-        setData(null)
-        console.error(e)
-        setError(true);
+    if (user && conversationId) {
+      setLoading(true);
+      async function fetchAndSetUser() {
+        try {
+          await getMessages(conversationId, limitCount).then((result) => {
+            setData(result);
+          })
+        } catch (e) {
+          setData(null)
+          console.error(e)
+          setError(true);
+        }
       }
+      fetchAndSetUser();
+      setLoading(false);
     }
-    fetchAndSetUser();
-    setLoading(false);
-    }
-  }, [conversationId, limitCount, user]);
-  
+  }, [conversationId, limitCount, user, data]);
+
 
   const dataRef = useRef(data);
   const conversationIdRef = useRef(conversationId);
@@ -132,7 +132,7 @@ const [error,setError] = useState(false);
   if (data?.empty)
     return (
       <div className="flex-grow">
-        <p className="mt-4 text-center text-gray-400">
+        <p className="mt-4 h-[calc(100vh-218px)] text-center text-gray-400">
           No message recently. Start chatting now.
         </p>
       </div>

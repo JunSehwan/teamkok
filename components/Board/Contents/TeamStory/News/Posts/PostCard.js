@@ -181,6 +181,16 @@ const PostCard = ({ post }) => {
     setSliderOn(false);
   }, [])
 
+// 링크내용 URL로 바꾸기
+const parseLinkTextToHTML = (text) => {
+  const regURL = new RegExp("(http|https|ftp|www|telnet|news|irc)://([-/.a-zA-Z0-9_~#%$?&=:200-377()]+)", "gi");
+  const regEmail = new RegExp("([xA1-xFEa-z0-9_-]+@[xA1-xFEa-z0-9-]+.[a-z0-9-]+)", "gi");
+
+  return text
+    ?.replace(regURL, "<a href='$1://$2' target='_blank'>$1://$2</a>")
+    ?.replace(regEmail, "<a href='mailto:$1'>$1</a>");
+};
+
 
   return (
     <article className="w-full max-w-2xl mx-auto break-inside p-4 rounded-xl bg-white flex flex-col bg-clip-border shadow-md mb-4">
@@ -190,12 +200,14 @@ const PostCard = ({ post }) => {
             {/* <Image width={30} height={30} alt="pic" className="rounded-full max-w-none w-12 h-12" src={post?.photo[0]} /> */}
             {post?.creatorAvatar ? (
               <Image
+              unoptimized
                 alt="avatar_user"
                 className="avatar rounded-lg object-cover"
                 width={48} height={48}
                 src={post?.creatorAvatar} />
             ) : (
               <Image
+              unoptimized
                 alt="avatar_user"
                 className="avatar rounded-lg object-cover shadow-inner bg-slate-100"
                   src={profilePic}
@@ -269,7 +281,7 @@ const PostCard = ({ post }) => {
           <>
             <div className="flex justify-between  hover:opacity-90">
               <button className="flex" onClick={onClickSlider}>
-                <Image width={720} height={720} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[0] || holderPicture} />
+                <Image unoptimized width={720} height={720} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[0] || holderPicture} />
               </button>
             </div>
           </>
@@ -281,10 +293,10 @@ const PostCard = ({ post }) => {
               onClick={onClickSlider}
             >
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[0] || holderPicture} />
+                <Image unoptimized width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[0] || holderPicture} />
               </a>
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[1] || holderPicture} />
+                <Image unoptimized width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[1] || holderPicture} />
               </a>
             </button>
           </>
@@ -293,15 +305,15 @@ const PostCard = ({ post }) => {
           <div className="flex flex-row  hover:opacity-90">
             <div className="flex flex-col justify-between gap-[4px]">
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[0] || holderPicture} />
+                <Image unoptimized width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[0] || holderPicture} />
               </a>
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[1] || holderPicture} />
+                <Image unoptimized width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[1] || holderPicture} />
               </a>
             </div>
             <div className="flex justify-between gap-[4px]">
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[2] || holderPicture} />
+                <Image unoptimized width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[2] || holderPicture} />
               </a>
             </div>
           </div>
@@ -310,18 +322,18 @@ const PostCard = ({ post }) => {
           <div className=" hover:opacity-90 ">
             <div className="flex justify-between gap-[4px] mb-[4px]">
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[0] || holderPicture} />
+                <Image unoptimized width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[0] || holderPicture} />
               </a>
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[1] || holderPicture} />
+                <Image unoptimized width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[1] || holderPicture} />
               </a>
             </div>
             <div className="flex justify-between gap-[4px]">
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[2] || holderPicture} />
+                <Image unoptimized width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[2] || holderPicture} />
               </a>
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[3] || holderPicture} />
+                <Image unoptimized width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[3] || holderPicture} />
               </a>
             </div>
           </div>
@@ -330,18 +342,18 @@ const PostCard = ({ post }) => {
           <div className=" hover:opacity-90 ">
             <div className="flex justify-between gap-[4px] mb-[4px]">
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[0] || holderPicture} />
+                <Image unoptimized width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[0] || holderPicture} />
               </a>
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[1] || holderPicture} />
+                <Image unoptimized width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[1] || holderPicture} />
               </a>
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[2] || holderPicture} />
+                <Image unoptimized width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[2] || holderPicture} />
               </a>
             </div>
             <div className="flex justify-between gap-[4px">
               <a className="flex" >
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[3] || holderPicture} />
+                <Image unoptimized width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[3] || holderPicture} />
               </a>
               <a className="flex relative overflow-hidden rounded-md" >
                 {post?.photo?.length > 5 &&
@@ -350,7 +362,7 @@ const PostCard = ({ post }) => {
                       +{post?.photo?.length - 4}
                     </div>
                   </>}
-                <Image width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[4] || holderPicture} />
+                <Image unoptimized width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[4] || holderPicture} />
               </a>
             </div>
           </div>
@@ -394,9 +406,8 @@ const PostCard = ({ post }) => {
             </div>
           </form>
           :
-          <p className='mt-4 whitespace-pre-wrap leading-normal'>
-            {post?.description}
-          </p>
+            <p className="mt-4 whitespace-pre-wrap leading-normal" 
+              dangerouslySetInnerHTML={{ __html: parseLinkTextToHTML(post?.description)}}></p>
         }
         <p className="text-gray-400 text-xs ml-1">
           {post?.modifiedId ? "(수정됨)" : null}

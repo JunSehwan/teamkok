@@ -69,9 +69,9 @@ const Comments = ({ comment,post }) => {
     <div className="media flex pb-4 w-full">
       <div className="mr-4">
         {comment?.avatar ?
-          <Image width={38} height={38} alt="pic" className="object-cover rounded-xl max-w-none w-12 h-12" src={comment?.avatar} />
+          <Image unoptimized width={38} height={38} alt="pic" className="object-cover rounded-xl max-w-none w-12 h-12" src={comment?.avatar} />
           :
-          <Image width={38} height={38} alt="pic" className="object-cover rounded-xl max-w-none w-12 h-12" src={profilePic} />
+          <Image unoptimized width={38} height={38} alt="pic" className="object-cover rounded-xl max-w-none w-12 h-12" src={profilePic} />
         }
       </div>
       <div className="media-body w-full">

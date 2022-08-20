@@ -218,7 +218,7 @@ const TeamScriptAdd = ({ addOpen, onAddClose, singleSection }) => {
                         <textarea
                           id="description"
                           tabIndex={-1}
-                          placeholder="공지사항을 작성해주세요."
+                          placeholder="주요업무를 작성해주세요."
                           className="w-full text-xl resize-none outline-none h-32"
                           onChange={onChangeDescription}
                           value={description}

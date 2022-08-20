@@ -193,7 +193,7 @@ const router=useRouter();
                 <div className="hover:bg-slate-100 google-btn flex flex-row items-center justify-center w-[70%] mx-auto p-2 bg-white shadow-lg">
                   <div className="google-icon-wrapper mr-3">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <Image width={34} height={34} alt="google" className="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" />
+                    <Image width={34} height={34} unoptimized alt="google" className="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" />
                   </div>
                   <p className="btn-text"><b>Sign in with google</b></p>
                 </div>

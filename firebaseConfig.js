@@ -55,9 +55,13 @@ export const currentUser = auth.currentUser;
 
 export { app, db, storage, FieldValue };
 
-const now = new Date();
+var now = dayjs();
 const nowForCopy = dayjs(now);
-const time = nowForCopy?.format('YYYY-MM-DD HH:mm:ss');
+const timefor = new Date().toISOString();
+const time = nowForCopy.format('YYYY-MM-DD HH:mm:ss');
+
+
+// var time = new Date().toISOString();
 
 // 로그인/아웃에 따라서 user값이 변경됨(기본설정함수)
 onAuthStateChanged(auth, (user) => {
@@ -152,7 +156,7 @@ export async function createAccount(
       // about: "",
       // banner: "#7CC6FE",
       email: user.email,
-      timestamp: time,
+      timestamp: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     })
     //   // setIsLoading(false);
     // Database updated
@@ -879,7 +883,7 @@ export async function uploadImage(file) {
 
 export async function createEducation(education) {
   const edu = await addDoc(api.educationsRef,
-    { ...education, timestamp: time });
+    { ...education, timestamp: dayjs().format('YYYY-MM-DD HH:mm:ss') });
 
   const docRef = doc(db, "educations", edu.id);
   const docSnap = await getDoc(docRef);
@@ -947,7 +951,7 @@ export async function modifyEducation(educationResult, id) {
 
 export async function createCareer(career) {
   const car = await addDoc(api.careersRef,
-    { ...career, timestamp: time });
+    { ...career, timestamp: dayjs().format('YYYY-MM-DD HH:mm:ss') });
 
   const docRef = doc(db, "careers", car.id);
   const docSnap = await getDoc(docRef);
@@ -1085,13 +1089,13 @@ export async function createBoard(board) {
         ...board,
         creatorId: user.uid,
         creatorName: user.displayName,
-        createdAt: time
+        createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss')
       });
     board.category?.map(async (v) => (
       await addDoc(api.sectionsRef, {
         creatorId: user.uid,
         creatorName: user.displayName,
-        createdAt: time,
+        createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         boardCategoryKey: v?.key,
         boardCategoryName: v?.name,
         boardId: newBoard?.id,
@@ -1360,7 +1364,7 @@ export async function createPost(postResult, URLs) {
         creatorId: user.uid,
         creatorName: user.displayName,
         creatorAvatar: user.photoURL,
-        createdAt: time,
+        createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         photo: URLs,
         likes: [],
       });
@@ -1609,7 +1613,7 @@ export async function updateAdminSurvey(survey, sectionId) {
 export async function createSmallIntern(smallintern, sectionId) {
   if (!smallintern) return;
   const user = auth.currentUser;
-  const inputContents = { createdAt: time, ...smallintern };
+  const inputContents = { createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'), ...smallintern };
   if (!user) {
     return alert("로그인 후 가능합니다.")
   } else {
@@ -1635,7 +1639,7 @@ export async function createSections(category, boardId) {
       await addDoc(api.sectionsRef, {
         creatorId: user.uid,
         creatorName: user.displayName,
-        createdAt: time,
+        createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         boardCategory: v?.key,
         boardCategoryName: v?.name,
         boardId: boardId,
@@ -1753,7 +1757,7 @@ export async function createConversation(sorted) {
               groupImage: null,
             }
             : {},
-        updatedAt: time,
+        updatedAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         seen: {},
         theme: "#0D90F3",
       });

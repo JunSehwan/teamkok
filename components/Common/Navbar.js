@@ -166,6 +166,7 @@ const Navbar = () => {
                   width={76.48}
                   alt="logo"
                   height={32}
+                  unoptimized
                 />
               </a></Link>
             </div>
@@ -264,6 +265,7 @@ const Navbar = () => {
                             <Image
                               className="flex-shrink-0 object-cover mx-1 mr-3 rounded-lg w-9 h-9"
                               src={profilePic}
+                              unoptimized
                               alt="avatar" width={40} height={40} />
                           }
                           <div className="mx-1 w-full ml-3">
@@ -329,6 +331,7 @@ const Navbar = () => {
                       width={76.48}
                       alt="TEAMZ_LOGO"
                       height={32}
+                      unoptimized
                     />
                   </div>
                   <div className="-mr-2">

@@ -12,7 +12,7 @@ const SideBarList = () => {
   const router = useRouter();
   const pid = router.query;
   const { mainConversations, conversationBar } = useSelector(state => state.chat);
-  const {sidebarIn } = useSelector(state => state.board);
+  const { sidebarIn } = useSelector(state => state.board);
   const dispatch = useDispatch();
   const [ignoreWidth, setIgnoreWidth] = useState(false);
   const onClickClose = useCallback(() => {
@@ -85,7 +85,7 @@ const SideBarList = () => {
           onClick={onClickOpen}
           className={`z-10 p-2 ml-2 fixed left-2 top-[150px] rounded-full hover:bg-gray-100 bg-slate-50 shadow text-gray-600
           ${sidebarIn ? "sm:left-[324px] top-[80px] mt-1" : "ml-2"
-        }`}>
+            }`}>
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
           </svg>

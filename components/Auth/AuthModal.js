@@ -64,6 +64,7 @@ const AuthModal = ({
                           width={81.26}
                           height={34}
                           alt="logo_image"
+                          unoptimized
                         />
                         <h1 role="main" className="text-[1.2rem] ml-[0.6rem] dark:text-white font-semibold leading-7 lg:leading-9 text-center text-gray-800">
                           {tabIndex === 1 ?

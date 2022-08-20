@@ -77,7 +77,9 @@ const CreateConversation = ({ setIsOpened }) => {
             <h1 className="whitespace-nowrap text-center text-xl">
               새로운 대화시작
             </h1>
+
           </div>
+          
           <div className="flex flex-1 items-center justify-end">
             <button
               onClick={() => setIsOpened(false)}
@@ -89,6 +91,10 @@ const CreateConversation = ({ setIsOpened }) => {
             </button>
           </div>
         </div>
+        <div className="px-4 text-sm text-gray-500 mb-4">
+          <p>현업전문가와 보드개설자는 참여자와 대화가 가능합니다.</p>
+          <p>참여자(관심보드 등록)는 보드개설자, 현업전문가와 대화가 가능합니다.</p>
+        </div>
         {
           <>
             {isCreating && (
@@ -98,8 +104,8 @@ const CreateConversation = ({ setIsOpened }) => {
             )}
             <div className="flex h-96 flex-col items-stretch gap-2 overflow-y-auto py-2">
               {newArr
-                .filter((doc) => doc?.userID !== user?.userID)
-                .map((doc) => (
+                ?.filter((doc) => doc?.userID !== user?.userID)
+                ?.map((doc) => (
                   <div
                     key={doc?.userID}
                     onClick={() => handleToggle(doc?.userID)}
@@ -108,23 +114,24 @@ const CreateConversation = ({ setIsOpened }) => {
                     <input
                       className="flex-shrink-0 cursor-pointer"
                       type="checkbox"
-                      checked={selected.includes(doc?.userID)}
+                      checked={selected?.includes(doc?.userID)}
                       readOnly
                     />
                     <Image
                       className="h-8 w-8 flex-shrink-0 rounded-full object-cover"
                       src={doc?.avatar || profilePicture}
+                      unoptimized
                       width={40}
                       height={40}
                       alt="profilePicture"
                     />
                     <p className="font-semibold whitespace-nowrap">{doc?.username}</p>
-                    {/* <UserInfo
+                    <UserInfo
                       userID={doc?.userID}
                       singleBoard={singleBoard}
                       singleSection={singleSection}
                       category={doc?.avatar}
-                    /> */}
+                    />
                   </div>
                 ))}
             </div>

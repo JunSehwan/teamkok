@@ -11,6 +11,7 @@ const Empty = ({ title, text }) => {
           <div className="w-max-[150px]">
           <Image
             src={emptyicon}
+              unoptimized
             alt="logo"
             width="80"
             height="80"

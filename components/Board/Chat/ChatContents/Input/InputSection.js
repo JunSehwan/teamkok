@@ -277,6 +277,7 @@ const InputSection = ({
           {previewFiles?.map((preview) => (
             <div key={preview} className="relative">
               <Image
+              unoptimized
                 width={28}
                 height={28}
                 className="h-28 w-28 object-cover" src={preview} alt="" />

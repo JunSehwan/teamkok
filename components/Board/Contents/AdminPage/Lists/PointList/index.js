@@ -48,6 +48,7 @@ const index = ({ content, target }) => {
               src={content?.giverAvatar || profilePicture}
               width={40}
               height={40}
+              unoptimized
               alt="profilePicture"
             />
             <div className="ml-4 flex flex-row items-center justify-start">

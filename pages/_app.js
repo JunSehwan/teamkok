@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Head from "next/head"; // Next에서 Head 수정할 수 있는 모듈
 import { ThemeProvider } from "styled-components";
 import GlobalStyle, { theme } from './styles/global';
@@ -7,9 +7,21 @@ import store from "store/index";
 import 'tailwindcss/tailwind.css'
 import { wrapper } from "store/index";
 import Navbar from 'components/Common/Navbar';
+import { useRouter } from 'next/router';
+import * as gtag from "lib/gtag";
 
 const _app = ({ Component, pageProps }) => {
 
+const router = useRouter()
+  useEffect(() => {
+    const handleRouteChange = (url) => {
+      gtag.pageview(url)
+    }
+    router.events.on('routeChangeComplete', handleRouteChange)
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange)
+    }
+  }, [router.events])
 
   return (
     <>

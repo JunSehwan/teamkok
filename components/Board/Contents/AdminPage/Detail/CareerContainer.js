@@ -76,7 +76,9 @@ const CareerContainer = ({ careers }) => {
                     }
                     <div className="text-left w-full p-4 col-span-5 ">
                       <div>
-                        <Image src={`/image/school.png`} alt="school" width={60}
+                        <Image 
+                        unoptimized
+                        src={`/image/school.png`} alt="school" width={60}
                           height={60} className="max-w-16 max-h-16 rounded-lg" />
                       </div>
                       <div >

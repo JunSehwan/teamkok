@@ -92,7 +92,7 @@ const BoardInfo = () => {
 
 
   const [id, setId] = useState("");
-  
+
   const [confirm, setConfirm] = useState(false);
   const cancelConfirm = () => {
     setConfirm(false);
@@ -147,7 +147,7 @@ const BoardInfo = () => {
     dispatch, email, email_check,
     name, category, logoPreview, companyDubCheck
   ])
-  
+
 
   return (
     <div>
@@ -193,6 +193,7 @@ const BoardInfo = () => {
                       <div
                         className="flex items-center w-[full]">
                         <Image
+                          unoptimized
                           src="/image/company.png"
                           alt="company"
                           width={30}

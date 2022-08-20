@@ -1,3 +1,4 @@
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Skeleton from "components/Common/Skeleton";
 import useLastMessage from "hooks/useLastMessage";
@@ -7,7 +8,7 @@ import profilePic from 'public/image/icon/happiness.png';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { messageNotRead } from 'slices/chat';
+import { messageNotRead, hideConversationBar } from 'slices/chat';
 import CategoryList from 'components/Common/CategoryList';
 
 const SelectConversation = ({ conversation, conversationId }) => {
@@ -35,6 +36,11 @@ const SelectConversation = ({ conversation, conversationId }) => {
     conversation.seen[user?.userID]) {
   }
 
+  const onClickDialog = useCallback(() => {
+    router.push(`/board/${pid?.id}/${pid?.category}/${conversationId}`)
+    dispatch(hideConversationBar());
+  }, [conversationId, pid?.category, pid?.id, router, dispatch])
+
   if (loading)
     return (
       <div className="flex items-stretch gap-2 py-2 px-5">
@@ -47,10 +53,10 @@ const SelectConversation = ({ conversation, conversationId }) => {
     );
   if (conversation.users.length === 2)
     return (
-      <Link
-        href={`/board/${pid?.id}/${pid?.category}/${conversationId}`}
+      <a
+        onClick={onClickDialog}
       >
-        <div className={`ml-[2px] hover:bg-slate-200 cursor-pointer relative flex items-stretch gap-2 py-2 px-5 transition duration-300 
+        <div className={`ml-[2px] text-black hover:bg-slate-200 cursor-pointer relative flex items-stretch gap-2 py-2 px-5 transition duration-300 
         ${conversationId === pid?.cid ? "!bg-sky-200 font-bold rounded-md" : ""
           }`}>
           <div className='flex flex-row items-center my-1'>
@@ -88,14 +94,14 @@ const SelectConversation = ({ conversation, conversationId }) => {
             )}
           </div>
         </div>
-      </Link>
+      </a>
     );
 
   return (
-    <Link
-      href={`/board/${pid?.id}/${pid?.category}/${conversationId}`}
+    <a
+      onClick={onClickDialog}
     >
-      <div className={`ml-[2px] hover:bg-slate-200 cursor-pointer relative flex items-stretch gap-2 py-2 px-5 transition duration-300 ${conversationId === pid?.cid ? "!bg-sky-200 font-bold rounded-md" : ""
+      <div className={`ml-[2px] text-black hover:bg-slate-200 cursor-pointer relative flex items-stretch gap-2 py-2 px-5 transition duration-300 ${conversationId === pid?.cid ? "!bg-sky-200 font-bold rounded-md" : ""
         }`}>
         <div className='flex flex-row items-center my-1'>
           {conversation?.group?.groupImage ? (
@@ -153,7 +159,7 @@ const SelectConversation = ({ conversation, conversationId }) => {
           )}
         </div>
       </div>
-    </Link>
+    </a>
   );
 };
 
