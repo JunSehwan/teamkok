@@ -25,26 +25,33 @@ const DetailInfoModal = ({ offer }) => {
 
   const [detailOpen, setDetailOpen] = useState(false);
   const onOpenDetail = useCallback(() => {
+    document.body.style.overflow = "hidden";
     setDetailOpen(true);
   }, [])
   const onCloseDetail = useCallback(async () => {
+    document.body.style.overflow = "unset";
     setDetailOpen(false);
   }, [])
 
+
+  const [yesConfirm, setYesConfirm] = useState(false);
+  const [noConfirm, setNoConfirm] = useState(false);
+
   const onYes = useCallback(() => {
     setYesConfirm(true);
+    document.body.style.overflow = "hidden";
   }, [])
   const onNo = useCallback(() => {
     setNoConfirm(true);
+    document.body.style.overflow = "hidden";
   }, [])
-
-  const [yesConfirm, setYesConfirm] = useState(false);
   const yesConfirmOk = useCallback(async () => {
     await modifyJoboffer("yes", offer?.id).then((result) => {
       dispatch(updateJoboffer(
         { id: offer?.id, answer: "yes", read: true, readtime: result }
       ));
       setYesConfirm(false);
+      document.body.style.overflow = "unset";
       onCloseDetail();
       alert("승낙 의사를 전달하였습니다.")
     })
@@ -52,15 +59,16 @@ const DetailInfoModal = ({ offer }) => {
 
   const yesConfirmCancel = useCallback(async () => {
     setYesConfirm(false);
+    // document.body.style.overflow = "unset";
   }, [])
 
-  const [noConfirm, setNoConfirm] = useState(false);
   const noConfirmOk = useCallback(async () => {
     await modifyJoboffer("no", offer?.id).then((result) => {
       dispatch(updateJoboffer(
         { id: offer?.id, answer: "no", read: true, readtime: result }
       ));
       setNoConfirm(false);
+      document.body.style.overflow = "unset";
       onCloseDetail();
       alert("거절 의사를 전달하였습니다.")
     })
@@ -91,7 +99,7 @@ const DetailInfoModal = ({ offer }) => {
       {detailOpen &&
         <div className="min-w-screen h-screen animated fadeIn faster fixed left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover" id="modal-id">
           <div className="absolute bg-black opacity-80 inset-0 z-0"></div>
-          <div ref={modalEl} className="w-full max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg bg-white">
+          <div ref={modalEl} className="w-full max-w-3xl p-5 relative mx-auto my-auto rounded-xl shadow-lg bg-white">
             {/* <!--content--> */}
             <div className="text-left p-2 sm:p-5 flex-auto justify-center w-full">
               {/* <!--body--> */}
@@ -139,24 +147,24 @@ const DetailInfoModal = ({ offer }) => {
               </div>
 
               {offer?.answer === "yes" || offer?.answer === "no" ?
-                <div className="p-1  mt-1 text-center space-x-2 md:block">
+                <div className="p-1  mt-6 text-center space-x-2 md:block">
                   <button type="button" onClick={onCloseDetail}
                     className="mb-2 md:mb-0 bg-gray-400 border border-gray-600 px-6 py-2 text-lg shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-gray-700">
                     이미 의사표시를 하였습니다.
                   </button>
                 </div>
                 :
-                <div className="p-1  mt-1 text-center space-x-2 md:block">
+                <div className="p-1 mt-3 sm:mt-6 text-center space-x-2 md:block">
                   <button type="button" onClick={onYes}
-                    className="mb-2 md:mb-0 bg-blue-600 border border-blue-600 px-6 py-2 text-lg shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-blue-700">
+                    className="mb-2 md:mb-0 bg-blue-600 border border-blue-600 px-5 sm:px-6 py-2 sm:py-2 text-md sm:text-lg shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-blue-700">
                     수락하기
                   </button>
                   <button type="button" onClick={onNo}
-                    className="mb-2 md:mb-0 bg-red-600 border border-red-600 px-6 py-2 text-lg shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-red-700">
+                    className="mb-2 md:mb-0 bg-red-600 border border-red-600 px-5 sm:px-6 py-2 sm:py-2 text-md sm:text-lg shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-red-700">
                     거절하기
                   </button>
                   <button type="button" onClick={onLater}
-                    className="mb-2 md:mb-0 bg-gray-600 border border-gray-600 px-6 py-2 text-lg shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-gray-700">
+                    className="mb-2 md:mb-0 bg-gray-600 border border-gray-600 px-5 sm:px-6 py-2 sm:py-2 text-md sm:text-lg shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-gray-700">
                     나중에
                   </button>
                 </div>

@@ -96,10 +96,12 @@ const BoardInfo = () => {
   const [confirm, setConfirm] = useState(false);
   const cancelConfirm = () => {
     setConfirm(false);
+    document.body.style.overflow =  "unset";
   }
   const closeConfirm = () => {
     router.push(`/board/${id}`);
     setConfirm(false);
+    document.body.style.overflow =  "unset";
     // router.push();
   }
 
@@ -143,6 +145,7 @@ const BoardInfo = () => {
     // openConfirm(con?.id);
     setId(con?.id);
     setConfirm(true);
+    document.body.style.overflow =  "hidden";
   }, [
     dispatch, email, email_check,
     name, category, logoPreview, companyDubCheck

@@ -15,11 +15,13 @@ const UpdateBoard = ({ board }) => {
   const { user } = useSelector(state => state.user);
   const dispatch = useDispatch();
   const [updateConfirm, setUpdateConfirm] = useState(false);
-  const onCancelUpdate = useCallback(() => {
-    setUpdateConfirm(false);
-  }, [])
   const onOpenUpdate = useCallback(() => {
     setUpdateConfirm(true);
+    document.body.style.overflow =  "hidden";
+  }, [])
+  const onCancelUpdate = useCallback(() => {
+    setUpdateConfirm(false);
+    document.body.style.overflow =  "unset";
   }, [])
 
 

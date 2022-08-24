@@ -29,16 +29,19 @@ const PostCard = ({ post }) => {
   }, [])
   const [removeConfirm, setRemoveConfirm] = useState(false);
   const onClickRemove = useCallback(() => {
+    document.body.style.overflow =  "hidden";
     setRemoveConfirm(true);
     setMoreOpen(false);
   }, [])
   const onOkRemove = useCallback(async () => {
     const result = await deletePost(post?.id);
     dispatch(removePost(result));
+    document.body.style.overflow =  "unset";
     setRemoveConfirm(false);
   }, [post?.id, dispatch])
 
   const onCancelRemove = useCallback(() => {
+    document.body.style.overflow =  "unset";
     setRemoveConfirm(false);
   }, [])
 

@@ -12,21 +12,37 @@ const index = () => {
   const { isExpert, isAdmin } = useSelector(state => state.user);
   const { selectedCategory, singleBoard } = useSelector(state => state.board);
   const [addOpen, setAddOpen] = useState(false);
-  const onAddOpen = useCallback(() => { setAddOpen(true); }, [])
-  const onAddClose = useCallback(() => { setAddOpen(false); }, [])
+  const onAddOpen = useCallback(() => { 
+    document.body.style.overflow = "hidden";
+    setAddOpen(true); }, [])
+  const onAddClose = useCallback(() => { 
+    document.body.style.overflow = "unset";
+    setAddOpen(false); }, [])
   const { singleSection } = useSelector(state => state.board);
 
   const [smallInternOpen, setSmallInternOpen] = useState(false);
-  const onInternOpen = useCallback(() => { setSmallInternOpen(true); }, [])
-  const onInternClose = useCallback(() => { setSmallInternOpen(false); }, [])
+  const onInternOpen = useCallback(() => { 
+    document.body.style.overflow = "hidden";
+    setSmallInternOpen(true); }, [])
+  const onInternClose = useCallback(() => { 
+    document.body.style.overflow = "unset";
+    setSmallInternOpen(false); }, [])
 
   const [teamStyleOpen, setTeamStyleOpen] = useState(false);
-  const onStyleOpen = useCallback(() => { setTeamStyleOpen(true); }, [])
-  const onStyleClose = useCallback(() => { setTeamStyleOpen(false); }, [])
+  const onStyleOpen = useCallback(() => { 
+    document.body.style.overflow = "hidden";
+    setTeamStyleOpen(true); }, [])
+  const onStyleClose = useCallback(() => { 
+    document.body.style.overflow = "unset";
+    setTeamStyleOpen(false); }, [])
 
   const [openIntern, setOpenIntern] = useState(false);
-  const onInternInfo = useCallback(() => { setOpenIntern(true); }, [])
-  const offInternInfo = useCallback(() => { setOpenIntern(false); }, [])
+  const onInternInfo = useCallback(() => { 
+    document.body.style.overflow = "hidden";
+    setOpenIntern(true); }, [])
+  const offInternInfo = useCallback(() => { 
+    document.body.style.overflow = "unset";
+    setOpenIntern(false); }, [])
 
   const [fold, setFold] = useState(true);
   const onToggleFold = useCallback(() => { setFold(prev => !prev) }, [])

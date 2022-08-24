@@ -160,11 +160,11 @@ const index = ({ onCloseForm, openForm }) => {
   return (
     <div className="overflow-y-auto min-w-screen h-screen animated fadeIn faster fixed left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover t-0 r-0">
       <div className="fixed bg-black opacity-80 inset-0 z-0"></div>
-      <div className="w-full  max-w-lg p-3 relative mx-auto my-auto rounded-xl shadow-lg  bg-white ">
+      <div className="w-full  max-w-2xl p-3 relative mx-auto my-auto rounded-xl shadow-lg  bg-white ">
 
         {convert ?
           (
-            <div className="w-full  max-w-lg p-5 relative mx-auto my-auto rounded-xl bg-white ">
+            <div className="w-full  max-w-2xl p-5 relative mx-auto my-auto rounded-xl bg-white ">
               {/* <!--content--> */}
               <div className="">
                 {/* <!--body--> */}

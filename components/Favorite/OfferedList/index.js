@@ -19,9 +19,11 @@ const index = () => {
 
   const [detailOpen, setDetailOpen] = useState(false);
   const onOpenDetail = useCallback(() => {
+    document.body.style.overflow =  "hidden";
     setDetailOpen(true);
   }, [])
   const onCloseDetail = useCallback(() => {
+    document.body.style.overflow =  "unset";
     setDetailOpen(false);
   }, [])
 

@@ -11,11 +11,13 @@ const UnOffer = ({ id }) => {
   const { user } = useSelector(state => state.user);
   const dispatch = useDispatch();
   const [removeConfirm, setRemoveConfirm] = useState(false);
+  const onOpenRemove = useCallback(() => {
+     setRemoveConfirm(true);
+     document.body.style.overflow =  "hidden";
+   }, [])
   const onCancelRemove = useCallback(() => {
     setRemoveConfirm(false);
-  }, [])
- const onOpenRemove = useCallback(() => {
-    setRemoveConfirm(true);
+    document.body.style.overflow =  "unset";
   }, [])
   const onClickRemove = useCallback(async () => {
     

@@ -20,7 +20,7 @@ const SelectConversation = ({ conversation, conversationId }) => {
   const { user } = useSelector(state => state.user);
   const filtered = users?.filter((it) => it?.id !== user?.userID);
   // const { id } = useParams();
-  const expert = singleBoard?.experts?.findIndex(obj => obj.userId == filtered?.[0]?.data().id);
+  const expert = singleBoard?.experts?.filter(obj => obj.userId == filtered?.[0]?.data().id);
   const category = CategoryList?.filter(obj => obj.key == filtered?.[0]?.data().category);
   const admin = singleBoard?.creatorId == filtered?.[0]?.data().id;
 
@@ -71,7 +71,7 @@ const SelectConversation = ({ conversation, conversationId }) => {
               {category?.length !== 0 && <span className="ml-1 px-3 py-0.5 bg-sky-600 rounded-full text-white text-xs" >{category[0]?.name}</span>}
               <p className="max-w-[180px] flex-grow overflow-hidden text-ellipsis whitespace-nowrap">
                 {filtered?.[0].data()?.username}
-                {expert && <span className="ml-1 px-2 py-0.5 rounded shadow-inner bg-white text-sm text-gray-600">🥇현업전문가</span>}
+                {expert?.length !== 0 && <span className="ml-1 px-2 py-0.5 rounded shadow-inner bg-white text-sm text-gray-600">🥇현업전문가</span>}
                 {admin && <span className="ml-1 px-2 py-0.5 rounded shadow-inner bg-white text-gray-600 text-sm" >👑보드개설자</span>}
               </p>
               {lastMessageLoading ? (

@@ -6,6 +6,7 @@ import { givePoint } from 'firebaseConfig';
 import { pointGive, addPointFalse } from 'slices/user';
 import PointList from './PointList';
 import styled from 'styled-components';
+import Empty from 'components/Common/Empty';
 
 const PointListModal = ({
   onOpenPointListModal,
@@ -50,7 +51,7 @@ const PointListModal = ({
                   </h2>
 
                   <StyledContainer className="mb-4 overflow-y-scroll max-h-[50vh]">
-                    {listArr?.map((v, i) => (
+                    {listArr?.length !== 0 && listArr?.map((v, i) => (
                       <div key={i}>
                         <PointList
                           content={v}
@@ -59,6 +60,7 @@ const PointListModal = ({
                       </div>
                     ))
                     }
+                    {listArr?.length === 0 && <Empty title="아직 포인트 부여내역이 없습니다."/>}
                   </StyledContainer>
 
                   <div className="w-full flex justify-end mt-4">

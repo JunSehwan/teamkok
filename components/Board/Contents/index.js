@@ -33,7 +33,7 @@ const index = () => {
     if (iamExpert && categoryMatch) {
       dispatch(expertSet(true));
     }
-    if (user?.userID === singleBoard?.creatorId) {
+    if (!!user?.userID && !!singleBoard?.creatorId && user?.userID === singleBoard?.creatorId) {
       dispatch(adminSet(true));
     }
     setState(true);

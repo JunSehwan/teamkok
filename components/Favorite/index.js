@@ -11,11 +11,11 @@ const index = () => {
     <>
     <section className="antialiased bg-gray-100 pt-[66px] text-gray-600 h-full px-4" x-data="app">
       <div className="flex flex-col justify-start h-full">
-        <OfferedList />
-        <OfferList />
         <MyCompanyList />
         <FavoriteList />
         <ExpertList />
+        <OfferedList />
+        <OfferList />
       </div>
     <Footer/>
     </section>

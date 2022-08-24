@@ -2042,7 +2042,6 @@ export async function getJoboffersByUserId(userId) {
       where("userId", "==", user.uid),
       orderBy("timestamp", "desc"),
     )
-
     //결과 검색
     const querySnapshot = await getDocs(q);
     const result = querySnapshot?.docs?.map((doc) => (

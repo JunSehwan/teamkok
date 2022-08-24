@@ -7,9 +7,11 @@ const index = () => {
 
   const [openForm, setOpenForm] = useState(false);
   const onOpenForm = useCallback(() => {
+    document.body.style.overflow =  "hidden";
     setOpenForm(true);
   }, [])
   const onCloseForm = useCallback(() => {
+    document.body.style.overflow =  "unset";
     setOpenForm(false);
   },[])
   const { isAdmin, isExpert } = useSelector(state => state.user);

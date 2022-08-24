@@ -24,7 +24,9 @@ const index = ({ infoConfirm, closeInfoConfirm }) => {
   const [isView, setIsView] = useState(false)
   useEffect(() => {
     setIsView(infoConfirm || user && user?.infoseen !== "done")
-  }, [infoConfirm, user?.infoseen, user])
+    if(isView){document.body.style.overflow =  "hidden";}
+    if(!isView){document.body.style.overflow =  "unset";}
+  }, [infoConfirm, user?.infoseen, user, isView])
 
   return (
     <>

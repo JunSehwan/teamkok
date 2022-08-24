@@ -54,13 +54,15 @@ const CreateConversation = ({ setIsOpened }) => {
   } else {
     singleBoard?.experts?.map((v) => (
       users?.map((m) => (
-        m?.userID == v?.userId && singleSection?.boardCategory == m?.category && newArr?.push(m)
+        (m?.userID == v?.userId && singleSection?.boardCategory == m?.category )
+        ? newArr?.push(m) : null
       ))
+    ))
+    users?.map((v)=>(
+      v?.userID == singleBoard?.creatorId && newArr?.push(v)
     ))
   }
   // 리스트에 정보넣기현업담당자/개설자/카테고리(분야) + 참여자 뭐 있어야 할듯(board니깐)
-
-
 
   return (
     <div
@@ -126,6 +128,9 @@ const CreateConversation = ({ setIsOpened }) => {
                       alt="profilePicture"
                     />
                     <p className="font-semibold whitespace-nowrap">{doc?.username}</p>
+                    {doc?.userID === singleBoard?.creatorId ? 
+                      <span className="ml-1 px-2 py-0.5 rounded shadow-inner bg-gray-500 text-white text-xs">👑보드개설자</span> : null
+                    }
                     <UserInfo
                       userID={doc?.userID}
                       singleBoard={singleBoard}

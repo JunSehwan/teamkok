@@ -10,8 +10,12 @@ import { addSections, addSectionDoneFalse } from 'slices/board';
 const AddSection = () => {
   const { isAdmin } = useSelector(state => state.user);
   const [open, setOpen] = useState(false);
-  const onOpen = useCallback(() => { setOpen(true); }, [])
-  const onClose = useCallback(() => { setOpen(false); }, [])
+  const onOpen = useCallback(() => { 
+     document.body.style.overflow = "hidden";
+    setOpen(true); }, [])
+  const onClose = useCallback(() => { 
+     document.body.style.overflow = "unset";
+    setOpen(false); }, [])
   const dispatch = useDispatch();
   const { singleBoard, addSectionsDone } = useSelector(state => state.board);
   // 
@@ -85,6 +89,9 @@ const AddSection = () => {
     setConfirm(false);
     onClose();
   }
+
+  
+  
   return (
     <div className="mt-4 w-full">
       <div className='w-[70%] flex justify-center mx-auto h-[2px] bg-slate-200 my-6'></div>
@@ -107,7 +114,7 @@ const AddSection = () => {
 
       {/* 모달창 */}
       {open ?
-        <div className="relative z-100" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div className="relative z-20" aria-labelledby="modal-title" role="dialog" aria-modal="true">
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
           <div className="fixed w-[100%] z-50 inset-0 overflow-y-auto">
             <div className="flex items-end sm:items-center justify-center min-h-full text-center sm:p-0">
@@ -194,7 +201,7 @@ const AddSection = () => {
 
                     <div className="w-full flex justify-end mt-4">
                       <button
-                        className='bg-blue-500 text-lg text-white hover:bg-blue-600 active:bg-violet-600 font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+                        className='bg-blue-500 text-lg text-white hover:bg-blue-600 active:bg-blue-600 font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
                         onClick={onSubmit}>생성
                       </button>
                     </div>

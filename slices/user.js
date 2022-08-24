@@ -175,7 +175,8 @@ export const user = createSlice({
         boardName: action.payload?.boardName,
         createdAt: action.payload?.createdAt,
       });
-      state.users.find((v) => v.userID === action.payload?.targetId)?.points?.unshift({
+      const target = state.users.find((v) => v.userID === action.payload?.targetId)
+      target?.points?.push({
         giverId: action.payload?.userId,
         giverName: action.payload?.username,
         giverAvatar: action.payload?.avatar,
@@ -184,7 +185,7 @@ export const user = createSlice({
         description: action.payload?.description,
         boardName: action.payload?.boardName,
         createdAt: action.payload?.createdAt,
-      });
+      })
       const myScore = state.users.find((v) => v.userID === action.payload?.targetId)
       myScore.point = state.users.find((v) => v.userID === action.payload?.targetId)?.point + parseInt(action.payload?.point);
       state.addPointDone = true;

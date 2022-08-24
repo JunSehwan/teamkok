@@ -18,12 +18,13 @@ const index = () => {
   let categoryMatch = parseInt(user?.category) === parseInt(pid.category);
   let iamFavorites = singleBoard?.favorites?.some(it => it?.userId === user?.userID);
   const [state, setState] = useState(false);
-
   useEffect(() => {
+    dispatch(expertSet(false));
+    dispatch(adminSet(false));
     if (iamExpert && categoryMatch) {
       dispatch(expertSet(true));
     }
-    if (user?.userID === singleBoard?.creatorId) {
+    if (!!user?.userID && !!singleBoard?.creatorId && user?.userID === singleBoard?.creatorId) {
       dispatch(adminSet(true));
     }
     setState(true);
@@ -40,7 +41,7 @@ const index = () => {
         }
       }
     }
-  }, [second, iamExpert, iamFavorites, isAdmin, singleBoard, state, user,router])
+  }, [second, iamExpert, iamFavorites, isAdmin, singleBoard, state, user, router])
 
   // 이건 라우팅 하지 말자.
   // useEffect(() => {

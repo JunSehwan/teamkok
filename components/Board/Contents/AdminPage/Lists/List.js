@@ -42,27 +42,33 @@ const List = ({ user, index, key }) => {
   // 포인트 생성 모달
   const [openModal, setOpenModal] = useState(false);
   const onOpenPointModal = useCallback(() => {
+    document.body.style.overflow = "hidden";
     setOpenModal(true);
   }, [])
   const onClosePointModal = useCallback(() => {
+    document.body.style.overflow = "unset";
     setOpenModal(false);
   }, [])
 
   // 포인트 조회 모달
   const [openListModal, setOpenListModal] = useState(false);
   const onOpenPointListModal = useCallback(() => {
+    document.body.style.overflow = "hidden";
     setOpenListModal(true);
   }, [])
   const onClosePointListModal = useCallback(() => {
+    document.body.style.overflow = "unset";
     setOpenListModal(false);
   }, [])
 
   // 채용제안 모달
   const [openOfferModal, setOpenOfferModal] = useState(false);
   const onOpenOfferModal = useCallback(() => {
+    document.body.style.overflow = "hidden";
     setOpenOfferModal(true);
   }, [])
   const onCloseOfferModal = useCallback(() => {
+    document.body.style.overflow = "unset";
     setOpenOfferModal(false);
   }, [])
 

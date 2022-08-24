@@ -51,14 +51,16 @@ const index = () => {
   const [state, setState] = useState(false);
 
   useEffect(() => {
+
     if (iamExpert && categoryMatch) {
       dispatch(expertSet(true));
     }
-    if (user?.userID === singleBoard?.creatorId) {
+    if (!!user?.userID && !!singleBoard?.creatorId && user?.userID === singleBoard?.creatorId) {
       dispatch(adminSet(true));
     }
     setState(true);
   }, [dispatch, setExpertState, iamExpert, categoryMatch, user?.userID, singleBoard?.creatorId, iamFavorites, isAdmin])
+
 
   const [second, setSecond] = useState(false);
   useEffect(() => {

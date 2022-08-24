@@ -58,12 +58,21 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [tabIndex, setTabIndex] = useState(1);
   const [openModal, setOpenModal] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleCancel = () => {
+    setOpen(false);
+  };
 
-  const handleCancel = () => { setOpen(false); };
-  const handleOpen = () => { setOpen(true); };
-
-  const handleCancelModal = () => { setOpenModal(false); };
-  const handleOpenModal = () => { setOpenModal(true); };
+  const handleOpenModal = () => {
+    document.body.style.overflow = "hidden";
+    setOpenModal(true);
+  };
+  const handleCancelModal = () => {
+    document.body.style.overflow = "unset";
+    setOpenModal(false);
+  };
 
   const [toggle, setToggle] = useState(false);
   const toggleDropdown = () => { setToggle(prev => !prev); };
@@ -71,13 +80,19 @@ const Navbar = () => {
   const onClickLogin = useCallback(() => {
     setTabIndex(2);
     setOpenModal(true);
+    document.body.style.overflow = "hidden";
   }, [])
 
   const [logoutConfirmModal, setLogoutConfirmModal] = useState(false);
-  const openLogoutConformModal = () => { setLogoutConfirmModal(true) };
-  const closeLogoutConformModal = () => { setLogoutConfirmModal(false) };
+  const openLogoutConformModal = () => { 
+    document.body.style.overflow = "hidden";
+    setLogoutConfirmModal(true) };
+  const closeLogoutConformModal = () => { 
+    document.body.style.overflow = "unset";
+    setLogoutConfirmModal(false) };
   const onClickLogout = useCallback(() => {
     setLogoutConfirmModal(true);
+    document.body.style.overflow = "hidden";
     setToggle(false);
     setOpen(false);
   }, [])
@@ -87,11 +102,13 @@ const Navbar = () => {
     dispatch(signOut({
     }));
     setLogoutConfirmModal(false);
+    document.body.style.overflow = "unset";
   }, [dispatch])
 
   const onClickSignup = useCallback(() => {
     setTabIndex(1);
     setOpenModal(true);
+    document.body.style.overflow = "hidden";
   }, [])
 
   const onClickProfile = useCallback(() => {
@@ -130,17 +147,20 @@ const Navbar = () => {
       }
     }
     fetchAndSetUser();
-  }, [user?.userID]);
+  }, [user?.userID, findNotRead]);
   var findNotRead = data?.filter(obj => obj.read !== true);
-
   const [infoConfirm, setInfoConfirm] = useState(false);
-  const closeInfoConfirm = useCallback(() => {
-    setInfoConfirm(false);
-  }, [])
   const openInfoConfirm = useCallback(() => {
+    document.body.style.overflow = "hidden";
     setInfoConfirm(true);
     setOpen(false);
   }, [])
+  const closeInfoConfirm = useCallback(() => {
+    document.body.style.overflow = "unset";
+    setInfoConfirm(false);
+  }, [])
+
+
 
   return (
     <>
@@ -154,7 +174,7 @@ const Navbar = () => {
         twobutton={true}
       />
 
-      <nav className={`${display === "none" && "hidden"} fixed z-20 bg-white w-full shadow-sm`}>
+      <nav className={`${display === "none" && "hidden"} fixed z-10 bg-white w-full shadow-sm`}>
         <div className="mx-auto px-4 sm:px-6">
           <div className="flex justify-between items-center border-b-2 border-gray-100 py-4 md:justify-start md:space-x-10">
             <div className="flex justify-start lg:w-0 lg:flex-1">
@@ -204,9 +224,9 @@ const Navbar = () => {
               </div>
               :
               <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-                {findNotRead && findNotRead?.length !== 0 && 
-                <button onClick={onClickFavorite} className='p-0.5 text-white bg-red-500 flex mr-[-41px] mt-[-20px] z-10 text-center font-xs rounded-full w-[18px] h-[18px] items-center justify-center'>
-                  {findNotRead?.length}</button>}
+                {findNotRead && findNotRead?.length !== 0 &&
+                  <button onClick={onClickFavorite} className='p-0.5 text-white bg-red-500 flex mr-[-41px] mt-[-20px] z-10 text-center font-xs rounded-full w-[18px] h-[18px] items-center justify-center'>
+                    {findNotRead?.length}</button>}
 
                 <button className="mr-2" onClick={onClickFavorite}>
                   <svg xmlns="http://www.w3.org/2000/svg" className="ml-[8px] h-8 w-8 active:hover:fill-violet-600 fill-violet-200 stroke-violet-500 active:hover:stroke-violet-600 " viewBox="0 0 20 20" fill="currentColor">
@@ -241,7 +261,7 @@ const Navbar = () => {
                       alt="avatar_user"
                       className="shadow-inner avatar w-7 h-8 rounded-md object-cover"
                       src={profilePic}
-                        unoptimized
+                      unoptimized
                       width={32} height={32}
                     />
                   )}
@@ -249,10 +269,10 @@ const Navbar = () => {
 
                 {/* <!-- Dropdown menu --> */}
                 {toggle &&
-                  <div className="fixed top-0 left-0 z-20 flex h-full w-full items-center justify-center ">
+                  <div className="fixed top-0 left-0 z-10 flex h-full w-full items-center justify-center ">
                     <div className="w-[100%] justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
                     >
-                      <div ref={modalEl} className="absolute top-[60px] right-[2vw] z-20 w-72 py-2 overflow-hidden bg-white rounded-md shadow-xl dark:bg-gray-800">
+                      <div ref={modalEl} className="absolute top-[60px] right-[2vw] z-10 w-72 py-2 overflow-hidden bg-white rounded-md shadow-xl dark:bg-gray-800">
                         <button onClick={onClickProfile} className="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white text-left w-full">
                           {user?.avatar ?
                             <Image

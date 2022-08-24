@@ -135,16 +135,14 @@ const TeamScriptAdd = ({ addOpen, onAddClose, singleSection }) => {
                     <h2 className="text-violet-600 font-lg font-bold tracking-normal leading-tight mb-4">섹션 기본정보</h2>
                   </div>
                   <form
-                    className="w-full pt-2 pb-2 mb-1 rounded mt-[1.4rem]"
+                    className="w-full pt-2 pb-2 mb-1 rounded mt-[1rem]"
                     onSubmit={onSubmit}
                   >
                     <div className="mb-1">
-                      <p className="block mb-1 text-sm font-bold text-gray-700">
-                        관심을 갖는 입사희망자들에게 알찬 정보를 전해주세요.
+                      <p className="block mb-4 text-sm font-bold text-gray-700">
+                        관심을 갖는 사람들에게 부서(섹션) 정보를 전해주세요.
                       </p>
-                      <p className="block mb-1 text-sm text-gray-500">
-                        사실 그대로를 전달해주어야 조기퇴사를 방지할 수 있습니다.
-                      </p>
+    
                     </div>
 
                     <div className="mb-1">
@@ -219,7 +217,7 @@ const TeamScriptAdd = ({ addOpen, onAddClose, singleSection }) => {
                           id="description"
                           tabIndex={-1}
                           placeholder="주요업무를 작성해주세요."
-                          className="w-full text-xl resize-none outline-none h-32"
+                          className="w-full resize-none outline-none h-32 px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                           onChange={onChangeDescription}
                           value={description}
                         >
@@ -259,8 +257,8 @@ const TeamScriptAdd = ({ addOpen, onAddClose, singleSection }) => {
                         />
                       }
 
-                      <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <button type="submit" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-cyan-600 text-base font-medium text-white hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 sm:ml-3 sm:w-auto sm:text-sm">업데이트</button>
+                      <div className="sm:flex sm:flex-row-reverse">
+                        <button type="submit" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">업데이트</button>
                         <button onClick={onAddClose} type="button" className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Cancel</button>
                       </div>
                     </div>

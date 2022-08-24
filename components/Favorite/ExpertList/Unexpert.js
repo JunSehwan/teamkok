@@ -12,11 +12,13 @@ const Unexpert = ({ boardId, boardname, boardlogo }) => {
   const { user } = useSelector(state => state.user);
   const dispatch = useDispatch();
   const [removeConfirm, setRemoveConfirm] = useState(false);
+  const onOpenRemove = useCallback(() => {
+   document.body.style.overflow =  "hidden";  
+   setRemoveConfirm(true);
+   }, [])
   const onCancelRemove = useCallback(() => {
+    document.body.style.overflow =  "unset";
     setRemoveConfirm(false);
-  }, [])
- const onOpenRemove = useCallback(() => {
-    setRemoveConfirm(true);
   }, [])
   const onClickRemove = useCallback(async () => {
     

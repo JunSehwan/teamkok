@@ -11,19 +11,20 @@ const UnOffer = ({ id }) => {
   const { user } = useSelector(state => state.user);
   const dispatch = useDispatch();
   const [removeConfirm, setRemoveConfirm] = useState(false);
+  const onOpenRemove = useCallback(() => {
+    setRemoveConfirm(true);
+    document.body.style.overflow = "hidden";
+  }, [])
   const onCancelRemove = useCallback(() => {
     setRemoveConfirm(false);
-  }, [])
- const onOpenRemove = useCallback(() => {
-    setRemoveConfirm(true);
+    document.body.style.overflow = "unset";
   }, [])
   const onClickRemove = useCallback(async () => {
-    
     const con = await deleteJoboffer(id);
     if (con) {
       dispatch(removeJoboffer(con))
       alert("해당 입사제안 내용이 삭제되었습니다.")
-    } 
+    }
   }, [dispatch, id])
 
 
