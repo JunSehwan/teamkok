@@ -17,11 +17,11 @@ const index = () => {
     router.push(`/board/${singleBoard?.id}/${category}`);
     dispatch(sideClose());
 
-  }, [router, singleBoard,dispatch])
+  }, [router, singleBoard, dispatch])
   const onClickHome = useCallback(() => {
     router.push(`/board/${singleBoard?.id}`);
     dispatch(sideClose());
-  }, [router,singleBoard, dispatch])
+  }, [router, singleBoard, dispatch])
   const sideBarClose = useCallback(() => {
     dispatch(sideClose());
   }, [dispatch])

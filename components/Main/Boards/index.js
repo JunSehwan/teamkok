@@ -53,8 +53,8 @@ const index = () => {
               <li key="all" className="">
                 <button onClick={() => onChangeCategory(null)}
                   type='button'
-                  className={null === category ? `px-3 py-2 rounded-lg ml-1 bg-amber-50 text-amber-700 hover:bg-amber-500 hover:text-white mb-1`
-                    : `px-3 py-2 rounded-lg ml-1 bg-amber-50 text-amber-600 hover:bg-amber-700 hover:text-white mb-1`
+                  className={null === category ? `px-3 py-2 rounded-lg ml-1 bg-amber-50 text-amber-700 hover:bg-amber-500 hover:text-white mb-1 shadow`
+                    : `px-3 py-2 rounded-lg ml-1 bg-amber-50 text-amber-600 hover:bg-amber-700 hover:text-white mb-1 shadow`
                   }>
                   <div className="flex-1 px-2 text-center ">
                     <div className="text-base leading-snug font-normal dark:text-white">
@@ -81,7 +81,7 @@ const index = () => {
 
           <section className="text-gray-600 body-font">
             <div className="container px-5 py-5 mx-auto w-[95%] sm:w-[95%]">
-              <h2 className="w-full my-6">기업보드</h2>
+              <h2 className="w-full my-6">보드리스트</h2>
               {AllBoards?.length > 0 ? (
                 <div className='w-full'>
                   <div
@@ -99,11 +99,11 @@ const index = () => {
                   {!noMore &&
                     <div className="w-full flex justify-center mb-4 mt-12">
                       <button
-                        className='px-[30%] py-3 rounded-xl bg-white border border-solid border-violet-600 text-violet-700 hover:translate-y-1 hover:shadow-none shadow-lg'
+                        className='px-[30%] py-3 rounded-xl bg-white border border-solid border-violet-300 text-violet-700 hover:translate-y-0.5 hover:shadow-none shadow'
                         onClick={() => loadMore()} type="button">더보기</button>
                     </div>
                   }
-                  <div className="w-full h-12 my-6 flex justify-center items-center">
+                  <div className="w-full h-12 my-16 flex justify-center items-center">
                     {noMore && (
                       <div className="text-center text-gray-600">
                         더이상 불러올 내용이 없어요.

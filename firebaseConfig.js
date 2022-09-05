@@ -1302,7 +1302,7 @@ export async function updateSection(result, sectionId) {
 export async function getSection(boardId, categoryId) {
   try {
     const docRef = collection(db, "sections");
-    const q = query(docRef, where("boardId", "==", boardId), where("boardCategory", "==", parseInt(categoryId)));
+    const q = query(docRef, where("boardId", "==", boardId), where("boardCategoryKey", "==", parseInt(categoryId)));
     const docSnap = await getDocs(q);
     //결과 검색
     const result = docSnap?.docs?.map((doc) => (
@@ -1640,7 +1640,7 @@ export async function createSections(category, boardId) {
         creatorId: user.uid,
         creatorName: user.displayName,
         createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-        boardCategory: v?.key,
+        boardCategoryKey: v?.key,
         boardCategoryName: v?.name,
         boardId: boardId,
       })

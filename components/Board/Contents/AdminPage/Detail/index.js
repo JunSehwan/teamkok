@@ -18,6 +18,15 @@ const index = () => {
   const nowYear = now.get("year"); // 2021 (년)
   const age = nowYear - showDetailInfo?.birthday?.year + 1
   var styleObject = StyleList?.filter(obj => obj.number == showDetailInfo?.style);
+
+  const parseLinkTextToHTML = (text) => {
+    const regURL = new RegExp("(http|https|ftp|www|telnet|news|irc)://([-/.a-zA-Z0-9_~#%$?&=:200-377()]+)", "gi");
+    const regEmail = new RegExp("([xA1-xFEa-z0-9_-]+@[xA1-xFEa-z0-9-]+.[a-z0-9-]+)", "gi");
+    return text
+      ?.replace(regURL, "<a href='$1://$2' target='_blank'>$1://$2</a>")
+      ?.replace(regEmail, "<a href='mailto:$1'>$1</a>");
+  };
+
   return (
     <div className='container p-4 my-1 sm:my-4 bg-slate-100 w-full mx-auto shadow-inner rounded-lg overflow-hidden'>
       {!showDetailCareers || !showDetailInfo ?
@@ -82,67 +91,78 @@ const index = () => {
                             {showDetailInfo?.email}</p>
                         }
                         {showDetailInfo?.url_one &&
-                          <p className="leading-relaxed text-base flex flex-row items-center">
+                          <div className="flex flex-row items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                             </svg>
-                            {showDetailInfo?.url_one}</p>}
+                            <span className="leading-relaxed text-base flex flex-row items-center "
+                              dangerouslySetInnerHTML={{ __html: parseLinkTextToHTML(showDetailInfo?.url_one) }}
+                            />
+                          </div>
+                        }
                         {showDetailInfo?.url_two &&
-                          <p className="leading-relaxed text-base flex flex-row items-center">
+                          <div className="flex flex-row items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                             </svg>
-                            {showDetailInfo?.url_two}</p>
+                            <span className="leading-relaxed text-base flex flex-row items-center "
+                              dangerouslySetInnerHTML={{ __html: parseLinkTextToHTML(showDetailInfo?.url_two) }}
+                            />
+                          </div>
                         }
                         {showDetailInfo?.url_three &&
-                          <p className="leading-relaxed text-base flex flex-row items-center">
+                          <div className="flex flex-row items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                             </svg>
-                            {showDetailInfo?.url_three}</p>}
+                            <span className="leading-relaxed text-base flex flex-row items-center "
+                              dangerouslySetInnerHTML={{ __html: parseLinkTextToHTML(showDetailInfo?.url_three) }}
+                            />
+                          </div>
+                        }
                       </div>
-                    
-                    <div>
-                      {/* 스타일카드 */}
-                      {styleObject[0] &&
-                        <div className="py-4 sm:py-0">
-                          <div className=" inline-block mr-2" >
-                            <div className="flex h-full items-center">
-                              <div className="mx-[auto] border-gray-400 flex flex-row mb-2 w-[100%]">
-                                <div
-                                  className="flex-col sm:flex-row bg-sky-100 text-left transition duration-500 shadow ease-in-out transform hover:-translate-y-1 hover:shadow-lg select-none cursor-pointer hover:bg-sky-200 click:active:checked:focus:bg-sky-300 dark:bg-gray-800 rounded-md flex flex-1 items-center p-4"
-                                >
-                                  <div className="flex flex-col h-10 justify-center items-center">
-                                    {styleObject[0]?.src &&
-                                      <div href="#" className="block relative my-4 sm:my-0">
-                                        <Image
-                                          className="mx-auto object-cover rounded-full h-14 w-14"
-                                          src={styleObject[0]?.src || ""}
-                                          width={46}
-                                          height={46}
-                                          unoptimized
-                                          alt="Style picture"
-                                        />
+
+                      <div>
+                        {/* 스타일카드 */}
+                        {styleObject[0] &&
+                          <div className="py-4 sm:py-0">
+                            <div className=" inline-block mr-2" >
+                              <div className="flex h-full items-center">
+                                <div className="mx-[auto] border-gray-400 flex flex-row mb-2 w-[100%]">
+                                  <div
+                                    className="flex-col sm:flex-row bg-sky-100 text-left transition duration-500 shadow ease-in-out transform hover:-translate-y-1 hover:shadow-lg select-none cursor-pointer hover:bg-sky-200 click:active:checked:focus:bg-sky-300 dark:bg-gray-800 rounded-md flex flex-1 items-center p-4"
+                                  >
+                                    <div className="flex flex-col h-10 justify-center items-center">
+                                      {styleObject[0]?.src &&
+                                        <div href="#" className="block relative my-4 sm:my-0">
+                                          <Image
+                                            className="mx-auto object-cover rounded-full h-14 w-14"
+                                            src={styleObject[0]?.src || ""}
+                                            width={46}
+                                            height={46}
+                                            unoptimized
+                                            alt="Style picture"
+                                          />
+                                        </div>
+                                      }
+                                    </div>
+                                    <div className="flex-1 pl-0 sm:pl-3 ">
+                                      <div className="leading-snug font-bold dark:text-white text-lg mt-2 sm:mt-0 text-center sm:text-left">
+                                        {styleObject[0]?.title}
                                       </div>
-                                    }
-                                  </div>
-                                  <div className="flex-1 pl-0 sm:pl-3 ">
-                                    <div className="leading-snug font-bold dark:text-white text-lg mt-2 sm:mt-0 text-center sm:text-left">
-                                      {styleObject[0]?.title}
-                                    </div>
-                                    <div className="text-gray-500 dark:text-gray-200 text-sm mt-1">
-                                      {styleObject[0]?.sub}
-                                    </div>
-                                    <div className="text-violet-500 dark:text-gray-200 text-sm mt-1">
-                                      {styleObject[0]?.tag}
+                                      <div className="text-gray-500 dark:text-gray-200 text-sm mt-1">
+                                        {styleObject[0]?.sub}
+                                      </div>
+                                      <div className="text-violet-500 dark:text-gray-200 text-sm mt-1">
+                                        {styleObject[0]?.tag}
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      }
+                        }
                       </div>
                     </div>
                     <div className="md:flex font-bold text-gray-800">

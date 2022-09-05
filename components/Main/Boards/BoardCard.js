@@ -85,7 +85,6 @@ const BoardCard = ({ board }) => {
     // 보드정보에 참석자 정보 array 추가
     // 유저정보에 fav 보드정보 추가
     const exResult = await exportBoard(user?.userID, user?.username, board?.id, board?.name, board?.logo);
-
     dispatch(updateExpertBoard(exResult))
     dispatch(updateUserExperts(exResult))
     router.push(`/board/${board?.id}`)
@@ -109,7 +108,7 @@ const BoardCard = ({ board }) => {
 
   return (
     <>
-      <div className="m-2 rounded-lg shadow hover:shadow-lg hover:-translate-x-1 hover:-translate-y-1 overflow-hidden text-ellipsis whitespace-nowrap">
+      <div className="m-2 rounded-lg hover:shadow shadow-lg hover:translate-x-0.5 hover:translate-y-0.5 overflow-hidden text-ellipsis whitespace-nowrap bg-white">
         <div className="w-full">
           <div className="w-full h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
             {/* <div className='lg:h-48 md:h-36 w-full'> */}
@@ -175,9 +174,9 @@ const BoardCard = ({ board }) => {
                       </svg>
                     </p></button>
                   :
-                  <button onClick={onClickFavorite} className="flex flex-row flex-nowrap py-2 pr-2 pl-2 text-center mr-4 text-white font-semibold rounded-md bg-blue-500 hover:bg-blue-600 w-full md:mb-2 lg:mb-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <button onClick={onClickFavorite} className="flex flex-row flex-nowrap py-2 pr-2 pl-2 text-center mr-4 text-white font-semibold rounded-md bg-blue-500 hover:bg-blue-600 w-full md:mb-2 lg:mb-0 items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                      <path d="M6 3a3 3 0 00-3 3v2.25a3 3 0 003 3h2.25a3 3 0 003-3V6a3 3 0 00-3-3H6zM15.75 3a3 3 0 00-3 3v2.25a3 3 0 003 3H18a3 3 0 003-3V6a3 3 0 00-3-3h-2.25zM6 12.75a3 3 0 00-3 3V18a3 3 0 003 3h2.25a3 3 0 003-3v-2.25a3 3 0 00-3-3H6zM17.625 13.5a.75.75 0 00-1.5 0v2.625H13.5a.75.75 0 000 1.5h2.625v2.625a.75.75 0 001.5 0v-2.625h2.625a.75.75 0 000-1.5h-2.625V13.5z" />
                     </svg>
                     <p className="ml-1 inline-flex items-center">관심기업 등록
                     </p>
@@ -186,9 +185,10 @@ const BoardCard = ({ board }) => {
 
                 <span className="mr-2 text-right text-gray-500 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-sm py-1 border-r-2 border-gray-200">
 
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                    <path fillRule="evenodd" d="M4.5 2.25a.75.75 0 000 1.5v16.5h-.75a.75.75 0 000 1.5h16.5a.75.75 0 000-1.5h-.75V3.75a.75.75 0 000-1.5h-15zM9 6a.75.75 0 000 1.5h1.5a.75.75 0 000-1.5H9zm-.75 3.75A.75.75 0 019 9h1.5a.75.75 0 010 1.5H9a.75.75 0 01-.75-.75zM9 12a.75.75 0 000 1.5h1.5a.75.75 0 000-1.5H9zm3.75-5.25A.75.75 0 0113.5 6H15a.75.75 0 010 1.5h-1.5a.75.75 0 01-.75-.75zM13.5 9a.75.75 0 000 1.5H15A.75.75 0 0015 9h-1.5zm-.75 3.75a.75.75 0 01.75-.75H15a.75.75 0 010 1.5h-1.5a.75.75 0 01-.75-.75zM9 19.5v-2.25a.75.75 0 01.75-.75h4.5a.75.75 0 01.75.75v2.25a.75.75 0 01-.75.75h-4.5A.75.75 0 019 19.5z" clipRule="evenodd" />
                   </svg>
+
                   <span className="text-lg ml-1">{board?.experts?.length + 1 || 1}</span>
                 </span>
 
@@ -197,16 +197,20 @@ const BoardCard = ({ board }) => {
                     !!myBoard && myBoard?.length !== 0 ||
                     !!myExBoard && myExBoard?.length !== 0 ?
                     <>
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-blue-600">
+                        <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clipRule="evenodd" />
                       </svg>
-                      <span className="text-lg text-blue-500 ml-1">{board?.favorites?.length || 0}</span>
+
+
+                      <span className="text-lg text-blue-500 ml-1 font-semibold">{board?.favorites?.length || 0}</span>
                     </>
                     :
                     <>
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                        <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clipRule="evenodd" />
                       </svg>
+
+
                       <span className="text-lg ml-1">{board?.favorites?.length || 0}</span>
                     </>
                   }

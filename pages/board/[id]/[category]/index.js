@@ -26,7 +26,6 @@ const board = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const pid = router.query;
-  
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -101,7 +100,6 @@ const board = () => {
       await getUsers().then((result) => {
         dispatch(setUsers(result));
       })
-
       dispatch(userLoadingEnd());
     });
     return () => {

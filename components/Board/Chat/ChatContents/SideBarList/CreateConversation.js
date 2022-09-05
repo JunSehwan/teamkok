@@ -48,17 +48,21 @@ const CreateConversation = ({ setIsOpened }) => {
   if (isExpert || isAdmin) {
     singleBoard?.favorites?.map((v) => (
       users?.map((m) => (
-        m?.userID == v?.userId && singleSection?.boardCategory == m?.category && newArr?.push(m)
+        m?.userID == v?.userId
+        // && singleSection?.boardCategory == m?.category 
+        && newArr?.push(m)
       ))
     ))
   } else {
     singleBoard?.experts?.map((v) => (
       users?.map((m) => (
-        (m?.userID == v?.userId && singleSection?.boardCategory == m?.category )
-        ? newArr?.push(m) : null
+        (m?.userID == v?.userId
+          // && singleSection?.boardCategory == m?.category
+        )
+          ? newArr?.push(m) : null
       ))
     ))
-    users?.map((v)=>(
+    users?.map((v) => (
       v?.userID == singleBoard?.creatorId && newArr?.push(v)
     ))
   }
@@ -81,7 +85,7 @@ const CreateConversation = ({ setIsOpened }) => {
             </h1>
 
           </div>
-          
+
           <div className="flex flex-1 items-center justify-end">
             <button
               onClick={() => setIsOpened(false)}
@@ -128,7 +132,7 @@ const CreateConversation = ({ setIsOpened }) => {
                       alt="profilePicture"
                     />
                     <p className="font-semibold whitespace-nowrap">{doc?.username}</p>
-                    {doc?.userID === singleBoard?.creatorId ? 
+                    {doc?.userID === singleBoard?.creatorId ?
                       <span className="ml-1 px-2 py-0.5 rounded shadow-inner bg-gray-500 text-white text-xs">👑보드개설자</span> : null
                     }
                     <UserInfo

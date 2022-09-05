@@ -200,7 +200,7 @@ const Navbar = () => {
             </div>
 
             {!user ?
-              <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0 mt-[12px]">
+              <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
                 <button
                   className="whitespace-nowrap px-4 py-2 border border-transparent rounded-md text-[0.88rem] font-medium text-gray-500 hover:text-gray-900
                 hover:bg-gray-100
@@ -229,7 +229,7 @@ const Navbar = () => {
                     {findNotRead?.length}</button>}
 
                 <button className="mr-2" onClick={onClickFavorite}>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="ml-[8px] h-8 w-8 active:hover:fill-violet-600 fill-violet-200 stroke-violet-500 active:hover:stroke-violet-600 " viewBox="0 0 20 20" fill="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="ml-[8px] h-8 w-8 hover:active:fill-violet-600 fill-violet-200 stroke-violet-500 stroke-2	 active:hover:stroke-violet-600 " viewBox="0 0 20 20" fill="currentColor">
                     <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
                   </svg>
                 </button>

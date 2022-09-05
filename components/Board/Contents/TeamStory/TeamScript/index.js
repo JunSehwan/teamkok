@@ -54,7 +54,7 @@ const index = () => {
           <div className="flex flex-row items-center justify-between pb-4">
             <div className="font-bold text-xl text-gray-600 fill-gray-600 dark:text-white flex flex-col sm:flex-row items-center">
               <div className="flex items-center">
-                <span>{selectedCategory?.name}팀 정보</span>
+                <span>{singleSection?.boardCategoryName}팀 정보</span>
                 
               </div>
 

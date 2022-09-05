@@ -13,7 +13,7 @@ const index = ({
   return (
     <button
       onClick={() => onChangeCategory(number)}
-      className="px-3 py-2 rounded-lg ml-1 bg-sky-50 text-blue-800 hover:bg-sky-500 hover:text-white mb-1"
+      className="px-3 py-2 rounded-lg ml-1 bg-sky-50 text-blue-800 hover:bg-sky-500 hover:text-white mb-1 shadow"
       key={number}
     >
       {name}

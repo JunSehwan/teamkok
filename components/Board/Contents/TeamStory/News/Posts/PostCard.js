@@ -29,19 +29,19 @@ const PostCard = ({ post }) => {
   }, [])
   const [removeConfirm, setRemoveConfirm] = useState(false);
   const onClickRemove = useCallback(() => {
-    document.body.style.overflow =  "hidden";
+    document.body.style.overflow = "hidden";
     setRemoveConfirm(true);
     setMoreOpen(false);
   }, [])
   const onOkRemove = useCallback(async () => {
     const result = await deletePost(post?.id);
     dispatch(removePost(result));
-    document.body.style.overflow =  "unset";
+    document.body.style.overflow = "unset";
     setRemoveConfirm(false);
   }, [post?.id, dispatch])
 
   const onCancelRemove = useCallback(() => {
-    document.body.style.overflow =  "unset";
+    document.body.style.overflow = "unset";
     setRemoveConfirm(false);
   }, [])
 
@@ -80,6 +80,7 @@ const PostCard = ({ post }) => {
       modifiedName: user?.username,
       description: description,
     };
+    const result = await modifyPost(postResult, post?.id);
     dispatch(updatePost({
       id: post?.id,
       description: description,
@@ -184,15 +185,15 @@ const PostCard = ({ post }) => {
     setSliderOn(false);
   }, [])
 
-// 링크내용 URL로 바꾸기
-const parseLinkTextToHTML = (text) => {
-  const regURL = new RegExp("(http|https|ftp|www|telnet|news|irc)://([-/.a-zA-Z0-9_~#%$?&=:200-377()]+)", "gi");
-  const regEmail = new RegExp("([xA1-xFEa-z0-9_-]+@[xA1-xFEa-z0-9-]+.[a-z0-9-]+)", "gi");
+  // 링크내용 URL로 바꾸기
+  const parseLinkTextToHTML = (text) => {
+    const regURL = new RegExp("(http|https|ftp|www|telnet|news|irc)://([-/.a-zA-Z0-9_~#%$?&=:200-377()]+)", "gi");
+    const regEmail = new RegExp("([xA1-xFEa-z0-9_-]+@[xA1-xFEa-z0-9-]+.[a-z0-9-]+)", "gi");
 
-  return text
-    ?.replace(regURL, "<a href='$1://$2' target='_blank'>$1://$2</a>")
-    ?.replace(regEmail, "<a href='mailto:$1'>$1</a>");
-};
+    return text
+      ?.replace(regURL, "<a href='$1://$2' target='_blank'>$1://$2</a>")
+      ?.replace(regEmail, "<a href='mailto:$1'>$1</a>");
+  };
 
 
   return (
@@ -203,17 +204,17 @@ const parseLinkTextToHTML = (text) => {
             {/* <Image width={30} height={30} alt="pic" className="rounded-full max-w-none w-12 h-12" src={post?.photo[0]} /> */}
             {post?.creatorAvatar ? (
               <Image
-              unoptimized
+                unoptimized
                 alt="avatar_user"
                 className="avatar rounded-lg object-cover"
                 width={48} height={48}
                 src={post?.creatorAvatar} />
             ) : (
               <Image
-              unoptimized
+                unoptimized
                 alt="avatar_user"
                 className="avatar rounded-lg object-cover shadow-inner bg-slate-100"
-                  src={profilePic}
+                src={profilePic}
                 width={48} height={48}
               />
             )}
@@ -305,7 +306,10 @@ const parseLinkTextToHTML = (text) => {
           </>
         }
         {post?.photo?.length === 3 &&
-          <div className="flex flex-row  hover:opacity-90">
+          <button
+            className="flex flex-row  hover:opacity-90"
+            onClick={onClickSlider}
+          >
             <div className="flex flex-col justify-between gap-[4px]">
               <a className="flex" >
                 <Image unoptimized width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[0] || holderPicture} />
@@ -319,10 +323,13 @@ const parseLinkTextToHTML = (text) => {
                 <Image unoptimized width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[2] || holderPicture} />
               </a>
             </div>
-          </div>
+          </button>
         }
         {post?.photo?.length === 4 &&
-          <div className=" hover:opacity-90 ">
+          <button
+            className=" hover:opacity-90 "
+            onClick={onClickSlider}
+          >
             <div className="flex justify-between gap-[4px] mb-[4px]">
               <a className="flex" >
                 <Image unoptimized width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[0] || holderPicture} />
@@ -339,10 +346,13 @@ const parseLinkTextToHTML = (text) => {
                 <Image unoptimized width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[3] || holderPicture} />
               </a>
             </div>
-          </div>
+          </button>
         }
         {post?.photo?.length >= 5 &&
-          <div className=" hover:opacity-90 ">
+          <button
+            className="hover:opacity-90 "
+            onClick={onClickSlider}
+          >
             <div className="flex justify-between gap-[4px] mb-[4px]">
               <a className="flex" >
                 <Image unoptimized width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full" src={post?.photo[0] || holderPicture} />
@@ -368,7 +378,7 @@ const parseLinkTextToHTML = (text) => {
                 <Image unoptimized width={520} height={520} alt="pic" className="rounded-md object-cover max-w-full " src={post?.photo[4] || holderPicture} />
               </a>
             </div>
-          </div>
+          </button>
         }
       </div>
       <div id={`${post?.id}`} tabIndex={-1} className="whitespace-pre-wrap leading-normal">
@@ -409,8 +419,8 @@ const parseLinkTextToHTML = (text) => {
             </div>
           </form>
           :
-            <p className="mt-4 whitespace-pre-wrap leading-normal" 
-              dangerouslySetInnerHTML={{ __html: parseLinkTextToHTML(post?.description)}}></p>
+          <p className="mt-4 whitespace-pre-wrap leading-normal"
+            dangerouslySetInnerHTML={{ __html: parseLinkTextToHTML(post?.description) }}></p>
         }
         <p className="text-gray-400 text-xs ml-1">
           {post?.modifiedId ? "(수정됨)" : null}

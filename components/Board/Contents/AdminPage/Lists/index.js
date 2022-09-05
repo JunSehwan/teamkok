@@ -23,9 +23,8 @@ const index = () => {
     v?.userID === m ? userArr.push(v) : null
   ))
   ))
-
   // 보드 개설자 제외
-  const filtered = userArr?.filter((user) => user.userID !== singleBoard?.creatorId);
+  const filtered = userArr?.filter((it) => it.userID !== singleBoard?.creatorId);
 
   // Expert 제외
   // singleBoard?.experts --> userId
@@ -46,24 +45,27 @@ const index = () => {
 
   // 4. 리스트 꺼내서 점수 등 주고 채용제안
 
+
+  // 중요!!! --> 원래 아래 filtered를 final로 해서 category 매칭까지 시켰지만 다시 풀었음
+  // 추후 대기업 등 관리시 다시 묶어놓을 예정
   return (
     <div className="my-3">
-      {final?.length !== 0 &&
-        final?.map((v, i) => (
+      {filtered?.length !== 0 &&
+        filtered?.map((v, i) => (
           <div key={i}>
-          <List
-            user={v}
-            index={i}
-          />
+            <List
+              user={v}
+              index={i}
+            />
           </div>
         ))
       }
-      {final?.length === 0 &&
-      <div className="w-full h-full my-[4rem] sm:my-[8rem]">
-        <Empty
-          title="아직 참여자가 없습니다."
-          text="적극적인 팀 어필을 통해 참여자를 모아보세요!"
-        />
+      {filtered?.length === 0 &&
+        <div className="w-full h-full my-[4rem] sm:my-[8rem]">
+          <Empty
+            title="아직 참여자가 없습니다."
+            text="적극적인 팀 어필을 통해 참여자를 모아보세요!"
+          />
         </div>
       }
     </div>

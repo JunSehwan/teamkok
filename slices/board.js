@@ -218,7 +218,7 @@ export const {
   showDetailMemberInformation,
   showDetailMemberCareers,
   updateUnfavoriteBoard,
-updateUnexpertBoard,
+  updateUnexpertBoard,
 } = board.actions;
 
 export const useBoardState = () => useAppSelector((state) => state.board);

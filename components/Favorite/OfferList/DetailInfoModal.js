@@ -42,7 +42,7 @@ const DetailInfoModal = ({ offer }) => {
       {detailOpen &&
         <div className="min-w-screen h-screen animated fadeIn faster fixed left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover" id="modal-id">
           <div className="absolute bg-black opacity-80 inset-0 z-0"></div>
-          <div ref={modalEl} className="w-full max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg bg-white">
+          <div ref={modalEl} className="w-full max-w-2xl p-5 relative mx-auto my-auto rounded-xl shadow-lg bg-white">
             {/* <!--content--> */}
             <div className="text-left p-2 sm:p-5 flex-auto justify-center w-full">
               {/* <!--body--> */}
@@ -66,7 +66,7 @@ const DetailInfoModal = ({ offer }) => {
                   </p>
                 </div>
 
-                <StyledContainer className="overflow-y-auto max-h-[72vh] w-full">
+                <StyledContainer className="overflow-y-scroll max-h-[52vh] w-full">
                   <div className="sm:max-w-full text-sm sm:text-md text-gray-600 overflow-hidden text-ellipsis whitespace-nowrap ">
                     <p className="font-semibold text-lg mt-8 mb-2">직급</p> {offer?.position || ""}
                   </div>

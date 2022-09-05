@@ -23,28 +23,28 @@ const AlertModal = ({ title, contents, contents_second, closeOutsideClick, openM
             >
             <div className="sticky p-4 w-[100%] my-6 mt-auto mb-auto mx-auto max-w-[32rem] min-w-[320px]" ref={modalEl}>
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                <svg className="h-[18%] w-[18%] mt-4 m-auto text-green-500" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                <svg className="h-[16%] w-[16%] mt-4 m-auto text-green-500" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7">
                   </path>
                 </svg>
                 {title ?
-                  (<p className="text-gray-800 mb-[12px] text-center dark:text-gray-100 font-bold text-[1.4rem] py-3 px-6">
+                  (<p className="text-gray-800 mb-[12px] text-center dark:text-gray-100 font-bold text-[1.4rem] py-4 px-6">
                     {title}
                   </p>)
                   : null}
-                <p className="whitespace-normal leading-normal w-full overflow-hidden text-left text-gray-600 dark:text-gray-100 text-md py-1 px-6">
+                <p className="whitespace-normal leading-normal w-full overflow-hidden text-left text-gray-600 dark:text-gray-100 text-md py-1 px-6 ml-4">
                   {contents}
                 </p>
                 <p className="text-left text-purple-600 dark:text-gray-100 text-sm py-1 px-6 mt-[2px]">
                   {contents_second}
                 </p>
-                <div className="flex items-center justify-center gap-4 w-full mt-8">
+                <div className="flex items-center justify-center gap-4 w-full mt-8 mb-4">
                   {twobutton ?
                     <>
                       <button type="button" onClick={closeModal} className="w-[40%] mb-[12px] py-2 px-4  bg-blue-600 hover:bg-blue-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
                         확인
                       </button>
-                      <button type="button" onClick={cancelFunc} className="w-[40%] mb-[12px] py-2 px-4  bg-white hover:bg-white focus:ring-white focus:ring-offset-white text-gray-600 transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+                      <button type="button" onClick={cancelFunc} className="w-[40%] mb-[12px] py-2 px-4  bg-white hover:bg-slate-100 focus:ring-white focus:ring-offset-white text-gray-600 transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg">
                         취소
                       </button>
                     </>

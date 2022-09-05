@@ -9,7 +9,7 @@ const Tab = ({ tabIndex, setTabIndex }) => {
 
   const { isExpert, isAdmin } = useSelector(state => state.user);
   return (
-    <div className="bg-slate-50 flex flex-col w-[100%] mx-auto space-y-6 xl:px-0">
+    <div className="flex flex-col w-[100%] mx-auto space-y-6 xl:px-0">
       <div className="relative">
         <div className="flex flex-wrap">
           <div className="w-full">

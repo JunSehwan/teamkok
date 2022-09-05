@@ -121,7 +121,7 @@ const DetailInfoModal = ({ offer }) => {
                   </p>
                 </div>
 
-                <StyledContainer className="overflow-y-auto max-h-[72vh] w-full">
+                <StyledContainer className="overflow-y-auto max-h-[52vh] w-full">
                   <div className="sm:max-w-full text-sm sm:text-md text-gray-600 overflow-hidden text-ellipsis whitespace-nowrap ">
                     <p className="font-semibold text-lg mt-8 mb-2">직급</p> {offer?.position || ""}
                   </div>

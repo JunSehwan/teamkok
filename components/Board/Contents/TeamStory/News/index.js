@@ -19,7 +19,7 @@ const index = () => {
   return (
     <>
     <div className="w-full mt-[2.4rem] p-[1rem] flex justify-between">
-      <h2 className="text-2xl font-extrabold mb-2">공지사항</h2>
+      <h2 className="text-xl text-blue-700 font-extrabold mb-2">팀이야기</h2>
       {isExpert || isAdmin ?
         <button type="button"
           onClick={onOpenForm}

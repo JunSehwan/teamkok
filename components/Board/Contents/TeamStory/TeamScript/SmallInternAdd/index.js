@@ -77,7 +77,13 @@ const index = ({ onInternClose, smallInternOpen, singleSection }) => {
     setMerit(e.currentTarget.value);
     setMeritError(false);
   }, [])
-
+  if (!assignment) {
+    setAssignment("과제 없음")
+  } if (!limit) {
+    setLimit("없음")
+  } if (!sendway) {
+    setSendway("없음")
+  }
   // 제출
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
@@ -119,7 +125,7 @@ const index = ({ onInternClose, smallInternOpen, singleSection }) => {
     const con = await createSmallIntern(internResult, singleSection?.id);
 
     dispatch(addSmallIntern(con));
-  }, [assignment,hiring, count, description, dispatch, employtype, limit, merit, period, sendway, singleSection?.id, user?.userID, user?.username])
+  }, [assignment, hiring, count, description, dispatch, employtype, limit, merit, period, sendway, singleSection?.id, user?.userID, user?.username])
 
   const [confirm, setConfirm] = useState(false);
   const ConfirmModalOpen = useCallback(() => {
@@ -151,7 +157,7 @@ const index = ({ onInternClose, smallInternOpen, singleSection }) => {
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
           <div className="fixed w-[100%] z-50 inset-0 overflow-y-auto">
             <div className="flex items-end sm:items-center justify-center min-h-full text-center sm:p-0">
-              <div className="border-solid border-t-8 border-violet-400 relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-xl sm:w-full">
+              <div className="border-solid border-t-8 border-violet-400 relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-3xl sm:w-full">
                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
 
                   <div className="relative bg-white rounded border">
@@ -193,14 +199,14 @@ const index = ({ onInternClose, smallInternOpen, singleSection }) => {
                     </div>
 
                     <div className="mb-4">
-                      <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="period">
+                      <label className="block mb-1 text-md font-bold text-gray-700" htmlFor="period">
                         채용일정
                       </label>
                       <input
                         className={periodError ?
-                          'w-full px-3 py-2 mb-2 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                          'w-full px-3 py-2 mb-2 text-md border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
                           :
-                          'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                          'w-full px-3 py-2 mb-2 text-md leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
                         }
                         id="period"
                         type="text"
@@ -216,14 +222,14 @@ const index = ({ onInternClose, smallInternOpen, singleSection }) => {
                     </div>
 
                     <div className="mb-4">
-                      <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="count">
+                      <label className="block mb-1 text-md font-bold text-gray-700" htmlFor="count">
                         채용인원 수
                       </label>
                       <input
                         className={countError ?
-                          'w-full px-3 py-2 mb-2 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                          'w-full px-3 py-2 mb-2 text-md border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
                           :
-                          'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                          'w-full px-3 py-2 mb-2 text-md leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
                         }
                         id="count"
                         type="text"
@@ -239,14 +245,14 @@ const index = ({ onInternClose, smallInternOpen, singleSection }) => {
                     </div>
 
                     <div className="mb-4">
-                      <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="employtype">
+                      <label className="block mb-1 text-md font-bold text-gray-700" htmlFor="employtype">
                         근무형태
                       </label>
                       <select
                         className={employtypeError ?
-                          'w-full px-3 py-2 mb-2 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                          'w-full px-3 py-2 mb-2 text-md border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
                           :
-                          'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                          'w-full px-3 py-2 mb-2 text-md leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
                         }
                         id="employtype"
                         name="employtype"
@@ -270,7 +276,7 @@ const index = ({ onInternClose, smallInternOpen, singleSection }) => {
 
 
                     <div className="mb-4">
-                      <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="description">
+                      <label className="block mb-1 text-md font-bold text-gray-700" htmlFor="description">
                         상세정보 안내
                       </label>
                       <div>
@@ -292,7 +298,7 @@ const index = ({ onInternClose, smallInternOpen, singleSection }) => {
 
 
                     <div className="mb-4">
-                      <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="merit">
+                      <label className="block mb-1 text-md font-bold text-gray-700" htmlFor="merit">
                         Smaill Intern 선정시 혜택에 대해서 안내해주세요.
                       </label>
                       <div>
@@ -320,7 +326,7 @@ const index = ({ onInternClose, smallInternOpen, singleSection }) => {
                     </label>
 
                     <div className="mb-4">
-                      <label className="block mb-1 text-sm font-semibold text-gray-500" htmlFor="assignment">
+                      <label className="block mb-1 text-md font-semibold text-gray-500" htmlFor="assignment">
                         수행해야하는 과제를 입력해주세요
                       </label>
                       <div>
@@ -338,12 +344,12 @@ const index = ({ onInternClose, smallInternOpen, singleSection }) => {
                     </div>
 
                     <div className="mb-4">
-                      <label className="block mb-1 text-sm font-semibold text-gray-500" htmlFor="limit">
+                      <label className="block mb-1 text-md font-semibold text-gray-500" htmlFor="limit">
                         과제제출기한
                       </label>
                       <input
                         className=
-                        'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                        'w-full px-3 py-2 mb-2 text-md leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
                         id="limit"
                         type="text"
                         maxLength={100}
@@ -355,12 +361,12 @@ const index = ({ onInternClose, smallInternOpen, singleSection }) => {
                     </div>
 
                     <div className="mb-4">
-                      <label className="block mb-1 text-sm font-semibold text-gray-500" htmlFor="sendway">
+                      <label className="block mb-1 text-md font-semibold text-gray-500" htmlFor="sendway">
                         과제제출 방법
                       </label>
                       <input
                         className=
-                        'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                        'w-full px-3 py-2 mb-2 text-md leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
                         id="sendway"
                         type="text"
                         maxLength={100}
@@ -371,10 +377,10 @@ const index = ({ onInternClose, smallInternOpen, singleSection }) => {
                       />
                     </div>
 
-                    
-                  
 
-                    <p className="text-sm text-gray-600 mt-4 mb-4">해당 기간내에 채용이 이루어집니다.<br />
+
+
+                    <p className="text-md text-gray-600 mt-4 mb-4">해당 기간내에 채용이 이루어집니다.<br />
                       과제제출기한 후 선정된 인원에게는 별도의 메시지를 발송합니다.</p>
 
                     <div className="w-full flex justify-end mt-4">

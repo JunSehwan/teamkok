@@ -7,7 +7,7 @@ import Footer from './Footer';
 const index = () => {
 
   return (
-    <div className="min-h-[100vh] flex flex-col justify-between">
+    <div className="bg-slate-50 min-h-[100vh] flex flex-col justify-between">
       <div>
       <Explain />
       <Search />
