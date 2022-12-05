@@ -108,7 +108,7 @@ function ForgotPassword() {
   return (
     <>
       <Head>
-        <title>TeamZ - Password Reset</title>
+        <title>TeamZ - 비밀번호 Reset</title>
       </Head>
       {loading ?
         <LoadingPage /> :

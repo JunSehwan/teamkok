@@ -12,37 +12,45 @@ const index = () => {
   const { isExpert, isAdmin } = useSelector(state => state.user);
   const { selectedCategory, singleBoard } = useSelector(state => state.board);
   const [addOpen, setAddOpen] = useState(false);
-  const onAddOpen = useCallback(() => { 
+  const onAddOpen = useCallback(() => {
     document.body.style.overflow = "hidden";
-    setAddOpen(true); }, [])
-  const onAddClose = useCallback(() => { 
+    setAddOpen(true);
+  }, [])
+  const onAddClose = useCallback(() => {
     document.body.style.overflow = "unset";
-    setAddOpen(false); }, [])
+    setAddOpen(false);
+  }, [])
   const { singleSection } = useSelector(state => state.board);
 
   const [smallInternOpen, setSmallInternOpen] = useState(false);
-  const onInternOpen = useCallback(() => { 
+  const onInternOpen = useCallback(() => {
     document.body.style.overflow = "hidden";
-    setSmallInternOpen(true); }, [])
-  const onInternClose = useCallback(() => { 
+    setSmallInternOpen(true);
+  }, [])
+  const onInternClose = useCallback(() => {
     document.body.style.overflow = "unset";
-    setSmallInternOpen(false); }, [])
+    setSmallInternOpen(false);
+  }, [])
 
   const [teamStyleOpen, setTeamStyleOpen] = useState(false);
-  const onStyleOpen = useCallback(() => { 
+  const onStyleOpen = useCallback(() => {
     document.body.style.overflow = "hidden";
-    setTeamStyleOpen(true); }, [])
-  const onStyleClose = useCallback(() => { 
+    setTeamStyleOpen(true);
+  }, [])
+  const onStyleClose = useCallback(() => {
     document.body.style.overflow = "unset";
-    setTeamStyleOpen(false); }, [])
+    setTeamStyleOpen(false);
+  }, [])
 
   const [openIntern, setOpenIntern] = useState(false);
-  const onInternInfo = useCallback(() => { 
+  const onInternInfo = useCallback(() => {
     document.body.style.overflow = "hidden";
-    setOpenIntern(true); }, [])
-  const offInternInfo = useCallback(() => { 
+    setOpenIntern(true);
+  }, [])
+  const offInternInfo = useCallback(() => {
     document.body.style.overflow = "unset";
-    setOpenIntern(false); }, [])
+    setOpenIntern(false);
+  }, [])
 
   const [fold, setFold] = useState(true);
   const onToggleFold = useCallback(() => { setFold(prev => !prev) }, [])
@@ -55,7 +63,7 @@ const index = () => {
             <div className="font-bold text-xl text-gray-600 fill-gray-600 dark:text-white flex flex-col sm:flex-row items-center">
               <div className="flex items-center">
                 <span>{singleSection?.boardCategoryName}팀 정보</span>
-                
+
               </div>
 
               {singleSection?.smallintern?.hiring ?
@@ -97,18 +105,18 @@ const index = () => {
             <ul >
               <List
                 // headicon="01"
-                question="🔎간략소개"
-                answer={singleSection?.intro || "미등록"}
+                question="🔎팀 소개"
+                answer={singleSection?.intro || "-"}
               />
               <List
                 // headicon="02"
                 question="👍강점"
-                answer={singleSection?.advantage || "미등록"}
+                answer={singleSection?.advantage || "-"}
               />
               <List
                 // headicon="03"
                 question="👨‍👦‍👦인원수"
-                answer={`${singleSection?.peopleCount || ""}명`}
+                answer={!!singleSection?.peopleCount ? singleSection?.peopleCount + "명" : "-"}
               />
               <List
                 // headicon="04"

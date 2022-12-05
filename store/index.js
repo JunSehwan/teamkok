@@ -9,10 +9,12 @@ import careerReducer from "slices/career";
 import mystyleReducer from "slices/mystyle";
 import boardReducer from "slices/board";
 import sectionReducer from "slices/section";
+import skillReducer from "slices/skill";
 
 import addServerReducer from "slices/addServer";
 import chatReducer from "slices/chat";
 import jobofferReducer from "slices/joboffer";
+import coccocReducer from "slices/coccoc";
 import serverSettingsReducer from "slices/serverSettings";
 import sendGifReducer from "slices/sendGif";
 
@@ -30,17 +32,15 @@ const makeStore = () =>
       mystyle: mystyleReducer,
       board: boardReducer,
       section: sectionReducer,
+      skill: skillReducer,
       
       chat: chatReducer,
       joboffer: jobofferReducer,
+      coccoc: coccocReducer,
       serverSettings: serverSettingsReducer,
       addServer: addServerReducer,
       sendGif: sendGifReducer,
     },
   });
 
-// export default store;
 export const wrapper = createWrapper(makeStore);
-// export const AppStore = makeStore;
-// export const RootState = ReturnType<AppStore["getState"]>;
-// export const AppDispatch = AppStore["dispatch"];

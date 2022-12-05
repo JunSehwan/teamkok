@@ -9,17 +9,18 @@ const Empty = ({ title, text }) => {
       <div className="w-full h-full text-center mt-[1.2rem]">
         <div className="flex h-full flex-col">
           <div className="w-max-[150px]">
-          <Image
-            src={emptyicon}
+            <Image
+              src={emptyicon}
               unoptimized
-            alt="logo"
-            width="80"
-            height="80"
+              alt="logo"
+              width="80"
+              height="80"
+              className="opacity-75"
             // responsive={30vw}
             // layout="fill"
-          />
+            />
           </div>
-          {title && <p className="text-gray-600 dark:text-gray-200 text-xl font-bold mt-4">
+          {title && <p className="text-gray-400 dark:text-gray-200 text-lg font-base mt-4">
             {title}
           </p>}
           <p className="text-gray-400 dark:text-gray-200 text-xs py-2 px-6">

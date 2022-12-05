@@ -154,7 +154,7 @@ const board = () => {
   return (
     <>
       <Head>
-        <title>TeamZ - 팀기반 채용플랫폼</title>
+        <title>{`${singleBoard?.name}의 기업보드`}</title>
 
         <meta name="keywords" content={`teamz, ${singleBoard?.name || ""} 팀즈, 채용공고, 현업담당자와 대화, 업무문의, 채용문의, 팀기반 소통플랫폼`} />
         <meta name="description" content="원하는 기업에 입사하기 위해 팀별 현업담당자에게 적극적으로 나를 어필을 할 수 있습니다." />

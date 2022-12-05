@@ -84,7 +84,7 @@ const index = () => {
 
           {/* <!-- menu-item --> */}
           <button
-            className={!pid?.category ? "pl-[6px] w-[100%] my-2 py-2 text-lg font-semibold text-violet-600 bg-violet-200 rounded-xl hover:text-violet-700 group cursor-pointer flex items-center"
+            className={!pid?.category ? "pl-[6px] w-[100%] my-2 py-2 text-md font-semibold text-violet-600 bg-violet-200 rounded-xl hover:text-violet-700 group cursor-pointer flex items-center"
               : "pl-[6px] w-[100%] my-1 py-2 text-lg font-semibold text-slate-600 hover:text-violet-500 group cursor-pointer flex items-center"
             }
             onClick={onClickHome}
@@ -105,8 +105,8 @@ const index = () => {
               type="button"
               onClick={() => onClickCategory(v?.key)}
               className=
-              {parseInt(pid?.category) === parseInt(v?.key) ? "pl-[6px] w-[100%] my-2 py-2 text-lg font-semibold text-violet-600 bg-violet-200 rounded-xl hover:text-violet-700 group cursor-pointer flex items-center"
-                : "pl-[6px] w-[100%] my-2 py-2 text-lg font-semibold text-slate-600 hover:text-violet-500 group cursor-pointer flex items-center"
+              {parseInt(pid?.category) === parseInt(v?.key) ? "pl-[6px] w-[100%] my-2 py-2 text-md font-semibold text-violet-600 bg-violet-200 rounded-xl hover:text-violet-700 group cursor-pointer flex items-center"
+                : "pl-[6px] w-[100%] my-2 py-2 text-md font-semibold text-slate-600 hover:text-violet-500 group cursor-pointer flex items-center"
               }
             >
               {v?.name}

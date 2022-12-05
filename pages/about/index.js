@@ -2,17 +2,18 @@ import React from 'react';
 import About from 'components/About';
 import Head from 'next/head'
 import { useRouter } from 'next/router';
-import { getAuth } from "firebase/auth";
 import Nav from "components/About/Nav";
 
-
 const index = () => {
-
+  const router = useRouter();
+  if (router.isFallback) {
+    return (<h1>Data is loading</h1>);
+  }
 
   return (
     <>
       <Head>
-        <title>TeamZ - 팀기반 채용플랫폼</title>
+        <title>TeamZ - 소개페이지</title>
 
         <meta name="keywords" content="teamz, 팀즈, 채용공고, 현업담당자와 대화, 업무문의, 채용문의, 팀기반 소통플랫폼" />
         <meta name="description" content="TEAMZ 소개페이지" />
@@ -36,9 +37,7 @@ const index = () => {
       <Nav>
         <About />
       </Nav>
-
     </>
-
   );
 };
 

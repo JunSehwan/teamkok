@@ -10,7 +10,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { db, getEducationsByUserId, getCareersByUserId } from "firebaseConfig";
 import LoadingPage from 'components/Common/Loading';
-
+import toast, { Toaster } from 'react-hot-toast';
 const index = () => {
 
   const auth = getAuth();
@@ -113,35 +113,58 @@ const index = () => {
 
   return (
     <>
-    <Head>
-      <title>TeamZ - 팀기반 채용플랫폼</title>
+      <Head>
+        <title>TeamZ - 팀기반 SNS형 채용플랫폼</title>
 
-      <meta name="keywords" content="teamz, 팀즈, 채용공고, 현업담당자와 대화, 업무문의, 채용문의, 팀기반 소통플랫폼" />
-      <meta name="description" content="원하는 기업에 입사하기 위해 팀별 현업담당자에게 적극적으로 나를 어필을 할 수 있습니다." />
+        <meta name="keywords" content="teamz, 팀즈, 채용공고, 현업담당자와 대화, 업무문의, 채용문의, 팀기반 소통플랫폼" />
+        <meta name="description" content="원하는 기업에 입사하기 위해 팀별 현업담당자에게 적극적으로 나를 어필을 할 수 있습니다." />
 
-      <meta name="application-name" content="TeamZ - 관심있는 기업보드에 참여 후 현업자담당자와 소통해보세요." />
-      <meta name="msapplication-tooltip" content="TeamZ" />
+        <meta name="application-name" content="TeamZ - 관심있는 기업보드에 참여 후 현업자담당자와 소통해보세요." />
+        <meta name="msapplication-tooltip" content="TeamZ" />
 
-      <meta property="og:type" content="TeamZ 기업리스트" />
-      <meta property="og:title" content="TeamZ - 팀기반 채용플랫폼" />
-      <meta property="og:description" content="원하는 기업보드를 선택하면 각 분야의 현업담당자와 소통할 수 있습니다." />
-      <meta property="og:image" content="https://teamz.co.kr/logo/teamz.png" />
-      <meta property="og:url" content="https://teamz.co.kr" />
+        <meta property="og:type" content="TeamZ 기업리스트" />
+        <meta property="og:title" content="TeamZ - 팀기반 채용플랫폼" />
+        <meta property="og:description" content="원하는 기업보드를 선택하면 각 분야의 현업담당자와 소통할 수 있습니다." />
+        <meta property="og:image" content="https://teamz.co.kr/logo/teamz.png" />
+        <meta property="og:url" content="https://teamz.co.kr" />
 
-      <meta name="twitter:card" content="TeamZ에 오신걸 환영합니다." />
-      <meta name="twitter:title" content="TeamZ - 팀기반 채용플랫폼" />
-      <meta name="twitter:description" content="원하는 기업보드를 선택하면 각 분야의 현업담당자와 소통할 수 있습니다." />
-      <meta name="twitter:image" content="https://teamz.co.kr/logo/teamz.png" />
-      <meta name="twitter:domain" content="https://teamz.co.kr" />
+        <meta name="twitter:card" content="TeamZ에 오신걸 환영합니다." />
+        <meta name="twitter:title" content="TeamZ - 팀기반 채용플랫폼" />
+        <meta name="twitter:description" content="원하는 기업보드를 선택하면 각 분야의 현업담당자와 소통할 수 있습니다." />
+        <meta name="twitter:image" content="https://teamz.co.kr/logo/teamz.png" />
+        <meta name="twitter:domain" content="https://teamz.co.kr" />
       </Head>
       {loading ?
         <LoadingPage />
         :
         <Main />
       }
+
+      <Toaster
+        // gutter={12}
+        // reverseOrder={false}
+        // position="bottom-center"
+        // toastOptions={{
+        //   className: '',
+        //   style: {
+        //     // border: '1px solid #713200',
+        //     padding: '16px',
+        //     background: 'rgba(0,0,0,0.66)',
+        //     color: 'white',
+        //   },
+        // }}
+        // containerStyle={{
+        //   top:20,
+        //   bottom: 20,
+        //   left: 20,
+        //   right: 20,
+        // }}
+      />
     </>
 
   );
 };
+
+
 
 export default index;

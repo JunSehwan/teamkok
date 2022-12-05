@@ -84,12 +84,14 @@ const Navbar = () => {
   }, [])
 
   const [logoutConfirmModal, setLogoutConfirmModal] = useState(false);
-  const openLogoutConformModal = () => { 
+  const openLogoutConformModal = () => {
     document.body.style.overflow = "hidden";
-    setLogoutConfirmModal(true) };
-  const closeLogoutConformModal = () => { 
+    setLogoutConfirmModal(true)
+  };
+  const closeLogoutConformModal = () => {
     document.body.style.overflow = "unset";
-    setLogoutConfirmModal(false) };
+    setLogoutConfirmModal(false)
+  };
   const onClickLogout = useCallback(() => {
     setLogoutConfirmModal(true);
     document.body.style.overflow = "hidden";
@@ -134,20 +136,27 @@ const Navbar = () => {
     setToggle(false);
     setOpen(false);
   }, [router])
+  const onClickAbout = useCallback(() => {
+    window.open('/about', '_blank')
+    setToggle(false);
+    setOpen(false);
+  }, [])
 
   const [data, setData] = useState();
   useEffect(() => {
     async function fetchAndSetUser() {
       try {
-        setData([]);
-        const result = await getJobofferedByUserId(user?.userID);
-        setData(result);
+        if (user) {
+          setData([]);
+          const result = await getJobofferedByUserId(user?.userID);
+          setData(result);
+        }
       } catch (e) {
         console.error(e);
       }
     }
     fetchAndSetUser();
-  }, [user?.userID, findNotRead]);
+  }, [user?.userID, findNotRead, user]);
   var findNotRead = data?.filter(obj => obj.read !== true);
   const [infoConfirm, setInfoConfirm] = useState(false);
   const openInfoConfirm = useCallback(() => {
@@ -176,16 +185,16 @@ const Navbar = () => {
 
       <nav className={`${display === "none" && "hidden"} fixed z-10 bg-white w-full shadow-sm`}>
         <div className="mx-auto px-4 sm:px-6">
-          <div className="flex justify-between items-center border-b-2 border-gray-100 py-4 md:justify-start md:space-x-10">
+          <div className="flex justify-between items-center border-b-2 border-gray-100 py-3 md:justify-start md:space-x-10">
             <div className="flex justify-start lg:w-0 lg:flex-1">
 
               <Link href="/"><a>
                 <span className="sr-only">TEAMZ</span>
                 <Image
                   src={logo}
-                  width={76.48}
+                  width={66.92}
                   alt="logo"
-                  height={32}
+                  height={28}
                   unoptimized
                 />
               </a></Link>
@@ -202,7 +211,7 @@ const Navbar = () => {
             {!user ?
               <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
                 <button
-                  className="whitespace-nowrap px-4 py-2 border border-transparent rounded-md text-[0.88rem] font-medium text-gray-500 hover:text-gray-900
+                  className="whitespace-nowrap px-4 py-2 border border-transparent rounded-md text-[0.88rem] font-medium text-violet-700 hover:text-violet-900
                 hover:bg-gray-100
                 focus:bg-gray-100 focus:shadow-lg focus:outline-none focus:ring-0
                   active:bg-gray-200 active:shadow-lg
@@ -233,13 +242,14 @@ const Navbar = () => {
                     <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
                   </svg>
                 </button>
-                <button className="" onClick={openInfoConfirm}>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 active:hover:text-violet-600 text-gray-600 " fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <button className="group-hover:transition-all" onClick={openInfoConfirm}>
+                  
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-600 hover:stroke-violet-600" fill="none " viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </button>
                 <button onClick={onClickMessage}>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="ml-[8px] active:hover:fill-violet-600 fill-gray-600 h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="ml-[8px] active:hover:fill-violet-600 fill-gray-600 h-8 w-8 hover:fill-violet-600" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                     <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                   </svg>
@@ -313,14 +323,17 @@ const Navbar = () => {
                           📝 기업보드 개설
                         </button>
                         <hr className="border-gray-200 dark:border-gray-700 " />
-                        <Link href="/about">
-                          <a
+                        <button
+                          onClick={onClickAbout}
+                          className="text-left w-full font-bold block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                        >
+                          {/* <a
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-left w-full font-bold block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-                            🔎 ABOUT
-                          </a>
-                        </Link>
+                            className="text-left w-full font-bold block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> */}
+                          🔎 ABOUT
+                          {/* </a> */}
+                        </button>
                         <button onClick={onClickLogout} className="flex w-[100%] text-left px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white items-center flex-row">
                           <svg xmlns="http://www.w3.org/2000/svg" className="mr-1 fill-gray-600 stroke-gray-600 h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clipRule="evenodd" />
@@ -436,16 +449,14 @@ const Navbar = () => {
                           <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                       </button>
-                      <Link href="/about">
-                        <a
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="ml-[8px] stroke-gray-600 h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M8 16l2.879-2.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                        </a>
-                      </Link>
+                      <button
+                        onClick={onClickAbout}
+                        className="text-left w-full font-bold block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="ml-[8px] stroke-gray-600 h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M8 16l2.879-2.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </button>
                       <button onClick={onClickLogout}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="ml-[8px] fill-gray-600 stroke-gray-600 h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clipRule="evenodd" />

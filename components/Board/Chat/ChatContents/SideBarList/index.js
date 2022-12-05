@@ -28,7 +28,7 @@ const SideBarList = () => {
     <>
       {!!conversationBar ?
         <Container
-          className={`sm:relative top-0 mt-[66px] sm:mt-0 fixed z-10 shadow bg-white border-slate-400 flex-shrink-0 overflow-y-auto overflow-x-hidden border-r
+          className={`sm:relative top-0 mt-[60.0px] sm:mt-0 fixed z-10 shadow bg-white border-slate-400 flex-shrink-0 overflow-y-auto overflow-x-hidden border-r
         ${!!pid?.cid
               ? "md:!block w-full md:w-[300px]"
               : "w-full md:!w-[300px]"
@@ -83,7 +83,7 @@ const SideBarList = () => {
         :
         <button
           onClick={onClickOpen}
-          className={`z-10 p-2 ml-2 fixed left-2 top-[150px] rounded-full hover:bg-gray-100 bg-slate-50 shadow text-gray-600
+          className={`z-10 p-2 ml-2 fixed left-2 top-[136px] rounded-full hover:bg-gray-100 bg-slate-50 shadow text-gray-600
           ${sidebarIn ? "sm:left-[324px] top-[80px] mt-1" : "ml-2"
             }`}>
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -102,7 +102,7 @@ const SideBarList = () => {
 };
 
 const Container = styled.div`
-height: calc(100vh - 138px);
+height: calc(100vh - 124px);
 `
 
 export default SideBarList;

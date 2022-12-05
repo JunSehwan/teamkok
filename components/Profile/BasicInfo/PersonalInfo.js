@@ -499,8 +499,8 @@ const PersonalInfo = ({ setTabIndex }) => {
             />
 
           }
-          <button type="submit" 
-          className="inline-flex justify-center py-3 px-4 w-full border border-transparent shadow-sm text-md font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          <button type="submit"
+            className="inline-flex justify-center py-3 px-4 w-full border border-transparent shadow-sm text-md font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             업데이트</button>
         </div>
       </form>

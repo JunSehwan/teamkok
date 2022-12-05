@@ -13,7 +13,7 @@ export const initialState = {
   loadDone: false,
   loadEducationsDone: false,
   loadSchoolsDone: false,
-
+  educationOpen: false,
 };
 
 export const education = createSlice({
@@ -48,6 +48,10 @@ export const education = createSlice({
       state.myEducations = newEdu;
       state.deleteDone = true;
     },
+    deleteDonefalse: (state) => {
+      state.deleteDone = false;
+    },
+    
     resetEducationState(state) {
       state.education = null;
     },
@@ -58,6 +62,12 @@ export const education = createSlice({
     loadSchools(state, action) {
       state.mainSchools = action.payload;
       state.loadSchoolsDone = true;
+    },
+    addEducationOpen(state, action) {
+      state.educationOpen = true;
+    },
+    addEducationOpenFalse(state, action) {
+      state.educationOpen = false;
     }
 
   },
@@ -76,11 +86,14 @@ export const {
   addEducation,
   updateEducation,
   removeEducation,
+  deleteDonefalse,
   resetEducationState,
   loadEducations,
   loadSchools,
   setAddDoneFalse,
-  setUpdateDoneFalse
+  setUpdateDoneFalse,
+  addEducationOpen,
+  addEducationOpenFalse,
 } = education.actions;
 
 export const useEducationState = () => useAppSelector((state) => state.education);

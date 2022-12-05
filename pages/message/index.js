@@ -139,7 +139,7 @@ const index = () => {
   return (
     <>
       <Head>
-        <title>TeamZ - 팀기반 채용플랫폼</title>
+        <title>TeamZ - 메시지</title>
 
         <meta name="keywords" content="teamz, 팀즈, 채용공고, 현업담당자와 대화, 업무문의, 채용문의, 팀기반 소통플랫폼" />
         <meta name="description" content="원하는 기업에 입사하기 위해 팀별 현업담당자에게 적극적으로 나를 어필을 할 수 있습니다." />

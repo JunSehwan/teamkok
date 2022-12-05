@@ -4,10 +4,16 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 module.exports = withBundleAnalyzer({
   // reactStrictMode: false,
+  // trailingSlash: true,
+  productionBrowserSourceMaps: true,
+  experimental: {
+    scrollRestoration: true,
+  },
+
   images: {
     loader: 'akamai',
     path: '',
-    domains: ['teamz.co.kr','localhost:3060','firebasestorage.googleapis.com', 'upload.wikimedia.org', 'lh3.googleusercontent.com', 'cdn.jsdelivr.net'],
+    domains: ['teamz.co.kr', 'localhost:3060', 'firebasestorage.googleapis.com', 'upload.wikimedia.org', 'lh3.googleusercontent.com', 'cdn.jsdelivr.net'],
     formats: ['image/avif', 'image/webp'],
   },
   distDir: 'build',
@@ -16,7 +22,7 @@ module.exports = withBundleAnalyzer({
   compiler: {
     styledComponents: true | {
       // Enabled by default in development, disabled in production to reduce file size,
-      // setting this will override the default for all environments.
+      // setting this withBundleAnalyzer override the default for all environments.
       displayName: true,
       // Enabled by default.
       ssr: true,
@@ -24,24 +30,27 @@ module.exports = withBundleAnalyzer({
       preprocess: false,
     },
   },
-
+  devServer: {
+    historyApiFallback: true,
+  },
+  devtool: 'eval-cheap-source-map',
   // webpack(config,options, { webpack }) {
   webpack(config, options) {
 
     if (!options.dev) {
       config.devtool = options.isServer ? false : 'eval'
     }
-    return config
+    // return config
 
-    // const prod = process.env.NODE_ENV === 'production';
-    // return {
-    //   ...config,
-    //   mode: prod ? 'production' : 'development',
-    //   devtool: prod ? 'hidden-source-map' : 'eval',
-    //   plugins: [
-    //     ...config.plugins,
-    //     new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /^\.\/ko$/),
-    //   ],
-    // };
+    const prod = process.env.NODE_ENV === 'production';
+    return {
+      ...config,
+      mode: prod ? 'production' : 'development',
+      devtool: prod ? 'hidden-source-map' : 'eval',
+      // plugins: [
+      //   ...config.plugins,
+      //   new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /^\.\/ko$/),
+      // ],
+    };
   },
 });

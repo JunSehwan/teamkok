@@ -6,10 +6,10 @@ export const initialState = {
   mainJoboffers: [],
   mainJoboffered: [],
   offerLoading: false,
-  addDone: false,
-  updateDone: false,
-  deleteDone: false,
-  loadDone: false,
+  addJobofferDone: false,
+  updateJobofferDone: false,
+  deleteJobofferDone: false,
+  loadJobofferDone: false,
   loadJoboffersDone: false,
 };
 
@@ -19,24 +19,24 @@ export const joboffer = createSlice({
   reducers: {
     addJoboffer: (state, action) => {
       state.mainJoboffers.unshift(action.payload);
-      state.addDone = true;
+      state.addJobofferDone = true;
     },
-    setAddDoneFalse: (state) => {
-      state.addDone = false;
+    addJobofferDoneFalse: (state) => {
+      state.addJobofferDone = false;
     },
     updateJoboffer: (state, action) => {
       state.mainJoboffered.find((v) => v.id === action.payload.id).read = action.payload.read;
       state.mainJoboffered.find((v) => v.id === action.payload.id).readtime = action.payload.readtime;
       state.mainJoboffered.find((v) => v.id === action.payload.id).answer = action.payload.answer;
-      state.updateDone = true;
+      state.updateJobofferDone = true;
     },
-    setUpdateDoneFalse: (state) => {
-      state.updateDone = false;
+    updateCoccocDoneFalse: (state) => {
+      state.updateJobofferDone = false;
     },
     removeJoboffer(state, action) {
       const newEdu = state.mainJoboffers.filter(v => v.id !== action.payload);
       state.mainJoboffers = newEdu;
-      state.deleteDone = true;
+      state.deleteJobofferDone = true;
     },
     resetJobofferState(state) {
       state.joboffer = null;
@@ -74,8 +74,8 @@ export const {
   loadJoboffers,
   loadJoboffered,
   loadSchools,
-  setAddDoneFalse,
-  setUpdateDoneFalse,
+  addJobofferDoneFalse,
+  updateCoccocDoneFalse,
 } = joboffer.actions;
 
 export const useJobofferState = () => useAppSelector((state) => state.joboffer);

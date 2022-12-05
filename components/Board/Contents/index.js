@@ -76,7 +76,7 @@ const index = () => {
   }, [dispatch, selcategoryArr, categorySetDone])
 
   return (
-    <div className={`${!sidebarIn ? `sm:pl-[0px]` : `sm:pl-[20rem]`} w-full pt-[66px] min-h-screen h-auto bg-slate-50`}>
+    <div className={`${!sidebarIn ? `sm:pl-[0px]` : `sm:pl-[20rem]`} w-full pt-[60.0px] min-h-screen h-auto bg-slate-50`}>
       <div className="h-full flex flex-col sm:flex-row">
         <SideBar />
         <SideButton />

@@ -32,7 +32,7 @@ import {
 } from "firebase/auth";
 import { getDownloadURL, getStorage, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
 import dayjs from "dayjs";
-import { nanoid } from 'nanoid'
+import { set } from "lodash";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -57,7 +57,6 @@ export { app, db, storage, FieldValue };
 
 var now = dayjs();
 const nowForCopy = dayjs(now);
-const timefor = new Date().toISOString();
 const time = nowForCopy.format('YYYY-MM-DD HH:mm:ss');
 
 
@@ -122,6 +121,30 @@ export async function getUser(userId) {
   return res.status(404).json({ id: user.id, ...user.data() });
 }
 
+export async function getOtherUser(otherid) {
+  try {
+    const result = await getDoc(api.userByIdRef(otherid));
+    if (result.exists()) {
+      const user = {
+        ...result.data(),
+        likes: result.data().likes || [],
+        liked: result.data().liked || [],
+        advices: result.data().advices || [],
+        adviced: result.data().adviced || [],
+        coccocs: result.data().coccocs || [],
+        coccoced: result.data().coccoced || [],
+        joboffers: result.data().joboffers || [],
+        joboffered: result.data().joboffered || [],
+        userID: otherid
+      };
+
+      return user;
+    }
+  } catch (e) {
+    console.error(e)
+  }
+}
+
 export async function createAccount(
   email, password, username, form, tel
 ) {
@@ -152,6 +175,14 @@ export async function createAccount(
       avatar: "",
       birthday: form,
       phonenumber: tel,
+      likes: [],
+      liked: [],
+      joboffers: [],
+      joboffered: [],
+      coccocs: [],
+      coccoced: [],
+      advices: [],
+      adviced: [],
       // tag: "0000", // Create function to generate unique tag for each username
       // about: "",
       // banner: "#7CC6FE",
@@ -302,7 +333,7 @@ export async function logOut() {
   }
 }
 
-export async function updateUserBasicInfo(username, newForm, email, tel, checkedCategory, gender, url_one, url_two, url_three, address) {
+export async function updateUserBasicInfo(username, newForm, email, tel, gender, address, address_sido) {
 
   const user = auth.currentUser;
 
@@ -317,20 +348,111 @@ export async function updateUserBasicInfo(username, newForm, email, tel, checked
     await updateUserDatabase("email_using", email);
     await updateUserDatabase("gender", gender);
     await updateUserDatabase("birthday", newForm);
-    await updateUserDatabase("url_one", url_one);
-    await updateUserDatabase("url_two", url_two);
-    await updateUserDatabase("url_three", url_three);
+    // await updateUserDatabase("url_one", url_one);
+    // await updateUserDatabase("url_two", url_two);
+    // await updateUserDatabase("url_three", url_three);
     await updateUserDatabase("address", address);
-
+    await updateUserDatabase("address_sido", address_sido);
     await updateUserDatabase("phonenumber", tel);
-    await updateUserDatabase("category", checkedCategory);
+    // await updateUserDatabase("category", checkedCategory);
 
-    return ({ username: username, newForm: newForm, email: email, tel: tel, address: address, checkedCategory: checkedCategory, gender: gender, url_one: url_one, url_two: url_two, url_three: url_three })
+    return ({ username: username, newForm: newForm, email: email, tel: tel, address: address, gender: gender, address_sido: address_sido, })
   } catch (error) {
     console.error(error);
     alert("profile update에 문제가 있습니다.");
   }
 }
+
+export async function updateMycompanyInfo(mycompany, myposition, mysection, mytype, companyemail) {
+
+  const user = auth.currentUser;
+
+  if (!user) return (
+    alert("로그인 후 가능합니다.")
+  );
+  try {
+    await updateUserDatabase("mycompany", mycompany);
+    await updateUserDatabase("myposition", myposition);
+    await updateUserDatabase("mysection", mysection);
+    await updateUserDatabase("mytype", mytype);
+    await updateUserDatabase("companyemail", companyemail);
+    await updateUserDatabase("companycomplete", true);
+
+    return ({
+      mycompany: mycompany,
+      myposition: myposition,
+      mysection: mysection,
+      mytype: mytype,
+      companyemail: companyemail,
+      companycomplete: true
+    })
+  } catch (error) {
+    console.error(error);
+    alert("profile update에 문제가 있습니다.");
+  }
+}
+
+export async function updateMycompanyAdditionalInfo(companyfield, companyurl, companyaddress, staffnumber, companyadditional) {
+
+  const user = auth.currentUser;
+
+  if (!user) return (
+    alert("로그인 후 가능합니다.")
+  );
+  try {
+    await updateUserDatabase("companyfield", companyfield);
+    await updateUserDatabase("companyurl", companyurl);
+    await updateUserDatabase("companyaddress", companyaddress);
+    await updateUserDatabase("staffnumber", staffnumber);
+    await updateUserDatabase("companyadditional", companyadditional);
+
+    return ({
+      companyfield: companyfield,
+      companyurl: companyurl,
+      companyaddress: companyaddress,
+      staffnumber: staffnumber,
+      companyadditional: companyadditional,
+    })
+  } catch (error) {
+    console.error(error);
+    alert("profile update에 문제가 있습니다.");
+  }
+}
+
+export async function patchAdditionalInfo(address_sido, address, links, additionalMent) {
+  const user = auth.currentUser;
+  if (!user) {
+    return alert("로그인 후 가능합니다.")
+  }
+  try {
+    await updateUserDatabase("links", []);
+    await updateUserDatabase("address_sido", address_sido);
+    await updateUserDatabase("address", address);
+    await updateUserDatabase("links", links);
+    await updateUserDatabase("additionalMent", additionalMent);
+    return ({ address_sido: address_sido, address: address, additionalMent: additionalMent, links: links })
+  } catch (error) {
+    console.error(error);
+    alert("profile update에 문제가 있습니다.");
+  }
+}
+
+export async function patchAdditionalInfoInProfile(links, additionalMent) {
+  const user = auth.currentUser;
+  if (!user) {
+    return alert("로그인 후 가능합니다.")
+  }
+  try {
+    await updateUserDatabase("links", []);
+    await updateUserDatabase("links", links);
+    await updateUserDatabase("additionalMent", additionalMent);
+    return ({ additionalMent: additionalMent, links: links })
+  } catch (error) {
+    console.error(error);
+    alert("profile update에 문제가 있습니다.");
+  }
+}
+
 
 export async function updateServiceInfoSeen(input) {
   const user = auth.currentUser;
@@ -339,6 +461,36 @@ export async function updateServiceInfoSeen(input) {
   );
   try {
     await updateUserDatabase("infoseen", input);
+    return input;
+  } catch (error) {
+    console.error(error);
+    alert("update에 문제가 있습니다.");
+  }
+}
+
+// onBoarding 페이지
+export async function updatePurpose(input) {
+  const user = auth.currentUser;
+  if (!user) return (
+    alert("로그인 후 가능합니다.")
+  );
+  try {
+    await updateUserDatabase("purpose", input);
+    return input;
+  } catch (error) {
+    console.error(error);
+    alert("update에 문제가 있습니다.");
+  }
+}
+
+// onBoarding 페이지
+export async function updateCategory(input) {
+  const user = auth.currentUser;
+  if (!user) return (
+    alert("로그인 후 가능합니다.")
+  );
+  try {
+    await updateUserDatabase("category", input);
     return input;
   } catch (error) {
     console.error(error);
@@ -484,7 +636,14 @@ export const setCategoryList = async (CategoryList) => {
 
 
 export const api = {
-  usersRef: collection(db, "users"),
+  // usersRef: collection(db, "users"),
+  usersRef: query(
+    collection(db, "users"),
+    // where("purpose", "!=", 1),
+    // orderBy("purpose"),
+    orderBy("timestamp", "desc")
+  ),
+
   userByIdRef: (userId) =>
     doc(db, "users", `${userId}`),
 
@@ -497,10 +656,12 @@ export const api = {
   viewsRef: collection(db, "ViewsData"),
   educationsRef: collection(db, "educations"),
   jobofferRef: collection(db, "joboffers"),
+  coccocRef: collection(db, "coccocs"),
   careersRef: collection(db, "careers"),
   mystyleRef: collection(db, "mystyle"),
   blogsRef: collection(db, "blogs"),
   boardsRef: collection(db, "boards"),
+  skillsRef: collection(db, "skills"),
   sectionsRef: collection(db, "sections"),
   postsRef: collection(db, "posts"),
   conversationRef: collection(db, "conversations"),
@@ -572,30 +733,128 @@ export const request = {
 
 // request.POST(api.commentsRef, { title: "newblog" });
 
+export async function getSkillsByUser(userId) {
+  const user = auth.currentUser;
+  const carRef = collection(db, "skills");
+  const q = query(carRef, where("userId", "==", userId), orderBy("timestamp", "desc"));
 
+  //결과 검색
+  const querySnapshot = await getDocs(q);
+  const result = querySnapshot?.docs?.map((doc) => (
+    {
+      ...doc.data(),
+      id: doc.id,
+    }
+  ))
+  return result
+}
+// 명령 실행시 await 필수!
+export async function getEducationsByUser(userId) {
+  const user = auth.currentUser;
+  const eduRef = collection(db, "educations");
+  const q = query(eduRef, where("userId", "==", userId), orderBy("timestamp", "asc"));
+
+  //결과 검색
+  const querySnapshot = await getDocs(q);
+  const result = querySnapshot?.docs?.map((doc) => (
+    {
+      ...doc.data(),
+      id: doc.id,
+    }
+  ))
+  return result
+}
+// 명령 실행시 await 필수!
+export async function getCareersByUser(userId) {
+  const user = auth.currentUser;
+  const carRef = collection(db, "careers");
+  const q = query(carRef, where("userId", "==", userId), orderBy("timestamp", "asc"));
+
+  //결과 검색
+  const querySnapshot = await getDocs(q);
+  const result = querySnapshot?.docs?.map((doc) => (
+    {
+      ...doc.data(),
+      id: doc.id,
+    }
+  ))
+  return result
+}
 
 // get all users
+
 export async function getUsers() {
   const result = await getDocs(api.usersRef);
-  return result.docs.map((doc) => ({
-    userID: doc.data().id,
-    avatar: doc.data().avatar,
-    email: doc.data().email,
-    username: doc.data().username,
-    category: doc.data().category,
-    gender: doc.data().gender,
-    phonenumber: doc.data().phonenumber,
-    timestamp: doc.data().timestamp,
-    survey: doc.data().survey,
-    style: doc.data().style,
-    url_one: doc.data().url_one,
-    url_two: doc.data().url_two,
-    url_three: doc.data().url_three,
-    birthday: doc.data().birthday,
-    point: doc.data().point,
-    points: doc.data().points,
-    givePoint: doc.data().givePoint,
-  }));
+
+  const people = await Promise.all(result.docs.map(async (doc) => {
+    var skills = await getSkillsByUser(doc.data().id)
+    var careers = await getCareersByUser(doc.data().id)
+    var educations = await getEducationsByUser(doc.data().id)
+    var joboffered = await getJobofferedByUserId(doc.data().id)
+    var joboffers = await getJoboffersByUserId(doc.data().id)
+    var coccoced = await getCoccocedByUserId(doc.data().id)
+    var coccocs = await getCoccocsByUserId(doc.data().id)
+
+    const man = {
+      userID: doc.data().id,
+      username: doc.data().username,
+      email: doc.data().email,
+      email_using: doc.data().email_using,
+      birthday: doc.data().birthday,
+      gender: doc.data().gender,
+      avatar: doc.data().avatar,
+      phonenumber: doc.data().phonenumber,
+      category: doc.data().category,
+      address: doc.data().address,
+      address_sido: doc.data().address_sido,
+      style: doc.data().style,
+      survey: doc.data().survey,
+      favorites: doc.data().favorites,
+      favLikes: doc.data().favLikes,
+      experts: doc.data().experts,
+      expertNum: doc.data().expertNum,
+      point: doc.data().point,
+      points: doc.data().points,
+      givePoint: doc.data().givePoint,
+      infoseen: doc.data().infoseen,
+      mycompany: doc.data().mycompany,
+      myposition: doc.data().myposition,
+      mysection: doc.data().mysection,
+      mytype: doc.data().mytype,
+      companyemail: doc.data().companyemail,
+      companylogo: doc.data().companylogo,
+      companyfield: doc.data().companyfield,
+      companyurl: doc.data().companyurl,
+      companyaddress: doc.data().companyaddress,
+      companycomplete: doc.data().companycomplete,
+      staffnumber: doc.data().staffnumber,
+      companyadditional: doc.data().companyadditional,
+      additionalMent: doc.data().additionalMent,
+      links: doc.data().links,
+      purpose: doc.data().purpose,
+      thumbvideo: doc.data().thumbvideo,
+      thumbimage: doc.data().thumbimage,
+      timestamp: doc.data().timestamp,
+      likes: doc.data().likes || [],
+      liked: doc.data().liked || [],
+      advices: doc.data().advices || [],
+      adviced: doc.data().adviced || [],
+      // coccocs: doc.data().coccocs || [],
+      // coccoced: doc.data().coccoced || [],
+      // joboffers: doc.data().joboffers || [],
+      // joboffered: doc.data().joboffered || [],
+      skills: skills,
+      careers: careers,
+      educations: educations,
+      joboffered: joboffered,
+      joboffers: joboffers,
+      coccoced: coccoced,
+      coccocs: coccocs,
+    }
+    return man;
+  }))
+  return people;
+
 }
 
 // get adimn  users
@@ -918,6 +1177,54 @@ export async function getEducationsByUserId(userId) {
   return result
 }
 
+// 명령 실행시 await 필수!
+export async function getCareersByOtherId(userId) {
+  const user = auth.currentUser;
+  const carRef = collection(db, "careers");
+  const q = query(carRef, where("userId", "==", userId), orderBy("timestamp", "asc"));
+
+  //결과 검색
+  const querySnapshot = await getDocs(q);
+  const result = querySnapshot?.docs?.map((doc) => (
+    {
+      ...doc.data(),
+      id: doc.id,
+    }
+  ))
+  return result
+}
+
+// 명령 실행시 await 필수!
+export async function getEducationsByOtherId(userId) {
+  const user = auth.currentUser;
+  const eduRef = collection(db, "educations");
+  const q = query(eduRef, where("userId", "==", userId), orderBy("timestamp", "asc"));
+
+  //결과 검색
+  const querySnapshot = await getDocs(q);
+  const result = querySnapshot?.docs?.map((doc) => (
+    {
+      ...doc.data(),
+      id: doc.id,
+    }
+  ))
+  return result
+}
+export async function getSkillsByOtherId(userId) {
+  const user = auth.currentUser;
+  const carRef = collection(db, "skills");
+  const q = query(carRef, where("userId", "==", userId), orderBy("timestamp", "desc"));
+
+  //결과 검색
+  const querySnapshot = await getDocs(q);
+  const result = querySnapshot?.docs?.map((doc) => (
+    {
+      ...doc.data(),
+      id: doc.id,
+    }
+  ))
+  return result
+}
 export async function deleteEducation(educationId) {
   const user = auth.currentUser;
   try {
@@ -1078,6 +1385,187 @@ export async function updateSurvey(survey) {
 }
 
 
+
+//     // SkillPool 따로 디비 만드는거보단, skill DB에서 중복 제거한 후 갯수 추출
+//     // 1. 일단 특정속성으로만 이루어진 배열만들기
+//     let result = objArray.map(a => a.foo);
+//     // 2. 중복된 것 갯수 구한 후 객체로 만들기
+//     const result = {};
+//     arr.forEach((x) => {
+//       result[x] = (result[x] || 0) + 1;
+//     });
+//     // 결과값: {"a":2,"b":2,"c":1}
+//     // 3. 객체를 배열로 바꿔서 값이 제일 큰 것부터 배열로 내보내기
+//     let strArr = [];
+//     for (let objKey in strObj) {
+//       if (strObj.hasOwnProperty(objKey)) {
+//         strArr.push(objKey);
+//       }
+//     }
+// // ['A', 'B', 'C']
+// // 4. slice로
+// // [a, b, c].slice 이런식으로
+export async function getSkillsByUserId(userId) {
+  const user = auth.currentUser;
+  const carRef = collection(db, "skills");
+  const q = query(carRef, where("userId", "==", user.uid), orderBy("timestamp", "desc"));
+
+  //결과 검색
+  const querySnapshot = await getDocs(q);
+  const result = querySnapshot?.docs?.map((doc) => (
+    {
+      ...doc.data(),
+      id: doc.id,
+    }
+  ))
+  return result
+}
+
+export async function getRelatedSkills(category) {
+  const user = auth.currentUser;
+  const carRef = collection(db, "skills");
+  const q = query(carRef, where("category", "==", category), orderBy("count", "asc"));
+
+  //결과 검색
+  const querySnapshot = await getDocs(q);
+  const result = querySnapshot?.docs?.map((doc) => (
+    {
+      ...doc.data(),
+      id: doc.id,
+    }
+  ))
+  return result
+}
+
+
+export async function createSkills(uniqueArr) {
+  const user = auth.currentUser;
+  if (!user) {
+    return alert("로그인 후 가능합니다.")
+  }
+  try {
+    const carRef = collection(db, "skills");
+    const q = query(carRef, where("userId", "==", user.uid), orderBy("timestamp", "desc"));
+    const querySnapshot = await getDocs(q);
+    const result = querySnapshot?.docs?.map((index) => (
+      deleteDoc(doc(db, "skills", index?.id))
+    ))
+    const res = await uniqueArr?.map(async (v) => (
+      await addDoc(api.skillsRef, {
+        userId: user.uid,
+        name: v?.name,
+        category: v?.category,
+        count: increment(1),
+        timestamp: dayjs().format('YYYY-MM-DD HH:mm:ss')
+      }
+      )))
+    return (res);
+
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+
+// LIKE USER
+export async function likeUser(
+  userId, username, userAvatar
+) {
+  const user = auth.currentUser;
+  // await updateDoc(api.userByIdRef(user.uid), {
+  //   likes: arrayUnion({ userId: userId, username: username, userAvatar: userAvatar }),
+  // });
+  await updateDoc(api.userByIdRef(userId), {
+    liked: arrayUnion({ userId: user.uid, username: user.displayName, userAvatar: user?.photoURL }),
+  });
+  const docRef = doc(db, "users", userId);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    const result = {
+      ...docSnap.data(),
+    }
+    return result;
+  }
+}
+
+// UNLIKE USER
+export async function unlikeUser(
+  userId, username, userAvatar
+) {
+  const user = auth.currentUser;
+  await updateDoc(api.userByIdRef(userId), {
+    liked: arrayRemove({ userId: user?.uid, username: user?.displayName, userAvatar: user?.photoURL }),
+  });
+  return await updateDoc(api.userByIdRef(user?.uid), {
+    likes: arrayRemove({ userId: userId, username: username, userAvatar: userAvatar }),
+  });
+}
+
+
+// Advice USER
+export async function createAdvice(
+  result
+) {
+  const user = auth.currentUser;
+  await updateDoc(api.userByIdRef(user.uid), {
+    advices: arrayUnion({
+      targetId: result?.targetId,
+      targetName: result?.targetName,
+      targetAvatar: result?.targetAvatar,
+      description: result?.description,
+      rating: result?.rating,
+    }),
+  });
+  await updateDoc(api.userByIdRef(result?.targetId), {
+    adviced: arrayUnion({
+      userId: user.uid,
+      username: user.displayName,
+      userAvatar: user?.photoURL,
+      description: result?.description,
+      rating: result?.rating,
+      mycompany: result?.mycompany,
+      mysection: result?.mysection,
+      companylogo: result?.companylogo,
+    }),
+  });
+  const docRef = doc(db, "users", result?.targetId);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    const result = {
+      ...docSnap.data(),
+    }
+    return result;
+  }
+}
+
+// Delete Advice USER
+export async function removeAdvice(
+  result
+) {
+  const user = auth.currentUser;
+  await updateDoc(api.userByIdRef(result?.targetId), {
+    adviced: arrayRemove({
+      userId: user.uid,
+      username: user.displayName,
+      userAvatar: user?.photoURL,
+      description: result?.description,
+      rating: result?.rating,
+      mycompany: result?.mycompany,
+      mysection: result?.mysection,
+      companylogo: result?.companylogo,
+    }),
+  });
+  return await updateDoc(api.userByIdRef(user?.uid), {
+    advices: arrayRemove({
+      targetId: result?.targetId,
+      targetName: result?.targetName,
+      targetAvatar: result?.targetAvatar,
+      description: result?.description,
+      rating: result?.rating,
+    }),
+  });
+}
+
 export async function createBoard(board) {
   const user = auth.currentUser;
   if (!user) {
@@ -1120,7 +1608,7 @@ export async function createBoard(board) {
 
 export async function getBoard(boardId) {
   try {
-    const docRef =  doc(db, "boards", boardId);
+    const docRef = doc(db, "boards", boardId);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       const result = {
@@ -1210,6 +1698,26 @@ async function updateBoardDatabase(property, newValue, boardId) {
       [property]: newValue,
     }
   );
+}
+
+export async function uploadLogoPreviewOnboard(file, userID) {
+  const storage = getStorage();
+  const logoRef = ref(storage, `company/${userID}/logo`);
+  await uploadBytes(logoRef, file);
+  return await getLogoPreviewURLOnboard(userID);
+}
+
+export async function saveCompanyLogoChangesOnboard(newLogoURL, userID) {
+  const user = auth.currentUser;
+  if (!user) return (
+    alert("로그인 후 가능합니다.")
+  );
+  await updateUserDatabase("companylogo", newLogoURL);
+}
+
+async function getLogoPreviewURLOnboard(userID) {
+  const storage = getStorage();
+  return await getDownloadURL(ref(storage, `company/${userID}/logo`));
 }
 
 export async function saveCompanyLogoChanges(newLogoURL, boardId) {
@@ -1712,7 +2220,7 @@ export async function getMessages(cid, limitCount) {
   try {
     const user = auth.currentUser;
     if (!user) {
-      return 
+      return
     }
     const q = query(
       collection(db, "conversations", cid, "messages"),
@@ -1726,7 +2234,7 @@ export async function getMessages(cid, limitCount) {
     //     id: cid,
     //   }
     //   // return result;
-      return docSnap;
+    return docSnap;
     // }
   }
   catch (e) {
@@ -2039,7 +2547,7 @@ export async function getJoboffersByUserId(userId) {
     const user = auth.currentUser;
     const jobofferRef = collection(db, "joboffers");
     const q = query(jobofferRef,
-      where("userId", "==", user.uid),
+      where("userId", "==", userId),
       orderBy("timestamp", "desc"),
     )
     //결과 검색
@@ -2060,7 +2568,7 @@ export async function getJobofferedByUserId(userId) {
     const user = auth.currentUser;
     if (!user) return;
     const jobofferRef = collection(db, "joboffers");
-    const q = query(jobofferRef, where("targetId", "==", user.uid), orderBy("timestamp", "desc"));
+    const q = query(jobofferRef, where("targetId", "==", userId), orderBy("timestamp", "desc"));
 
     //결과 검색
     const querySnapshot = await getDocs(q);
@@ -2103,16 +2611,281 @@ export async function modifyJoboffer(jobofferResult, id) {
       }
     );
     const docRef = doc(db, "joboffers", id);
-    // const docSnap = await getDoc(docRef);
-    // if (docSnap.exists()) {
-    //   const result = {
-    //     ...docSnap.data(),
-    //     id: myOffer.id,
-    //   }
-    // }
 
     return new Date().toISOString();
   } catch (e) {
     console.error(e)
   }
 }
+
+
+export async function createCoccoc(offer) {
+  const created = await addDoc(api.coccocRef,
+    { ...offer, timestamp: new Date().toISOString() });
+
+  const docRef = doc(db, "coccocs", created.id);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    const result = {
+      ...docSnap.data(),
+      id: created.id,
+    }
+    // console.log("Document data:", docSnap.data());
+    return result;
+  } else {
+    // doc.data() will be undefined in this case
+    alert("No such document!");
+  }
+}
+
+// 내가 제안한 리스트 불러오기
+export async function getCoccocsByUserId(userId) {
+  try {
+    const user = auth.currentUser;
+    const coccocRef = collection(db, "coccocs");
+    const q = query(coccocRef,
+      where("userId", "==", userId),
+      orderBy("timestamp", "desc"),
+    )
+    //결과 검색
+    const querySnapshot = await getDocs(q);
+    const result = querySnapshot?.docs?.map((doc) => (
+      {
+        ...doc.data(),
+        id: doc.id,
+      }
+    ))
+    return result
+  } catch (e) {
+  }
+}
+// 내가 오퍼받은 리스트 불러오기
+export async function getCoccocedByUserId(userId) {
+  try {
+    const user = auth.currentUser;
+    if (!user) return;
+    const coccocRef = collection(db, "coccocs");
+    const q = query(coccocRef, where("targetId", "==", userId), orderBy("timestamp", "desc"));
+
+    //결과 검색
+    const querySnapshot = await getDocs(q);
+    const result = querySnapshot?.docs?.map((doc) => (
+      {
+        ...doc.data(),
+        id: doc.id,
+      }
+    ))
+    return result
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export async function deleteCoccoc(coccocId) {
+  const user = auth.currentUser;
+  try {
+    if (!user) return (alert("로그인이 필요합니다."))
+    if (!coccocId) return alert("삭제에 문제가 있습니다.");
+
+    const docRef = doc(db, "coccocs", coccocId);
+    deleteDoc(docRef);
+
+    return coccocId;
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+export async function modifyCoccoc(coccocResult, id) {
+  const user = auth.currentUser;
+  try {
+    if (!user || !id) return alert("업데이트에 문제가 발생했습니다.");
+    const myOffer = await updateDoc(doc(db, "coccocs", id),
+      {
+        answer: coccocResult,
+        read: true,
+        readtime: new Date().toISOString()
+      }
+    );
+    const docRef = doc(db, "coccocs", id);
+
+    return new Date().toISOString();
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+
+
+// // Coccoc USER
+// export async function createCoccoc(
+//   result
+// ) {
+//   const user = auth.currentUser;
+//   await updateDoc(api.userByIdRef(user.uid), {
+//     coccocs: arrayUnion({
+//       targetId: result?.targetId,
+//       targetName: result?.targetName,
+//       targetAvatar: result?.targetAvatar,
+//       description: result?.description,
+//       job: result?.job,
+//       salary: result?.salary,
+//       type: result?.type,
+//       duedate: result?.duedate,
+//       company: result?.company,
+//       section: result?.section,
+//     }),
+//   });
+//   await updateDoc(api.userByIdRef(result?.targetId), {
+//     coccoced: arrayUnion({
+//       userId: user.uid,
+//       username: user.displayName,
+//       userAvatar: user?.photoURL,
+//       description: result?.description,
+//       job: result?.job,
+//       salary: result?.salary,
+//       type: result?.type,
+//       duedate: result?.duedate,
+//       company: result?.company,
+//       section: result?.section,
+//       mycompany: result?.mycompany,
+//       mysection: result?.mysection,
+//       companylogo: result?.companylogo,
+//     }),
+//   });
+//   const docRef = doc(db, "users", result?.targetId);
+//   const docSnap = await getDoc(docRef);
+//   if (docSnap.exists()) {
+//     const result = {
+//       ...docSnap.data(),
+//     }
+//     return result;
+//   }
+// }
+
+// // Delete Coccoc USER
+// export async function removeCoccoc(
+//   result
+// ) {
+//   const user = auth.currentUser;
+//   await updateDoc(api.userByIdRef(result?.targetId), {
+//     coccoced: arrayRemove({
+//       userId: user.uid,
+//       username: user.displayName,
+//       userAvatar: user?.photoURL,
+//       description: result?.description,
+//       job: result?.job,
+//       salary: result?.salary,
+//       type: result?.type,
+//       duedate: result?.duedate,
+//       company: result?.company,
+//       section: result?.section,
+//       mycompany: result?.mycompany,
+//       mysection: result?.mysection,
+//       companylogo: result?.companylogo,
+//     }),
+//   });
+//   return await updateDoc(api.userByIdRef(user?.uid), {
+//     coccocs: arrayRemove({
+//       targetId: result?.targetId,
+//       targetName: result?.targetName,
+//       targetAvatar: result?.targetAvatar,
+//       description: result?.description,
+//       job: result?.job,
+//       salary: result?.salary,
+//       type: result?.type,
+//       duedate: result?.duedate,
+//       company: result?.company,
+//       section: result?.section,
+//     }),
+//   });
+// }
+
+// // Joboffer USER
+// export async function createJoboffer(
+//   result
+// ) {
+//   const user = auth.currentUser;
+//   await updateDoc(api.userByIdRef(user.uid), {
+//     joboffers: arrayUnion({
+//       targetId: result?.targetId,
+//       targetName: result?.targetName,
+//       targetAvatar: result?.targetAvatar,
+//       description: result?.description,
+//       job: result?.job,
+//       salary: result?.salary,
+//       type: result?.type,
+//       duedate: result?.duedate,
+//       company: result?.company,
+//       section: result?.section,
+//       space: result?.space,
+//     }),
+//   });
+//   await updateDoc(api.userByIdRef(result?.targetId), {
+//     joboffered: arrayUnion({
+//       userId: user.uid,
+//       username: user.displayName,
+//       userAvatar: user?.photoURL,
+//       description: result?.description,
+//       job: result?.job,
+//       salary: result?.salary,
+//       type: result?.type,
+//       duedate: result?.duedate,
+//       company: result?.company,
+//       section: result?.section,
+//       space: result?.space,
+//       mycompany: result?.mycompany,
+//       mysection: result?.mysection,
+//       companylogo: result?.companylogo,
+//     }),
+//   });
+//   const docRef = doc(db, "users", result?.targetId);
+//   const docSnap = await getDoc(docRef);
+//   if (docSnap.exists()) {
+//     const result = {
+//       ...docSnap.data(),
+//     }
+//     return result;
+//   }
+// }
+
+// // Delete Joboffer USER
+// export async function removeJoboffer(
+//   result
+// ) {
+//   const user = auth.currentUser;
+//   await updateDoc(api.userByIdRef(result?.targetId), {
+//     joboffered: arrayRemove({
+//       userId: user.uid,
+//       username: user.displayName,
+//       userAvatar: user?.photoURL,
+//       description: result?.description,
+//       job: result?.job,
+//       salary: result?.salary,
+//       type: result?.type,
+//       duedate: result?.duedate,
+//       company: result?.company,
+//       section: result?.section,
+//       space: result?.space,
+//       mycompany: result?.mycompany,
+//       mysection: result?.mysection,
+//       companylogo: result?.companylogo,
+//     }),
+//   });
+//   return await updateDoc(api.userByIdRef(user?.uid), {
+//     joboffers: arrayRemove({
+//       targetId: result?.targetId,
+//       targetName: result?.targetName,
+//       targetAvatar: result?.targetAvatar,
+//       description: result?.description,
+//       job: result?.job,
+//       salary: result?.salary,
+//       type: result?.type,
+//       duedate: result?.duedate,
+//       company: result?.company,
+//       section: result?.section,
+//       space: result?.space,
+//     }),
+//   });
+// }

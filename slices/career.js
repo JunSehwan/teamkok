@@ -13,6 +13,7 @@ export const initialState = {
   loadDone: false,
   loadCareersDone: false,
   loadCompaniesDone: false,
+  careerOpen: false,
 };
 
 export const career = createSlice({
@@ -47,6 +48,10 @@ export const career = createSlice({
       state.myCareers = newCar;
       state.deleteDone = true;
     },
+    deleteDonefalse: (state) => {
+      state.deleteDone = false;
+    },
+
     resetCareerState(state) {
       state.career = null;
     },
@@ -60,6 +65,12 @@ export const career = createSlice({
     },
     setUsersCareers(state, action) {
       state.userCareers = action.payload;
+    },
+    addCareerOpen(state, action) {
+      state.careerOpen = true;
+    },
+    addCareerOpenFalse(state, action) {
+      state.careerOpen = false;
     }
 
   },
@@ -78,12 +89,15 @@ export const {
   addCareer,
   updateCareer,
   removeCareer,
+  deleteDonefalse,
   resetCareerState,
   loadCareers,
   loadCompanies,
   setAddDoneFalse,
   setUpdateDoneFalse,
-  setUsersCareers
+  setUsersCareers,
+  addCareerOpen,
+  addCareerOpenFalse,
 } = career.actions;
 
 export const useCareerState = () => useAppSelector((state) => state.career);

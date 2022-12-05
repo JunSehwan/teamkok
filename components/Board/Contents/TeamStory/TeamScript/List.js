@@ -15,7 +15,7 @@ const List = ({ headicon, question, answer }) => {
         </div>
       </div>
       <div className="flex items-start justify-start text-base">
-        <span className='whitespace-pre-wrap leading-normal font-normal text-gray-600 pt-1 ml-5 pl-3 mb-1'>
+        <span className='whitespace-pre-wrap leading-normal font-normal text-gray-800 pt-1 ml-5 pl-3 mb-1'>
           {answer}
         </span>
       </div>

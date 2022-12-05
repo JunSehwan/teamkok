@@ -11,9 +11,9 @@ const Shoot = () => {
   const { singleConversation } = useSelector(state => state.chat);
 
   return (
-    <div className="flex pt-[66px] bg-slate-50">
+    <div className="flex pt-[60.0px] bg-slate-50">
       <SideBarList />
-      <div className="flex-grow flex-col items-end justify-center gap-3 md:!flex text-gray-500 h-[calc(100vh-66px)] ">
+      <div className="flex-grow flex-col items-end justify-center gap-3 md:!flex text-gray-500 h-[calc(100vh-60.0px)] ">
         <ChatView
           replyInfo={replyInfo}
           setReplyInfo={setReplyInfo}

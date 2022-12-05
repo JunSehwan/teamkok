@@ -10,7 +10,7 @@ export default createGlobalStyle`
     line-height: 1.15;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
-    font-family: "나눔고딕", "Noto Sans KR", sans-serif, "Intel", "Helvetica Neue", Helvetica, Arial, "맑은 고딕", malgun gothic, "돋움", Dotum, sans-serif, "Apple Color Emoji", "Noto Color Emoji";
+    font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
   }
   
   *, :after, :before {
@@ -41,7 +41,6 @@ ul {
     font-size: 16px;
     vertical-align: baseline;
     box-sizing: border-box;
-    font-family: "나눔고딕", "Noto Sans KR",sans-serif,"Intel", "Helvetica Neue", Helvetica, Arial, "맑은 고딕", malgun gothic, "돋움", Dotum, sans-serif, "Apple Color Emoji", "Noto Color Emoji";
   }
 
   article, aside, details, figcaption, figure,
@@ -76,7 +75,6 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: "나눔고딕", "Noto Sans KR",sans-serif,"Intel", "Helvetica Neue", Helvetica, Arial, "맑은 고딕", malgun gothic, "돋움", Dotum, sans-serif, "Apple Color Emoji", "Noto Color Emoji";
     margin-top: 0;
     margin-bottom: 0;
     color: inherit;
@@ -147,6 +145,7 @@ h4, .h4 {
 
 :root {
   /* 메인컬러   */
+    --myblue-color: #1890FF;
     --purple-strong: #5c16c5;
     --purple-normal: #7136b5;
     --blue-weak: #4c5ace;
@@ -182,6 +181,12 @@ h4, .h4 {
     --danger: #dc3545;
     --light: #f8f9fa;
     --dark: #343a40;
+     @media screen and (max-width: 640px) {
+        --navbar-height: 52.17px;
+    }
+        --navbar-height: 59px;
+    
+    --navbar-height: 60px;
     --breakpoint-xs: 0;
     --breakpoint-sm: 576px;
     --breakpoint-md: 768px;

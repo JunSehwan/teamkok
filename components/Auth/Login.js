@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { signIn, emailDubCheck, getUser } from 'firebaseConfig';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, signUp } from "slices/user";
@@ -19,10 +19,12 @@ import {
 import Image from 'next/image';
 import dayjs from "dayjs";
 import { useRouter } from 'next/router';
+import Link from 'next/link';
+import GoBack from 'components/Common/GoBack';
 
-const Login = ({ handleCancelModal }) => {
+const Login = () => {
   const dispatch = useDispatch();
-const router=useRouter();
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [emailDubError, setEmailDubError] = useState(false);
@@ -49,19 +51,23 @@ const router=useRouter();
   const [loginError, setLoginError] = useState(false);
   const [results, setResults] = useState();
 
-  const { signUpSuccess, logInSuccess } = useSelector(state => state.user);
+  const { signUpSuccess, isLoggedIn } = useSelector(state => state.user);
   const { user } = useSelector(state => state.user);
   useEffect(() => {
-    if (signUpSuccess || logInSuccess || !!user) {
+    if (signUpSuccess || isLoggedIn || !!user) {
       setEmail("");
       setPassword("");
       setEmailError(false);
       setEmailDubError(false);
       setPasswordError(false);
-      handleCancelModal();
     }
-  }, [signUpSuccess, logInSuccess,user, handleCancelModal])
+  }, [signUpSuccess, isLoggedIn, user])
 
+  useEffect(() => {
+    if (signUpSuccess || isLoggedIn || !!user) {
+      router.push("/dashboard")
+    }
+  }, [isLoggedIn, router, signUpSuccess, user])
 
   const auth = getAuth();
 
@@ -95,7 +101,6 @@ const router=useRouter();
       if (!loginResult) setLoginError(true);
       if (loginResult?.uid?.length !== 0) {
         dispatch(login({ results }));
-        handleCancelModal();
       }
     } catch (e) {
       if (e) { setLoginError(true); }
@@ -105,7 +110,7 @@ const router=useRouter();
       alert(errorCode, "에러")
     }
 
-  }, [password, email, auth, results, dispatch, handleCancelModal])
+  }, [password, email, auth, results, dispatch])
 
 
   // 구글로그인
@@ -158,7 +163,6 @@ const router=useRouter();
               }));
             }
 
-            handleCancelModal();
           }
 
           return data?.user
@@ -169,112 +173,141 @@ const router=useRouter();
     } catch (err) {
       console.error(err);
     }
-  }, [auth, db, time, dispatch, handleCancelModal])
+  }, [auth, db, time, dispatch,])
 
-  const handlePasswordForgot = useCallback(()=>{
+  const handlePasswordForgot = useCallback(() => {
     router.push("/auth/forgotpassword");
-    handleCancelModal();
-  }, [router, handleCancelModal])
+  }, [router,])
+
+  // autoFocus 관련
+  const inputElement = useRef(null);
+  useEffect(() => {
+    if (inputElement.current) {
+      inputElement.current.focus();
+    }
+  }, []);
 
   return (
     <div>
-      <div className="container mx-auto">
+      <div className="max-w-[32rem] container mx-auto">
         <div className="flex justify-center my-3">
           {/* <!-- Row --> */}
           <div className="w-full flex">
             {/* <!-- Col --> */}
-            {/* <!-- Col --> */}
-            <div className="mt-6 w-full bg-white rounded-lg lg:rounded-l-none">
 
-              <button
-                onClick={signInWithGoogleHandler}
-                className="flex min-w-full cursor-pointer items-center gap-3 rounded-md bg-white p-2 text-black transition duration-300 disabled:!cursor-default disabled:!brightness-75"
-              >
-                <div className="hover:bg-slate-100 google-btn flex flex-row items-center justify-center w-[70%] mx-auto p-2 bg-white shadow-lg">
-                  <div className="google-icon-wrapper mr-3">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <Image width={34} height={34} unoptimized alt="google" className="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" />
+            {/* 뒤로가기 버튼 */}
+            <div className='w-full fixed left-0 top-0 py-2 bg-[#ffffff51] z-10 backdrop-blur-md	'>
+              <div className='max-w-[32rem] mx-auto'>
+                <div className='w-full flex justify-items-end items-center'>
+                  <GoBack />
+                </div>
+                <h3 className='text-xl text-gray-600 my-2 ml-2 w-full'>로그인🔅</h3>
+              </div>
+            </div>
+            <div className='pt-[100px] w-full'>
+              <div className="mt-6 px-2 w-full bg-white rounded-lg lg:rounded-l-none">
+                <form
+                  className="w-full pt-4 pb-2 mb-4 bg-white rounded"
+                  onSubmit={onSubmit}
+                >
+
+                  <div className="mb-4">
+                    <label className="block mb-1 text-md font-bold text-gray-700" htmlFor="login_email">
+                      이메일
+                    </label>
+                    <input
+                      className={emailError || emailDubError ?
+                        'w-full px-3 py-2 mb-2 text-md border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                        :
+                        'w-full px-3 py-2 mb-2 text-md leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                      }
+                      ref={inputElement}
+                      id="login_email"
+                      type="email"
+                      placeholder="이메일주소"
+                      onChange={onChangeEmail}
+                      value={email}
+                    />
+                    {emailError ? (
+                      <p className="text-xs mb-[1.5rem] italic text-red-500">이메일을 입력해주세요.</p>
+                    ) : null}
+                    {emailDubError ? (
+                      <p className="text-xs mb-[1.5rem] italic text-red-500">해당하는 이메일 계정은 존재하지 않습니다.</p>
+                    ) : null}
                   </div>
-                  <p className="btn-text"><b>Sign in with google</b></p>
-                </div>
-              </button>
-
-              <div className="w-[90%] mx-auto h-[4px] py-4 my-4 border-b-[1px] border-solid border-slate-200"></div>
-              <div className="w-fit bg-white mt-[-24px] px-6 mx-auto text-sm text-gray-500">또는</div>
 
 
-              <form className="w-full pt-4 pb-2 mb-4 bg-white rounded">
-
-                <div className="mb-4">
-                  <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="email">
-                    이메일
-                  </label>
-                  <input
-                    className={emailError || emailDubError ?
-                      'w-full px-3 py-2 mb-2 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-                      :
-                      'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-                    }
-                    id="login_email"
-                    type="email"
-                    placeholder="이메일주소"
-                    onChange={onChangeEmail}
-                    value={email}
-                  />
-                  {emailError ? (
-                    <p className="text-xs mb-[1.5rem] italic text-red-500">이메일을 입력해주세요.</p>
-                  ) : null}
-                  {emailDubError ? (
-                    <p className="text-xs mb-[1.5rem] italic text-red-500">해당하는 이메일 계정은 존재하지 않습니다.</p>
-                  ) : null}
-                </div>
-
-
-                <div className="mb-4">
-                  <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="password">
-                    비밀번호
-                  </label>
-                  <input
-                    className=
-                    'w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
-                    id="login_password"
-                    type="password"
-                    autoComplete="current-password"
-                    placeholder="********"
-                    onChange={onChangePassword}
-                    value={password}
-                  />
-                  {passwordError ? (
-                    <p className="text-xs mb-[1.5rem] italic text-red-500">비밀번호를 입력해주세요.</p>
-                  ) : null}
-                  {loginError ? (
-                    <p className="text-xs mb-[1.5rem] italic text-red-500">로그인 에러 - 비밀번호를 다시 확인해주세요.</p>
-                  ) : null}
-                </div>
-                <div className="mb-6 text-center">
-                  <button
-                    className="w-full px-4 text-md py-4 font-bold text-white bg-purple-600 rounded-lg hover:bg-purple-700 focus:outline-none focus:shadow-outline"
-                    type="button"
-                    onClick={onSubmit}
-                  >
-                    로그인
-                  </button>
-                </div>
-                <hr className="mb-6 border-t" />
-                <div className="text-center">
-                  <a
-                    className="inline-block text-[0.88rem] text-blue-500 align-baseline hover:text-blue-800"
-                    onClick={handlePasswordForgot}
-                  >
-                    Forgot Password?
-                  </a>
-                </div>
+                  <div className="mb-4">
+                    <label className="block mb-1 text-md font-bold text-gray-700" htmlFor="password">
+                      비밀번호
+                    </label>
+                    <input
+                      className=
+                      'w-full px-3 py-2 mb-3 text-md leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                      id="login_password"
+                      type="password"
+                      autoComplete="current-password"
+                      placeholder="********"
+                      onChange={onChangePassword}
+                      value={password}
+                    />
+                    {passwordError ? (
+                      <p className="text-xs mb-[1.5rem] italic text-red-500">비밀번호를 입력해주세요.</p>
+                    ) : null}
+                    {loginError ? (
+                      <p className="text-xs mb-[1.5rem] italic text-red-500">로그인 에러 - 비밀번호를 다시 확인해주세요.</p>
+                    ) : null}
+                  </div>
+                  <div className="mb-6 text-center">
+                    <button
+                      className="w-full px-4 text-md py-4 font-bold text-white bg-sky-600 rounded-lg hover:bg-sky-700 focus:outline-none focus:shadow-outline"
+                      type="onSubmit"
+                    >
+                      로그인
+                    </button>
+                  </div>
 
 
-              </form>
 
-              <div className="g-signin2" data-width="300" data-height="200" data-longtitle="true" />
+                  <div className="text-center text-[14px] text-gray-500">
 
+                    비밀번호를 잊어버렸나요?
+                    <a
+                      className="inline-block text-[0.88rem] text-blue-500 align-baseline hover:text-blue-800"
+                      onClick={handlePasswordForgot}
+                    >
+                      &nbsp;비밀번호를 재설정
+                    </a>
+                    해주세요.
+                  </div>
+
+                  <div className="text-center mt-[1rem] mb-[1rem] text-[14px] text-gray-500">
+                    아직 회원이 아니신가요? <Link href="/signup"><a className="text-[0.88rem] text-blue-500 align-baseline hover:text-blue-800">회원가입</a></Link>을 해주세요.
+                  </div>
+
+
+                  <div className="w-[90%] mx-auto h-[4px] py-4 my-4 border-b-[1px] border-solid border-slate-200"></div>
+                  <div className="w-fit bg-white mt-[-24px] px-8 mx-auto text-md text-gray-500">소셜 계정 로그인</div>
+                  <div className='google_wrapper mt-4 mb-4'>
+                    <button
+                      onClick={signInWithGoogleHandler}
+                      className="flex min-w-full cursor-pointer items-center gap-3 rounded-full bg-white p-2 text-black transition duration-300 disabled:!cursor-default disabled:!brightness-75"
+                    >
+                      <div className="hover:bg-slate-50 rounded-full google-btn flex flex-row items-center justify-center w-[70%] mx-auto p-2 bg-white shadow-lg">
+                        <div className="google-icon-wrapper mr-3">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <Image width={34} height={34} unoptimized alt="google" className="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" />
+                        </div>
+                        <p className="btn-text"><b>Sign in with google</b></p>
+                      </div>
+                    </button>
+                  </div>
+
+                </form>
+
+                <div className="g-signin2" data-width="300" data-height="200" data-longtitle="true" />
+
+              </div>
             </div>
           </div>
         </div>
@@ -284,7 +317,6 @@ const router=useRouter();
 };
 
 Login.propTypes = {
-  handleCancelModal: PropTypes.func,
 };
 
 export default Login;

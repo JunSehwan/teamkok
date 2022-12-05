@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Footer from 'components/Main/Footer';
 import styled from 'styled-components';
 import Image from 'next/image';
 
 const index = () => {
+
   return (
     <>
-      <div className="min-h-[calc(100vh-66px)] bg-slate-50 flex flex-col justify-between">
+      <div className="min-h-[calc(100vh-60.0px)] bg-slate-50 flex flex-col justify-between">
         <div className="pt-24 pb-12">
           <div className="container m-auto text-gray-600 md:px-12 xl:px-6 px-6">
             <div className="space-y-6 md:space-y-0 md:flex md:gap-6 lg:items-center lg:gap-12">

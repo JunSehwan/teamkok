@@ -317,7 +317,7 @@ const Career = ({ carform, setCarform }) => {
                 id="company_name"
                 type="text"
                 maxLength={100}
-                placeholder="회사명"
+                placeholder="ABC회사"
                 onChange={onChangeName}
                 value={name}
               />
@@ -362,7 +362,7 @@ const Career = ({ carform, setCarform }) => {
                 value={section}
               />
               {sectionError ? (
-                <p className="text-xs mb-[1.5rem] italic text-red-500">직위명을 입력해주세요.</p>
+                <p className="text-xs mb-[1.5rem] italic text-red-500">부서명을 입력해주세요.</p>
               ) : null}
             </div>
 

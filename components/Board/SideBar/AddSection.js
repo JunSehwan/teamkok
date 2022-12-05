@@ -94,17 +94,17 @@ const AddSection = () => {
   
   return (
     <div className="mt-4 w-full">
-      <div className='w-[70%] flex justify-center mx-auto h-[2px] bg-slate-200 my-6'></div>
+      {/* <div className='w-[70%] flex justify-center mx-auto h-[2px] bg-slate-200 my-6'></div> */}
       {isAdmin ?
         <button
           onClick={onOpen}
           className="w-full px-2">
-          <div className='flex flex-row items-center justify-start w-full'>
+          <div className='hover:bg-slate-200 pr-4 py-2 rounded-lg  flex flex-row items-center justify-start w-full'>
             <svg xmlns="http://www.w3.org/2000/svg" className="text-blue-700 mr-2 h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" />
             </svg>
-            <span className='text-base'>새로운 섹션 생성</span>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+            <span className=' text-gray-500'>새로운 섹션 생성</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="text-gray-400 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
           </div>

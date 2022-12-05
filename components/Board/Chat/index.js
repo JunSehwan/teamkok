@@ -77,7 +77,7 @@ const index = () => {
 
 
   return (
-    <div className={`w-full  ${!sidebarIn ? `sm:pl-[0px]` : `sm:pl-[20rem]`} pt-[66px] min-h-screen h-auto `}>
+    <div className={`w-full  ${!sidebarIn ? `sm:pl-[0px]` : `sm:pl-[20rem]`} pt-[60.0px] min-h-screen h-auto`}>
       <div className="h-full flex flex-col sm:flex-row">
         <SideBar />
         <SideButton />

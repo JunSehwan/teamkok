@@ -12,10 +12,7 @@ const Avatar = () => {
 
   function removeAvatar() {
     saveUserAvatarChanges("");
-    dispatch(
-      setUserAvatar(
-        ""
-      )
+    dispatch(setUserAvatar("")
     );
     dispatch(setUserAvatarPreview(null));
   }

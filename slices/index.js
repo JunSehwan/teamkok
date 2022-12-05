@@ -10,12 +10,14 @@ import careerReducer from './career';
 import mystyleReducer from './mystyle';
 import boardReducer from './board';
 import sectionReducer from './section';
+import skillReducer from './skill';
 
 import addServerReducer from './addServer';
 import sendGifReducer from './sendGif';
 import serverSettingsReducer from './serverSettings';
 import chatReducer from './chat';
 import jobofferReducer from './joboffer';
+import coccocReducer from './coccoc';
 
 const rootReducer = combineReducers({
   userReducer,
@@ -26,6 +28,7 @@ const rootReducer = combineReducers({
   mystyleReducer,
   boardReducer,
   sectionReducer,
+  skillReducer,
   sectionSettingsReducer,
 
   addServerReducer,
@@ -33,6 +36,7 @@ const rootReducer = combineReducers({
   serverSettingsReducer,
   chatReducer,
   jobofferReducer,
+  coccocReducer,
 
 });
 

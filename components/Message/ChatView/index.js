@@ -130,7 +130,7 @@ const [error,setError] = useState(false);
 
   if (data?.empty)
     return (
-      <div className="flex-grow">
+      <div className="flex-grow  min-h-[calc(100vh-132px)]">
         <p className="mt-4 text-center text-gray-400">
           No message recently. Start chatting now.
         </p>
@@ -140,10 +140,10 @@ const [error,setError] = useState(false);
   return (
     <div
       id="scrollableDiv"
-      height="calc(100vh-66px)"
+      height="calc(100vh-60.0px)"
       width="100%"
       style={{
-        height: 'calc(100vh-66px)',
+        height: 'calc(100vh-60.0px)',
         overflow: 'auto',
         width: '100%',
         display: 'flex',

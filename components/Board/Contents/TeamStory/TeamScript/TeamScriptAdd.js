@@ -146,17 +146,17 @@ const TeamScriptAdd = ({ addOpen, onAddClose, singleSection }) => {
                     </div>
 
                     <div className="mb-1">
-                      <input
+                      <textarea
                         className={introError ?
-                          'w-full px-3 py-2 mb-2 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                          'w-full px-3 h-24 py-2 mb-2 text-sm border-red-500 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
                           :
-                          'w-full px-3 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
+                          'w-full px-3 h-24 py-2 mb-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
                         }
                         id="intro"
                         tabIndex={-1}
                         type="text"
                         maxLength={100}
-                        placeholder="팀 간략소개"
+                        placeholder="팀 소개"
                         onChange={onChangeIntro}
                         value={intro || ""}
                       />
@@ -210,7 +210,7 @@ const TeamScriptAdd = ({ addOpen, onAddClose, singleSection }) => {
 
                     <div className="mb-4">
                       <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="description">
-                        팀 주요업무 또는 신입이 하는 업무를 상세히 작성해주세요.
+                        팀의 주요업무를 작성해주세요.
                       </label>
                       <div>
                         <textarea
@@ -248,7 +248,7 @@ const TeamScriptAdd = ({ addOpen, onAddClose, singleSection }) => {
                       {confirm &&
                         <AlertModal
                           title="업데이트 완료"
-                          // contents="업데이트 완료"
+                          contents="팀 정보가 변경되었습니다."
                           closeOutsideClick={false}
                           openModal={confirm}
                           closeModal={closeConfirm}

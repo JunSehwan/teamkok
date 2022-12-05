@@ -48,16 +48,16 @@ const index = () => {
     <>
       {loading ? <Loading /> :
         <>
-          <div className='w-full'>
-            <ul id="category" className="flex flex-row flex-wrap w-[95%] sm:w-[90%] mt-12 mb-4 mx-auto">
+          <div className='container mx-auto w-[95%] sm:w-[95%]'>
+            <ul id="category" className="flex flex-row flex-wrap mt-12 mb-4 mx-auto">
               <li key="all" className="">
                 <button onClick={() => onChangeCategory(null)}
                   type='button'
-                  className={null === category ? `px-3 py-2 rounded-lg ml-1 bg-amber-50 text-amber-700 hover:bg-amber-500 hover:text-white mb-1 shadow`
-                    : `px-3 py-2 rounded-lg ml-1 bg-amber-50 text-amber-600 hover:bg-amber-700 hover:text-white mb-1 shadow`
+                  className={null === category ? `px-2 py-1.5 rounded-lg ml-1 bg-amber-50 text-amber-700 hover:bg-amber-500 hover:text-white dark:bg-gray-700 mb-1 shadow`
+                    : `px-2 py-1.5 rounded-lg ml-1 bg-amber-50 text-amber-600 hover:bg-amber-700 hover:text-white mb-1 shadow dark:bg-gray-700`
                   }>
                   <div className="flex-1 px-2 text-center ">
-                    <div className="text-base leading-snug font-normal dark:text-white">
+                    <div className="text-sm leading-snug font-normal dark:text-white">
                       🔎전체보기
                     </div>
 
@@ -69,7 +69,7 @@ const index = () => {
                   <Category
                     name={v?.name}
                     number={v?.key}
-                    category={category}
+                    // category={category}
                     setCategory={setCategory}
                     onChangeCategory={onChangeCategory}
                     index={i}
@@ -88,7 +88,7 @@ const index = () => {
                     className="flex flex-wrap justify-left w-full"
                   >
                     {AllBoards?.map((m, i) => (
-                      <div className="w-full sm:max-w-[22rem]" key={m?.id}>
+                      <div className="w-full sm:max-w-[17rem]" key={m?.id}>
                         <BoardCard
                           board={m}
                           index={i}
@@ -99,7 +99,7 @@ const index = () => {
                   {!noMore &&
                     <div className="w-full flex justify-center mb-4 mt-12">
                       <button
-                        className='px-[30%] py-3 rounded-xl bg-white border border-solid border-violet-300 text-violet-700 hover:translate-y-0.5 hover:shadow-none shadow'
+                        className='px-[120px] py-3 rounded bg-slate-100 text-gray-400 font-semibold hover:translate-y-0.5 hover:shadow-none shadow'
                         onClick={() => loadMore()} type="button">더보기</button>
                     </div>
                   }

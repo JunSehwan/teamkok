@@ -15,7 +15,7 @@ const index = () => {
     <>
       {sidebarIn === false ?
         <button
-          className="shadow z-20 fixed left-[17px] top-[82px] flex justify-end mb-[2.2rem] p-[0.57rem] rounded-xl w-[fit-content] ml-auto hover:bg-sky-200 hover:text-sky-700 text-violet-600 bg-violet-100"
+          className="shadow z-[5] fixed left-[17px] top-[62px] flex justify-end mb-[2.2rem] p-[0.57rem] rounded-xl w-[fit-content] ml-auto hover:bg-sky-200 hover:text-sky-700 text-violet-600 bg-violet-100"
           onClick={sideBarOpen}
         >
           <div className=''>

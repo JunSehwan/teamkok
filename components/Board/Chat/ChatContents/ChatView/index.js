@@ -132,7 +132,7 @@ const ChatView = ({ conversation, inputSectionOffset, replyInfo, setReplyInfo })
   if (data?.empty)
     return (
       <div className="flex-grow">
-        <p className="mt-4 h-[calc(100vh-218px)] text-center text-gray-400">
+        <p className="mt-4 h-[calc(100vh-192px)] text-center text-gray-400">
           No message recently. Start chatting now.
         </p>
       </div>

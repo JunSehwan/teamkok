@@ -41,7 +41,7 @@ const PasswordRemake = () => {
   }, [email])
 
   return (
-    <div className='w-full max-w-full h-[calc(100vh-66px)] pt-12 bg-slate-100'>
+    <div className='w-full max-w-full h-[calc(100vh-60.0px)] pt-12 bg-slate-100'>
     <div className='w-full max-w-2xl mx-auto h-full mt-[-10rem] flex flex-col justify-center'>
       <h4 className="text-3xl mb-8 font-bold">비밀번호 재설정</h4>
       <h2 className="text-lg mt-4 mb-4 font-semibold">본인의 이메일 계정을 작성해주세요.</h2>

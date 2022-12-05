@@ -105,7 +105,6 @@ const BoardInfo = () => {
     // router.push();
   }
 
-
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
 
@@ -124,7 +123,7 @@ const BoardInfo = () => {
       return setEmailError(true);
     }
     email_check(email);
-    if (category == []) {
+    if (uniqueArr?.length === 0) {
       document.getElementById('category').focus();
       return setCategoryError(true);
     }
@@ -135,21 +134,15 @@ const BoardInfo = () => {
     const boardResult = {
       name: name,
       email: email,
-      category: category,
+      category: uniqueArr,
     };
     const con = await createBoard(boardResult);
-    // const logoURL = await uploadLogo(logoImage, con?.id);
     await saveCompanyLogoChanges(logoPreview, con?.id);
     dispatch(addBoard({ ...con, logo: logoPreview }));
-    // dispatch(setBoardLogo(logoPreview));
-    // openConfirm(con?.id);
     setId(con?.id);
     setConfirm(true);
     document.body.style.overflow =  "hidden";
-  }, [
-    dispatch, email, email_check,
-    name, category, logoPreview, companyDubCheck
-  ])
+  }, [name, companyDubCheck, email, email_check, uniqueArr, category?.length, logoPreview, dispatch])
 
 
   return (

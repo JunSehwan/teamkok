@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import NoticeList from 'components/Common/NoticeList';
 import NoticeTag from './NoticeTag';
-import { loadingUpload, loadingUploadDone } from 'slices/sectionSettings';
 import { addPost, setAddDoneFalse } from 'slices/section';
 import { createPost } from 'firebaseConfig'
 
