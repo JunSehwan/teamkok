@@ -3,18 +3,24 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'components/Common/Modal/Modal';
 import styled from 'styled-components';
-import { modifyJoboffer } from 'firebaseConfig';
-import { updateJoboffer, updateJobofferDoneFalse } from 'slices/joboffer';
 import Image from 'next/image';
 import profilePic from 'public/image/icon/happiness.png';
 import companyPic from 'public/image/company.png';
 import dayjs from 'dayjs';
+import { useRouter } from 'next/router';
+import LoadingPage from 'components/Common/Loading';
 import { addConversation } from 'slices/chat';
 import { createConversation } from "firebaseConfig";
-import LoadingPage from 'components/Common/Loading';
-import { useRouter } from 'next/router';
-
+import { BsChevronDoubleRight } from 'react-icons/bs';
 const index = ({ jobofferCon, jobofferOn, openJoboffer, closeJoboffer }) => {
+
+  const { user } = useSelector(state => state.user);
+  const router = useRouter();
+  const goProfile = useCallback(() => {
+    router.push({
+      pathname: `/friends/detail/${jobofferCon?.targetId}`,
+    });
+  }, [jobofferCon?.targetId, router])
 
   let toDayis = Date.now();
   let today_Second = Math.round(toDayis / 1000); // 나노세컨드로 표현
@@ -26,8 +32,9 @@ const index = ({ jobofferCon, jobofferOn, openJoboffer, closeJoboffer }) => {
 
   const finall = new Date(jobofferCon?.enddate);
   const today = new Date();
-  const diff = (finall - today) / 1000
+  const diff = (finall - today)/1000
 
+  // const diff = jobofferCon?.enddate?.seconds - today_Second;
   let diffDay = Math.floor(diff / (60 * 60 * 24));
   let diffHour = Math.floor((diff / (60 * 60)) % 24);
   let diffMin = Math.floor((diff / (60)) % 60);
@@ -52,59 +59,13 @@ const index = ({ jobofferCon, jobofferOn, openJoboffer, closeJoboffer }) => {
   }, [diff])
 
   const dispatch = useDispatch();
-  const { user } = useSelector(state => state.user);
-
-  const { updateJobofferDone } = useSelector(state => state.joboffer);
-  useEffect(() => {
-    if (updateJobofferDone && jobofferOn) {
-
-      closeJoboffer();
-    }
-  }, [dispatch, updateJobofferDone, closeJoboffer, jobofferOn])
 
 
-  const onYes = useCallback(async (e) => {
-    e.preventDefault();
-    if (!user?.userID) {
-      return alert('로그인이 필요합니다.');
-    }
-    await modifyJoboffer(1, jobofferCon?.id).then((result) => {
-      dispatch(updateJoboffer(
-        { id: jobofferCon?.id, answer: 1, read: true, readtime: result }
-      ));
-    })
-  }, [user?.userID, jobofferCon?.id, dispatch])
-
-  const onNo = useCallback(async (e) => {
-    e.preventDefault();
-    if (!user?.userID) {
-      return alert('로그인이 필요합니다.');
-    }
-    await modifyJoboffer(1, jobofferCon?.id).then((result) => {
-      dispatch(updateJoboffer(
-        { id: jobofferCon?.id, answer: 2, read: true, readtime: result }
-      ));
-    })
-  }, [user?.userID, jobofferCon?.id, dispatch])
-
-  const onLater = useCallback(async (e) => {
-    e.preventDefault();
-    if (!user?.userID) {
-      return alert('로그인이 필요합니다.');
-    }
-    await modifyJoboffer(1, jobofferCon?.id).then((result) => {
-      dispatch(updateJoboffer(
-        { id: jobofferCon?.id, answer: 3, read: true, readtime: result }
-      ));
-    })
-  }, [user?.userID, jobofferCon?.id, dispatch])
-
-  const router = useRouter();
   const [isCreating, setIsCreating] = useState(false);
   const openDialog = useCallback(async () => {
     setIsCreating(true);
 
-    const sorted = [jobofferCon?.userId, user?.userID].sort();
+    const sorted = [jobofferCon?.targetId, user?.userID].sort();
     const result = await createConversation(sorted);
 
     if (result?.key !== "fail") {
@@ -115,14 +76,13 @@ const index = ({ jobofferCon, jobofferOn, openJoboffer, closeJoboffer }) => {
       router.push(`/message/${result?.value}`);
       setIsCreating(false);
     }
-  }, [dispatch, jobofferCon?.userId, router, user?.userID])
-
+  }, [dispatch, jobofferCon?.targetId, router, user?.userID])
 
   return (
     <Modal
       open={openJoboffer}
       onClose={closeJoboffer}
-      title={`${jobofferCon?.targetName}님에게 도착한 입사제의`}
+      title={`${jobofferCon?.targetName}님에게 보낸 입사제의`}
       visible={jobofferOn}
       widths="960px"
       onCancel={closeJoboffer}
@@ -141,8 +101,8 @@ const index = ({ jobofferCon, jobofferOn, openJoboffer, closeJoboffer }) => {
           :
           jobofferCon?.answer == 1 || jobofferCon?.answer == 2 ?
             <h3 className='text-gray-400 text-[1.44rem] my-4 w-full'>
-              {jobofferCon?.answer == 1 && <span className='text-green-600'>수락함</span>}
-              {jobofferCon?.answer == 2 && <span className='text-gray-600'>거절함</span>}
+              {jobofferCon?.answer == 1 && <span className='text-green-600'>😄상대방이 승낙했습니다. 대화를 통해 추가사항을 전달해보세요!</span>}
+              {jobofferCon?.answer == 2 && <span className='text-gray-600'>상대방이 거절했어요😔 더 좋은 인재를 만나실꺼에요!</span>}
             </h3>
             :
             <h3 className='sm:text-[2.0rem] text-[1.6rem] text-gray-700 my-4 w-full'>
@@ -150,7 +110,7 @@ const index = ({ jobofferCon, jobofferOn, openJoboffer, closeJoboffer }) => {
             </h3>
         }
         <p className='text-gray-700 my-2 w-full'>
-          제안받은 날: {calloutDay}
+          제안한 날: {calloutDay}
         </p>
 
 
@@ -159,7 +119,7 @@ const index = ({ jobofferCon, jobofferOn, openJoboffer, closeJoboffer }) => {
         >
           <div className="my-6">
             <div className='w-full flex flex-col'>
-              <div className='flex flex-row items-center gap-3'>
+              <button onClick={goProfile} className='flex flex-row items-center gap-3'>
                 <div className='w-[72px] h-[72px]'>
 
                   {/* {diffDay}일
@@ -169,7 +129,7 @@ const index = ({ jobofferCon, jobofferOn, openJoboffer, closeJoboffer }) => {
                   <ImageWrapper className='w-[72px] h-[72px]'>
                     <Image
                       className="object-cover rounded-[12px] mx-auto"
-                      src={jobofferCon?.companylogo || companyPic}
+                      src={jobofferCon?.targetAvatar || profilePic}
                       // layout="fill"
                       width={72}
                       height={72}
@@ -179,9 +139,13 @@ const index = ({ jobofferCon, jobofferOn, openJoboffer, closeJoboffer }) => {
                   </ImageWrapper>
                 </div>
                 <div className='flex flex-col'>
-                  <h2 className='font-bold text-2xl'>{jobofferCon?.company}</h2>
+                  <h2 className='font-bold text-2xl text-left'>{jobofferCon?.targetName}</h2>
+                  <p className='text-md font-bold pt-1 text-blue-500 hover:text-blue-700 flex flex-row items-center gap-1'>
+                    <span>프로필보기</span>
+                    <BsChevronDoubleRight />
+                  </p>
                 </div>
-              </div>
+              </button>
 
               <div className='flex flex-col gap-6 my-4 text-gray-700'>
                 <p className='text-sky-600 text-xl'>
@@ -230,7 +194,7 @@ const index = ({ jobofferCon, jobofferOn, openJoboffer, closeJoboffer }) => {
                       <ProfileWrapper className='w-[60px] h-[60px]'>
                         <Image
                           className="object-cover rounded-[12px] mx-auto"
-                          src={jobofferCon?.userAvatar || profilePic}
+                          src={jobofferCon?.companylogo || companyPic}
                           // layout="fill"
                           width={60}
                           height={60}
@@ -241,12 +205,12 @@ const index = ({ jobofferCon, jobofferOn, openJoboffer, closeJoboffer }) => {
                     </div>
                   </div>
                   <div>
-                    <div className='text-md flex flex-col gap-1 text-end'>
+                    <div className='text-md flex flex-col gap-2 text-end'>
                       <div className='flex flex-row gap-2'>
                         <span className='text-gray-700'>{jobofferCon?.mycompany}</span>
                         <span className='text-gray-700'>{jobofferCon?.mysection}</span>
                       </div>
-                      <span className='text-gray-700 font-bold'>{jobofferCon?.username}</span>
+                      <span className='text-gray-700'>{jobofferCon?.username}</span>
                     </div>
                   </div>
                 </div>
@@ -264,58 +228,33 @@ const index = ({ jobofferCon, jobofferOn, openJoboffer, closeJoboffer }) => {
             </div>
             :
             jobofferCon?.answer == 1 || jobofferCon?.answer == 2 ?
-              <>
-                <div className="flex w-full justify-end my-4">
-                  <div className='text-gray-500'>답변을 완료하였습니다.</div>
-                </div>
-                <div className='flex flex-col md:flex-row w-full justify-end gap-2 items-center'>
-                  <button
-                    onClick={closeJoboffer}
-                    type="button"
-                    className="w-full px-6 min-w-[144px] text-md py-4 font-bold  text-gray-700 bg-gray-200 hover:bg-gray-300 focus:outline-none focus:shadow-outline rounded-lg">
-                    확인
-                  </button>
-                  <button
-                    onClick={openDialog}
-                    type="button"
-                    className="w-full px-6 min-w-[144px] text-md py-4 font-bold  text-white bg-gray-900 hover:bg-black focus:outline-none focus:shadow-outline rounded-lg">
-                    대화하기
-                  </button>
-                </div>
-              </>
+              <div className="flex w-full justify-end my-4">
+                <div className='text-gray-500'>답변을 받은 건입니다.</div>
+              </div>
               :
-              <>
-                <div className="flex flex-col md:flex-row w-full justify-end gap-2 items-center">
-                  <button
-                    onClick={openDialog}
-                    type="button"
-                    className="w-full md:max-w-[250px] px-6 min-w-[144px] text-md py-4 font-bold  text-white bg-gray-900 hover:bg-black focus:outline-none focus:shadow-outline rounded-lg">
-                    대화하기
-                  </button>
-                  <button
-                    onClick={onLater}
-                    type="button"
-                    className="w-full md:max-w-[250px] px-6 min-w-[144px] text-md py-4 font-bold text-gray-600 bg-white hover:bg-gray-100 focus:outline-none focus:shadow-outline rounded-lg 
-                    ">
-                    나중에
-                  </button>
-                  <button
-                    onClick={onNo}
-                    type="button"
-                    className="w-full md:max-w-[250px] px-6 min-w-[144px] text-md py-4 font-bold text-gray-600 bg-white hover:bg-gray-100 focus:outline-none focus:shadow-outline rounded-lg 
-                    ">
-                    거절합니다.
-                  </button>
-                  <button
-                    onClick={onYes}
-                    type="button"
-                    className="w-full md:max-w-[250px] px-6 min-w-[144px] text-md py-4 font-bold text-white bg-[#4173f4] hover:bg-[#1C52DC]  focus:outline-none focus:shadow-outline rounded-lg">
-                    좋습니다!
-                  </button>
-
-                </div>
-              </>
+              null
           }
+          <div className='w-full flex justify-center'>
+          </div>
+          <div className="flex flex-col md:flex-row w-full justify-end gap-2 items-center">
+
+            <button
+              onClick={closeJoboffer}
+              type="button"
+              className="w-full px-6 min-w-[144px] text-md py-4 font-bold  text-gray-700 bg-gray-200 hover:bg-gray-300 focus:outline-none focus:shadow-outline rounded-lg">
+              확인
+            </button>
+            {jobofferCon?.answer !== 2 &&
+              <button
+                onClick={openDialog}
+                type="button"
+                className="w-full px-6 min-w-[144px] text-md py-4 font-bold  text-white bg-gray-900 hover:bg-black focus:outline-none focus:shadow-outline rounded-lg">
+                대화하기
+              </button>
+            }
+
+
+          </div>
         </div>
       </div>
     </Modal >

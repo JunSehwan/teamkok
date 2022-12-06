@@ -36,8 +36,9 @@ const ModalSection = styled.div`
   
   /* background-color: rgba(255, 255, 255, 1); */
   background: rgb(255,255,255);
-  background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 90%, rgba(255,255,255,0.6886729691876751) 100%);
-  padding: 16px;
+  
+  /* background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 90%, rgba(255,255,255,0.6886729691876751) 100%); */
+  
   max-width: ${(props) => props.widths || "1200px"};
   ${(props) => modalSlideSettings(props.visible)}
 `;
@@ -142,14 +143,14 @@ const Modal = ({
             visible={visible} onClick={onClose}
             aria-labelledby="modal-title" role="dialog" aria-modal="true" />
 
-          <ModalSection className="relative mt-8 inset-0 overflow-y-hidden rounded-lg w-full h-full"
+          <ModalSection className="relative md:p-6 mt-8 inset-0 overflow-y-hidden rounded-lg w-full h-full"
             visible={visible}
             widths={widths}>
 
             <Title className='w-full'>
               <div className="flex items-start justify-between p-5 rounded-t">
                 <div className="relative rounded border w-full">
-                  <h2 className="text-[#1890FF] text-2xl py-2 font-bold tracking-normal leading-tight w-full text-center">{title}</h2>
+                  <h2 className="text-blue-800 text-2xl py-2 font-bold tracking-normal leading-tight w-full text-center">{title}</h2>
                 </div>
                 <button
                   className="p-3 rounded-xl hover:bg-slate-200 ml-auto bg-transparent border-0 text-gray-500 hover:text-gray-700 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"

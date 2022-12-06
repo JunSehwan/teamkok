@@ -86,7 +86,7 @@ const RightMessage = ({ message, setReplyInfo }) => {
               <div
                 onClick={(e) => e.stopPropagation()}
                 title={formattedDate}
-                className={`bg-blue-400 after:border-blue-400 relative rounded-lg p-2 px-3 text-white after:absolute after:left-full after:bottom-[6px] after:border-8 after:border-t-transparent after:border-r-transparent`}
+                className={`bg-[#fef01b] after:border-[#fef01b] relative rounded-lg p-2 px-3 text-gray-800 after:absolute after:left-full after:bottom-[6px] after:border-4 after:border-t-transparent after:border-r-transparent`}
               >
                 {splitLinkFromMessage(message?.content).map((item, index) => (
                   <Fragment key={index}>
@@ -170,9 +170,9 @@ const RightMessage = ({ message, setReplyInfo }) => {
           <div
             onClick={(e) => e.stopPropagation()}
             title={formattedDate}
-            className="border-violet-400 rounded-lg border p-3 text-gray-400"
+            className="border-violet-400 rounded-lg border p-3 text-gray-100 text-sm"
           >
-            Message has been removed
+            메시지가 삭제되었습니다.
           </div>
         )}
 
@@ -181,7 +181,7 @@ const RightMessage = ({ message, setReplyInfo }) => {
           {/* //리액션인데 기능 못함 */}
             {/* <button
               onClick={() => setIsSelectReactionOpened(true)}
-              className="text-lg text-gray-400 opacity-0 transition hover:text-gray-600 group-hover:opacity-100"
+              className="text-lg text-gray-100 opacity-0 transition hover:text-gray-600 group-hover:opacity-100"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -193,7 +193,7 @@ const RightMessage = ({ message, setReplyInfo }) => {
                 setReplyInfo(message);
                 e.stopPropagation();
               }}
-              className="text-gray-400 opacity-0 transition hover:text-gray-600 group-hover:opacity-100"
+              className="text-gray-100 opacity-0 transition hover:text-gray-600 group-hover:opacity-100"
             >
               <ReplyIcon />
             </button>
@@ -203,7 +203,7 @@ const RightMessage = ({ message, setReplyInfo }) => {
                 removeMessage(message?.id);
                 e.stopPropagation();
               }}
-              className="text-lg text-gray-400 opacity-0 transition hover:text-gray-600 group-hover:opacity-100"
+              className="text-lg text-gray-100 opacity-0 transition hover:text-gray-600 group-hover:opacity-100"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

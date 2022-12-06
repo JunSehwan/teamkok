@@ -74,8 +74,8 @@ const LeftMessage = ({ message, conversation, index, docs, setReplyInfo }) => {
               <div
                 onClick={(e) => e.stopPropagation()}
                 title={formattedDate}
-                className={`bg-amber-200 rounded-lg p-2 text-gray-700 ${conversation?.users?.length === 2
-                  ? "after:border-amber-200 relative after:absolute after:right-full after:bottom-[6px] after:border-8 after:border-t-transparent after:border-l-transparent"
+                className={`bg-slate-50 rounded-lg p-2 text-gray-700 ${conversation?.users?.length === 2
+                  ? "after:border-amber-200 relative after:absolute after:right-full after:bottom-[6px] after:border-4 after:border-t-transparent after:border-l-transparent"
                   : ""
                   }`}
               >
@@ -123,7 +123,7 @@ const LeftMessage = ({ message, conversation, index, docs, setReplyInfo }) => {
           <div
             onClick={(e) => e.stopPropagation()}
             title={formattedDate}
-            className="bg-amber-300 flex items-center gap-2 overflow-hidden rounded-lg py-3 px-5"
+            className="bg-emerald-200 flex items-center gap-2 overflow-hidden rounded-lg py-3 px-5"
           >
             <FileIcon
               className="h-4 w-4 object-cover"
@@ -162,9 +162,9 @@ const LeftMessage = ({ message, conversation, index, docs, setReplyInfo }) => {
           <div
             onClick={(e) => e.stopPropagation()}
             title={formattedDate}
-            className="border-x-amber-200 rounded-lg border p-3 text-gray-400"
+            className="border-x-amber-200 rounded-lg border p-3 text-gray-200 text-sm"
           >
-            Message has been removed
+            메시지가 삭제되었습니다.
           </div>
         )}
 
@@ -172,7 +172,7 @@ const LeftMessage = ({ message, conversation, index, docs, setReplyInfo }) => {
           <>
             {/* <button
               onClick={() => setIsSelectReactionOpened(true)}
-              className="text-lg text-gray-500 opacity-0 transition hover:text-gray-300 group-hover:opacity-100"
+              className="text-lg text-gray-500 opacity-0 transition hover:text-gray-100 group-hover:opacity-100"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -183,7 +183,7 @@ const LeftMessage = ({ message, conversation, index, docs, setReplyInfo }) => {
                 setReplyInfo(message);
                 e.stopPropagation();
               }}
-              className="text-gray-500 opacity-0 transition hover:text-gray-300 group-hover:opacity-100"
+              className="text-gray-100 opacity-0 transition hover:text-gray-600 group-hover:opacity-100"
             >
               <ReplyIcon />
             </button>

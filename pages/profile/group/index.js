@@ -29,6 +29,7 @@ const index = () => {
         dispatch(resetUserState());
         return router.push("/");
       }
+     
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
       if (!docSnap.exists()) {

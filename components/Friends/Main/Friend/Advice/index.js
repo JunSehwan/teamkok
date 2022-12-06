@@ -35,6 +35,7 @@ const index = ({ adviceOn, openAdvice, closeAdvice, friendname, friend, detail }
     setRatingError(false);
   }, [])
 
+  const [annoymous, setAnonymous] = useState(false);
   const [description, setDescription] = useState();
   const [descriptionError, setDescriptionError] = useState(false);
   const onChangeDescription = useCallback((e) => {
@@ -58,7 +59,7 @@ const index = ({ adviceOn, openAdvice, closeAdvice, friendname, friend, detail }
       return setDescriptionError(true);
     }
 
-  
+
     const con = await createAdvice(
       {
         targetId: friend?.userID,
@@ -66,6 +67,7 @@ const index = ({ adviceOn, openAdvice, closeAdvice, friendname, friend, detail }
         targetAvatar: friend?.avatar,
         description: description,
         rating: rating,
+        annoymous: annoymous,
         mycompany: user?.mycompany,
         mysection: user?.mysection,
         companylogo: user?.companylogo,
@@ -81,6 +83,7 @@ const index = ({ adviceOn, openAdvice, closeAdvice, friendname, friend, detail }
         userAvatar: user?.avatar,
         description: description,
         rating: rating,
+        annoymous: annoymous,
         mycompany: user?.mycompany,
         mysection: user?.mysection,
         companylogo: user?.companylogo,
@@ -95,13 +98,14 @@ const index = ({ adviceOn, openAdvice, closeAdvice, friendname, friend, detail }
         userAvatar: user?.avatar,
         description: description,
         rating: rating,
+        annoymous: annoymous,
         mycompany: user?.mycompany,
         mysection: user?.mysection,
         companylogo: user?.companylogo,
       }));
     }
 
-  }, [user?.userID, user?.username, user?.avatar, user?.mycompany, user?.mysection, user?.companylogo, rating, description, friend?.userID, friend?.username, friend?.avatar, detail, dispatch])
+  }, [user?.userID, user?.mycompany, user?.mysection, user?.companylogo, user?.username, user?.avatar, rating, description, friend?.userID, friend?.username, friend?.avatar, annoymous, detail, dispatch])
 
 
   return (
@@ -130,7 +134,7 @@ const index = ({ adviceOn, openAdvice, closeAdvice, friendname, friend, detail }
           className="w-full pt-2 pb-2 mb-1 rounded mt-[1.4rem]"
           onSubmit={onSubmit}
         >
-          <div className="mb-7">
+          <div className="my-10">
             <Stars className="star-rating w-full mx-auto flex justify-center"
               id="rating"
             >
@@ -159,11 +163,11 @@ const index = ({ adviceOn, openAdvice, closeAdvice, friendname, friend, detail }
             ) : null}
           </div>
 
-          <div className="mb-4">
+          <div className="my-10">
             <textarea
               id="description"
               placeholder="성공적인 이직을 위한 제언(필요스킬 중심으로)"
-              className="w-full px-3 py-4 mb-2 resize-none h-52 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+              className="w-full px-3 py-4 mb-2 resize-none h-52 border rounded shadow focus:outline-none focus:shadow-outline"
               onChange={onChangeDescription}
               value={description}
             >
@@ -173,12 +177,15 @@ const index = ({ adviceOn, openAdvice, closeAdvice, friendname, friend, detail }
             ) : null}
           </div>
 
+          <Radio className="my-10 flex w-[240px] mx-auto relative">
+            <input type="radio" id="option0" name="tabs" className="hidden" onClick={() => setAnonymous(false)} />
+            <label htmlFor="option0" className="cursor-pointer w-1/2 flex items-center justify-center truncate uppercase select-none font-semibold rounded-full px-6 py-2 ">내정보 공개</label>
 
+            <input type="radio" id="option1" name="tabs" className="hidden" onClick={() => setAnonymous(true)} />
+            <label htmlFor="option1" className="cursor-pointer w-1/2 flex items-center justify-center truncate uppercase select-none font-semibold rounded-full px-6 py-2 ">익명으로</label>
 
-
-
-
-
+            <div className="w-1/2 flex items-center justify-center truncate uppercase select-none font-semibold text-lg rounded-full p-0 h-full bg-gray-200 absolute transform transition-transform tabAnim"></div>
+          </Radio>
 
 
           <div className="mb-2 text-right">
@@ -201,7 +208,22 @@ const Stars = styled.div`
     color: rgba(0,0,0,0.33);
   }
 `
+const Radio = styled.div`
+  .tabAnim {
+    z-index: -9;
+  }
+color: rgba(0,0,0,0.66);
+:hover :active :focus :checked{
+color: white;
+}
+  #option0:checked ~ div {
+    --tw-translate-x: 0%;
+  }
 
+  #option1:checked ~ div {
+    --tw-translate-x: 100%;
+  }
+`
 index.propTypes = {
   adviceOn: PropTypes.bool,
   openAdvice: PropTypes.func,

@@ -5,7 +5,9 @@ import Modal from 'components/Common/Modal/Modal';
 import { createOffer } from 'firebaseConfig';
 import { addJoboffer } from 'slices/joboffer';
 import AlertModal from 'components/Common/Modal/AlertModal';
-
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import dayjs from 'dayjs';
 const index = ({ jobofferOn, openJoboffer, closeJoboffer, friendname, friend, detail }) => {
 
   const dispatch = useDispatch();
@@ -22,6 +24,7 @@ const index = ({ jobofferOn, openJoboffer, closeJoboffer, friendname, friend, de
       setJobError(false);
       setSpaceError(false);
       setDuedateError(false);
+      setEnddateError(false);
       closeConfirmModal();
       closeJoboffer();
       setJob("");
@@ -134,6 +137,15 @@ const index = ({ jobofferOn, openJoboffer, closeJoboffer, friendname, friend, de
     );
   };
 
+  const [enddate, setEnddate] = useState(new Date());
+  const [enddateError, setEnddateError] = useState(false);
+  const dateToString = (date) => {
+    return date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0')
+  }
+  
+ 
+
+  
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
 
@@ -164,7 +176,14 @@ const index = ({ jobofferOn, openJoboffer, closeJoboffer, friendname, friend, de
       document.getElementById('space').focus();
       return setSpaceError(true);
     }
+    if (!enddate || enddate?.length == 0) {
+      document.getElementById('enddate').focus();
+      return setEnddateError(true);
+    }
 
+    const final = dayjs(enddate).format('YYYY-MM-DDTHH:mm:ss.sssZ');
+    const finalEnddate = new Date(final);
+   
 
     const con = await createOffer(
       {
@@ -182,12 +201,12 @@ const index = ({ jobofferOn, openJoboffer, closeJoboffer, friendname, friend, de
         company: user?.mycompany,
         section: section,
         space: space,
+        enddate: final,
         mycompany: user?.mycompany,
         mysection: user?.mysection,
         companylogo: user?.companylogo,
       }
     );
-
     if (detail === true) {
       dispatch(addJoboffer({
         targetId: friend?.userID,
@@ -204,6 +223,7 @@ const index = ({ jobofferOn, openJoboffer, closeJoboffer, friendname, friend, de
         company: user?.mycompany,
         section: section,
         space: space,
+        enddate: final,
         mycompany: user?.mycompany,
         mysection: user?.mysection,
         companylogo: user?.companylogo,
@@ -221,6 +241,7 @@ const index = ({ jobofferOn, openJoboffer, closeJoboffer, friendname, friend, de
         salary: parseInt(salary),
         type: type,
         duedate: duedate,
+        enddate: final,
         company: user?.mycompany,
         section: section,
         space: space,
@@ -231,7 +252,7 @@ const index = ({ jobofferOn, openJoboffer, closeJoboffer, friendname, friend, de
     }
 
 
-  }, [user?.userID, user?.mycompany, user?.username, user?.avatar, user?.mysection, user?.companylogo, duedate, section, job, salary, type, space, friend?.userID, friend?.username, friend?.avatar, description, detail, dispatch])
+  }, [user?.userID, user?.username, user?.avatar, user?.mycompany, user?.mysection, user?.companylogo, duedate, section, job, salary, type, space, enddate, friend?.userID, friend?.username, friend?.avatar, description, detail, dispatch])
 
   // autoFocus 관련
   const inputElement = useRef(null);
@@ -270,8 +291,13 @@ const index = ({ jobofferOn, openJoboffer, closeJoboffer, friendname, friend, de
       document.getElementById('space').focus();
       return setSpaceError(true);
     }
+    if (!enddate || enddate?.length == 0) {
+      document.getElementById('enddate').focus();
+      return setEnddateError(true);
+    }
+
     setConfirmModalOpened(true);
-  }, [duedate?.month?.length, duedate?.year?.length, job, salary, section, space, type, user?.userID])
+  }, [duedate?.month?.length, duedate?.year?.length, enddate, job, salary, section, space, type, user?.userID])
 
   const closeConfirmModal = useCallback(() => {
     setConfirmModalOpened(false);
@@ -475,26 +501,24 @@ const index = ({ jobofferOn, openJoboffer, closeJoboffer, friendname, friend, de
               </textarea>
             </div>
             <div className="py-4">
-              <label className="block mb-2 text-md font-bold text-gray-700 " htmlFor="description">
+              <label className="block mb-2 text-md font-bold text-gray-700 " htmlFor="enddate">
                 응답기한을 언제까지로 설정할까요?
               </label>
 
-              <div date-rangepicker className="flex items-center">
-                <div className="relative">
-                  <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                    <svg aria-hidden="true" className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd"></path></svg>
-                  </div>
-                  <input name="start" type="text" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start"/>
-                </div>
-                <span className="mx-4 text-gray-500">to</span>
-                <div className="relative">
-                  <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                    <svg aria-hidden="true" className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd"></path></svg>
-                  </div>
-                  <input name="end" type="text" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end"/>
-                </div>
-              </div>
-
+              <DatePicker
+                className={duedateError ?
+                  "block w-full cursor-pointer p-4 text-gray-900 border border-red-300 rounded-lg bg-red-50 sm:text-md focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500"
+                  :
+                  "block w-full cursor-pointer p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                }
+                id="enddate" selected={enddate}
+                onChange={setEnddate}
+                showTimeSelect
+                dateFormat="Pp"
+              />
+              {enddateError ? (
+                <p className="text-xs mt-[0.3rem] italic text-red-500">언제까지 응답을 받으실건가요?</p>
+              ) : null}
             </div>
 
 

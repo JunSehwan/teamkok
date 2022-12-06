@@ -55,7 +55,7 @@ const index = () => {
               <h3 className='sm:text-[2.3rem] text-[1.8rem] text-gray-700 pl-2'>
                 {averageValue ? (Math.round(averageValue))?.toLocaleString() + "만원" : <span className="text-gray-300 text-2lg">아직 없어요..</span>}
               </h3>
-              {averageValue && <p className='mb-1'>(총 {plusedArr?.length}건)</p>}
+              {plusedArr?.length !== 0 && <p className='mb-1'>(총 {plusedArr?.length}건)</p>}
             </div>
           </div>
         </div>
@@ -64,7 +64,7 @@ const index = () => {
           <div className='mx-auto pl-2 text-left'>
             <div className='flex justify-between w-full items-center'>
               <p className='text-gray-500 text-[1.2rem] leading-8'>
-                🪪입사제안을 받은 기업
+                🪪입사제안을 받은 팀
               </p>
 
               <button
@@ -95,7 +95,7 @@ const index = () => {
           <div className='mx-auto pl-2 text-left'>
             <div className='flex justify-between w-full items-center'>
               <p className='text-gray-500 text-[1.2rem] leading-8'>
-                📌나를 콕! 찍은 기업
+                📌나를 콕! 찍은 팀
               </p>
 
               <button

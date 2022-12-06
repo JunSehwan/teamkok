@@ -1,9 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { MdDocumentScanner, MdSpaceDashboard } from 'react-icons/md';
-import { FaAngleDown, FaBuilding } from 'react-icons/fa';
-import toast from 'react-hot-toast';
+import { MdSpaceDashboard } from 'react-icons/md';
+import { FaBuilding } from 'react-icons/fa';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { AiOutlineComment } from 'react-icons/ai';
@@ -38,9 +37,7 @@ const BottomBar = styled.div`
 const index = (
 ) => {
   const { user } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
   const router = useRouter();
-  const notify = () => toast("업데이트 성공");
 
 
   return (
@@ -118,23 +115,25 @@ const index = (
                   </button> */}
                 </div>
               </li>
-              {user?.purpose === 4 && (<></>)}
-              <li>
-                <div className={`flex items-center justify-between text-[14px] font-normal text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700
+              {user?.purpose === 4 && (<>
+
+                <li>
+                  <div className={`flex items-center justify-between text-[14px] font-normal text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700
                  ${router.pathname === "/dashboard/group" ? "bg-slate-200" : "bg-transparent"}`}>
-                  <Link className='flex-shrink-0 ' href="/dashboard/group">
-                    <a className={`pl-6 w-full flex flex-row justify-center p-2 py-3 items-center ${router.pathname === "/dashboard/group" ? "text-gray-700" : "text-gray-500"}`}>
-                      <FaBuilding
-                        className="flex-shrink-0 w-6 h-6  transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                      ></FaBuilding>
-                      <span className="flex-1 ml-3 whitespace-nowrap">그룹페이지</span>
-                    </a>
-                  </Link>
-                  {/* <button onClick={() => setResumeOpen(prev => !prev)} className="w-8 h-8 inline-flex justify-center z-1 hover:bg-gray-300 p-2 rounded-full items-center text-md font-medium text-gray-400 dark:bg-gray-700 dark:text-gray-300">
+                    <Link className='flex-shrink-0 ' href="/dashboard/group">
+                      <a className={`w-full flex flex-row justify-center p-2 py-3 items-center ${router.pathname === "/dashboard/group" ? "text-gray-700" : "text-gray-500"}`}>
+                        <FaBuilding
+                          className="flex-shrink-0 w-6 h-6  transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                        ></FaBuilding>
+                        <span className="flex-1 ml-3 whitespace-nowrap">그룹페이지</span>
+                      </a>
+                    </Link>
+                    {/* <button onClick={() => setResumeOpen(prev => !prev)} className="w-8 h-8 inline-flex justify-center z-1 hover:bg-gray-300 p-2 rounded-full items-center text-md font-medium text-gray-400 dark:bg-gray-700 dark:text-gray-300">
                     <FaAngleDown className='w-4 h-4' />
                   </button> */}
-                </div>
-              </li>
+                  </div>
+                </li>
+              </>)}
             </ul>
           </div>
         </div>
@@ -205,20 +204,21 @@ const index = (
                   </Link>
                 </div>
               </li>
-              <li>
-                <div className={`flex items-center min-w-[68px] justify-between py-[4px] px-2 sm:px-6 rounded-lg my-1 text-[14px] font-normal text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700
+              {user?.purpose === 4 && (<>
+                <li>
+                  <div className={`flex items-center min-w-[68px] justify-between py-[4px] px-2 sm:px-6 rounded-lg my-1 text-[14px] font-normal text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700
                  ${router.pathname === "/dashboard/group" ? "bg-slate-200" : "bg-transparent"}`}>
-                  <Link className='flex-shrink-0 ' href="/dashboard/group">
-                    <a className={`w-full flex flex-col justify-center gap-2 items-center ${router.pathname === "/dashboard/group" ? "text-gray-700" : "text-gray-500"}`}>
-                      <FaBuilding
-                        className="flex-shrink-0 w-6 h-6  transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                      ></FaBuilding>
-                      <span className="flex-1 whitespace-nowrap">그룹페이지</span>
-                    </a>
-                  </Link>
-                </div>
-              </li>
-
+                    <Link className='flex-shrink-0 ' href="/dashboard/group">
+                      <a className={`w-full flex flex-col justify-center gap-2 items-center ${router.pathname === "/dashboard/group" ? "text-gray-700" : "text-gray-500"}`}>
+                        <FaBuilding
+                          className="flex-shrink-0 w-6 h-6  transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                        ></FaBuilding>
+                        <span className="flex-1 whitespace-nowrap">그룹페이지</span>
+                      </a>
+                    </Link>
+                  </div>
+                </li>
+              </>)}
 
             </ul>
           </div>

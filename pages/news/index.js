@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Dashboard from 'components/Dashboard';
+import News from 'components/News';
 import Head from 'next/head'
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
@@ -19,21 +19,25 @@ import { addCategory } from 'slices/category';
 import LoadingPage from 'components/Common/Loading';
 import CategoryList from 'components/Common/CategoryList';
 
-const index = () => {
 
+const news = () => {
   const auth = getAuth();
   const { user, loading } = useSelector(state => state.user);
+  const { singleBoard } = useSelector(state => state.board);
   const dispatch = useDispatch();
   const router = useRouter();
+  const pid = router.query;
+
+  useEffect(() => {
+    if (!router.isReady) return;
+  }, [router.isReady, pid])
   useEffect(() => {
     const authStateListener = onAuthStateChanged(auth, async (user) => {
       dispatch(userLoadingStart());
-      dispatch(addCategory(CategoryList));
       if (!user) {
         dispatch(resetUserState());
         return router.push("/");
       }
-     
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
       if (!docSnap.exists()) {
@@ -41,7 +45,6 @@ const index = () => {
         return router.push("/");
       }
       const docData = docSnap.data();
-
       const currentUser = {
         userID: user.uid,
         username: docData.username,
@@ -85,10 +88,8 @@ const index = () => {
         liked: docData.liked,
         advices: docData.advices,
         adviced: docData.adviced,
-
       };
       dispatch(setUser(currentUser));
-      dispatch(userLoadingEnd());
       await getEducationsByUserId().then((result) => {
         dispatch(loadEducations(result));
       })
@@ -110,11 +111,14 @@ const index = () => {
       await getCoccocedByUserId(user?.uid).then((result) => {
         dispatch(loadCoccoced(result));
       })
+
+
+      dispatch(userLoadingEnd());
     });
     return () => {
       authStateListener();
     };
-  }, [auth, dispatch, router]);
+  }, [auth, dispatch, pid, router]);
 
 
   useEffect(() => {
@@ -125,7 +129,7 @@ const index = () => {
       const docData = user?.data();
 
       const currentUser = {
-        userID: user.id,
+        userID: user.uid,
         username: docData.username,
         email: docData.email,
         email_using: docData.email_using,
@@ -175,39 +179,36 @@ const index = () => {
       unsubscribe();
     };
   }, [dispatch, user?.uid, user?.userID]);
-
-
   return (
     <>
       <Head>
-        <title>황금잡(JOB)을 콕! 찍어서 들어가는 잡!콕!</title>
+        <title>{`팀소식을 들어보세요!`}</title>
 
-        <meta name="keywords" content="teamz, 팀즈, 채용공고, 현업담당자와 대화, 업무문의, 채용문의, 팀기반 소통플랫폼" />
+        <meta name="keywords" content={`teamz, 팀즈, 채용공고, 현업담당자와 대화, 업무문의, 채용문의, 팀기반 소통플랫폼`} />
         <meta name="description" content="원하는 기업에 입사하기 위해 팀별 현업담당자에게 적극적으로 나를 어필을 할 수 있습니다." />
 
         <meta name="application-name" content="TeamZ - 관심있는 기업보드에 참여 후 현업자담당자와 소통해보세요." />
         <meta name="msapplication-tooltip" content="TeamZ" />
 
-        <meta property="og:type" content="TeamZ - 프로필페이지" />
-        <meta property="og:title" content="TeamZ - 내 정보를 입력해야만 기업보드에서 활동할 수 있습니다." />
-        <meta property="og:description" content="원하는 기업보드를 선택하면 각 분야의 현업담당자와 소통할 수 있습니다." />
-        <meta property="og:image" content="https://teamz.co.kr/logo/teamz.png" />
-        <meta property="og:url" content="https://teamz.co.kr/profile" />
+        <meta property="og:type" content={`TeamZ - 기업보드`} />
+        <meta property="og:title" content={`기업의 현직자, 채용담당자와 즐거운 커뮤니케이션을 통해 팀에 합류할 수 있습니다.`} />
+        <meta property="og:description" content="기업보드에는 일대일 대화뿐만 아니라 채용공고(Small Intern)를 통해 채용이 이루어지고, 관련분야의 소식까지 확인할 수 있습니다.." />
+        <meta property="og:image" content="https://jobcoc.com/logo/jobcoc.png" />
+        <meta property="og:url" content={`https://jobcoc.com/news`} />
 
-        <meta name="twitter:card" content="TeamZ에 오신걸 환영합니다." />
-        <meta name="twitter:title" content="TeamZ - 내 정보를 입력해야만 기업보드에서 활동할 수 있습니다." />
-        <meta name="twitter:description" content="원하는 기업보드를 선택하면 각 분야의 현업담당자와 소통할 수 있습니다." />
-        <meta name="twitter:image" content="https://teamz.co.kr/logo/teamz.png" />
-        <meta name="twitter:domain" content="https://teamz.co.kr/profile" />
+        <meta name="twitter:card" content={`TeamZ - 기업보드`} />
+        <meta name="twitter:title" content={`기업의 현직자, 채용담당자와 즐거운 커뮤니케이션을 통해 팀에 합류할 수 있습니다.`} />
+        <meta name="twitter:description" content="기업보드에는 일대일 대화뿐만 아니라 채용공고(Small Intern)를 통해 채용이 이루어지고, 관련분야의 소식까지 확인할 수 있습니다.." />
+        <meta name="twitter:image" content="https://jobcoc.com/logo/jobcoc.png" />
+        <meta name="twitter:domain" content={`https://jobcoc.com/news`} />
       </Head>
 
       {loading ?
         <LoadingPage /> :
-        <Dashboard />}
+        <News />
+      }
     </>
-
   );
 };
 
-
-export default index;
+export default news;

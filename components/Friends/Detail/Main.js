@@ -6,13 +6,13 @@ import toast, { Toaster } from "react-hot-toast";
 import Router, { useRouter } from "next/router";
 import Image from "next/image";
 import { nanoid } from 'nanoid'
-import {  BsFillPlayFill,} from "react-icons/bs";
+import {  BsBackspace, BsFillBackspaceFill, BsFillPlayFill,} from "react-icons/bs";
 import styled from "styled-components";
 import { GoVerified } from "react-icons/go";
 import { HiVolumeOff, HiVolumeUp } from "react-icons/hi";
 import { MdOutlineCancel } from "react-icons/md";
 import { AiOutlineDingtalk } from "react-icons/ai";
-import { FaRegHandPointUp } from "react-icons/fa";
+import { FaBackspace, FaRegHandPointUp } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import profilePic from '/public/image/icon/happiness.png';
 import backgroundPicture from '/public/image/backgroundPicture.jpg';
@@ -222,9 +222,9 @@ const Main = () => {
     >
       <Toaster />
       <div className="relative flex-2 w-full lg:w-9/12 flex justify-center items-center bg-blurred-img bg-no-repeat bg-cover bg-center bg-gradient-to-r from-gray-900 to-gray-700">
-        <div className="opacity-90 absolute top-6 right-4 lg:left-6 flex gap-6 z-50">
+        <div className="opacity-90 absolute top-6 left-6 flex gap-6 z-50">
           <p className="cursor-pointer " onClick={() => router.back()}>
-            <MdOutlineCancel className="text-white text-[45px] hover:opacity-90" />
+            <FaBackspace className="text-white text-[38px] hover:opacity-90" />
           </p>
         </div>
 
@@ -303,7 +303,7 @@ const Main = () => {
 
       </div>
       <div className="relative w-full md:w-full lg:w-[700px] md:h-[calc(100vh-var(--navbar-height))]">
-        <Container className="md:h-[calc(100vh-var(--navbar-height))] lg:overflow-y-scroll">
+        <Container className="lg:h-[calc(100vh-var(--navbar-height))] lg:overflow-y-scroll">
           <div
             className="flex gap-4 mb-4 bg-white w-full pl-3 pt-6"
           /*    onClick={handleChangePage} */

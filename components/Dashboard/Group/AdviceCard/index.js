@@ -54,43 +54,23 @@ const index = ({ adviceCon }) => {
           <div className='w-full flex justify-between items-center'>
             <div className='flex flex-row items-center gap-2'>
               <div className='w-[48px] h-[48px]'>
-                {adviceCon?.annoymous ?
-                  <ImageWrapper className='w-[48px] h-[48px]'>
-                    <Image
-                      className="object-cover rounded-[12px] mx-auto"
-                      src={profilePic}
-                      // layout="fill"
-                      width={48}
-                      height={48}
-                      unoptimized
-                      alt="avatar">
-                    </Image>
-                  </ImageWrapper>
-                  :
 
-                  <ImageWrapper className='w-[48px] h-[48px]'>
-                    <Image
-                      className="object-cover rounded-[12px] mx-auto"
-                      src={adviceCon?.companylogo || adviceCon?.userAvatar || profilePic}
-                      // layout="fill"
-                      width={48}
-                      height={48}
-                      unoptimized
-                      alt="avatar">
-                    </Image>
-                  </ImageWrapper>
-                }
+                <ImageWrapper className='w-[48px] h-[48px]'>
+                  <Image
+                    className="object-cover rounded-[12px] mx-auto"
+                    src={adviceCon?.targetAvatar || profilePic}
+                    // layout="fill"
+                    width={48}
+                    height={48}
+                    unoptimized
+                    alt="avatar">
+                  </Image>
+                </ImageWrapper>
               </div>
               <div className='flex flex-col'>
-                {adviceCon?.annoymous ?
-                  <>
-                    <p>익명의 전문가</p>
-                  </>
-                  :
-                  <>
-                    <p>{adviceCon?.mycompany}</p>
-                    <p className='text-gray-500'>{adviceCon?.username}</p>
-                  </>}
+                <>
+                  <p className='text-lg font-bold'>{adviceCon?.targetName}</p>
+                </>
               </div>
             </div>
             <div className=''>

@@ -53,8 +53,8 @@ const index = ({ coccocCon }) => {
           <div>
             {coccocCon?.answer == 1 || coccocCon?.answer == 2 ?
               <div className='text-gray-400 w-full'>
-                {coccocCon?.answer == 1 && <span className='text-green-600'>수락함</span>}
-                {coccocCon?.answer == 2 && <span className='text-gray-600'>거절함</span>}
+                {coccocCon?.answer == 1 && <span className='text-blue-600 font-bold'>승낙</span>}
+                {coccocCon?.answer == 2 && <span className='text-gray-600 font-bold'>거절</span>}
               </div>
               :
               <div className='text-md text-gray-700 w-full'>
@@ -69,7 +69,7 @@ const index = ({ coccocCon }) => {
                 <ImageWrapper className='w-[48px] h-[48px]'>
                   <Image
                     className="object-cover rounded-[12px] mx-auto"
-                    src={coccocCon?.companylogo || coccocCon?.userAvatar || profilePic}
+                    src={coccocCon?.targetAvatar ||  profilePic}
                     // layout="fill"
                     width={48}
                     height={48}
@@ -79,17 +79,17 @@ const index = ({ coccocCon }) => {
                 </ImageWrapper>
               </div>
               <div className='flex flex-col'>
-                <p className='text-lg font-bold'>{coccocCon?.company}</p>
+                <p className='text-lg font-bold'>{coccocCon?.targetName}</p>
                 <p className='text-gray-500 text-sm'>{coccocCon?.section}</p>
                 <p className='text-gray-500 text-sm'>{coccocCon?.job}</p>
               </div>
             </div>
-            <div className=''>
+            {/* <div className=''>
               <p className='text-sky-500 text-lg'>
-                {coccocCon?.salary ? (Math.round(coccocCon?.salary))?.toLocaleString() + "만원" : <span className="text-gray-300 text-2lg">아직 없어요..</span>}
+                {coccocCon?.targetName}
               </p>
 
-            </div>
+            </div> */}
           </div>
 
           {/* <div className='contents p-6 text-left'>

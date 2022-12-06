@@ -353,6 +353,7 @@ export const user = createSlice({
         username: action.payload.username,
         userAvatar: action.payload.userAvatar,
         description: action.payload.description,
+        annoymous: action.payload.annoymous,
         rating: action.payload.rating,
         mycompany: action.payload.mycompany,
         mysection: action.payload.mysection,
@@ -364,6 +365,7 @@ export const user = createSlice({
         username: action.payload.targetName,
         userAvatar: action.payload.targetAvatar,
         description: action.payload.description,
+        annoymous: action.payload.annoymous,
         rating: action.payload.rating,
       });
       state.addAdviceDone = true;
@@ -375,6 +377,7 @@ export const user = createSlice({
         userAvatar: action.payload.userAvatar,
         description: action.payload.description,
         rating: action.payload.rating,
+        annoymous: action.payload.annoymous,
         mycompany: action.payload.mycompany,
         mysection: action.payload.mysection,
         companylogo: action.payload.companylogo,
@@ -385,6 +388,7 @@ export const user = createSlice({
         userAvatar: action.payload.targetAvatar,
         description: action.payload.description,
         rating: action.payload.rating,
+        annoymous: action.payload.annoymous,
       });
       state.addAdviceDone = true;
     },
@@ -489,6 +493,7 @@ export const user = createSlice({
         salary: action.payload.salary,
         type: action.payload.type,
         duedate: action.payload.duedate,
+        enddate: action.payload.enddate,
         company: action.payload.company,
         section: action.payload.section,
         space: action.payload.space,
@@ -506,6 +511,7 @@ export const user = createSlice({
         salary: action.payload.salary,
         type: action.payload.type,
         duedate: action.payload.duedate,
+        enddate: action.payload.enddate,
         company: action.payload.company,
         section: action.payload.section,
         space: action.payload.space,
@@ -522,6 +528,7 @@ export const user = createSlice({
         salary: action.payload.salary,
         type: action.payload.type,
         duedate: action.payload.duedate,
+        enddate: action.payload.enddate,
         company: action.payload.company,
         section: action.payload.section,
         space: action.payload.space,
@@ -535,6 +542,7 @@ export const user = createSlice({
         userAvatar: action.payload.targetAvatar,
         description: action.payload.description,
         job: action.payload.job,
+        enddate: action.payload.enddate,
         salary: action.payload.salary,
         type: action.payload.type,
         duedate: action.payload.duedate,

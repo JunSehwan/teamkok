@@ -30,7 +30,8 @@ export const joboffer = createSlice({
       state.mainJoboffered.find((v) => v.id === action.payload.id).answer = action.payload.answer;
       state.updateJobofferDone = true;
     },
-    updateCoccocDoneFalse: (state) => {
+    
+    updateJobofferDoneFalse: (state) => {
       state.updateJobofferDone = false;
     },
     removeJoboffer(state, action) {
@@ -75,7 +76,7 @@ export const {
   loadJoboffered,
   loadSchools,
   addJobofferDoneFalse,
-  updateCoccocDoneFalse,
+  updateJobofferDoneFalse,
 } = joboffer.actions;
 
 export const useJobofferState = () => useAppSelector((state) => state.joboffer);

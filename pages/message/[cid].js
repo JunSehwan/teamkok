@@ -17,7 +17,7 @@ import {
 } from "firebaseConfig";
 import { wrapper } from 'store/index';
 import LoadingPage from 'components/Common/Loading';
-import Shoot from 'components/Message/Shoot';
+import Talking from 'components/MessageNew/Talking';
 import { loadConversationList } from 'slices/chat';
 import { useDocumentQuery } from "hooks/useDocumentQuery";
 import InputSection from 'components/Board/Chat/ChatContents/Input/InputSection';
@@ -151,7 +151,7 @@ const index = () => {
   return (
     <>
       <Head>
-        <title>TeamZ - 메시지</title>
+        <title>JOBCOC - 메시지</title>
 
         <meta name="keywords" content="teamz, 팀즈, 채용공고, 현업담당자와 대화, 업무문의, 채용문의, 팀기반 소통플랫폼" />
         <meta name="description" content="원하는 기업에 입사하기 위해 팀별 현업담당자에게 적극적으로 나를 어필을 할 수 있습니다." />
@@ -172,25 +172,18 @@ const index = () => {
         <meta name="twitter:domain" content={`https://teamz.co.kr/message/${pid?.cid}`} />
       </Head>
 
-      {/* {loading ?
+      {loading ?
         <LoadingPage /> :
-        docuLoading ?
-          (<>
-            <div className="border-dark-lighten h-20 border-b"></div>
-            <div className="flex-grow"></div>
-            <InputSection disabled />
-          </>)
-          :
-          !mainConversations
-            ? (
-              <div className="flex h-full w-full flex-col items-center justify-center gap-6">
-                <p className="text-center text-lg">대화중인 리스트가 없습니다.</p>
-                <p className="text-center text-lg">흥미로운 팀의 현직자, 채용담당자와 대화해보세요!</p>
-              </div>
-            ) : ( */}
-              <Shoot />
-            {/* )
-      } */}
+        // !mainConversations || mainConversations?.length === 0
+        //   ? (
+        //     <div className="flex h-full w-full flex-col items-center justify-center">
+        //       <p className="text-center text-lg pt-[200px]">Conversation does not exists</p>
+        //     </div>
+        //   ) :
+        (
+          <Talking />
+        )
+      }
     </>
   );
 };

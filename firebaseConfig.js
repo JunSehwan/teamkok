@@ -1513,6 +1513,7 @@ export async function createAdvice(
       targetName: result?.targetName,
       targetAvatar: result?.targetAvatar,
       description: result?.description,
+      annoymous: result?.annoymous,
       rating: result?.rating,
     }),
   });
@@ -1522,6 +1523,7 @@ export async function createAdvice(
       username: user.displayName,
       userAvatar: user?.photoURL,
       description: result?.description,
+      annoymous: result?.annoymous,
       rating: result?.rating,
       mycompany: result?.mycompany,
       mysection: result?.mysection,
@@ -1550,6 +1552,7 @@ export async function removeAdvice(
       userAvatar: user?.photoURL,
       description: result?.description,
       rating: result?.rating,
+      annoymous: result?.annoymous,
       mycompany: result?.mycompany,
       mysection: result?.mysection,
       companylogo: result?.companylogo,
@@ -1562,6 +1565,7 @@ export async function removeAdvice(
       targetAvatar: result?.targetAvatar,
       description: result?.description,
       rating: result?.rating,
+      annoymous: result?.annoymous,
     }),
   });
 }
@@ -1920,6 +1924,62 @@ export async function getPosts(sectionId) {
     console.error(e);
   }
 }
+export async function getAllPosts() {
+  try {
+    // 첫번째 post 컬렉션의 스냅샷을 작성날짜 기준 내림차순 (orderBy 2번째 인자 생략시 기본 내림차순)으로 정렬해 10개의 문서만 받아오기
+    const q = query(
+      api.postsRef, 
+      orderBy("createdAt", "desc"), limit(10));
+    const docSnap = await getDocs(q);
+    // 마지막 문서 스냅샷 기억해해두기 (쿼리결과 스냅샷 크기 - 1 = 마지막 문서 위치)
+    const lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];
+    // 앞서 기억해둔 문서값으로 새로운 쿼리 요청 
+    const next = query(collection(db, "post"),
+      orderBy("createdAt"),
+      startAfter(lastVisible),
+      limit(10));
+
+    //결과 검색
+    const result = docSnap?.docs?.map((doc) => (
+      {
+        ...doc.data(),
+        id: doc.id,
+      }
+    ))
+    return result;
+  }
+  catch (e) {
+    console.error(e);
+  }
+}
+
+export async function getPostsByUserId(userID) {
+  try {
+    // 첫번째 post 컬렉션의 스냅샷을 작성날짜 기준 내림차순 (orderBy 2번째 인자 생략시 기본 내림차순)으로 정렬해 10개의 문서만 받아오기
+    const q = query(api.postsRef, where("creatorId", "==", userID), orderBy("createdAt", "desc"), limit(10));
+    const docSnap = await getDocs(q);
+    // 마지막 문서 스냅샷 기억해해두기 (쿼리결과 스냅샷 크기 - 1 = 마지막 문서 위치)
+    const lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];
+    // 앞서 기억해둔 문서값으로 새로운 쿼리 요청 
+    const next = query(collection(db, "post"),
+      orderBy("createdAt"),
+      startAfter(lastVisible),
+      limit(10));
+
+    //결과 검색
+    const result = docSnap?.docs?.map((doc) => (
+      {
+        ...doc.data(),
+        id: doc.id,
+      }
+    ))
+    return result;
+  }
+  catch (e) {
+    console.error(e);
+  }
+}
+
 
 
 export async function deletePost(postId) {

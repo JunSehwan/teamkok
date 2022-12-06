@@ -85,7 +85,7 @@ const SideBarList = () => {
 };
 
 const Container = styled.div`
-height: calc(100vh - 60.0px);
+
 `
 
 export default SideBarList;

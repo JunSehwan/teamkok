@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useCallback } from 'react';
 // import { Link, useParams } from "react-router-dom";
 import PropTypes from 'prop-types';
@@ -9,8 +10,8 @@ import profilePic from 'public/image/icon/happiness.png';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import CategoryList from 'components/Common/CategoryList';
-import {hideConversationBar} from 'slices/chat';
+// import CategoryList from 'components/Common/CategoryList';
+// import { hideConversationBar } from 'slices/chat';
 
 const SelectConversation = ({ conversation, conversationId }) => {
   const dispatch = useDispatch();
@@ -18,20 +19,18 @@ const SelectConversation = ({ conversation, conversationId }) => {
   const pid = router.query;
   const { data: users, loading } = useUsersInfo(conversation?.users);
   const { user } = useSelector(state => state.user);
-  const filtered = users?.filter((it) => it.id !== user?.userID);
+  const filtered = users?.filter((it) => it?.id !== user?.userID);
   // const { id } = useParams();
   const {
     data: lastMessage,
     loading: lastMessageLoading,
     error: lastMessageError,
   } = useLastMessage(conversationId);
-  const category = CategoryList?.filter(obj => obj.key == filtered?.[0]?.data().category);
-
+  // const category = CategoryList?.filter(obj => obj.key == filtered?.[0]?.data().category);
 
   const onClickDialog = useCallback(() => {
     router.push(`/message/${conversationId}`)
-    dispatch(hideConversationBar());
-  }, [conversationId, router, dispatch])
+  }, [conversationId, router])
 
 
   if (loading)
@@ -49,26 +48,26 @@ const SelectConversation = ({ conversation, conversationId }) => {
       <a
         onClick={onClickDialog}
       >
-        <div className={`ml-[2px] text-black hover:bg-slate-200 cursor-pointer relative flex items-stretch gap-2 py-2 px-5 transition duration-300 
-        ${conversationId === pid?.cid ? "!bg-sky-200 font-bold rounded-md" : ""
+        <div className={`text-black  hover:bg-slate-200 cursor-pointer relative flex items-stretch gap-2 py-3 px-4 transition duration-300 
+        ${conversationId === pid?.cid ? "bg-gray-200 font-bold border-solid border-l-4 border-blue-600" : ""
           }`}>
-          <div className='flex flex-row items-center my-1'>
-            <Image
+          <div className='flex flex-row items-center my-1 w-full'>
+            <img
               width={40}
               height={40}
-              className="h-14 w-14 flex-shrink-0 rounded-full object-cover"
-              src={filtered?.[0]?.data()?.avatar || profilePic}
+              className="h-10 w-10 flex-shrink-0 rounded-2xl object-cover"
+              src={filtered?.[0]?.data()?.avatar && filtered?.[0]?.data()?.avatar?.length !== 0 ? filtered?.[0]?.data()?.avatar : profilePic?.src}
               alt=""
             />
-            <div className="flex flex-grow flex-col ml-2 items-start gap-1 py-1">
-              {category?.length !== 0 && <span className="ml-1 px-3 py-0.5 bg-sky-600 rounded-full text-white text-xs" >{category[0]?.name}</span>}
-              <p className="max-w-[180px] flex-grow overflow-hidden text-ellipsis whitespace-nowrap">
+            <div className="flex flex-grow flex-col ml-2 items-start gap-0.5 py-1 w-full">
+              {/* {category?.length !== 0 && <span className="ml-1 px-3 py-0.5 bg-sky-600 rounded-full text-white text-xs" >{category[0]?.name}</span>} */}
+              <p className="max-w-[320px] md:max-w-[200px] flex-grow overflow-hidden text-ellipsis whitespace-nowrap font-bold">
                 {filtered?.[0]?.data()?.username}
               </p>
               {lastMessageLoading ? (
                 <Skeleton className="w-2/3 flex-grow" />
               ) : (
-                <p className="max-w-[180px] flex-grow overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-400">
+                <p className="max-w-[320px] md:max-w-[200px] flex-grow overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-600">
                   {lastMessage?.message}
                 </p>
               )}
@@ -93,7 +92,7 @@ const SelectConversation = ({ conversation, conversationId }) => {
     >
       <div className={`ml-[2px] text-black hover:bg-slate-200 cursor-pointer relative flex items-stretch gap-2 py-2 px-5 transition duration-300 ${conversationId === pid?.cid ? "!bg-sky-200 font-bold rounded-md" : ""
         }`}>
-        <div className='flex flex-row items-center my-1'>
+        <div className='flex flex-row items-center my-1 w-full'>
           {conversation?.group?.groupImage ? (
             <Image
               className="h-14 w-14 flex-shrink-0 rounded-full object-cover"
@@ -122,8 +121,8 @@ const SelectConversation = ({ conversation, conversationId }) => {
               />
             </div>
           )}
-          <div className="flex flex-grow flex-col ml-2 items-start gap-1 py-1">
-            <p className="max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap">
+          <div className="flex flex-grow flex-col ml-2 items-start gap-0.5 py-1 w-full">
+            <p className="max-w-[320px] md:max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
               {conversation?.group?.groupName ||
                 filtered
                   ?.map((user) => user.data()?.username)
@@ -133,7 +132,7 @@ const SelectConversation = ({ conversation, conversationId }) => {
             {lastMessageLoading ? (
               <Skeleton className="w-2/3 flex-grow" />
             ) : (
-              <p className="max-w-[180px] flex-grow overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-400">
+              <p className="max-w-[320px] md:max-w-[200px] flex-grow overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-600">
                 {lastMessage?.message}
               </p>
             )}

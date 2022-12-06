@@ -237,7 +237,7 @@ const index = ({ children }) => {
         <div className="mx-auto px-4 sm:px-6">
           <div className={`flex justify-between items-center border-b-1 border-gray-100 py-2 ${ScrollActive === true && "border-0"} justify-start md:space-x-10`}>
             <div className="flex justify-start">
-              <Link href={`${user ? "dashboard" : "/"}`}>
+              <Link href={`${user ? "/dashboard" : "/"}`}>
                 <a>
                   <span className="sr-only">JOBCOC</span>
                   <Image
@@ -294,7 +294,7 @@ const index = ({ children }) => {
                 <div className="flex items-center justify-center md:flex">
 
                   <button
-                    className={`text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/dashboard" && "text-[#4979f5]"}`}
+                    className={`text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/dashboard" || router?.pathname?.includes("/dashboard") ? "text-[#4979f5]" : ""}`}
                     onClick={onClickDashboard}>
                     <div className='flex flex-col items-center'>
                       <MdDashboard className='w-6 h-6' />
@@ -302,7 +302,7 @@ const index = ({ children }) => {
                     </div>
                   </button>
                   <button
-                    className={`text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/friends" && "text-[#4979f5]"}`}
+                    className={`text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/friends" || router?.pathname?.includes("/friends") ?  "text-[#4979f5]" : ""}`}
                     onClick={onClickFriends}>
                     <div className='flex flex-col items-center'>
                       <FaIdCard className='w-6 h-6' />
@@ -312,7 +312,7 @@ const index = ({ children }) => {
                   {/* FaBuilding
                   TiNews */}
                   <button
-                    className={`text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/news" && "text-[#4979f5]"}`}
+                    className={`text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/news" || router?.pathname?.includes("/teamlist") ? "text-[#4979f5]" : ""}`}
                     onClick={onClickNews}>
                     <div className='flex flex-col items-center'>
                       <HiUserGroup className='w-6 h-6' />
@@ -320,7 +320,7 @@ const index = ({ children }) => {
                     </div>
                   </button>
                   <button
-                    className={`sm:flex hidden text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/teamlist" && "text-[#4979f5]"}`}
+                    className={`sm:flex hidden text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/teamlist" || router?.pathname?.includes("/teamlist") ? "text-[#4979f5]" : ""}`}
                     onClick={onClickTeams}>
                     <div className='flex flex-col items-center'>
                       <FaBuilding className='w-6 h-6' />
@@ -333,7 +333,7 @@ const index = ({ children }) => {
                     </button>
                   }
                   <button
-                    className={`sm:flex hidden text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/message" && "text-[#4979f5]"}`}
+                    className={`sm:flex hidden text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/message" || router?.pathname?.includes("/message") ? "text-[#4979f5]" : ""}`}
                     onClick={onClickMessage}>
                     <div className='flex flex-col items-center'>
                       <MdMessage className='w-6 h-6' />

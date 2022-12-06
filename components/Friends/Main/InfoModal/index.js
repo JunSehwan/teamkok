@@ -3,6 +3,7 @@ import { TbHandClick } from 'react-icons/tb';
 import styled, { keyframes } from 'styled-components';
 import { updateServiceInfoSeen } from 'firebaseConfig';
 import { useSelector } from 'react-redux';
+import { motion } from 'framer-motion';
 
 const animate = keyframes`
  from {
@@ -22,7 +23,7 @@ const scale = keyframes`
     transform: scale(1.2);
   }
 `
-const Container = styled.div`
+const Container = styled(motion.div)`
   #double {
     animation: ${scale} 0.5s infinite ease-in-out;
   }
@@ -93,7 +94,11 @@ const index = () => {
   return (
     <>
       {open && user?.infoseen !== 99 ?
-        <Container className="fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center">
+        <Container
+          className="fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+        >
           <div className="w-[100%] justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
           >
             <div className="sticky w-[100%] mt-auto mb-[25px] mx-auto max-w-[32rem] min-w-[320px]" ref={modalEl}>

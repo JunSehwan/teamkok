@@ -34,7 +34,7 @@ const _app = ({ Component, pageProps }) => {
     <>
       <GlobalStyle />
       <Head>
-        <title>Welcome to TEAMZ!</title>
+        <title>내가 원하는 JOB을 콕!콕!</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <link rel="apple-touch-icon" sizes="57x57" href="/logo/apple-icon-57x57.png" />
@@ -51,7 +51,7 @@ const _app = ({ Component, pageProps }) => {
         <link rel="icon" type="image/png" sizes="96x96" href="/logo/favicon-96x96.png" />
         <link rel="icon" type="imagfirebase deploy --only hostinge/png" sizes="16x16" href="/logo/favicon-16x16.png" />
         <link rel="manifest" href="/logo/manifest.json" />
-        <link rel="stylesheet" as="style" crossOrigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+        <link rel="stylesheet" as="style" crossOrigin="true" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
         <meta name="msapplication-TileColor" content="#ffffff" />
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png"></meta>
         <meta name="theme-color" content="#ffffff"></meta>

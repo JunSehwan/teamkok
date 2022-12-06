@@ -16,7 +16,7 @@ import {
   getConversations, getUsers
 } from "firebaseConfig";
 import LoadingPage from 'components/Common/Loading';
-import Message from 'components/Message';
+import MessageNew from 'components/MessageNew';
 import { loadConversationList } from 'slices/chat';
 
 const index = () => {
@@ -50,10 +50,6 @@ const index = () => {
         avatar: docData.avatar,
         phonenumber: docData.phonenumber,
         category: docData.category,
-        url_one: docData.url_one,
-        url_two: docData.url_two,
-        url_three: docData.url_three,
-        about: docData.about,
         address: docData.address,
         style: docData.style,
         survey: docData.survey,
@@ -112,10 +108,6 @@ const index = () => {
         avatar: docData.avatar,
         phonenumber: docData.phonenumber,
         category: docData.category,
-        url_one: docData.url_one,
-        url_two: docData.url_two,
-        url_three: docData.url_three,
-        about: docData.about,
         address: docData.address,
         style: docData.style,
         survey: docData.survey,
@@ -139,7 +131,7 @@ const index = () => {
   return (
     <>
       <Head>
-        <title>TeamZ - 메시지</title>
+        <title>다양한 전문가들과 대화를 나눠보세요 - JOBCOC</title>
 
         <meta name="keywords" content="teamz, 팀즈, 채용공고, 현업담당자와 대화, 업무문의, 채용문의, 팀기반 소통플랫폼" />
         <meta name="description" content="원하는 기업에 입사하기 위해 팀별 현업담당자에게 적극적으로 나를 어필을 할 수 있습니다." />
@@ -162,14 +154,15 @@ const index = () => {
 
       {loading ?
         <LoadingPage /> :
-        !mainConversations
-          ? (
-            <div className="flex h-full w-full flex-col items-center justify-center gap-6">
-              <p className="text-center text-lg">Conversation does not exists</p>
-            </div>
-          ) : (
-            <Message />
-          )
+        // !mainConversations || mainConversations?.length === 0
+        //   ? (
+        //     <div className="flex h-full w-full flex-col items-center justify-center">
+        //       <p className="text-center text-lg pt-[200px]">Conversation does not exists</p>
+        //     </div>
+        //   ) :
+        (
+          <MessageNew />
+        )
       }
     </>
   );

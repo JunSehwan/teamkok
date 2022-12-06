@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
 import LeftBar from './LeftBar';
 import Main from './Main';
@@ -7,11 +8,31 @@ import JobOffer from './JobOffer';
 import Coccoc from './Coccoc';
 import Advice from './Advice';
 import Group from './Group';
-
+import toast from 'react-hot-toast';
+import { updateJobofferDoneFalse } from 'slices/joboffer';
+import { updateCoccocDoneFalse } from 'slices/coccoc';
 
 const index = () => {
   const router = useRouter();
 
+
+  const dispatch = useDispatch();
+  const { updateJobofferDone } = useSelector(state => state.joboffer);
+  const { updateCoccocDone } = useSelector(state => state.coccoc);
+  const updateNotify = () => toast('답변을 하였습니다.😀');
+  useEffect(() => {
+    if (updateJobofferDone) {
+      updateNotify();
+      dispatch(updateJobofferDoneFalse());
+    }
+  }, [dispatch, updateJobofferDone])
+  const updateCoccocNotify = () => toast('답변을 하였습니다.😀');
+  useEffect(() => {
+    if (updateCoccocDone) {
+      updateCoccocNotify();
+      dispatch(updateCoccocDoneFalse());
+    }
+  }, [dispatch, updateCoccocDone])
 
   return (
     <>
@@ -22,10 +43,10 @@ const index = () => {
         <div className='ml-0 md:ml-[289px] w-full max-w-[1200px]'>
           {router?.pathname === "/dashboard" ? <Main />
             : router?.pathname === "/dashboard/joboffer" ? <JobOffer />
-            : router?.pathname === "/dashboard/coccoc" ? <Coccoc />
-            : router?.pathname === "/dashboard/advice" ? <Advice />
-            : router?.pathname === "/dashboard/group" ? <Group />
-              : null
+              : router?.pathname === "/dashboard/coccoc" ? <Coccoc />
+                : router?.pathname === "/dashboard/advice" ? <Advice />
+                  : router?.pathname === "/dashboard/group" ? <Group />
+                    : null
           }
         </div>
       </div>

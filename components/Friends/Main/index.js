@@ -102,8 +102,6 @@ const index = () => {
   // }, [users]
   // );
 
-
-
   useEffect(() => {
     if (users && scrollPosition && scrolling) {
       setTimeout(() => {
