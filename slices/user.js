@@ -60,6 +60,7 @@ export const initialState = {
   deleteJobofferDone: false,
   scrollPosition: 0,
   scrolling: false,
+  categoryFilter: null,
 };
 
 export const user = createSlice({
@@ -572,6 +573,9 @@ export const user = createSlice({
     setScrollPositionDone(state) {
       state.scrolling = false;
     },
+    changeCategoryFilter(state, action) {
+      state.categoryFilter = action.payload;
+    },
 
   },
   extraReducers: {
@@ -662,6 +666,7 @@ export const {
   addLikeDoneFalse,
   addUnlikeDoneFalse,
   setScrollPositionDone,
+  changeCategoryFilter,
 } = user.actions;
 
 export const useUserState = () => useAppSelector((state) => state.user);

@@ -101,17 +101,17 @@ onAuthStateChanged(auth, (user) => {
 // }
 
 
+
 export async function getUser(userId) {
-  const userRef = collection(db, "users", userId);
-  const docSnap = await getDoc(userRef);
+  const result = await getDoc(api.userByIdRef(userId));
 
   // const user = await userRef.doc('currentUser.uid').get();
   // if (!user.exists) {
   //   return res.status(404).json({});
   // }
 
-  if (docSnap.exists()) {
-    return { id: docSnap.id, ...docSnap.data() }
+  if (result.exists()) {
+    return { id: result.id, ...result.data() }
   } else {
     // doc.data() will be undefined in this case
     console.log("No such document!");
@@ -641,7 +641,7 @@ export const api = {
     collection(db, "users"),
     // where("purpose", "!=", 1),
     // orderBy("purpose"),
-    orderBy("timestamp", "desc")
+    // orderBy("timestamp", "desc")
   ),
 
   userByIdRef: (userId) =>
@@ -656,6 +656,7 @@ export const api = {
   viewsRef: collection(db, "ViewsData"),
   educationsRef: collection(db, "educations"),
   jobofferRef: collection(db, "joboffers"),
+  subscribeRef: collection(db, "subscribes"),
   coccocRef: collection(db, "coccocs"),
   careersRef: collection(db, "careers"),
   mystyleRef: collection(db, "mystyle"),
@@ -783,6 +784,95 @@ export async function getCareersByUser(userId) {
 
 // get all users
 
+export async function getFriends() {
+  const q = query(api.usersRef,
+    where("purpose", ">", 1),
+    where("purpose", "<", 4),
+    // where("purpose", "!=", 4),
+    orderBy("purpose", "asc"),
+    orderBy("timestamp", "desc"),
+    // orderBy("purpose", "desc"),
+    // where("avatar", "!=", ""),
+    // orderBy("avatar", "desc")
+  );
+  const querySnapshot = await getDocs(q);
+
+  const people = await Promise.all(querySnapshot?.docs?.map(async (doc) => {
+    var skills = await getSkillsByUser(doc.data().id)
+    var careers = await getCareersByUser(doc.data().id)
+    var educations = await getEducationsByUser(doc.data().id)
+    var joboffered = await getJobofferedByUserId(doc.data().id)
+    var joboffers = await getJoboffersByUserId(doc.data().id)
+    var coccoced = await getCoccocedByUserId(doc.data().id)
+    var coccocs = await getCoccocsByUserId(doc.data().id)
+
+    const man = {
+      userID: doc.data().id,
+      username: doc.data().username,
+      email: doc.data().email,
+      email_using: doc.data().email_using,
+      birthday: doc.data().birthday,
+      gender: doc.data().gender,
+      avatar: doc.data().avatar,
+      phonenumber: doc.data().phonenumber,
+      category: doc.data().category,
+      address: doc.data().address,
+      address_sido: doc.data().address_sido,
+      style: doc.data().style,
+      survey: doc.data().survey,
+      favorites: doc.data().favorites,
+      favLikes: doc.data().favLikes,
+      experts: doc.data().experts,
+      expertNum: doc.data().expertNum,
+      point: doc.data().point,
+      points: doc.data().points,
+      givePoint: doc.data().givePoint,
+      infoseen: doc.data().infoseen,
+      mycompany: doc.data().mycompany,
+      myposition: doc.data().myposition,
+      mysection: doc.data().mysection,
+      mytype: doc.data().mytype,
+      companyemail: doc.data().companyemail,
+      companylogo: doc.data().companylogo,
+      companyfield: doc.data().companyfield,
+      companyurl: doc.data().companyurl,
+      companyaddress: doc.data().companyaddress,
+      companycomplete: doc.data().companycomplete,
+      staffnumber: doc.data().staffnumber,
+      companyadditional: doc.data().companyadditional,
+      additionalMent: doc.data().additionalMent,
+      links: doc.data().links,
+      purpose: doc.data().purpose,
+      thumbvideo: doc.data().thumbvideo,
+      thumbimage: doc.data().thumbimage,
+      timestamp: doc.data().timestamp,
+      likes: doc.data().likes || [],
+      liked: doc.data().liked || [],
+      advices: doc.data().advices || [],
+      adviced: doc.data().adviced || [],
+      // coccocs: doc.data().coccocs || [],
+      // coccoced: doc.data().coccoced || [],
+      // joboffers: doc.data().joboffers || [],
+      // joboffered: doc.data().joboffered || [],
+      skills: skills,
+      careers: careers,
+      educations: educations,
+      joboffered: joboffered,
+      joboffers: joboffers,
+      coccoced: coccoced,
+      coccocs: coccocs,
+    }
+    return man;
+  }))
+  const result = [];
+  people?.map(v => (
+    v?.careers?.length !== 0 && result?.push(v)
+  ))
+  return result;
+}
+
+// get all users
+
 export async function getUsers() {
   const result = await getDocs(api.usersRef);
 
@@ -854,7 +944,97 @@ export async function getUsers() {
     return man;
   }))
   return people;
+}
 
+// getCategoryUsers
+
+
+
+export async function getCategoryUsers(categoryFilter) {
+  const q = query(api.usersRef,
+    // orderBy("category", "asc"),
+    where("purpose", ">", 1),
+    where("purpose", "<", 4),
+    orderBy("purpose", "asc"),
+    orderBy("timestamp", "desc"),
+    where("category", "==", categoryFilter),
+    // where("avatar", "!=", ""),
+    // orderBy("avatar", "desc"),
+  );
+  const querySnapshot = await getDocs(q);
+
+  const people = await Promise.all(querySnapshot?.docs?.map(async (doc) => {
+    var skills = await getSkillsByUser(doc.data().id)
+    var careers = await getCareersByUser(doc.data().id)
+    var educations = await getEducationsByUser(doc.data().id)
+    var joboffered = await getJobofferedByUserId(doc.data().id)
+    var joboffers = await getJoboffersByUserId(doc.data().id)
+    var coccoced = await getCoccocedByUserId(doc.data().id)
+    var coccocs = await getCoccocsByUserId(doc.data().id)
+
+    const man = {
+      userID: doc.data().id,
+      username: doc.data().username,
+      email: doc.data().email,
+      email_using: doc.data().email_using,
+      birthday: doc.data().birthday,
+      gender: doc.data().gender,
+      avatar: doc.data().avatar,
+      phonenumber: doc.data().phonenumber,
+      category: doc.data().category,
+      address: doc.data().address,
+      address_sido: doc.data().address_sido,
+      style: doc.data().style,
+      survey: doc.data().survey,
+      favorites: doc.data().favorites,
+      favLikes: doc.data().favLikes,
+      experts: doc.data().experts,
+      expertNum: doc.data().expertNum,
+      point: doc.data().point,
+      points: doc.data().points,
+      givePoint: doc.data().givePoint,
+      infoseen: doc.data().infoseen,
+      mycompany: doc.data().mycompany,
+      myposition: doc.data().myposition,
+      mysection: doc.data().mysection,
+      mytype: doc.data().mytype,
+      companyemail: doc.data().companyemail,
+      companylogo: doc.data().companylogo,
+      companyfield: doc.data().companyfield,
+      companyurl: doc.data().companyurl,
+      companyaddress: doc.data().companyaddress,
+      companycomplete: doc.data().companycomplete,
+      staffnumber: doc.data().staffnumber,
+      companyadditional: doc.data().companyadditional,
+      additionalMent: doc.data().additionalMent,
+      links: doc.data().links,
+      purpose: doc.data().purpose,
+      thumbvideo: doc.data().thumbvideo,
+      thumbimage: doc.data().thumbimage,
+      timestamp: doc.data().timestamp,
+      likes: doc.data().likes || [],
+      liked: doc.data().liked || [],
+      advices: doc.data().advices || [],
+      adviced: doc.data().adviced || [],
+      // coccocs: doc.data().coccocs || [],
+      // coccoced: doc.data().coccoced || [],
+      // joboffers: doc.data().joboffers || [],
+      // joboffered: doc.data().joboffered || [],
+      skills: skills,
+      careers: careers,
+      educations: educations,
+      joboffered: joboffered,
+      joboffers: joboffers,
+      coccoced: coccoced,
+      coccocs: coccocs,
+    }
+    return man;
+  }))
+  const result = [];
+  people?.map(v => (
+    v?.careers?.length !== 0 && result?.push(v)
+  ))
+  return result;
 }
 
 // get adimn  users
@@ -1140,6 +1320,29 @@ export async function uploadImage(file) {
   return imageUrl.metadata;
 }
 
+export async function subscribeEmail(email) {
+  const ref = collection(db, "subscribes");
+  
+  const created = await addDoc(api.subscribeRef,
+    { email:email, timestamp: new Date().toISOString() });
+
+  const docRef = doc(db, "subscribes", created.id);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    const result = {
+      ...docSnap.data(),
+      id: created.id,
+    }
+    // console.log("Document data:", docSnap.data());
+    return result;
+  } else {
+    // doc.data() will be undefined in this case
+    alert("No such document!");
+  }
+}
+
+
 export async function createEducation(education) {
   const edu = await addDoc(api.educationsRef,
     { ...education, timestamp: dayjs().format('YYYY-MM-DD HH:mm:ss') });
@@ -1407,34 +1610,51 @@ export async function updateSurvey(survey) {
 // // [a, b, c].slice 이런식으로
 export async function getSkillsByUserId(userId) {
   const user = auth.currentUser;
-  const carRef = collection(db, "skills");
-  const q = query(carRef, where("userId", "==", user.uid), orderBy("timestamp", "desc"));
+  if (!user) {
+    return alert("로그인 후 가능합니다.")
+  }
+  try {
+    const carRef = collection(db, "skills");
+    const q = query(carRef, where("userId", "==", user.uid), orderBy("timestamp", "desc"));
 
-  //결과 검색
-  const querySnapshot = await getDocs(q);
-  const result = querySnapshot?.docs?.map((doc) => (
-    {
-      ...doc.data(),
-      id: doc.id,
-    }
-  ))
-  return result
+    //결과 검색
+    const querySnapshot = await getDocs(q);
+    const result = querySnapshot?.docs?.map((doc) => (
+      {
+        ...doc.data(),
+        id: doc.id,
+      }
+    ))
+    return result
+  } catch (e) { console.error(e) }
 }
 
 export async function getRelatedSkills(category) {
   const user = auth.currentUser;
-  const carRef = collection(db, "skills");
-  const q = query(carRef, where("category", "==", category), orderBy("count", "asc"));
+  if (!user) {
+    return alert("로그인 후 가능합니다.")
+  }
+  try {
+    if (!category) return;
+    const carRef = collection(db, "skills");
+    const q = query(carRef,
+      where("category", "==", category),
+      // orderBy("count", "asc")
+    );
 
-  //결과 검색
-  const querySnapshot = await getDocs(q);
-  const result = querySnapshot?.docs?.map((doc) => (
-    {
-      ...doc.data(),
-      id: doc.id,
-    }
-  ))
-  return result
+    //결과 검색
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) return;
+    const result = querySnapshot?.docs?.map((doc) => (
+      {
+        ...doc.data(),
+        id: doc.id,
+      }
+    ))
+    return result
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 
@@ -1454,7 +1674,7 @@ export async function createSkills(uniqueArr) {
       await addDoc(api.skillsRef, {
         userId: user.uid,
         name: v?.name,
-        category: v?.category,
+        category: v?.category || null,
         count: increment(1),
         timestamp: dayjs().format('YYYY-MM-DD HH:mm:ss')
       }
@@ -1924,34 +2144,58 @@ export async function getPosts(sectionId) {
     console.error(e);
   }
 }
-export async function getAllPosts() {
+export async function getAllPosts(limitCount, category) {
   try {
     // 첫번째 post 컬렉션의 스냅샷을 작성날짜 기준 내림차순 (orderBy 2번째 인자 생략시 기본 내림차순)으로 정렬해 10개의 문서만 받아오기
     const q = query(
-      api.postsRef, 
-      orderBy("createdAt", "desc"), limit(10));
-    const docSnap = await getDocs(q);
-    // 마지막 문서 스냅샷 기억해해두기 (쿼리결과 스냅샷 크기 - 1 = 마지막 문서 위치)
-    const lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];
-    // 앞서 기억해둔 문서값으로 새로운 쿼리 요청 
-    const next = query(collection(db, "post"),
-      orderBy("createdAt"),
-      startAfter(lastVisible),
+      api.postsRef,
+      orderBy("createdAt", "desc"),
       limit(10));
+    // 마지막 문서 스냅샷 기억해해두기 (쿼리결과 스냅샷 크기 - 1 = 마지막 문서 위치)
+    // const lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];
+    // 앞서 기억해둔 문서값으로 새로운 쿼리 요청 
+    if (category) {
+      const next = query(collection(db, "posts"),
+        where("category", "==", category),
+        orderBy("createdAt", "desc"),
+        // startAfter(lastVisible),
+        limit(limitCount));
+      const docSnap = await getDocs(next);
 
-    //결과 검색
-    const result = docSnap?.docs?.map((doc) => (
-      {
-        ...doc.data(),
-        id: doc.id,
-      }
-    ))
-    return result;
+      // //결과 검색
+      const result = docSnap?.docs?.map((doc) => (
+        {
+          ...doc.data(),
+          id: doc.id,
+        }
+      ))
+      return result;
+    }
+    else {
+      const next = query(collection(db, "posts"),
+        orderBy("createdAt", "desc"),
+        // startAfter(lastVisible),
+        limitToLast(limitCount));
+      const docSnap = await getDocs(next);
+
+      // //결과 검색
+      const result = docSnap?.docs?.map((doc) => (
+        {
+          ...doc.data(),
+          id: doc.id,
+        }
+      ))
+      return result;
+    }
+
+    // return docSnap;
   }
   catch (e) {
     console.error(e);
   }
 }
+
+
 
 export async function getPostsByUserId(userID) {
   try {

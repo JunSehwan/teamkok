@@ -49,7 +49,7 @@ const Twelve = ({ goNextStage, goFriends,  goCertStage }) => {
     <div className='w-full h-[100vh] flex flex-col justify-between'>
       {/* 뒤로가기 버튼 ==> 첫번째는 없고 두번째부터*/}
       <div className='py-4 bg-[#ffffff51] z-10 backdrop-blur-md	'>
-        <div className='mx-auto pl-2 text-left'>
+        <div className='mx-auto text-left'>
           <div className='w-full flex justify-start items-center'>
             <div className='w-max'>
               <div className='flex justify-start items-center'>
@@ -67,7 +67,7 @@ const Twelve = ({ goNextStage, goFriends,  goCertStage }) => {
           </div>
           </div>
           <h3 className='sm:text-[2.3rem] text-[1.8rem] text-gray-700 my-4 w-full pl-2'>
-            🪄팀의 이미지지</h3>
+            🪄팀 이미지</h3>
           <p className='ml-2 my-1 text-gray-500 text-[1.2rem] leading-8'>팀을 대표할 수 있는 이미지 또는 로고를 업로드해주세요.</p>
 
           <div className='relative flex justify-center w-[162px] mx-auto mt-4 border-white rounded-[12px] group'>

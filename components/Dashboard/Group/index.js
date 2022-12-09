@@ -39,7 +39,7 @@ const index = () => {
       <div className='pt-5'>
 
         <div className='py-6'>
-          <div className='mx-auto pl-2 text-left'>
+          <div className='mx-auto text-left'>
             <div className='flex justify-between w-full items-center'>
               <p className='text-gray-500 text-[1.2rem] leading-8'>
                 👩‍👦입사에 승낙한 인재리스트
@@ -61,7 +61,7 @@ const index = () => {
         </div>
 
         <div className='py-6'>
-          <div className='mx-auto pl-2 text-left'>
+          <div className='mx-auto text-left'>
             <div className='flex justify-between w-full items-center'>
               <p className='text-gray-500 text-[1.2rem] leading-8'>
                 🪪입사제안
@@ -95,7 +95,7 @@ const index = () => {
 
 
         <div className='py-6'>
-          <div className='mx-auto pl-2 text-left'>
+          <div className='mx-auto text-left'>
             <div className='flex justify-between w-full items-center'>
               <p className='text-gray-500 text-[1.2rem] leading-8'>
                 📌콕!콕!
@@ -127,7 +127,7 @@ const index = () => {
         </div>
 
         <div className='py-6'>
-          <div className='mx-auto pl-2 text-left flex-col flex'>
+          <div className='mx-auto text-left flex-col flex'>
             <div className='flex justify-between w-full items-center'>
               <p className='text-gray-500 text-[1.2rem] leading-8'>
                 💡내가 보낸 조언
@@ -159,7 +159,7 @@ const index = () => {
         </div>
 
         <div className='py-6'>
-          <div className='mx-auto pl-2 text-left'>
+          <div className='mx-auto text-left'>
             <div className='flex justify-between w-full items-center'>
               <p className='text-gray-500 text-[1.2rem] leading-8'>
                 💖우리팀 좋아요 개수

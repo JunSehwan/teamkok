@@ -34,7 +34,7 @@ const Third = ({ goNextStage, goNews, goPrevStage, goCertStage }) => {
     <div className='w-full h-[100vh] flex flex-col justify-between'>
       {/* 뒤로가기 버튼 ==> 첫번째는 없고 두번째부터*/}
       <div className='py-4 bg-[#ffffff51] z-10 backdrop-blur-md	'>
-        <div className='mx-auto pl-2 text-left'>
+        <div className='mx-auto text-left'>
           <div className='w-full flex justify-start items-center'>
             <div className='w-max'>
               <div className='flex justify-start items-center'>

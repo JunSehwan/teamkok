@@ -9,7 +9,7 @@ const First = ({ goNextStage, goNews }) => {
     <div className='w-full h-[100vh] flex flex-col justify-between'>
       {/* 뒤로가기 버튼 ==> 첫번째는 없고 두번째부터*/}
       <div className='py-4 bg-[#ffffff51] z-10 backdrop-blur-md	'>
-        <div className='mx-auto pl-2 text-left'>
+        <div className='mx-auto text-left'>
 
           <div className='my-6 px-4'>
             <div className="w-full bg-gray-200 rounded-full dark:bg-gray-700 ">

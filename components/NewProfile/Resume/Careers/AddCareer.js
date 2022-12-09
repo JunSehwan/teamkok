@@ -1,9 +1,7 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
 import { createCareer } from 'firebaseConfig';
 import { addCareer, setAddDoneFalse, addCareerOpenFalse } from 'slices/career';
 import { useDispatch, useSelector } from 'react-redux';
-import { IoMdArrowRoundBack } from 'react-icons/io';
 import toast from 'react-hot-toast';
 
 const AddCareer = () => {

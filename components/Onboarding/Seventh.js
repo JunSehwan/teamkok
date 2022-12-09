@@ -94,7 +94,7 @@ const Seventh = ({ goNextStage, goNews, goPrevStage, goCertStage }) => {
     <div className='w-full h-[100vh] flex flex-col justify-between'>
       {/* 뒤로가기 버튼 ==> 첫번째는 없고 두번째부터*/}
       <div className='py-4 bg-[#ffffff51] z-10 backdrop-blur-md	'>
-        <div className='mx-auto pl-2 text-left'>
+        <div className='mx-auto text-left'>
           <div className='w-full flex justify-start items-center'>
             <div className='w-max'>
               <div className='flex justify-start items-center'>
@@ -119,7 +119,7 @@ const Seventh = ({ goNextStage, goNews, goPrevStage, goCertStage }) => {
             className="w-full"
           // onSubmit={onSubmit}
           >
-            <div className='overflow-y-scroll h-[50vh] py-4 px-2'>
+            <div className='overflow-y-auto py-4 px-2'>
               <div className="max-w-[720px] py-2">
                 <label className="block mb-4 text-md font-bold text-gray-700" htmlFor="skill">
                   본인의 자신있는 스킬을 등록해주세요!
@@ -146,7 +146,7 @@ const Seventh = ({ goNextStage, goNews, goPrevStage, goCertStage }) => {
                     )) : <Empty text="스킬을 선택해주세요" />}
                 </div>
 
-                <div className='w-full flex flex-row items-center'>
+                <div className='w-full gap-2 flex flex-col md:flex-row items-center mb-2'>
                   <input
                     className={skillError ?
                       "block w-full p-4 text-gray-900 border border-red-300 rounded-lg bg-red-50 sm:text-md focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500"
@@ -161,7 +161,7 @@ const Seventh = ({ goNextStage, goNews, goPrevStage, goCertStage }) => {
                     value={skill || ""}
                   />
                   <button
-                    className='my-2 w-[70px] ml-1 text-md py-5 px-4 font-bold text-white bg-sky-400 hover:bg-sky-500  focus:outline-none focus:shadow-outline rounded-lg'
+                    className='mb-2 md:mb-0 w-full md:w-[70px] text-md py-5 px-4 font-bold text-white bg-sky-400 hover:bg-sky-500  focus:outline-none focus:shadow-outline rounded-lg'
                     onClick={onClick}
                   >
                     등록</button>

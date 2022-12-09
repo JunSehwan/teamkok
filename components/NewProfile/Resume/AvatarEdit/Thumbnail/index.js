@@ -43,7 +43,7 @@ const index = () => {
                   className="rounded-xl h-[383px] w-[245px] bg-black"
                   controls
                   loop
-                  src={user?.thumbvideo}
+                  src={user?.thumbvideo || ""}
                 />
               ) : (
                 <div onClick={openVideoModal} className='bg-slate-100 rounded-xl h-[383px] w-[245px] flex flex-col justify-center items-center'>
@@ -52,16 +52,16 @@ const index = () => {
                 </div>
               )}
             </div>
-            <div className='w-full my-4 flex justify-center'>
-              {user?.thumbimage?.length !== 0 ? (
+            <div className='w-full my-4 flex justify-center relative'>
+              {user?.thumbimage && user?.thumbimage?.length !== 0 ? (
                 <>
                   <img
                     className="rounded-xl h-[383px] w-[245px] bg-black object-cover"
                     alt="thumbimg"
-                    src={user?.thumbimage[0]}
+                    src={user?.thumbimage[0] || ""}
                   />
                   {user?.thumbimage?.length > 1 &&
-                    <div className='absolute p-2 rounded-t-lg bg-white opacity-70 text-sm text-center w-[245px]'>외 {user?.thumbimage?.length - 1}장</div>}
+                    <div className='absolute bottom-0 left-0 right-0 w-full p-2 rounded-t-lg bg-white opacity-70 text-sm text-center'>외 {user?.thumbimage?.length - 1}장</div>}
                 </>
               ) : (
                 <div onClick={openVideoModal} className='bg-slate-100 rounded-xl h-[383px] w-[245px] flex flex-col justify-center items-center'>
@@ -75,7 +75,7 @@ const index = () => {
 
           <div className='flex flex-row w-full'>
 
-            <button type="button" onClick={openImageModal}
+            <button type="button" onClick={openVideoModal}
               className="border-dashed border-2 border-gray-300 w-full flex flex-col text-gray-500 bg-gray-100 hover:bg-gray-200 font-medium rounded-xl px-4 py-2 text-center items-center dark:focus:ring-[#3b5998]/55 mr-2 mb-2">
               <TbVideoPlus className='w-8 h-8' />
               {/* <span className="px-2 py-4 text-md text-gray-100 border-l-2 border-gray-100 font-mono">

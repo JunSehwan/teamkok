@@ -91,10 +91,7 @@ const index = () => {
       };
       dispatch(setUser(currentUser));
       dispatch(userLoadingEnd());
-      // await getUsers().then((result) => {
-      //   dispatch(setUsers(result));
-      // })
-
+      
 
       if (otherid) {
         await getOtherUser(otherid).then((result) => {

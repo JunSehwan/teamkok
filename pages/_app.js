@@ -11,7 +11,17 @@ import { useRouter } from 'next/router';
 import * as gtag from "lib/gtag";
 import Script from 'next/script'
 
+import AOS from "aos";
+import 'aos/dist/aos.css';
+
 const _app = ({ Component, pageProps }) => {
+
+  useEffect(() => {
+    AOS.init({
+      delay: 400,
+      duration: 800,
+    });
+  });
 
   const router = useRouter()
   useEffect(() => {
@@ -51,7 +61,7 @@ const _app = ({ Component, pageProps }) => {
         <link rel="icon" type="image/png" sizes="96x96" href="/logo/favicon-96x96.png" />
         <link rel="icon" type="imagfirebase deploy --only hostinge/png" sizes="16x16" href="/logo/favicon-16x16.png" />
         <link rel="manifest" href="/logo/manifest.json" />
-        <link rel="stylesheet" as="style" crossOrigin="true" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+        
         <meta name="msapplication-TileColor" content="#ffffff" />
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png"></meta>
         <meta name="theme-color" content="#ffffff"></meta>

@@ -268,21 +268,21 @@ const Fifth = ({ goNextStage, goNews, goPrevStage, goCertStage }) => {
   return (
     <div className='w-full h-[100vh] flex flex-col justify-between'>
       {/* 뒤로가기 버튼 ==> 첫번째는 없고 두번째부터*/}
-      <div className='py-4 bg-[#ffffff51] z-10 backdrop-blur-md	'>
-        <div className='mx-auto pl-2 text-left'>
+      <div className='py-4 backdrop-blur-md	'>
+        <div className='mx-auto text-left'>
           <div className='w-full flex justify-start items-center'>
             <div className='w-max'>
               <div className='flex justify-start items-center'>
                 <button className="text-gray-600 p-3 rounded-full hover:bg-gray-100"
                   onClick={() => goCertStage(4)}
                 >
-                  <IoMdArrowRoundBack className='w-6 h-6' />
+                  <IoMdArrowRoundBack className='w-6 h-6'/>
                 </button>
               </div>
             </div>
             <div className='my-6 px-4 w-full'>
               <div className="w-full bg-gray-200 rounded-full dark:bg-gray-700 ">
-                <div className=" w-[42%] bg-sky-600 text-xs font-medium text-sky-100 text-center p-0.5 leading-none rounded-full">
+                <div className="w-[42%] bg-sky-600 text-xs font-medium text-sky-100 text-center p-0.5 leading-none rounded-full">
                   42%</div>
               </div>
             </div>
@@ -298,7 +298,7 @@ const Fifth = ({ goNextStage, goNews, goPrevStage, goCertStage }) => {
             className="w-full"
             onSubmit={onSubmit}
           >
-            <div className='overflow-y-scroll h-[48vh] py-4 px-2'>
+            <div className='overflow-y-auto py-4 px-2'>
               <div className="max-w-[720px] py-4">
                 <label
                   className="block mb-2 text-md font-bold text-gray-700 "
@@ -442,14 +442,14 @@ const Fifth = ({ goNextStage, goNews, goPrevStage, goCertStage }) => {
               <div className="max-w-[720px] py-4">
                 <div className="mb-4 md:mr-2 md:mb-0 w-[100%]">
                   {finish ?
-                    <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="start">
+                    <label className="block mb-1 text-md font-bold text-gray-700" htmlFor="start">
                       기간
                     </label>
                     :
-                    <label className="block mb-1 text-sm font-bold text-gray-700" htmlFor="start">
+                    <label className="block mb-1 text-md font-bold text-gray-700" htmlFor="start">
                       입사일
                     </label>}
-                  <div className="flex flex-row">
+                  <div className="flex flex-col md:flex-row gap-2">
                     <>
                       <select
                         className={startError ?
@@ -528,14 +528,14 @@ const Fifth = ({ goNextStage, goNews, goPrevStage, goCertStage }) => {
 
 
 
-      <div className='w-full justify-center flex flex-col items-center px-2'>
+      <div className='w-full justify-end flex flex-col items-center px-2'>
         <button className="my-3 py-2 w-[12rem] text-gray-500 text-[14px] underline" onClick={goNews}>나중에 하기</button>
         {noCareers ?
-          <button className='my-2 w-full text-md py-4 font-bold text-white bg-[#4173f4] hover:bg-[#1C52DC]  focus:outline-none focus:shadow-outline rounded-lg' onClick={onSubmit}>다음</button>
+          <button className='my-2 w-full text-md py-4 font-bold text-white bg-[#4173f4] hover:bg-[#1C52DC] focus:outline-none focus:shadow-outline rounded-lg' onClick={onSubmit}>다음</button>
           :
-          <div className='flex flex-row w-full'>
-            <button className='my-2 w-full text-md py-4 font-bold text-white bg-gray-600 hover:bg-gray-700  focus:outline-none focus:shadow-outline rounded-lg' onClick={goNextStage}>건너뛰기</button>
-            <button className='my-2 ml-1 w-full text-md py-4 font-bold text-white bg-[#4173f4] hover:bg-[#1C52DC]  focus:outline-none focus:shadow-outline rounded-lg' onClick={onSubmit}>추가등록</button>
+          <div className='flex flex-col md:flex-row w-full gap-1'>
+            <button className='w-full text-md py-4 font-bold text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:shadow-outline rounded-lg' onClick={goNextStage}>건너뛰기</button>
+            <button className='w-full text-md py-4 font-bold text-white bg-[#4173f4] hover:bg-[#1C52DC] focus:outline-none focus:shadow-outline rounded-lg' onClick={onSubmit}>추가등록</button>
           </div>
         }
       </div>

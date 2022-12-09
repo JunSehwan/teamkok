@@ -37,7 +37,7 @@ const index = () => {
       <div className='pt-5'>
 
         <div className='py-6'>
-          <div className='mx-auto pl-2 text-left'>
+          <div className='mx-auto text-left'>
             <div className='flex justify-between w-full items-center'>
               <p className='text-gray-500 text-[1.2rem] leading-8'>
                 💰평균 제안받은 연봉수준
@@ -61,7 +61,7 @@ const index = () => {
         </div>
 
         <div className='py-6'>
-          <div className='mx-auto pl-2 text-left'>
+          <div className='mx-auto text-left'>
             <div className='flex justify-between w-full items-center'>
               <p className='text-gray-500 text-[1.2rem] leading-8'>
                 🪪입사제안을 받은 팀
@@ -92,7 +92,7 @@ const index = () => {
 
 
         <div className='py-6'>
-          <div className='mx-auto pl-2 text-left'>
+          <div className='mx-auto text-left'>
             <div className='flex justify-between w-full items-center'>
               <p className='text-gray-500 text-[1.2rem] leading-8'>
                 📌나를 콕! 찍은 팀
@@ -121,7 +121,7 @@ const index = () => {
         </div>
 
         <div className='py-6'>
-          <div className='mx-auto pl-2 text-left flex-col flex'>
+          <div className='mx-auto text-left flex-col flex'>
             <div className='flex justify-between w-full items-center'>
               <p className='text-gray-500 text-[1.2rem] leading-8'>
                 💡전문가에게 받은 조언
@@ -150,7 +150,7 @@ const index = () => {
 
         </div>
         <div className='py-6'>
-          <div className='mx-auto pl-2 text-left'>
+          <div className='mx-auto text-left'>
             <div className='flex justify-between w-full items-center'>
               <p className='text-gray-500 text-[1.2rem] leading-8'>
                 💖내 프로필 좋아요 개수

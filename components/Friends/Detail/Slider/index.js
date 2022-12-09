@@ -51,23 +51,23 @@ function Slider({ photo, setSliderOn, sliderClose, sliderOn }) {
 
   return (
     <div className="min-w-screen min-h-screen animated fadeIn faster fixed left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover" id="modal-id">
-      <div className="absolute bg-black opacity-80 inset-0 z-0"></div>
-      <div ref={modalEl} className="w-full  max-w-[90%] h-[90%] p-3 relative mx-auto my-auto rounded-xl shadow-lg  bg-white">
+      <div className="absolute bg-black opacity-50 inset-0 z-0"></div>
+      <div ref={modalEl} className="w-full max-w-[100%] h-[100%] relative mx-auto my-auto rounded-sm shadow-lg bg-white">
         {/* <!--content--> */}
         <div className="h-full w-full relative">
-          <section className="flex h-full w-full bg-gray-300 py-4 px-2  justify-center items-center relative overflow-hidden">
-            <button onClick={sliderClose} 
-            className="text-gray-800 p-2 hover:bg-gray-200 rounded-full absolute right-4 top-4">
+          <section className="flex h-full w-full bg-gradient-to-r from-gray-700 to-gray-900 justify-center items-center relative overflow-hidden">
+            <button onClick={sliderClose}
+              className="text-gray-700 shadow-inner p-2 hover:bg-gray-400 z-10 bg-gray-100/50 rounded-full absolute right-4 top-4">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
             {/* 이전버튼 */}
-            <div className="absolute h-5 w-2 left-0 ml-2 z-10 text-5xl cursor-pointer select-none text-white">
+            <div className="absolute w-2 left-0 ml-2 z-10 text-5xl cursor-pointer select-none text-white">
               <svg
                 onClick={prevSlide}
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 text-orange-700 shadow-lg hover:text-blue-600 hover:bg-blue-300 rounded-full"
+                className="h-10 w-10 text-white bg-gray-700 shadow-lg hover:text-blue-600 hover:bg-blue-300 rounded-full"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -84,7 +84,7 @@ function Slider({ photo, setSliderOn, sliderClose, sliderOn }) {
               <svg
                 onClick={nextSlide}
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 text-orange-700 shadow-lg hover:text-blue-600 hover:bg-blue-300 rounded-full"
+                className="h-10 w-10 text-white bg-gray-700 shadow-lg hover:text-blue-600 hover:bg-blue-300 rounded-full"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -103,7 +103,7 @@ function Slider({ photo, setSliderOn, sliderClose, sliderOn }) {
                 <div
                   className={
                     index === current
-                      ? "opacity-100 duration-100 ease-in scale-105"
+                      ? "opacity-100 duration-100 ease-in scale-100"
                       : "opacity-0 duration-100"
                   }
                   key={index}
@@ -115,7 +115,10 @@ function Slider({ photo, setSliderOn, sliderClose, sliderOn }) {
                         // className="autoImage"
                         src={slide || holderPicture}
                         alt="slides"
-                        className="max-h-[654px] h-auto w-full autoImage object-center  bg-cover shadow"
+                        className="max-h-full max-w-full
+                        sm:max-w-[640px] md:max-w-[768px] lg:max-w-[1024px] xl:max-w-[1280px] 2xl:max-w-[1536px] 
+                        sm:max-h-[640px] md:max-h-[768px] lg:max-h-[1024px] xl:max-h-[1280px] 2xl:max-h-[1536px] 
+                        autoImage object-center bg-cover shadow z-0"
                       />
                     </AutoHeightImageWrapper>
                   )}

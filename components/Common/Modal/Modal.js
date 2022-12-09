@@ -107,22 +107,16 @@ const slideOut = keyframes`
     }
 `
 
-const Modal = ({
-  onClose, title, children, visible, widths
-}) => {
+const Modal = ({ onClose, title, children, visible, widths }) => {
 
   const [isOpen, setIsOpen] = useState(false);
-
   useEffect(() => {
     let timeoutId;
     if (visible) {
       setIsOpen(true);
-
       document.body.style.overflow = "hidden"
-
     } else {
       timeoutId = setTimeout(() => setIsOpen(false), 150);
-
       document.body.style.overflow = "unset";
     }
     return () => {
@@ -165,7 +159,7 @@ const Modal = ({
               </div>
             </Title>
 
-            <Content className='relative min-h-0 overflow-y-auto pb-[80px]'>
+            <Content className='relative min-h-0 overflow-y-auto pb-[80px] pr-0'>
               {children}
             </Content>
 

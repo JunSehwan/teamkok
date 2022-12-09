@@ -23,14 +23,8 @@ import CategoryList from 'components/Common/CategoryList';
 const news = () => {
   const auth = getAuth();
   const { user, loading } = useSelector(state => state.user);
-  const { singleBoard } = useSelector(state => state.board);
   const dispatch = useDispatch();
   const router = useRouter();
-  const pid = router.query;
-
-  useEffect(() => {
-    if (!router.isReady) return;
-  }, [router.isReady, pid])
   useEffect(() => {
     const authStateListener = onAuthStateChanged(auth, async (user) => {
       dispatch(userLoadingStart());
@@ -90,6 +84,7 @@ const news = () => {
         adviced: docData.adviced,
       };
       dispatch(setUser(currentUser));
+      dispatch(userLoadingEnd());
       await getEducationsByUserId().then((result) => {
         dispatch(loadEducations(result));
       })
@@ -113,12 +108,11 @@ const news = () => {
       })
 
 
-      dispatch(userLoadingEnd());
     });
     return () => {
       authStateListener();
     };
-  }, [auth, dispatch, pid, router]);
+  }, [auth, dispatch, router]);
 
 
   useEffect(() => {
@@ -129,7 +123,7 @@ const news = () => {
       const docData = user?.data();
 
       const currentUser = {
-        userID: user.uid,
+        userID: user.id,
         username: docData.username,
         email: docData.email,
         email_using: docData.email_using,

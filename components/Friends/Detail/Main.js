@@ -6,7 +6,7 @@ import toast, { Toaster } from "react-hot-toast";
 import Router, { useRouter } from "next/router";
 import Image from "next/image";
 import { nanoid } from 'nanoid'
-import {  BsBackspace, BsFillBackspaceFill, BsFillPlayFill,} from "react-icons/bs";
+import { BsBackspace, BsFillBackspaceFill, BsFillPlayFill, } from "react-icons/bs";
 import styled from "styled-components";
 import { GoVerified } from "react-icons/go";
 import { HiVolumeOff, HiVolumeUp } from "react-icons/hi";
@@ -132,7 +132,7 @@ const Main = () => {
   useEffect(() => {
     myCareers &&
       myCareers?.map((v) => (
-        v?.ismain === true &&
+        // v?.ismain === true &&
         setMyCareer(v)
       ))
   }, [myCareers])
@@ -140,7 +140,7 @@ const Main = () => {
   useEffect(() => {
     myEducations &&
       myEducations?.map((v) => (
-        v?.ismain === true &&
+        // v?.ismain === true &&
         setMyEducation(v)
       ))
   }, [myEducations])
@@ -324,7 +324,14 @@ const Main = () => {
                 <div className="flex flex-row items-center gap-2">
                   <p>{friend?.username} </p>
                   {friend?.category && friend?.skills?.length !== 0 && myCareer?.length !== 0 && myEducation?.length !== 0 ?
-                    <GoVerified className="text-blue-400 text-xl" /> : null}
+                    <Tooltip
+                      placement="bottom"
+                      className="w-max"
+                      content="JOBCOC 인증"
+                      trigger="hover">
+                      <GoVerified className="text-blue-400 text-md" />
+                    </Tooltip>
+                    : null}
                   <div className="flex md:flex-row flex-col">
                     <p className="font-normal text-sm">{myAge || "나이미상"}</p>
                   </div>

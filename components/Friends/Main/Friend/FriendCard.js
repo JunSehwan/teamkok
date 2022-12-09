@@ -208,7 +208,7 @@ const FriendCard = ({ friend, show, setShow }) => {
 
   return (
     <div
-      
+
       // initial={{ opacity: 0 }}
       // whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
@@ -226,7 +226,7 @@ const FriendCard = ({ friend, show, setShow }) => {
         >
           <div
             className="w-[360px] min-w-[302px] overflow-hidden flex items-end gap-3 p-4 cursor-pointer font-semibold rounded-b-3xl 
-        absolute z-10 text-white bottom-0 left-0 right-0 bg-stone-300/20
+        absolute z-10 text-white bottom-0 left-0 right-0 bg-slate-700/40
         ">
             <div className="w-full">
               <div className="flex w-full justify-between items-center mb-2 ">
@@ -248,10 +248,17 @@ const FriendCard = ({ friend, show, setShow }) => {
                   <p className="flex gap-2 items-center md:text-xl text-lg font-bold text-primary text-yellow-100">
                     {friend?.username}
                     {friend?.category && friend?.skills?.length !== 0 && myCareer?.length !== 0 && myEducation?.length !== 0 ?
-                      <GoVerified className="text-blue-400 text-md" /> : null}
+                      <Tooltip
+                        placement="bottom"
+                        className="w-max"
+                        content="JOBCOC 인증"
+                        trigger="hover">
+                        <GoVerified className="text-blue-400 text-md" />
+                      </Tooltip>
+                      : null}
                   </p>
                   {category[0] &&
-                    <p className="px-2 ml-2 py-1.5 rounded-lg bg-white/80 text-black/70 shadow-inner text-md">
+                    <p className="px-2 ml-1 py-1 rounded-full bg-white/80 text-black/70 shadow-inner text-md">
                       {category[0]?.name}</p>}
                   {/* <p className="font-medium text-xs hidden md:block">
                     {friend?.email}
@@ -288,7 +295,7 @@ const FriendCard = ({ friend, show, setShow }) => {
 
 
 
-                <div className="my-1.5 text-yellow-200 font-normal md:text-[0.88rem]">
+                <div className="my-0.5 text-yellow-200 font-normal md:text-[0.88rem]">
                   {myCareer ?
                     <div className="flex text-left">
                       <div>
@@ -298,16 +305,21 @@ const FriendCard = ({ friend, show, setShow }) => {
                               className="mr-1">{myCareer?.name}</span>
                             <span className="mr-1">{myCareer?.job}</span>
                             <span className="mr-1">{myCareer?.start?.year}~{myCareer?.end?.year == 9999 ? "현재" : myCareer?.end?.year}</span>
+                            <span className="mr-1">(총 {friend?.careers?.length}개)</span>
                           </div>
                         </div>
 
                       </div>
                     </div>
-                    : <span className="text-gray-300/70">보유경력 없음</span>
+                    :
+                    <>
+                      <span className="text-gray-300/70">주경력 없음</span>
+                      <span className="text-gray-300/70 ml-1">(총 {friend?.careers?.length}개)</span>
+                    </>
                   }
                 </div>
 
-                <div className="my-1.5 text-yellow-200 font-normal md:text-[0.88rem]">
+                <div className="my-0.5 text-yellow-200 font-normal md:text-[0.88rem]">
                   {myEducation ?
                     <div className="flex text-left">
                       <div>
@@ -318,13 +330,18 @@ const FriendCard = ({ friend, show, setShow }) => {
                             >{myEducation?.name}</span>
                             <span className="mr-1">{myEducation?.major}</span>
                             <span className="mr-1">{myEducation?.start?.year}~{myEducation?.end?.year == 9999 ? "현재" : myEducation?.end?.year}</span>
+                            <span className="mr-1">(총 {friend?.educations?.length}개)</span>
                           </div>
                         </div>
 
 
                       </div>
                     </div>
-                    : <span className="text-gray-300/70">보유학력 없음</span>
+                    :
+                    <>
+                      <span className="text-gray-300/70">주학력 없음</span>
+                      <span className="text-gray-300/70 ml-1">(총 {friend?.educations?.length}개)</span>
+                    </>
                   }
                 </div>
 
@@ -346,9 +363,9 @@ const FriendCard = ({ friend, show, setShow }) => {
                         className="w-max"
                         content="제안받은 연봉"
                         trigger="hover">
-                        <span className="px-3 w-full text-center flex bg-yellow-500/50 p-1 rounded-xl">
+                        <span className="px-3 w-full text-center flex bg-amber-600/80 py-1 rounded-xl">
                           <span
-                            className="">💰 {v?.salary}만원</span>
+                            className="text-amber-100 font-semibold">💰{v?.salary}만원</span>
                         </span>
                       </Tooltip>
                     ))
@@ -515,7 +532,11 @@ const FriendCard = ({ friend, show, setShow }) => {
 
       {/* 버튼 */}
       {user && user?.mycompany && friend?.userID !== user?.userID &&
-        <div className="ml-3 flex-col flex justify-center absolute right-[16px] sm:right-0 sm:top-0 top-[76px] sm:relative">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="ml-3 flex-col flex justify-center absolute right-[16px] sm:right-0 sm:top-0 top-[76px] sm:relative">
           <div className="flex flex-col items-center justify-center gap-3">
             <Tooltip
               placement="left"
@@ -536,8 +557,8 @@ const FriendCard = ({ friend, show, setShow }) => {
               </button>
             </Tooltip>
 
-            <Like 
-            friend={friend}
+            <Like
+              friend={friend}
             />
 
             <Tooltip
@@ -611,7 +632,7 @@ const FriendCard = ({ friend, show, setShow }) => {
                     <BsStarFill className="w-6 h-6 " />
                   </motion.div>
                 </button>
-                <span className="text-emerald-700 text-xs">입사제안</span>
+                <span className="text-emerald-200 text-xs">입사제안</span>
               </div>
             </Tooltip>
             <Joboffer
@@ -628,20 +649,23 @@ const FriendCard = ({ friend, show, setShow }) => {
               content="상세보기"
               trigger="hover"
             >
-              <button className="
-                  rounded-full p-3 hover:bg-white bg-amber-300/60 border-solid border-amber-600 flex items-center justify-center"
-                onClick={handleChangeDetailsPage}
-              >
-                <motion.div
-                  whileHover={{ scale: 1.2 }}
-                  whileTap={{ scale: 0.9 }}
+              <div className="flex flex-col items-center justify-center">
+                <button className="
+                  rounded-full p-3 hover:bg-white bg-amber-300/30 border-solid border-amber-600 flex items-center justify-center "
+                  onClick={handleChangeDetailsPage}
                 >
-                  <FaFingerprint className="w-6 h-6 text-amber-600" />
-                </motion.div>
-              </button>
+                  <motion.div
+                    whileHover={{ scale: 1.2 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <FaFingerprint className="w-6 h-6 text-amber-600" />
+                  </motion.div>
+                </button>
+                <span className="text-amber-200 text-xs">상세보기</span>
+              </div>
             </Tooltip>
           </div>
-        </div>
+        </motion.div>
       }
     </div>
   );

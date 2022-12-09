@@ -6,10 +6,7 @@ import {
   updateSurveyFalse, updateStyleFalse,
 } from 'slices/user';
 
-import StylesIcon from 'public/image/icon/styles.png';
-import SurveyIcon from 'public/image/icon/survey.png';
-import Image from 'next/image';
-
+import { FcPortraitMode, FcTodoList } from 'react-icons/fc';
 import StyleModal from './StyleModal';
 import SurveyModal from './SurveyModal';
 import { toast } from 'react-hot-toast';
@@ -53,7 +50,7 @@ const MyStyle = () => {
     }
   }, [updateSurveyDone, dispatch])
 
-  var styleObject = StyleList?.filter(obj => obj.number == user?.style);
+  var styleObject = StyleList?.filter(obj => obj?.number == user?.style);
 
   return (
     <>
@@ -65,23 +62,14 @@ const MyStyle = () => {
               <button
                 onClick={openStyleModal}
                 className={`${user?.style ? "bg-white border-blue-600 text-gray-600" : "bg-slate-100 border-slate-600 text-gray-600"}  dark:bg-gray-800 shadow-lg rounded-md flex items-center justify-between p-3 dark:border-gray-600 text-white font-medium group`}>
-                <div className="flex justify-center items-center w-14 h-14 p-2 bg-white rounded-full transition-all duration-300 transform group-hover:rotate-12">
+                <div className="flex justify-center items-center w-14 h-14 p-2 bg-white rounded-full transition-all duration-300 transform hover:rotate-12">
                   <div className="w-max-[150px]">
-                    <Image
-                      src={StylesIcon}
-                      unoptimized
-                      alt="mystyle"
-                      width={60}
-                      height={60}
-                      className=""
-                    // responsive={30vw}
-                    // layout="fill"
-                    />
+                    <FcPortraitMode className="w-8 h-8" />
                   </div>
                 </div>
                 <div className="text-right text-gray-600">
                   <p className="text-xl">업무스타일</p>
-                  {!!user?.style ?
+                  {user?.style ?
                     (<p className="text-[#4173f4]">
                       🧬{styleObject[0]?.title}
                     </p>)
@@ -92,18 +80,9 @@ const MyStyle = () => {
               <button
                 onClick={openSurveyModal}
                 className={`${user?.survey ? "bg-white border-blue-600 text-gray-600" : "bg-slate-100 border-slate-600 text-gray-600"}  dark:bg-gray-800 shadow-lg rounded-md flex items-center justify-between p-3 dark:border-gray-600  font-medium group`}>
-                <div className="flex justify-center items-center w-14 h-14 p-2 bg-white rounded-full transition-all duration-300 transform group-hover:rotate-12">
+                <div className="flex justify-center items-center w-14 h-14 p-2 bg-white rounded-full transition-all duration-300 transform hover:rotate-12">
                   <div className="w-max-[150px]">
-                    <Image
-                      src={SurveyIcon}
-                      unoptimized
-                      alt="logo"
-                      width={60}
-                      height={60}
-                      className=""
-                    // responsive={30vw}
-                    // layout="fill"
-                    />
+                    <FcTodoList className="w-8 h-8" />
                   </div>
                 </div>
                 <div className="text-right text-gray-600">

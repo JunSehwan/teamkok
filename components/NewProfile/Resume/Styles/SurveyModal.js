@@ -5,7 +5,7 @@ import {
   updateUserStyle, updateUserSurvey,
   updateSurveyFalse, updateStyleFalse,
 } from 'slices/user';
-import { updateStyle, updateSurvey } from 'firebaseConfig';
+import { updateSurvey } from 'firebaseConfig';
 import Question from './Question';
 import Survey from 'components/Common/Survey';
 import PropTypes from 'prop-types';

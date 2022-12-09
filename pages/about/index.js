@@ -1,8 +1,8 @@
 import React from 'react';
-import About from 'components/About';
+import NewAbout from 'components/NewAbout';
 import Head from 'next/head'
 import { useRouter } from 'next/router';
-import Nav from "components/About/Nav";
+import Nav from "components/NewAbout/Nav";
 
 const index = () => {
   const router = useRouter();
@@ -34,9 +34,9 @@ const index = () => {
         <meta name="twitter:domain" content="https://teamz.co.kr/about" />
       </Head>
 
-      <Nav>
-        <About />
-      </Nav>
+      {/* <Nav> */}
+      <NewAbout />
+      {/* </Nav> */}
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { updateCategory } from 'firebaseConfig';
 import { patchCategory, patchCategoryFalse } from 'slices/user';
@@ -61,19 +61,36 @@ const index = () => {
   }, [dispatch, patchCategoryDone])
 
   const [category, setCategory] = useState(user?.category);
-  const onChange = useCallback((e) => async () => {
+  const onChange = useCallback((e) => () => {
     setCategory(parseInt(e))
-    const res = await updateCategory(
-      category
-    );
+
+
+  }, [])
+
+  useEffect(() => {
+    if (user?.category !== category) {
+      document.getElementById('ending').focus();
+    }
+  }, [category, user?.category])
+
+  const onSubmit = useCallback(async () => {
+    const res = await updateCategory(category);
     dispatch(patchCategory(res));
   }, [category, dispatch])
+
+  // autoFocus 관련
+  const inputElement = useRef(null);
+  useEffect(() => {
+    if (inputElement.current) {
+      inputElement.current.focus();
+    }
+  }, []);
 
   return (
     <>
       <div className='pt-[var(--navbar-height)] pb-[70px] md:pb-auto' >
         <div className='py-4'>
-          <div className='mx-auto pl-2 text-left'>
+          <div className='mx-auto text-left'>
 
             <div className="md:hidden block overflow-y-auto py-4 rounded ">
               <div className='space-y-4 md:space-y-6 mt-6'>
@@ -156,7 +173,19 @@ const index = () => {
             </ul>
           </div>
         </div>
-
+        {user?.category !== category &&
+          <div
+            className='flex justify-end my-4'>
+            <button
+              ref={inputElement}
+              id="ending"
+              onClick={onSubmit}
+              type="button"
+              className="w-full px-6 min-w-[144px] text-md py-4 font-bold md:max-w-[320px] text-white bg-gray-900 hover:bg-black focus:outline-none focus:shadow-outline rounded-lg">
+              변경완료
+            </button>
+          </div>
+        }
         <div className='w-full justify-center flex flex-col items-center px-2'>
           {/* <button className='my-2 w-full text-md py-4 font-bold text-white bg-sky-500 hover:bg-sky-600 focus:outline-none focus:shadow-outline rounded-lg' onClick={onSubmit}>시작하기</button> */}
         </div>

@@ -1,21 +1,23 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import Friend from "./Friend";
 import Spin from 'components/Common/Spin';
 import { useDispatch, useSelector } from "react-redux";
-import { addLikeDoneFalse, addUnlikeDoneFalse, addAdviceDoneFalse, setScrollPositionDone } from 'slices/user';
+import { addLikeDoneFalse, addUnlikeDoneFalse, addAdviceDoneFalse, setUsers } from 'slices/user';
 import { addJobofferDoneFalse } from 'slices/joboffer';
 import { addCoccocDoneFalse } from 'slices/coccoc';
 import toast from 'react-hot-toast';
 import InfoModal from './InfoModal';
 import { nanoid } from 'nanoid'
+import BtnToTop from 'components/Common/BtnToTop';
+import GoNext from './GoNext';
+import TopNavBar from './TopNavBar';
+import { getCategoryUsers, getFriends } from 'firebaseConfig';
 
 const index = () => {
 
-  const [friendcards, setFriendCards] = useState([]);
-  // const [loading, setLoading] = useState(true);
-  const { user, users, scrolling } = useSelector((state) => state.user);
+  const { users, scrolling } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const { addAdviceDone, addLikeDone, addUnlikeDone } = useSelector(state => state.user);
+  const { addAdviceDone, addLikeDone, addUnlikeDone, categoryFilter } = useSelector(state => state.user);
   const { addJobofferDone } = useSelector(state => state.joboffer);
   const { addCoccocDone } = useSelector(state => state.coccoc);
   const { scrollPosition } = useSelector(state => state.user);
@@ -25,32 +27,21 @@ const index = () => {
   const adviceNotify = () => toast('조언해주기 성공!😍');
   const coccocNotify = () => toast('콕!하기 성공!😍');
   const jobofferNotify = () => toast('입사제안하기 성공!😍');
-  // let aElSection = useRef();
-  // let aElSection = document.querySelectorAll("section");
-  // let curSIdx = 0;
-  // let wheelTimer;
-  // window.addEventListener("wheel", function (e) {
-  //   clearTimeout(wheelTimer);
-  //   wheelTimer =
-  //     function () {
-  //       setTimeout(() => {
-  //         if (e?.deltaY < 0) doScroll(--curSIdx);
-  //         else doScroll(++curSIdx);
-  //       }, [500])
-  //     }
-  // })
 
-  // function doScroll(sidx) {
-  //   sidx = sidx < 0 ? 0 : sidx;
-  //   sidx = sidx > aElSection?.length - 1 ? aElSection?.length - 1 : sidx;
-  //   curSIdx = sidx;
-  //   aElSection[curSIdx]?.scrollIntoView(
-  //     {
-  //       block: "center", inline: "center",
-  //       behavior: "smooth"
-  //     }
-  //   );
-  // }
+  useEffect(() => {
+    async function fetchAndSetUser() {
+      if (categoryFilter) {
+        const result = await getCategoryUsers(categoryFilter);
+        dispatch(setUsers(result));
+      }
+      if (!categoryFilter) {
+        const result = await getFriends();
+        dispatch(setUsers(result));
+      }
+    }
+    fetchAndSetUser();
+  }, [categoryFilter, dispatch]);
+
 
   useEffect(() => {
     if (addLikeDone) {
@@ -93,14 +84,6 @@ const index = () => {
   }, [addJobofferDone, dispatch]
   )
 
-  // useEffect(() => {
-  //   if (users) {
-  //   setFriendCards(users)
-  //   setLoading(false);
-
-  //   }
-  // }, [users]
-  // );
 
   useEffect(() => {
     if (users && scrollPosition && scrolling) {
@@ -108,8 +91,7 @@ const index = () => {
         window.scrollTo({
           top: scrollPosition, left: 0, behavior: 'smooth'
         })
-      }, [1000])
-      dispatch(setScrollPositionDone());
+      }, [500])
     }
   }, [users, scrollPosition, dispatch, scrolling])
 
@@ -117,28 +99,38 @@ const index = () => {
 
   return (
     <>
+      <TopNavBar />
       {/* {!loading ? ( */}
-      {users?.length !== 0 ?
-      (<div className="scroll-smooth"
-      >
-        {users?.map((friend) => (
-          // <StickScroll key={friend?.userID}>
-          <section className="scroll-smooth"
-            key={nanoid()}>
-            <Friend
-              friend={friend}
-              id={friend?.userID}
-            />
-          </section>
+      {users?.length !== 0 &&
+        (<div className="scroll-smooth"
+        >
+          {users?.map((friend) => (
+            // <StickScroll key={friend?.userID}>
+            <section className="scroll-smooth"
+              key={nanoid()}>
+              <Friend
+                friend={friend}
+                id={friend?.userID}
+              />
+            </section>
 
-        ))}
-        <InfoModal />
-      </div>)
-        : ( 
-      <div className="w-full h-[calc(100vh-var(--navbar-height))] flex justify-center items-center">
-        <Spin />
-      </div>
-       )}
+          ))}
+          <InfoModal />
+        </div>)}
+      {users?.length == 0 && !categoryFilter &&
+
+        <div className="w-full h-[calc(100vh-var(--navbar-height))] flex justify-center items-center">
+          <Spin />
+        </div>
+      }
+      {users?.length == 0 && categoryFilter &&
+
+        <div className="w-full h-[calc(100vh-var(--navbar-height))] flex justify-center items-center">
+          <div>해당 카테고리내의 인물이 아직 없네요.</div>
+        </div>
+      }
+      <BtnToTop moreDown={true} />
+      <GoNext />
     </>
   );
 };

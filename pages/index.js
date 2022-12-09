@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Main from 'components/Main';
+import Landing from 'components/Landing';
 import Head from 'next/head'
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
@@ -17,6 +17,12 @@ const index = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { user, loading } = useSelector(state => state.user);
+
+  useEffect(() => {
+    if ((user || user?.userID)) {
+      router.push('/dashboard');
+    }
+  }, [router, user]);
 
   useEffect(() => {
     const authStateListener = onAuthStateChanged(auth, async (user) => {
@@ -137,7 +143,7 @@ const index = () => {
       {loading ?
         <LoadingPage />
         :
-        <Main />
+        <Landing />
       }
 
       <Toaster

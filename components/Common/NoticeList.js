@@ -12,9 +12,9 @@ const NoticeList =
     { key: 7, name: "#복리후생" },
     { key: 8, name: "#경력개발" },
     { key: 9, name: "#칭찬/격려" },
-    { key: 11, name: "#Job Description" },
-    { key: 12, name: "#개선점" },
-    { key: 13, name: "#기타" },
+    { key: 10, name: "#Job Description" },
+    { key: 11, name: "#개선점" },
+    { key: 12, name: "#기타" },
 
   ]
 

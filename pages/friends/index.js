@@ -12,7 +12,7 @@ import { loadCareers } from "slices/career";
 import { loadSkills } from "slices/skill";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
-import { db, getUsers, getEducationsByUserId, getCareersByUserId, getSkillsByUserId } from "firebaseConfig";
+import { db, getFriends, getEducationsByUserId, getCareersByUserId, getSkillsByUserId } from "firebaseConfig";
 import { addCategory } from 'slices/category';
 import LoadingPage from 'components/Common/Loading';
 import CategoryList from 'components/Common/CategoryList';
@@ -86,7 +86,7 @@ const index = () => {
       };
       dispatch(setUser(currentUser));
       dispatch(userLoadingEnd());
-      await getUsers().then((result) => {
+      await getFriends().then((result) => {
         dispatch(setUsers(result));
       })
       await getEducationsByUserId().then((result) => {

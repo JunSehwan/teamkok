@@ -8,8 +8,8 @@ const Fourteen = ({ goProfile, goDashboard, goPrevStage, goCertStage, goFriends 
   return (
     <div className='w-full h-[100vh] flex flex-col justify-between'>
       {/* 뒤로가기 버튼 ==> 첫번째는 없고 두번째부터*/}
-      <div className='py-4 bg-[#ffffff51] z-10 backdrop-blur-md	'>
-        <div className='mx-auto pl-2 text-left'>
+      <div className='py-4 bg-[#ffffff51] z-10 backdrop-blur-md'>
+        <div className='mx-auto text-left'>
           <div className='w-full flex justify-start items-center'>
             <div className='w-max'>
               <div className='flex justify-start items-center'>
@@ -36,7 +36,7 @@ const Fourteen = ({ goProfile, goDashboard, goPrevStage, goCertStage, goFriends 
 
       <div className='w-full justify-center flex flex-col items-center px-2'>
         <button className="my-3 py-2 w-[12rem] text-gray-500 text-[14px] underline" onClick={goProfile}>프로필정보 업데이트</button>
-        <button className='my-2 w-full text-md py-6 font-bold text-white  bg-[#4173f4] hover:bg-[#1C52DC]  focus:outline-none focus:shadow-outline rounded-lg' onClick={goFriends}>재야의 인재 보러가기</button>
+        <button className='my-2 w-full text-md py-6 font-bold text-white  bg-[#4173f4] hover:bg-[#1C52DC]  focus:outline-none focus:shadow-outline rounded-lg' onClick={goFriends}>다양한 인재 탐색하기</button>
       </div>
     </div>
   );

@@ -238,8 +238,8 @@ const AddEducation = () => {
   // autoFocus 관련
   const inputElement = useRef(null);
   useEffect(() => {
-    if (inputElement.current) {
-      inputElement.current.focus();
+    if (inputElement?.current) {
+      inputElement?.current?.focus();
     }
   }, []);
 

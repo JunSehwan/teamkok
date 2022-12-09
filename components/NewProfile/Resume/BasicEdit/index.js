@@ -347,7 +347,7 @@ const index = () => {
                   placeholder="일"
                   
                 >
-                  {days.map(item => (
+                  {days?.map(item => (
                     <option value={item} key={item}>
                       {item}일
                     </option>
@@ -401,9 +401,9 @@ const index = () => {
                 defaultValue={user?.address_sido || ""}
                 onChange={(e) => onChangeAddress_sido(e)}>
                 <option value="">시/도 선택</option>
-                {sido.map((el) => (
-                  <option key={el.codeNm} value={el.codeNm}>
-                    {el.codeNm}
+                {sido?.map((el) => (
+                  <option key={el?.codeNm} value={el?.codeNm}>
+                    {el?.codeNm}
                   </option>
                 ))}
               </select>

@@ -30,6 +30,7 @@ const Eightth = ({ goNextStage, goNews, goPrevStage, goCertStage }) => {
     setLink([e.target.value, ...links]);
   }, [links]);
   const onClick = useCallback(() => {
+    if (link?.length == 0) { return }
     if (!!link || link !== "") {
       setLinks([link, ...links])
       setLink("");
@@ -105,8 +106,8 @@ const Eightth = ({ goNextStage, goNews, goPrevStage, goCertStage }) => {
   return (
     <div className='w-full h-[100vh] flex flex-col justify-between'>
       {/* 뒤로가기 버튼 ==> 첫번째는 없고 두번째부터*/}
-      <div className='py-4 bg-[#ffffff51] z-10 backdrop-blur-md	'>
-        <div className='mx-auto pl-2 text-left'>
+      <div className='py-4 backdrop-blur-md	'>
+        <div className='mx-auto text-left'>
           <div className='w-full flex justify-start items-center'>
             <div className='w-max'>
               <div className='flex justify-start items-center'>
@@ -128,7 +129,7 @@ const Eightth = ({ goNextStage, goNews, goPrevStage, goCertStage }) => {
           <h3 className='sm:text-[2.1rem] text-[1.8rem] text-gray-700 my-2 w-full pl-2'>
             🔎추가정보 등록</h3>
 
-          <div className='overflow-y-scroll h-[60vh] py-4 px-2'>
+          <div className='overflow-y-auto py-4 px-2'>
 
             <div className="max-w-[720px] py-4">
               <label className="block mb-4 text-md font-bold text-gray-700 " htmlFor="address">
@@ -155,9 +156,9 @@ const Eightth = ({ goNextStage, goNews, goPrevStage, goCertStage }) => {
 
                   <input
                     className={addressError ?
-                      "block w-full p-4 text-gray-900 border border-red-300 rounded-lg bg-red-50 sm:text-md focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500 mt-2 sm:mt-0"
+                      "block w-full p-4 text-gray-900 border border-red-300 rounded-lg bg-red-50 sm:text-md focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500 sm:mt-0"
                       :
-                      "block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mt-2 sm:mt-0"
+                      "block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 sm:mt-0"
                     }
                     id="address"
                     type="address"
@@ -198,7 +199,7 @@ const Eightth = ({ goNextStage, goNews, goPrevStage, goCertStage }) => {
                     </button>
                   )) : <Empty text="URL을 입력해주세요" />}
               </div>
-              <div className='w-full flex flex-row items-center'>
+              <div className='w-full flex flex-col md:flex-row items-center gap-2'>
                 <input
                   className="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   id="link"
@@ -209,7 +210,7 @@ const Eightth = ({ goNextStage, goNews, goPrevStage, goCertStage }) => {
                   value={link || ""}
                 />
                 <button
-                  className='my-2 w-[70px] ml-1 text-md py-5 px-4 font-bold text-white bg-sky-400 hover:bg-sky-500  focus:outline-none focus:shadow-outline rounded-lg'
+                  className='mb-2 w-full md:w-[70px] text-md py-5 px-4 font-bold text-white bg-sky-400 hover:bg-sky-500  focus:outline-none focus:shadow-outline rounded-lg'
                   onClick={onClick}
                 >
                   등록</button>
@@ -221,7 +222,7 @@ const Eightth = ({ goNextStage, goNews, goPrevStage, goCertStage }) => {
                 마지막으로, {user?.username}님에 대한 짧은 소개를 작성해주세요.
               </label>
               <textarea
-                className="block w-full h-32 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="block w-full h-32 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 id="additionalMent"
                 type="text"
                 placeholder="추가로 어필할 내용이 있다면 작성해주세요.(프로젝트, 자격증 등)"

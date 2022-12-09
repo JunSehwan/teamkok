@@ -14,7 +14,6 @@ const index = ({ introModalOpened, closeIntroModal }) => {
   return (
     <Modal
       onClose={closeIntroModal}
-      // title="🖼️CoverImage 생성"
       visible={introModalOpened}
       widths="800px"
     >

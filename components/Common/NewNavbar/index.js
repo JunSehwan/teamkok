@@ -48,7 +48,7 @@ const index = ({ children }) => {
     return () => { window?.removeEventListener("scroll", handleScroll); }; //  window? 에서 스크롤을 감시를 종료
   });
   useEffect(() => {
-    if (router?.pathname === "/about" || router?.pathname === "/signin" || router?.pathname == "/signup" || router?.pathname == "/onboarding") {
+    if (router?.pathname === "/about" || router?.pathname === "/about/Service" || router?.pathname === "/about/Privacy" || router?.pathname === "/signin" || router?.pathname == "/signup" || router?.pathname == "/onboarding") {
       setDisplay(true);
     } else {
       setDisplay(false);
@@ -134,10 +134,14 @@ const index = ({ children }) => {
   }, [dispatch])
 
   const onClickSignup = useCallback(() => {
+    setToggle(false);
+    setOpen(false);
     router.push("/signup");
   }, [router])
 
   const onClickSetting = useCallback(() => {
+    setToggle(false);
+    setOpen(false);
     router.push("/setting");
   }, [router])
 
@@ -255,7 +259,7 @@ const index = ({ children }) => {
                   hover:bg-gray-200 active:shadow-lg'
                   onClick={onClickAbout}
                 >
-                  서비스 소개
+                  넥스트퍼스 소개
                 </button>
                 : null}
             </div>
@@ -319,14 +323,14 @@ const index = ({ children }) => {
                       <span className='mt-[2px] text-xs hidden md:inline'>팀소식콕!</span>
                     </div>
                   </button>
-                  <button
+                  {/* <button
                     className={`sm:flex hidden text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/teamlist" || router?.pathname?.includes("/teamlist") ? "text-[#4979f5]" : ""}`}
                     onClick={onClickTeams}>
                     <div className='flex flex-col items-center'>
                       <FaBuilding className='w-6 h-6' />
                       <span className='mt-[2px] text-xs hidden md:inline'>팀정보</span>
                     </div>
-                  </button>
+                  </button> */}
                   {findNotRead && findNotRead?.length !== 0 &&
                     <button onClick={onClickFavorite} className='p-0.5 text-white bg-red-500 flex mr-[-41px] mt-[-20px] z-10 text-center font-xs rounded-full w-[18px] h-[18px] items-center justify-center'>
                       {findNotRead?.length}
@@ -357,7 +361,7 @@ const index = ({ children }) => {
 
                 {/* 햄버거 버튼 */}
                 <div className="-mr-2 -my-2 sm:hidden">
-                  <button type="button" onClick={handleOpen} className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" aria-expanded="false">
+                  <button type="button" onClick={handleOpen} className="rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" aria-expanded="false">
                     <span className="sr-only">Open menu</span>
                     <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -485,12 +489,12 @@ const index = ({ children }) => {
 
                 <div>
                   <ul className="mt-2 mb-2 space-y-2 tracking-wide">
-                    <li className="min-w-max" key="teams">
+                    {/* <li className="min-w-max" key="teams">
                       <button onClick={onClickTeams} aria-label="dashboard" className="bg group flex items-center space-x-4 rounded-full px-4 py-3 text-gray-500 w-full">
                         <FaBuilding className='w-6 h-6' />
                         <span className="group-hover:text-gray-700">팀정보</span>
                       </button>
-                    </li>
+                    </li> */}
                     <li className="min-w-max" key="message">
                       <button onClick={onClickMessage} className="bg group flex items-center space-x-4 rounded-full px-4 py-3 text-gray-500 w-full">
                         <MdMessage className='w-6 h-6' />

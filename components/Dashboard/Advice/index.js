@@ -19,7 +19,7 @@ const index = () => {
 
 
         <div className='py-6'>
-          <div className='mx-auto pl-2 text-left'>
+          <div className='mx-auto text-left'>
             <div className='flex justify-between w-full items-center'>
               <p className='text-gray-500 text-[1.2rem] leading-8'>
                 💡내가 받은 조언

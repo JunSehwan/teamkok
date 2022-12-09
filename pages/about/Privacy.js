@@ -1,13 +1,12 @@
 import React from 'react';
-import PrivacyComponent from 'components/About/PrivacyComponent';
+import NewAbout from 'components/NewAbout';
 import Head from 'next/head';
-import Nav from "components/About/Nav";
 
 const Privacy = () => {
 
   return (
     <>
-        <Head>
+      <Head>
         <title>TeamZ - 개인정보처리방침</title>
 
         <meta name="keywords" content="teamz, 팀즈, 채용공고, 현업담당자와 대화, 업무문의, 채용문의, 팀기반 소통플랫폼" />
@@ -28,9 +27,7 @@ const Privacy = () => {
         <meta name="twitter:image" content="https://teamz.co.kr/logo/teamz.png" />
         <meta name="twitter:domain" content="https://teamz.co.kr/about/Privacy" />
       </Head>
-      <Nav>
-       <PrivacyComponent/>
-      </Nav>
+        <NewAbout />
     </>
   );
 };

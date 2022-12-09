@@ -38,10 +38,10 @@ const index = ({ imageModalOpened, closeImageModal }) => {
     const selectedFilesArray = Array.from(selectedFiles);
     const imagesArray = selectedFilesArray?.map((file) => {
       // setFiles(prevState => [...prevState, file])
-      return ({ id: file.id, name: file.name, url: URL.createObjectURL(file) })
+      return ({ id: file?.id, name: file?.name, url: URL.createObjectURL(file) })
     });
     // onSelectFileUpload(selectedFiles)
-    setSelectedImages((previousImages) => previousImages.concat(imagesArray));
+    setSelectedImages((previousImages) => previousImages?.concat(imagesArray));
   };
 
   const changePicture = (e) => {
@@ -306,15 +306,14 @@ const index = ({ imageModalOpened, closeImageModal }) => {
                       border-gray-200 flex flex-col items-center outline-none justify-center'>
 
                       <div className="rounded-3xl w-full p-4 flex flex-col gap-2 items-center justify-evenly ">
-                        {selectedImages?.length > 0 &&
-                          (selectedImages?.length > 10 ? (
+                        {selectedImages?.length > 10 ? 
                             <p className="error mb-4 text-red-500 w-full text-left">
                               10개를 초과한 이미지를 업로드할 수 없습니다. <br />
                               <span>
                                 please delete <b> {selectedImages?.length - 10} </b> of them{" "}
                               </span>
                             </p>
-                          ) : (''))}
+                           : null}
                         <div className="gap-2 images flex flex-wrap	flex-row w-full md:flex-col-2">
                           {selectedImages &&
                             selectedImages?.map((image, index) => {

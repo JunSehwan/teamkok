@@ -49,7 +49,7 @@ const index = ({ goNextStage, goNews, goPrevStage, goCertStage }) => {
 
 
   const onChangeSkill = useCallback((value) => {
-    setSkillArr([{ category: value.category, name: value.name }, ...skillArr]);
+    setSkillArr([{ category: value?.category, name: value?.name }, ...skillArr]);
   }, [skillArr]);
 
   const onClick = useCallback(() => {

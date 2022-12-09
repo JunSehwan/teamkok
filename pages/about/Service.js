@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import ServiceComponent from 'components/About/ServiceComponent';
+import NewAbout from 'components/NewAbout';
 import Head from 'next/head';
-import Nav from "components/About/Nav";
 
 const Service = () => {
 
@@ -28,9 +27,7 @@ const Service = () => {
         <meta name="twitter:image" content="https://teamz.co.kr/logo/teamz.png" />
         <meta name="twitter:domain" content="https://teamz.co.kr/about/Service" />
       </Head>
-      <Nav>
-        <ServiceComponent />
-      </Nav>
+      <NewAbout />
     </>
   );
 };
