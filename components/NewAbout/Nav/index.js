@@ -31,8 +31,9 @@ const Header = () => {
   };
 
   return (
+    <>
     <header
-      className={`flex flex-row z-10 bg-[rgb(1 42 74/1)] px-4 py-4 ${mobileMenu ? 'h-screen' : 'h-fit'} fixed top-0 w-full shadow-lg md:flex-row md:justify-between md:px-12 md:h-fit items-center sm:justify-between flex-row`}
+        className={`flex flex-col z-10 bg-gray-800/70 px-4 py-4 ${mobileMenu ? 'h-fit' : 'h-fit'} fixed top-0 w-full shadow-lg md:flex-row md:justify-between md:px-12 md:h-fit items-center sm:justify-between flex-row`}
     >
       <nav className='flex flex-row justify-between items-center w-full'>
         <Link href="/about">
@@ -47,43 +48,42 @@ const Header = () => {
             className={classNames(!mobileMenu ? 'block' : 'hidden')}
             onClick={() => setMobileMenu(true)}
           >
-            <BiMenuAltRight className="h-8 mr-2" />
+            <BiMenuAltRight className="h-6 w-6" />
           </button>
           <button type="button" className={classNames(mobileMenu ? 'block' : 'hidden')} onClick={() => setMobileMenu(false)}>
-            <AiOutlineClose className="h-8 mr-2" />
+            <AiOutlineClose className="h-6 w-6" />
           </button>
-        </div>
-
-
-        {/* 데스크탑 */}
-        <div className={classNames(mobileMenu ? 'block' : 'hidden', 'md:block')}>
-          <ul className="flex flex-col gap-8 items-center md:flex-row">
-            {
-              menuItems?.map((item) => (
-                <li key={item?.name}>
-                  <Link href={item?.path}>
-                    <a
-                      onClick={() => changeCurrentStatus(item?.name)}
-                      href={item?.path}
-                      className={classNames(
-                        item?.current
-                          ? 'border-b-2 border-gray-300 text-gray-300 pb-1'
-                          : 'text-sky-400',
-                        'text-lg hover:text-gray-300',
-                      )}
-                      aria-current={item?.current ? 'page' : undefined}
-                    >
-                      {item?.name}
-                    </a>
-                  </Link>
-                </li>
-              ))
-            }
-          </ul>
         </div>
       </nav>
 
+      {/* 데스크탑 */}
+      <div className={classNames(mobileMenu ? 'block' : 'hidden', 'md:block')}>
+        <ul className="flex flex-col gap-8 items-center md:flex-row">
+          {
+            menuItems?.map((item) => (
+              <li className="whitespace-nowrap w-full" key={item?.name}>
+                <Link href={item?.path}>
+                  <a
+                    onClick={() => changeCurrentStatus(item?.name)}
+                    href={item?.path}
+                    className={classNames(
+                      item?.current
+                        ? 'border-b-2 border-gray-300 text-gray-300 pb-1'
+                        : 'text-sky-400',
+                      'text-lg hover:text-gray-300',
+                    )}
+                    aria-current={item?.current ? 'page' : undefined}
+                  >
+                    {item?.name}
+                  </a>
+                </Link>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </header>
+    </>
   );
 };
 

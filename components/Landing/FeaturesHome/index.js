@@ -26,7 +26,7 @@ function Features() {
   }, [tab])
 
   return (
-    <section className="relative">
+    <section className="relative md:h-auto h-[96rem]">
 
       {/* Section background (needs .relative class on parent and next sibling elements) */}
       <div className="absolute inset-0 bg-gray-100 pointer-events-none mb-16" aria-hidden="true"></div>
@@ -38,7 +38,7 @@ function Features() {
           {/* Section header */}
           <div className="max-w-3xl mx-auto text-center pb-12 md:pb-16">
             <h1 className="text-3xl font-extrabold leading-tight mb-4">
-              '3분' 개성있는 프로필 만들기
+              <span className='text-blue-600'>'3분안에'</span> 개성있는 프로필 만들기
             </h1>
             <p className="text-xl text-gray-600">재빨리 프로필을 만들고 내 커리어에 대한 조언을 듣고, 입사제의를 받아보세요.</p>
           </div>
@@ -48,12 +48,12 @@ function Features() {
 
             {/* Content */}
             <div className="max-w-xl md:max-w-none md:w-full mx-auto md:col-span-7 lg:col-span-6 md:mt-6" data-aos="fade-right">
-              <div className="md:pr-4 lg:pr-12 xl:pr-16 mb-8">
+              <div className="md:pr-4 lg:pr-12 xl:pr-16 mb-14">
                 <h3 className="text-3xl font-bold leading-tight mb-3">
                   자, 그럼 시작해볼까요?
                 </h3>
                 <p className="text-xl text-gray-600">
-                  잠깐! 지금 구직의사가 없다고 하더라도, 콕콕 기능을 통해 좀 더 내 커리어 경력을 쌓은 후, 희망하는 팀에 합류할 수 있는 기회를 얻을 수 있습니다.
+                  <span className="text-red-500">잠깐!</span> 지금 구직의사가 없다고 하더라도, 콕콕 기능을 통해 좀 더 내 커리어 경력을 쌓은 후, 희망하는 팀에 합류할 수 있는 기회를 얻을 수 있습니다.
                 </p>
               </div>
               {/* Tabs buttons */}
@@ -105,7 +105,7 @@ function Features() {
             </div>
 
             {/* Tabs items */}
-            <div className="max-w-xl md:max-w-none md:w-full mx-auto md:col-span-5 lg:col-span-6 mb-8 md:mb-0 md:order-1" data-aos="zoom-y-out" ref={tabs}>
+            <div className="max-w-xl md:max-w-none md:w-full mx-auto md:col-span-5 lg:col-span-6 mb-14 md:mb-0 md:order-1" data-aos="zoom-y-out" ref={tabs}>
               <div className="relative flex flex-col text-center lg:text-right">
                 {/* Item 1 */}
                 <Transition
@@ -121,14 +121,14 @@ function Features() {
                 >
                   <div className="relative inline-flex flex-col">
                     <img className="md:max-w-none mx-auto rounded-2xl" src='/image/backgroundPicture.jpg' width="600" height="462" alt="Features bg" />
-                    <img className="md:max-w-none absolute w-full left-10 transform animate-float rounded-2xl shadow-lg" src='/image/screenshot/new_Profile.png' width="600" height="520" alt="Element" style={{ top: '20%' }} />
+                    <img className="md:max-w-none absolute w-full left-0 md:left-10 transform animate-float rounded-2xl shadow-lg" src='/image/screenshot/new_Profile.png' width="600" height="520" alt="Element" style={{ top: '20%' }} />
                   </div>
                 </Transition>
                 {/* Item 2 */}
                 <Transition
                   show={tab === 2}
                   appear={true}
-                  className="w-full"
+                  className="w-full flex justify-start sm:block"
                   enter="transition ease-in-out duration-700 transform order-first"
                   enterStart="opacity-0 translate-y-16"
                   enterEnd="opacity-100 translate-y-0"
@@ -137,8 +137,8 @@ function Features() {
                   leaveEnd="opacity-0 -translate-y-16"
                 >
                   <div className="relative inline-flex flex-col">
-                    <img className="md:max-w-none mx-auto rounded-2xl" src='/image/screenshot/new_peoplecard.png' width="380" height="462" alt="Features bg" />
-                    <img className="md:max-w-none absolute w-full left-20 transform animate-float rounded-2xl shadow-lg " src='/image/screenshot/new_posting.png' width="320" height="400" alt="Element" style={{ top: '30%' }} />
+                    <img className="md:max-w-none mx-auto rounded-2xl sm:w-[320px] w-[240px]" src='/image/screenshot/new_peoplecard.png' width="380" height="462" alt="Features bg" />
+                    <img className="md:max-w-none absolute w-[320px] left-[24%] md:left-10 transform animate-float rounded-2xl shadow-lg " src='/image/screenshot/new_posting.png' width="320" height="480" alt="Element" style={{ top: '10%' }} />
                   </div>
                 </Transition>
                 {/* Item 3 */}
@@ -154,8 +154,8 @@ function Features() {
                   leaveEnd="opacity-0 -translate-y-16"
                 >
                   <div className="relative inline-flex flex-col">
-                    <img className="md:max-w-none mx-auto rounded-2xl" src='/image/backgroundPicture45.jpg' width="500" height="760" alt="Features bg" />
-                    <img className="md:max-w-none absolute w-full left-10 transform animate-float rounded-2xl shadow-lg" src='/image/screenshot/new_conversation.png' width="600" height="440" alt="Element" style={{ top: '20%' }} />
+                    <img className="md:max-w-none mx-auto rounded-2xl" src='/image/backgroundPicture45.jpg' width="600" height="462" alt="Features bg" />
+                    <img className="md:max-w-none absolute w-full left-0 md:left-10 transform animate-float rounded-2xl shadow-lg" src='/image/screenshot/new_conversation.png' width="600" height="520" alt="Element" style={{ top: '20%' }} />
                   </div>
                 </Transition>
               </div>

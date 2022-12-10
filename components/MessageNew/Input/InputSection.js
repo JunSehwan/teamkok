@@ -55,9 +55,10 @@ const InputSection = ({
 
   const updateTimestamp = useCallback(() => {
     updateDoc(doc(db, "conversations", conversationId), {
+      lastSender: user?.userID,
       updatedAt: time,
     });
-  }, [conversationId, time])
+  }, [conversationId, time, user?.userID])
 
   useEffect(() => {
     const handler = () => {

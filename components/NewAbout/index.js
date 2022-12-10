@@ -11,7 +11,7 @@ const index = () => {
   return (
     <div className='p-0 m-0 bg-[#012a4a] min-h-[100vh] text-[#f9f9f9] overflow-x-hidden'>
       <Nav/>
-      <div className='w-full max-w-[1200px]'>
+      <div className='w-full max-w-[1200px] mx-auto'>
         {router?.pathname === "/about" ? <Introduce />
           : router?.pathname === "/about/Privacy" ? <Privacy />
             : router?.pathname === "/about/Service" ? <Service />

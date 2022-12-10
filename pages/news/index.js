@@ -176,25 +176,25 @@ const news = () => {
   return (
     <>
       <Head>
-        <title>{`팀소식을 들어보세요!`}</title>
+        <title>관심있는 팀의 일상이야기 📰 - JOBCOC</title>
 
-        <meta name="keywords" content={`teamz, 팀즈, 채용공고, 현업담당자와 대화, 업무문의, 채용문의, 팀기반 소통플랫폼`} />
-        <meta name="description" content="원하는 기업에 입사하기 위해 팀별 현업담당자에게 적극적으로 나를 어필을 할 수 있습니다." />
+        <meta name="keywords" content="jobcoc, 채용사이트, 채용공고, 현업담당자와 대화, 업무문의, 채용문의, 소통플랫폼" />
+        <meta name="description" content="1분 자기소개 영상이나 포트폴리오 이미지로 나의 이력을 어필할 수 있습니다. 또한, 채용담당자가 제안하는 동료들의 실질적인 연봉 수준을 확인할 수 있습니다." />
 
-        <meta name="application-name" content="TeamZ - 관심있는 기업보드에 참여 후 현업자담당자와 소통해보세요." />
-        <meta name="msapplication-tooltip" content="TeamZ" />
+        <meta name="application-name" content="JOBCOC - 개성있는 프로필로 빠르게 취업하기" />
+        <meta name="msapplication-tooltip" content="JOBCOC" />
 
-        <meta property="og:type" content={`TeamZ - 기업보드`} />
-        <meta property="og:title" content={`기업의 현직자, 채용담당자와 즐거운 커뮤니케이션을 통해 팀에 합류할 수 있습니다.`} />
-        <meta property="og:description" content="기업보드에는 일대일 대화뿐만 아니라 채용공고(Small Intern)를 통해 채용이 이루어지고, 관련분야의 소식까지 확인할 수 있습니다.." />
+        <meta property="og:type" content="관심있는 팀의 일상이야기! 팀포스팅, JOBCOC" />
+        <meta property="og:title" content="JOBCOC - 개성있는 프로필로 빠르게 취업하기" />
+        <meta property="og:description" content="1분 자기소개 영상이나 포트폴리오 이미지로 나의 이력을 어필할 수 있습니다. 또한, 채용담당자가 제안하는 동료들의 실질적인 연봉 수준을 확인할 수 있습니다." />
         <meta property="og:image" content="https://jobcoc.com/logo/jobcoc.png" />
-        <meta property="og:url" content={`https://jobcoc.com/news`} />
+        <meta property="og:url" content="https://jobcoc.com" />
 
-        <meta name="twitter:card" content={`TeamZ - 기업보드`} />
-        <meta name="twitter:title" content={`기업의 현직자, 채용담당자와 즐거운 커뮤니케이션을 통해 팀에 합류할 수 있습니다.`} />
-        <meta name="twitter:description" content="기업보드에는 일대일 대화뿐만 아니라 채용공고(Small Intern)를 통해 채용이 이루어지고, 관련분야의 소식까지 확인할 수 있습니다.." />
+        <meta name="twitter:card" content="JOBCOC에서 원하는 팀에 합류하세요!" />
+        <meta name="twitter:title" content="JOBCOC - 개성있는 프로필로 빠르게 취업하기" />
+        <meta name="twitter:description" content="1분 자기소개 영상이나 포트폴리오 이미지로 나의 이력을 어필할 수 있습니다. 또한, 채용담당자가 제안하는 동료들의 실질적인 연봉 수준을 확인할 수 있습니다." />
         <meta name="twitter:image" content="https://jobcoc.com/logo/jobcoc.png" />
-        <meta name="twitter:domain" content={`https://jobcoc.com/news`} />
+        <meta name="twitter:domain" content="https://jobcoc.com" />
       </Head>
 
       {loading ?

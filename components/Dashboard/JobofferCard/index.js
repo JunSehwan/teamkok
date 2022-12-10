@@ -66,7 +66,9 @@ const index = ({ jobofferCon }) => {
         // initial={{ opacity: 0 }}
         // whileInView={{ opacity: 1 }}
         // viewport={{ once: true }}
-        className="w-full rounded-lg bg-white shadow-md hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:bg-slate-50"
+        className={`w-full rounded-lg bg-white shadow-md hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:bg-slate-50
+        ${jobofferCon?.answer == 3 || !jobofferCon?.answer ? "border-solid border-2 border-red-400/50" : null}
+        `}
       >
         <button
           className='p-4 flex flex-col gap-2 w-full text-left'
@@ -84,7 +86,7 @@ const index = ({ jobofferCon }) => {
                   {jobofferCon?.answer == 2 && <span className='text-gray-600'>거절함</span>}
                 </div>
                 :
-                <div className='text-md text-green-700 w-full'>
+                <div className='text-md text-red-700 w-full'>
                   {resultDay}일 남음
                 </div>
             }

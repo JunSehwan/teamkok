@@ -10,15 +10,18 @@ import AdviceCard from './AdviceCard'
 import CoccocCard from './CoccocCard';
 import JobofferCard from './JobofferCard';
 import PeopleCard from './PeopleCard';
+import PostCard from './PostCard';
 
 const index = () => {
   const { user } = useSelector(state => state.user);
   const { mainJoboffers } = useSelector(state => state.joboffer);
+  const { mainPosts } = useSelector(state => state.section);
   const { mainCoccocs } = useSelector(state => state.coccoc);
   const router = useRouter();
   const [moreAdvice, setMoreAdvice] = useState(4);
   const [moreCoccoc, setMoreCoccoc] = useState(4);
   const [moreJoboffer, setMoreJoboffer] = useState(4);
+  const [morePosts, setMorePosts] = useState(4);
   const offerArr = [];
   mainJoboffers?.map(v => (
     v?.answer == 1 && offerArr?.push(v)
@@ -32,6 +35,14 @@ const index = () => {
   const uniqueArr = plusedArr?.filter((element, index) => {
     return plusedArr.indexOf(element) === index;
   });
+
+  const [postLikes, setPostLikes] = useState(0);
+  useEffect(() => {
+    mainPosts?.map(v => (
+      v?.likes && setPostLikes(prev => prev + v?.likes?.length)
+    ))
+
+  }, [mainPosts])
 
   return (
     <div className='pt-[var(--navbar-height)] md:px-8 pb-[70px] md:pb-auto'>
@@ -159,14 +170,46 @@ const index = () => {
         </div>
 
         <div className='py-6'>
+          <div className='mx-auto text-left flex-col flex'>
+            <div className='flex justify-between w-full items-center'>
+              <p className='text-gray-500 text-[1.2rem] leading-8'>
+                📰내 포스팅
+              </p>
+
+
+            </div>
+            <h3 className='sm:text-[2.3rem] text-[1.8rem] text-gray-700 mt-2 w-full pl-2'>
+              {mainPosts && mainPosts?.length !== 0 ? (mainPosts?.length + "건") : <span className="text-gray-300 text-2lg">아직 없어요..</span>}
+            </h3>
+            <div className='grid grid-cols-1 lg:grid-cols-2 w-full gap-2 my-4'>
+              {mainPosts?.slice(0, morePosts)?.map?.((v) => (
+                <PostCard
+                  key={nanoid()}
+                  post={v}
+                />
+              ))}
+            </div>
+            {mainPosts?.length > morePosts &&
+              <button
+                className='flex justify-center w-full text-gray-600 text px-8 py-1 flex-row items-center'
+                onClick={() => setMorePosts(prev => prev + 6)}
+              >
+                <MdOutlineExpandMore />
+                <span className='hover:text-gray-800 ml-1'>더보기</span>
+              </button>
+            }
+          </div>
+        </div>
+
+        <div className='py-6'>
           <div className='mx-auto text-left'>
             <div className='flex justify-between w-full items-center'>
               <p className='text-gray-500 text-[1.2rem] leading-8'>
-                💖우리팀 좋아요 개수
+                💖우리팀 소식 좋아요 개수
               </p>
             </div>
             <h3 className='sm:text-[2.3rem] text-[1.8rem] text-gray-700 mt-2 w-full pl-2'>
-              {user?.liked && user?.liked?.length !== 0 ? (user?.liked?.length + "건") : <span className="text-gray-300 text-2lg">아직 없어요..</span>}
+              {postLikes ? (postLikes + "건") : <span className="text-gray-300 text-2lg">아직 없어요..</span>}
             </h3>
           </div>
         </div>

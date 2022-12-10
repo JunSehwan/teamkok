@@ -29,7 +29,7 @@ function HeroHome() {
         </svg>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+      <div className="max-w-6xl mx-auto px-1 sm:px-2">
 
         {/* Hero content */}
         <div className="pt-32 pb-12 md:pt-40 md:pb-20">
@@ -43,8 +43,8 @@ function HeroHome() {
               </span></h1>
             <div className="max-w-3xl mx-auto">
               <p className="text-xl text-gray-600 mb-8" data-aos="zoom-y-out" data-aos-delay="150">
-                1분 자기소개 영상이나 포트폴리오 이미지로 나의 이력을 어필할 수 있습니다.
-                또한, 채용담당자가 제안하는 동료들의 실질적인 연봉 수준을 확인할 수 있습니다.
+                자기소개 영상, 포트폴리오로 나의 경력을 어필할 수 있습니다.<br/>
+                또한, 동료들이 제안받는 연봉 수준을 확인하세요!
               </p>
               <div className="max-w-xs mx-auto sm:max-w-none sm:flex sm:justify-center" data-aos="zoom-y-out" data-aos-delay="300">
                 <div>

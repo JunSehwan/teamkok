@@ -12,7 +12,6 @@ import {
   addComment, addCommentDoneFalse, loadComments, setRemoveDoneFalse
 } from 'slices/section';
 import Comments from './Comments';
-import ProfileModal from './ProfileModal';
 import NoticeList from 'components/Common/NoticeList';
 import profilePic from 'public/image/icon/happiness.png';
 import Slider from './Slider';
@@ -141,6 +140,7 @@ const PostCard = ({ post }) => {
     setCommentOpened(false);
   }, []);
 
+
   const [comment, setComment] = useState("");
   const onChangeComment = useCallback((e) => {
     setComment(e.currentTarget.value);
@@ -246,21 +246,11 @@ const PostCard = ({ post }) => {
     <motion.div
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
-      transition={{ delay: 0.1, duration: 0.5 }}
       viewport={{ once: true }}
-      className="w-full max-w-2xl mx-auto break-inside rounded-xl bg-white flex flex-col bg-clip-border shadow-md mb-4">
+      className="w-full max-w-2xl mx-auto break-inside rounded-xl bg-white flex flex-col bg-clip-border shadow-2xl mb-4">
       <div className="flex p-4 pb-6 items-center justify-between">
         <div className="flex">
-          <ProfileModal
-            profileOpened={profileOpened}
-            closeProfile={closeProfile}
-            post={post}
-          />
-          <button
-            className='text-left flex flex-row'
-            onClick={openProfile}
-          >
-            <a className="inline-block mr-3" href="#">
+            <div className="inline-block mr-3" href="#">
               {/* <Image width={30} height={30} alt="pic" className="rounded-full max-w-none w-12 h-12" src={post?.photo[0]} /> */}
               {post?.creatorAvatar ? (
                 <Image
@@ -278,7 +268,7 @@ const PostCard = ({ post }) => {
                   width={48} height={48}
                 />
               )}
-            </a>
+            </div>
             <div className="flex flex-col">
               <div>
                 <a className="inline-block text-lg text-blue-700 font-bold">
@@ -295,7 +285,6 @@ const PostCard = ({ post }) => {
                 {createTime}
               </div>
             </div>
-          </button>
         </div>
         {/* More 버튼 */}
         {user?.userID == post?.creatorId &&

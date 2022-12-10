@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 
-const Fourteen = ({ goProfile, goPrevStage, goCertStage, goNews }) => {
+const Nineth = ({ goProfile, goPrevStage, goCertStage, goNews }) => {
 
 
   return (
@@ -35,18 +35,18 @@ const Fourteen = ({ goProfile, goPrevStage, goCertStage, goNews }) => {
       </div>
 
       <div className='w-full justify-center flex flex-col items-center px-2'>
-        <button className="my-3 py-2 w-[12rem] text-gray-500 text-[14px] underline" onClick={goProfile}>프로필 정보 수정하기</button>
+        <button className="my-3 py-2 w-[12rem] text-gray-500 text-[14px] underline" onClick={goProfile}>프로필 업데이트하러 가기</button>
         <button className='my-2 w-full text-md py-6 font-bold text-white  bg-[#4173f4] hover:bg-[#1C52DC]  focus:outline-none focus:shadow-outline rounded-lg' onClick={goNews}>다양한 팀소식 보러가기</button>
       </div>
     </div>
   );
 };
 
-Fourteen.propTypes = {
+Nineth.propTypes = {
   goNextStage: PropTypes.func,
   goCertStage: PropTypes.func,
   goProfile: PropTypes.func,
   goNews: PropTypes.func,
 };
 
-export default Fourteen;
+export default Nineth;

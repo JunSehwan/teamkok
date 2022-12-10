@@ -23,6 +23,17 @@ import Link from 'next/link';
 import GoBack from 'components/Common/GoBack';
 
 const Login = () => {
+  // useEffect(() => {
+  //   if ((user || user?.userID)) {
+  //     if (user?.purpose == 1) {
+  //       console.log(user?.purpose)
+  //       router.push('/friends')
+  //     } else {
+  //       console.log(user?.purpose)
+  //       router.push('/news')
+  //     }
+  //   }
+  // }, [router, user]);
   const dispatch = useDispatch();
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -64,8 +75,12 @@ const Login = () => {
   }, [signUpSuccess, isLoggedIn, user])
 
   useEffect(() => {
-    if (signUpSuccess || isLoggedIn || !!user) {
-      router.push("/dashboard")
+    if (signUpSuccess && isLoggedIn && !!user) {
+      if (user?.purpose === 1) {
+        router.push("/friends")
+      } else {
+        router.push("/news")
+      }
     }
   }, [isLoggedIn, router, signUpSuccess, user])
 

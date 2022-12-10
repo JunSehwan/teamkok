@@ -245,7 +245,7 @@ const FriendCard = ({ friend, show, setShow }) => {
               <div>
                 {/* 프로필 기본정보 */}
                 <div className="flex items-end gap-2 mb-2">
-                  <p className="flex gap-2 items-center md:text-xl text-lg font-bold text-primary text-yellow-100">
+                  <div className="flex gap-2 items-center md:text-xl text-lg font-bold text-primary text-yellow-100">
                     {friend?.username}
                     {friend?.category && friend?.skills?.length !== 0 && myCareer?.length !== 0 && myEducation?.length !== 0 ?
                       <Tooltip
@@ -256,7 +256,7 @@ const FriendCard = ({ friend, show, setShow }) => {
                         <GoVerified className="text-blue-400 text-md" />
                       </Tooltip>
                       : null}
-                  </p>
+                  </div>
                   {category[0] &&
                     <p className="px-2 ml-1 py-1 rounded-full bg-white/80 text-black/70 shadow-inner text-md">
                       {category[0]?.name}</p>}

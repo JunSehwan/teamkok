@@ -21,8 +21,8 @@ const index = () => {
 
           {/* Section header */}
           <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
-            <h2 className="text-3xl font-extrabold leading-tight mb-4">이제는, 간단하면서 흥미롭게!</h2>
-            <p className="text-xl text-gray-600">원하는 팀에 합류하기 위한 준비부터 도와드립니다.</p>
+            <h2 className="text-3xl font-extrabold leading-tight mb-4">이제, 간단하고 흥미롭게!</h2>
+            <p className="text-xl text-gray-600">원하는 팀에 합류하기 위한 '준비단계'부터 도와드립니다. 어떤 스킬을 좀 더 학습해야 할 지 안내받을 수 있습니다.</p>
           </div>
 
           {/* Items */}

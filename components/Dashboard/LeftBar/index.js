@@ -115,7 +115,7 @@ const index = (
                   </button> */}
                 </div>
               </li>
-              {user?.purpose === 4 && (<>
+              {user?.purpose === 1 && (<>
 
                 <li>
                   <div className={`flex items-center justify-between text-[14px] font-normal text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700

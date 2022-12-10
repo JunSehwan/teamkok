@@ -6,12 +6,10 @@ import Link from 'next/link';
 import { auth, logOut } from 'firebaseConfig';
 import { useDispatch, useSelector } from 'react-redux';
 import AlertModal from 'components/Common/Modal/AlertModal';
-// import { closeSignupConfirmModal } from 'slices/user';
 import { signOut } from 'slices/user';
 import profilePic from '/public/image/icon/happiness.png';
 import { useRouter } from 'next/router';
-import { getJobofferedByUserId } from 'firebaseConfig';
-import InformationModal from 'components/Common/Modal/InformationModal';
+import { getJobofferedByUserId, getConversationByUserId } from 'firebaseConfig';
 
 import { AiFillSetting } from "react-icons/ai";
 import { BsFillCaretDownFill } from "react-icons/bs";
@@ -20,7 +18,7 @@ import { BsFillBellFill, BsQuestionCircleFill } from "react-icons/bs";
 import { HiUserGroup } from "react-icons/hi";
 import { MdMessage, MdDashboard } from "react-icons/md";
 import { IoLogOut } from "react-icons/io5";
-
+import useLastMessageSSS from "hooks/useLastMessageSSS";
 
 const index = ({ children }) => {
   const router = useRouter();
@@ -65,26 +63,6 @@ const index = ({ children }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   });
-
-
-  // const [signupSuccessModal, setSignUpSuccessModal] = useState(false);
-  // const closeConfirmModal = () => {
-  //   setSignUpSuccessModal(false);
-  //   dispatch(closeSignupConfirmModal());
-  // }
-
-  // const startConfirmModal = useCallback(() => {
-  //   setSignUpSuccessModal(true);
-  // }, []);
-
-  // useEffect(() => {
-  //   if (signUpSuccess) {
-  //     startConfirmModal();
-  //   } else {
-  //     setSignUpSuccessModal(false);
-  //   }
-
-  // }, [setSignUpSuccessModal, signUpSuccess, startConfirmModal])
 
   const [open, setOpen] = useState(false);
   const [tabIndex, setTabIndex] = useState(1);
@@ -177,17 +155,6 @@ const index = ({ children }) => {
     setToggle(false);
     setOpen(false);
   }, [router])
-  // const onClickAlarm = useCallback(() => {
-  //   router.push("/alarm");
-  //   setToggle(false);
-  //   setOpen(false);
-  // }, [router])
-
-  const onClickFavorite = useCallback(() => {
-    router.push("/favorite");
-    setToggle(false);
-    setOpen(false);
-  }, [router])
 
   const onClickDashboard = useCallback(() => {
     router.push("/dashboard");
@@ -221,17 +188,25 @@ const index = ({ children }) => {
     }
     fetchAndSetUser();
   }, [user?.userID, findNotRead, user]);
-  var findNotRead = data?.filter(obj => obj.read !== true);
-  const [infoConfirm, setInfoConfirm] = useState(false);
-  const openInfoConfirm = useCallback(() => {
-    document.body.style.overflow = "hidden";
-    setInfoConfirm(true);
-    setOpen(false);
-  }, [])
-  const closeInfoConfirm = useCallback(() => {
-    document.body.style.overflow = "unset";
-    setInfoConfirm(false);
-  }, [])
+  var findNotRead = data?.filter(obj => obj?.answer == 3 || !obj?.answer);
+
+  const [conversationData, setConversationData] = useState();
+  useEffect(() => {
+    async function fetchAndSetUser() {
+      try {
+        if (user) {
+          setConversationData([]);
+          const result = await getConversationByUserId(user?.userID);
+          setConversationData(result);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    fetchAndSetUser();
+  }, [user?.userID, findNotReadConversation, user]);
+  var findNotReadConversation = conversationData?.filter(obj => obj?.lastSender !== user?.userID);
+
 
 
 
@@ -298,15 +273,20 @@ const index = ({ children }) => {
                 <div className="flex items-center justify-center md:flex">
 
                   <button
-                    className={`text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/dashboard" || router?.pathname?.includes("/dashboard") ? "text-[#4979f5]" : ""}`}
+                    className={`relative text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/dashboard" || router?.pathname?.includes("/dashboard") ? "text-[#4979f5]" : ""}`}
                     onClick={onClickDashboard}>
                     <div className='flex flex-col items-center'>
                       <MdDashboard className='w-6 h-6' />
                       <span className='mt-[2px] text-xs hidden md:inline'>대시보드</span>
                     </div>
+                    {findNotRead && findNotRead?.length !== 0 &&
+                      <div className='top-[17px] p-0.5 text-white bg-red-500 flex mr-[-41px] mt-[-20px] shadow text-center text-xs rounded-full w-[18px] h-[18px] items-center justify-center z-5 absolute'>
+                        {findNotRead?.length}
+                      </div>
+                    }
                   </button>
                   <button
-                    className={`text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/friends" || router?.pathname?.includes("/friends") ?  "text-[#4979f5]" : ""}`}
+                    className={`text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/friends" || router?.pathname?.includes("/friends") ? "text-[#4979f5]" : ""}`}
                     onClick={onClickFriends}>
                     <div className='flex flex-col items-center'>
                       <FaIdCard className='w-6 h-6' />
@@ -331,24 +311,21 @@ const index = ({ children }) => {
                       <span className='mt-[2px] text-xs hidden md:inline'>팀정보</span>
                     </div>
                   </button> */}
-                  {findNotRead && findNotRead?.length !== 0 &&
-                    <button onClick={onClickFavorite} className='p-0.5 text-white bg-red-500 flex mr-[-41px] mt-[-20px] z-10 text-center font-xs rounded-full w-[18px] h-[18px] items-center justify-center'>
-                      {findNotRead?.length}
-                    </button>
-                  }
+
                   <button
-                    className={`sm:flex hidden text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/message" || router?.pathname?.includes("/message") ? "text-[#4979f5]" : ""}`}
+                    className={`relative text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/message" || router?.pathname?.includes("/message") ? "text-[#4979f5]" : ""}`}
                     onClick={onClickMessage}>
                     <div className='flex flex-col items-center'>
                       <MdMessage className='w-6 h-6' />
                       <span className='mt-[2px] text-xs hidden md:inline'>메시지</span>
                     </div>
+                    {findNotReadConversation && findNotReadConversation?.length !== 0 &&
+                      <div className='top-[17px] p-0.5 text-white bg-red-500 flex mr-[-41px] mt-[-20px] shadow text-center text-xs rounded-full w-[18px] h-[18px] items-center justify-center z-5 absolute'>
+                        {findNotReadConversation?.length}
+                      </div>
+                    }
                   </button>
-                  {findNotRead && findNotRead?.length !== 0 &&
-                    <button onClick={onClickFavorite} className='p-0.5 text-white bg-red-500 flex mr-[-41px] mt-[-20px] z-10 text-center font-xs rounded-full w-[18px] h-[18px] items-center justify-center'>
-                      {findNotRead?.length}
-                    </button>
-                  }
+
                   {/* <button
                     className={`sm:flex hidden text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/alarm" && "text-[#4979f5]"}`}
                     onClick={onClickAlarm}>
@@ -495,13 +472,13 @@ const index = ({ children }) => {
                         <span className="group-hover:text-gray-700">팀정보</span>
                       </button>
                     </li> */}
-                    <li className="min-w-max" key="message">
+                    {/* <li className="min-w-max" key="message">
                       <button onClick={onClickMessage} className="bg group flex items-center space-x-4 rounded-full px-4 py-3 text-gray-500 w-full">
                         <MdMessage className='w-6 h-6' />
                         <span className="group-hover:text-gray-700">메시지</span>
                       </button>
                     </li>
-                    <hr className="border-gray-200 dark:border-gray-700 " />
+                    <hr className="border-gray-200 dark:border-gray-700 " /> */}
                     <li className="min-w-max" key="profile">
                       <button onClick={onClickProfile} className="group flex items-center space-x-4 rounded-md px-4 py-3 text-gray-500 w-full">
                         <FaUserCircle className='w-6 h-6' />
@@ -546,11 +523,8 @@ const index = ({ children }) => {
         }
       </nav>
       {children}
-      {display === false && <InformationModal
-        infoConfirm={infoConfirm}
-        closeInfoConfirm={closeInfoConfirm}
-      />
-      }
+
+
       {/* {signupSuccessModal ?
         <AlertModal
           title="JOBCOC 회원가입 성공!"
