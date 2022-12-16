@@ -32,9 +32,13 @@ const index = () => {
   ))
   var plusedArr = coccocArr?.concat(offerArr);
 
-  const uniqueArr = plusedArr?.filter((element, index) => {
-    return plusedArr.indexOf(element) === index;
-  });
+  const uniqueArr = plusedArr?.reduce(function (acc, current) {
+    if (acc.findIndex(({ targetId }) => targetId === current.targetId) === -1) {
+      acc.push(current);
+    }
+    return acc;
+  }, []);
+
 
   const [postLikes, setPostLikes] = useState(0);
   useEffect(() => {

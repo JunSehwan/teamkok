@@ -1,1 +1,7 @@
 node_modules/
+.admin-sdk.json
+.admin-sdk
+admin-sdk.json
+admin-sdk
+.env
+env

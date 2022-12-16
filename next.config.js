@@ -12,7 +12,7 @@ module.exports = withBundleAnalyzer({
   images: {
     loader: 'akamai',
     path: '',
-    domains: ['teamz.co.kr', 'localhost:3060', 'firebasestorage.googleapis.com', 'upload.wikimedia.org', 'lh3.googleusercontent.com', 'cdn.jsdelivr.net'],
+    domains: ['teamz.co.kr', 'jobcoc.com', 'localhost:3060', 'firebasestorage.googleapis.com', 'upload.wikimedia.org', 'lh3.googleusercontent.com', 'cdn.jsdelivr.net'],
     formats: ['image/avif', 'image/webp'],
   },
   distDir: 'build',

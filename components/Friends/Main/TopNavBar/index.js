@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import CategoryCapsule from './CategoryCapsule';
 import CategoryList from "components/Common/CategoryList";
-import { changeCategoryFilter } from 'slices/user';
+import { changeCategoryFilter, setScrollPosition } from 'slices/user';
 import { nanoid } from 'nanoid'
 import { motion } from "framer-motion";
 import styled from "styled-components";
@@ -39,6 +39,7 @@ const index = ({ hide }) => {
   const [category, setCategory] = useState(null);
 
   const onChangeCategory = useCallback((e) => {
+    dispatch(setScrollPosition(0));
     setCategory(e);
     setWide(false);
     dispatch(changeCategoryFilter(e));

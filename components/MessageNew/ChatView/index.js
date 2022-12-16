@@ -91,6 +91,7 @@ const ChatView = ({ conversation, inputSectionOffset, replyInfo, setReplyInfo })
 
     await updateDoc(doc(db, "conversations", conversationIdRef.current), {
       [`seen.${user?.userID}`]: lastDoc?.id,
+      lastSeener: user?.userID
     });
   };
 

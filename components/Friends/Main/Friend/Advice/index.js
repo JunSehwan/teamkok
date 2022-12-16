@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'components/Common/Modal/Modal';
 import { AiFillStar } from 'react-icons/ai';
 import styled from 'styled-components';
-import { createAdvice } from 'firebaseConfig';
+import { createAdvice, sendMailForAdvice } from 'firebaseConfig';
 import { addAdvice, addDetailAdvice } from 'slices/user';
 
 const index = ({ adviceOn, openAdvice, closeAdvice, friendname, friend, detail }) => {
@@ -60,7 +60,7 @@ const index = ({ adviceOn, openAdvice, closeAdvice, friendname, friend, detail }
     }
 
 
-    const con = await createAdvice(
+    await createAdvice(
       {
         targetId: friend?.userID,
         targetName: friend?.username,
@@ -72,7 +72,19 @@ const index = ({ adviceOn, openAdvice, closeAdvice, friendname, friend, detail }
         mysection: user?.mysection,
         companylogo: user?.companylogo,
       }
-    );
+    ).then(async (result) => {
+      if (result) {
+        await sendMailForAdvice(
+          {
+            targetEmail: friend?.email,
+            targetName: friend?.username,
+            mycompany: user?.mycompany,
+            username: user?.username,
+            section: user?.mysection,
+          }
+        )
+      }
+    })
     if (detail === true) {
       dispatch(addDetailAdvice({
         targetId: friend?.userID,
@@ -105,7 +117,7 @@ const index = ({ adviceOn, openAdvice, closeAdvice, friendname, friend, detail }
       }));
     }
 
-  }, [user?.userID, user?.mycompany, user?.mysection, user?.companylogo, user?.username, user?.avatar, rating, description, friend?.userID, friend?.username, friend?.avatar, annoymous, detail, dispatch])
+  }, [user?.userID, user?.mycompany, user?.mysection, user?.companylogo, user?.username, user?.avatar, rating, description, friend?.userID, friend?.username, friend?.avatar, friend?.email, annoymous, detail, dispatch])
 
 
   return (

@@ -12,7 +12,7 @@ import companyPic from 'public/image/company.png';
 import LoadingPage from 'components/Common/Loading';
 import { useRouter } from 'next/router';
 import { addConversation } from 'slices/chat';
-import { createConversation } from "firebaseConfig";
+import { createConversation, sendMailForCoccocAnswer, getOtherUser } from "firebaseConfig";
 
 const index = ({ coccocCon, coccocOn, openCoccoc, closeCoccoc }) => {
   let calloutDay = dayjs(coccocCon?.timestamp).format('YYYY-MM-DD')
@@ -26,37 +26,67 @@ const index = ({ coccocCon, coccocOn, openCoccoc, closeCoccoc }) => {
     }
   }, [dispatch, updateCoccocDone, closeCoccoc, coccocOn])
 
+  const [friend, setFriend] = useState();
+  useEffect(() => {
+    async function fetchAndSetUser() {
+      const result = await getOtherUser(coccocCon?.userId);
+      setFriend(result);
+    }
+    fetchAndSetUser();
+  }, [coccocCon?.userId]);
 
   const onYes = useCallback(async (e) => {
     e.preventDefault();
     if (!user?.userID) {
       return alert('로그인이 필요합니다.');
     }
-    await modifyCoccoc(1, coccocCon?.id).then((result) => {
+    await modifyCoccoc(1, coccocCon?.id).then(async(result) => {
+      if (result) {
+        await sendMailForCoccocAnswer(
+          {
+            targetEmail: friend?.email,
+            targetName: coccocCon?.targetName,
+            company: coccocCon?.company,
+            section: coccocCon?.section,
+            username: coccocCon?.username,
+          }
+        )
+      }
       dispatch(updateCoccoc(
         { id: coccocCon?.id, answer: 1, read: true, readtime: result }
       ));
     })
-  }, [user?.userID, coccocCon?.id, dispatch])
+  }, [user?.userID, coccocCon?.id, coccocCon?.targetName, coccocCon?.company, coccocCon?.section, coccocCon?.username, dispatch, friend?.email])
 
   const onNo = useCallback(async (e) => {
     e.preventDefault();
     if (!user?.userID) {
       return alert('로그인이 필요합니다.');
     }
-    await modifyCoccoc(1, coccocCon?.id).then((result) => {
+    await modifyCoccoc(2, coccocCon?.id).then(async(result) => {
+      if (result) {
+        await sendMailForCoccocAnswer(
+          {
+            targetEmail: friend?.email,
+            targetName: coccocCon?.targetName,
+            company: coccocCon?.company,
+            section: coccocCon?.section,
+            username: coccocCon?.username,
+          }
+        )
+      }
       dispatch(updateCoccoc(
         { id: coccocCon?.id, answer: 2, read: true, readtime: result }
       ));
     })
-  }, [user?.userID, coccocCon?.id, dispatch])
+  }, [user?.userID, coccocCon?.id, coccocCon?.targetName, coccocCon?.company, coccocCon?.section, coccocCon?.username, dispatch, friend?.email])
 
   const onLater = useCallback(async (e) => {
     e.preventDefault();
     if (!user?.userID) {
       return alert('로그인이 필요합니다.');
     }
-    await modifyCoccoc(1, coccocCon?.id).then((result) => {
+    await modifyCoccoc(3, coccocCon?.id).then((result) => {
       dispatch(updateCoccoc(
         { id: coccocCon?.id, answer: 3, read: true, readtime: result }
       ));

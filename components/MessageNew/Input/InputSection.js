@@ -15,7 +15,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { useRouter } from 'next/router';
-import { db, storage } from "firebaseConfig";
+import { db, storage, sendMail, getConversation } from "firebaseConfig";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import Alert from "components/Common/Alert";
 import ClickAwayListener from "components/Common/ClickAwayListener";
@@ -50,11 +50,34 @@ const InputSection = ({
   const fileInputRef = useRef(null);
   const textInputRef = useRef(null);
 
-
   const [fileDragging, setFileDragging] = useState(false);
 
-  const updateTimestamp = useCallback(() => {
-    updateDoc(doc(db, "conversations", conversationId), {
+
+  // useEffect(() => {
+  //   if (user && conversationId) {
+  //     // setLoading(true);
+  //     async function fetchAndSetUser() {
+  //       try {
+  //         await getConversation(conversationId).then((result) => {
+  //           console.log(result , "result")
+  //         })
+  //       } catch (e) {
+  //         // setData(null)
+  //         console.error(e)
+  //         // setError(true);
+  //       }
+  //     }
+  //     fetchAndSetUser();
+  //     // setLoading(false);
+  //   }
+  // }, [conversationId, user]);
+
+
+  const updateTimestamp = useCallback(async () => {
+    // if (conversation?.lastSender !== user?.userID) {
+    // await sendMail(user?.userID);
+    // }
+    await updateDoc(doc(db, "conversations", conversationId), {
       lastSender: user?.userID,
       updatedAt: time,
     });
@@ -423,9 +446,9 @@ const InputSection = ({
             </div>
           ) : (
             <button className="text-primary flex flex-shrink-0 items-center text-xl px-2 hover:bg-slate-200 rounded-xl py-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
             </button>
           )}
         </form>

@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'components/Common/Modal/Modal';
-import { createOffer } from 'firebaseConfig';
+import { createOffer, sendMailForJobOffer } from 'firebaseConfig';
 import { addJoboffer } from 'slices/joboffer';
 import AlertModal from 'components/Common/Modal/AlertModal';
 import DatePicker from "react-datepicker";
@@ -37,6 +37,9 @@ const index = ({ jobofferOn, openJoboffer, closeJoboffer, friendname, friend, de
         year: standardYear,
         month: 1,
       });
+
+
+
     }
   }, [dispatch, closeJoboffer, closeConfirmModal, jobofferOn, user?.mysection, addJobofferDone])
 
@@ -142,10 +145,10 @@ const index = ({ jobofferOn, openJoboffer, closeJoboffer, friendname, friend, de
   const dateToString = (date) => {
     return date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0')
   }
-  
- 
 
-  
+
+
+
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
 
@@ -183,9 +186,9 @@ const index = ({ jobofferOn, openJoboffer, closeJoboffer, friendname, friend, de
 
     const final = dayjs(enddate).format('YYYY-MM-DDTHH:mm:ss.sssZ');
     const finalEnddate = new Date(final);
-   
 
-    const con = await createOffer(
+
+    await createOffer(
       {
         targetId: friend?.userID,
         targetName: friend?.username,
@@ -206,7 +209,19 @@ const index = ({ jobofferOn, openJoboffer, closeJoboffer, friendname, friend, de
         mysection: user?.mysection,
         companylogo: user?.companylogo,
       }
-    );
+    ).then(async (result) => {
+      if (result) {
+        await sendMailForJobOffer(
+          {
+            targetEmail: friend?.email,
+            targetName: friend?.username,
+            mycompany: user?.mycompany,
+            username: user?.username,
+            section: section,
+          }
+        )
+      }
+    })
     if (detail === true) {
       dispatch(addJoboffer({
         targetId: friend?.userID,
@@ -252,7 +267,7 @@ const index = ({ jobofferOn, openJoboffer, closeJoboffer, friendname, friend, de
     }
 
 
-  }, [user?.userID, user?.username, user?.avatar, user?.mycompany, user?.mysection, user?.companylogo, duedate, section, job, salary, type, space, enddate, friend?.userID, friend?.username, friend?.avatar, description, detail, dispatch])
+  }, [user?.userID, user?.username, user?.avatar, user?.mycompany, user?.mysection, user?.companylogo, duedate, section, job, salary, type, space, enddate, friend?.userID, friend?.username, friend?.avatar, friend?.email, description, detail, dispatch])
 
   // autoFocus 관련
   const inputElement = useRef(null);

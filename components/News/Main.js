@@ -46,6 +46,7 @@ const Main = () => {
 
   useEffect(() => {
     documentRef?.current?.addEventListener('scroll', throttleScroll);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     return () => documentRef?.current?.removeEventListener('scroll', throttleScroll);
   }, [pageY, throttleScroll]);
 

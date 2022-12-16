@@ -5,7 +5,7 @@ import { BiImageAdd } from 'react-icons/bi';
 import VideoCreate from './VideoCreate';
 import { useSelector } from 'react-redux';
 import ImageCreate from './ImageCreate';
-import { FcAbout } from 'react-icons/fc';
+import {  FcStackOfPhotos, FcVideoCall } from 'react-icons/fc';
 
 const index = () => {
   const { user } = useSelector(state => state.user);
@@ -47,7 +47,7 @@ const index = () => {
                 />
               ) : (
                 <div onClick={openVideoModal} className='bg-slate-100 rounded-xl h-[383px] w-[245px] flex flex-col justify-center items-center'>
-                  <FcAbout className='w-10 h-10 ' />
+                    <FcVideoCall className='w-10 h-10 ' />
                   <span className='font-bold text-md text-gray-400'>Empty</span>
                 </div>
               )}
@@ -64,8 +64,8 @@ const index = () => {
                     <div className='absolute bottom-0 left-0 right-0 w-full p-2 rounded-t-lg bg-white opacity-70 text-sm text-center'>외 {user?.thumbimage?.length - 1}장</div>}
                 </>
               ) : (
-                <div onClick={openVideoModal} className='bg-slate-100 rounded-xl h-[383px] w-[245px] flex flex-col justify-center items-center'>
-                  <FcAbout className='w-10 h-10 ' />
+                  <div onClick={openImageModal} className='bg-slate-100 rounded-xl h-[383px] w-[245px] flex flex-col justify-center items-center'>
+                    <FcStackOfPhotos className='w-10 h-10 ' />
                   <span className='font-bold text-md text-gray-400'>Empty</span>
                 </div>
               )}

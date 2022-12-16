@@ -160,7 +160,7 @@ const usePagination = (collectionName, limitCount, target, setTarget) => {
         setLoadingMore(true);
         setTimeout(async () => {
           await loadMore(5);
-        }, [1500])
+        }, [500])
         setLoadingMore(false);
       }
     },
@@ -187,9 +187,9 @@ const usePagination = (collectionName, limitCount, target, setTarget) => {
 
 
   // 처음 화면이 랜더링 되었을때 첫번째 페이지를 문서를 가져오도록 설정
-  useEffect(() => {
-    getFirstPage();
-  }, [getFirstPage]);
+  // useEffect(() => {
+  //   getFirstPage();
+  // }, [getFirstPage]);
   useEffect(() => {
     if (filterNumber == null) {
       getFirstPage();

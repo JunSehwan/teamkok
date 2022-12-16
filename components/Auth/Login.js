@@ -134,6 +134,13 @@ const Login = () => {
   const time = nowForCopy?.format('YYYY-MM-DD HH:mm:ss');
   const [con, setCon] = useState();
   const db = getFirestore();
+
+  const signInWithKakaoHandler = useCallback(() => {
+    const redirectUri = `${location.origin}/auth/kakaologin`;
+    Kakao.Auth.authorize({ redirectUri });
+  }, [])
+
+
   const signInWithGoogleHandler = useCallback(async () => {
     const googleProvider = new GoogleAuthProvider();
     try {
@@ -303,19 +310,28 @@ const Login = () => {
 
                   <div className="w-[90%] mx-auto h-[4px] py-4 my-4 border-b-[1px] border-solid border-slate-200"></div>
                   <div className="w-fit bg-white mt-[-24px] px-8 mx-auto text-md text-gray-500">소셜 계정 로그인</div>
-                  <div className='google_wrapper mt-4 mb-4'>
+                  <div className='mt-4 mb-4 gap-4 p-2 flex flex-col min-w-full items-center'>
                     <button
                       onClick={signInWithGoogleHandler}
-                      className="flex min-w-full cursor-pointer items-center gap-3 rounded-full bg-white p-2 text-black transition duration-300 disabled:!cursor-default disabled:!brightness-75"
+                      className="hover:bg-slate-50 rounded-full google-btn flex flex-row items-center justify-center w-[70%] mx-auto p-2 bg-white shadow-lg h-[48px] disabled:!cursor-default disabled:!brightness-75"
                     >
-                      <div className="hover:bg-slate-50 rounded-full google-btn flex flex-row items-center justify-center w-[70%] mx-auto p-2 bg-white shadow-lg">
-                        <div className="google-icon-wrapper mr-3">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <Image width={34} height={34} unoptimized alt="google" className="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" />
-                        </div>
-                        <p className="btn-text"><b>Sign in with google</b></p>
+                      <div className="mr-3 flex items-center gap-2">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <Image width={28} height={28} unoptimized alt="google" className="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" />
                       </div>
+                      <p className="btn-text"><b>구글로 시작하기</b></p>
                     </button>
+
+                    {/* <button
+                      onClick={signInWithKakaoHandler}
+                      className="hover:bg-[#FEE50090] rounded-full kakao-btn flex flex-row items-center justify-center w-[70%] mx-auto p-2 bg-[#FEE500] shadow-lg h-[48px] disabled:!cursor-default disabled:!brightness-75"
+                    >
+                      <div className="mr-3 flex items-center gap-2">
+                        <Image width={25} height={25} unoptimized alt="kakao" className="kakao-icon" src="./kakao_bubble.png" />
+                      </div>
+                      <p className="btn-text"><b>카카오로 시작하기</b></p>
+                    </button> */}
+
                   </div>
 
                 </form>

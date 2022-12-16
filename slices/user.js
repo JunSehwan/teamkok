@@ -75,6 +75,7 @@ export const user = createSlice({
     signOut: (state, action) => {
       state.user = null;
       state.isLoggedIn = false;
+      state.signUpSuccess = false;
     },
     signUp(state, action) {
       state.user = action.payload;

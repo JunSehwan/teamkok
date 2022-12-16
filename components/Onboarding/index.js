@@ -17,7 +17,7 @@ import { SwitchTransition, CSSTransition } from "react-transition-group";
 import styled from 'styled-components';
 import Router from 'next/router';
 import { Toaster } from 'react-hot-toast';
-
+import { updateFirstMake } from 'firebaseConfig';
 const Container = styled.section`
       width: 100%;
       height: 100%;
@@ -56,6 +56,14 @@ const index = () => {
   const nodeRef = stage == 1 ? helloRef : goodbyeRef;
   const goNextStage = useCallback(() => {
     setStage(prev => prev + 1);
+  }, [])
+  const goNextStageFirst = useCallback(async () => {
+    try {
+      await updateFirstMake(false);
+      setStage(prev => prev + 1);
+    } catch (e) {
+      console.error(e);
+    }
   }, [])
   const goPrevStage = useCallback(() => {
     setStage(prev => prev - 1);
@@ -97,7 +105,7 @@ const index = () => {
                   <div>
                     {stage === 1 ?
                       <First
-                        goNextStage={goNextStage}
+                        goNextStageFirst={goNextStageFirst}
                         goNews={goNews}
                       /> :
                       stage === 2 ?

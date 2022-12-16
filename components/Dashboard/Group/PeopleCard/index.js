@@ -2,15 +2,14 @@ import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
-import { AiFillStar } from 'react-icons/ai';
+import { AiFillStar, AiFillWechat } from 'react-icons/ai';
 import profilePic from 'public/image/icon/happiness.png';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { getOtherUser } from 'firebaseConfig';
-import { setOtherUser } from "slices/user";
-import { useDispatch } from 'react-redux';
-import { FcVoicePresentation } from 'react-icons/fc';
-
+import { getOtherUser, createConversation } from 'firebaseConfig';
+import { useDispatch, useSelector } from 'react-redux';
+import { addConversation } from 'slices/chat';
+import { FaUserCircle } from 'react-icons/fa';
 const ImageWrapper = styled.div`
 width: 100%;
 border-radius: 8px;
@@ -31,12 +30,24 @@ position: relative;
 
 const index = ({ friend }) => {
   const router = useRouter();
+  const { user } = useSelector(state => state.user);
   const dispatch = useDispatch();
   const goProfile = useCallback(() => {
     router.push({
       pathname: `/friends/detail/${friend?.targetId}`,
     });
   }, [friend?.targetId, router])
+  const goDialog = useCallback(async () => {
+
+    const sorted = [friend?.targetId, user?.userID].sort();
+    const result = await createConversation(sorted);
+    if (result?.key !== "fail") {
+      dispatch(addConversation(result));
+      router.push(`/message/${result?.id}`);
+    } else {
+      router.push(`/message/${result?.value}`);
+    }
+  }, [dispatch, friend?.targetId, router, user?.userID])
 
   const [myUser, setMyUser] = useState();
   useEffect(() => {
@@ -69,9 +80,8 @@ const index = ({ friend }) => {
       <div
         className="w-full rounded-lg bg-white shadow-md hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 hover:bg-slate-50"
       >
-        <button
+        <div
           className='p-4 flex flex-col gap-2 w-full text-left'
-          onClick={goProfile}
         >
           <div className='w-full flex justify-between items-center'>
             <div className='flex flex-row items-center gap-2'>
@@ -102,15 +112,21 @@ const index = ({ friend }) => {
               </div>
             </div>
             <div>
-              <div className='flex flex-col items-center justify-center rounded-xl bg-slate-50 p-2 shadow-inner'>
-                <FcVoicePresentation className='h-8 w-8' />
-                <span className='text-sm text-gray-600'>자세히</span>
+              <div className='flex flex-row gap-2 items-center'>
+                <button onClick={goProfile} className='flex hover:bg-slate-100 flex-col items-center justify-center rounded-xl bg-slate-50 p-2 shadow-inner'>
+                  <FaUserCircle className='h-7 w-7 text-gray-500' />
+                  <span className='text-sm text-gray-600 hidden md:inline'>상세보기</span>
+                </button>
+                <button onClick={goDialog} className='flex hover:bg-slate-100 flex-col items-center justify-center rounded-xl bg-slate-50 p-2 shadow-inner'>
+                  <AiFillWechat className='h-7 w-7 text-gray-500' />
+                  <span className='text-sm text-gray-600 hidden md:inline'>대화하기</span>
+                </button>
               </div>
             </div>
           </div>
 
 
-        </button>
+        </div>
       </div>
     </>
   );

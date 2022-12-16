@@ -78,7 +78,7 @@ const index = ({ videoModalOpened, closeVideoModal }) => {
           className="rounded-lg xl:h-[80vh] flex w-full flex-col justify-center items-center gap-4 p-6 pt-3"
         >
           <div>
-            <div className="border-dashed rounded-xl border-4 border-gray-200 flex flex-col justify-center items-center  outline-none w-[260px] h-[400px] pl-10 pr-10 cursor-pointer hover:border-red-300 hover:bg-gray-100">
+            <div className="border-dashed rounded-xl border-4 border-gray-200 flex flex-col justify-center items-center  outline-none w-[360px] h-[600px] pl-10 pr-10 cursor-pointer hover:border-red-300 hover:bg-gray-100">
               {loading ? (
                 <>
                   <div className='-ml-[48px] mb-[48px]'>
@@ -119,7 +119,7 @@ const index = ({ videoModalOpened, closeVideoModal }) => {
 
                         <p className="w-full text-gray-400 mt-4 text-sm leading-10 text-left">
                           ✔️ MP4 or WebM or ogg <br />
-                          ✔️ 추천 영상배율: 720x1280 <br />
+                          ✔️ 추천 영상배율: 360x600 <br />
                           ✔️ 3분이내의 영상 <br />
                           ✔️ 0.5 GB 이하
                         </p>
@@ -136,9 +136,9 @@ const index = ({ videoModalOpened, closeVideoModal }) => {
                       />
                     </label>
                   ) : (
-                    <div className=" rounded-3xl w-[300px]  p-4 flex flex-col gap-6 justify-center items-center">
+                    <div className=" rounded-3xl w-[360px]  p-4 flex flex-col gap-6 justify-center items-center">
                       <video
-                        className="rounded-xl h-[383px] w-[245px] mt-16 bg-black"
+                        className="rounded-xl h-[600px] w-[360px] mt-16 bg-black"
                         controls
                         loop
                         src={selectedFile}
@@ -159,7 +159,7 @@ const index = ({ videoModalOpened, closeVideoModal }) => {
               )}
             </div>
             {wrongFileType && (
-              <p className="text-center text-xl text-red-400 font-semibold mt-4 w-[260px]">
+              <p className="text-center text-xl text-red-400 font-semibold mt-4 w-[360px]">
                 video 유형의 파일을 선택해주세요. (mp4 or webm or ogg)
               </p>
             )}

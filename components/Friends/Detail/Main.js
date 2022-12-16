@@ -10,12 +10,11 @@ import { BsBackspace, BsFillBackspaceFill, BsFillPlayFill, } from "react-icons/b
 import styled from "styled-components";
 import { GoVerified } from "react-icons/go";
 import { HiVolumeOff, HiVolumeUp } from "react-icons/hi";
-import { MdOutlineCancel } from "react-icons/md";
 import { AiOutlineDingtalk } from "react-icons/ai";
-import { FaBackspace, FaRegHandPointUp } from "react-icons/fa";
+import { FaRegHandPointUp } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import profilePic from '/public/image/icon/happiness.png';
-import backgroundPicture from '/public/image/backgroundPicture.jpg';
+import backgroundPicture from '/public/image/backgroundPicture.png';
 import { BsFillHeartFill, BsHeart, BsStarFill } from 'react-icons/bs';
 import { likeUser, unlikeUser } from 'firebaseConfig';
 import { likeToDetailUser, unlikeToDetailUser } from 'slices/user';
@@ -29,8 +28,10 @@ import StyleModal from "./StyleModal";
 import { addAdviceDoneFalse } from 'slices/user';
 import { addJobofferDoneFalse } from 'slices/joboffer';
 import { addCoccocDoneFalse } from 'slices/coccoc';
-import Slider from './Slider';
+import Slider from 'components/Common/Slider';
 import { FcPlus } from "react-icons/fc";
+import { MdOutlineClose } from "react-icons/md";
+import { BiLink } from "react-icons/bi";
 
 const Main = () => {
   const router = useRouter();
@@ -206,12 +207,19 @@ const Main = () => {
     setSliderOn(false);
   }, [])
 
-  // const goBack = () => {
-  //   Router.push({
-  //     pathname: '/friends',
-  //     query: {  }
-  //   })
-  // }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const domainRegex = /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$/
+  const goLink = useCallback((href) => {
+    const sameDomain = domainRegex.test(href)
+    if (sameDomain) {
+      return window.open("https://" + href)
+    }
+    if (!sameDomain) {
+      return window.open(href);
+    }
+  }, [domainRegex])
+
+  const isTeamMember = user && user?.mycompany && friend?.userID !== user?.userID && user?.purpose === 1
 
   return (
     <motion.div
@@ -221,11 +229,11 @@ const Main = () => {
       className="flex w-full bg-white flex-wrap lg:flex-nowrap"
     >
       <Toaster />
-      <div className="relative flex-2 w-full lg:w-9/12 flex justify-center items-center bg-blurred-img bg-no-repeat bg-cover bg-center bg-gradient-to-r from-gray-900 to-gray-700">
-        <div className="opacity-90 absolute top-6 left-6 flex gap-6 z-50">
-          <p className="cursor-pointer " onClick={() => router.back()}>
-            <FaBackspace className="text-white text-[38px] hover:opacity-90" />
-          </p>
+      <div className="relative flex-2 w-full lg:w-9/12 flex justify-center items-center bg-no-repeat bg-cover bg-center bg-gradient-to-r from-gray-900 to-gray-700">
+        <div className="opacity-90 absolute top-4 left-4 flex gap-6 z-[5]">
+          <button className="cursor-pointer opacity-80 p-2 flex justify-center items-center shadow-inner rounded-full bg-gray-100 hover:bg-gray-200" onClick={() => router.back()}>
+            <MdOutlineClose className="text-gray-600 font-bold text-lg" />
+          </button>
         </div>
 
         <div className="relative">
@@ -236,19 +244,21 @@ const Main = () => {
                   autoPlay={true}
                   ref={videoRef}
                   onClick={onVideoClick}
+                  controls
+                  playsInline
                   loop
                   src={friend?.thumbvideo}
                   className=" h-full cursor-pointer"
                 ></video>
 
-                <div className="absolute top-[45%] left-[40%] cursor-pointer">
+                <div className="absolute top-[45%] left-[45%] cursor-pointer">
                   {!isPlaying && (
                     <button onClick={onVideoClick}>
                       <BsFillPlayFill className="text-white text-6xl lg:text-8xl rounded-full p-4 bg-slate-300/50" />
                     </button>
                   )}
                 </div>
-                <div className="absolute bottom-3 lg:bottom-5 right-3 lg:right-5  cursor-pointer">
+                {/* <div className="absolute bottom-3 lg:bottom-5 right-3 lg:right-5  cursor-pointer">
                   {isVideoMuted ? (
                     <button onClick={() => setIsVideoMuted(false)}>
                       <HiVolumeOff className="text-white text-3xl lg:text-4xl" />
@@ -258,17 +268,16 @@ const Main = () => {
                       <HiVolumeUp className="text-white text-3xl lg:text-4xl" />
                     </button>
                   )}
-                </div>
+                </div> */}
               </>
             )}
 
             {!friend?.thumbvideo &&
-              friend?.thumbimage &&
-              friend?.thumbimage?.length === 1 ?
+              friend?.thumbimage ?
               <>
                 <img
                   src={friend?.thumbimage[0] || backgroundPicture?.src}
-                  className="lg:h-[calc(100vh-var(--navbar-height))] h-[60vh] rounded-xl cursor-pointer object-cover opacity-90"
+                  className="lg:h-[calc(100vh-var(--navbar-height))] h-[60vh] cursor-pointer object-cover opacity-90"
                 ></img>
               </>
               : !friend?.thumbvideo &&
@@ -279,9 +288,9 @@ const Main = () => {
                 >
                   <img
                     src={friend?.thumbimage[0] || backgroundPicture?.src}
-                    className="lg:h-[calc(100vh-var(--navbar-height))] h-[60vh] rounded-xl cursor-pointer object-cover opacity-90"
+                    className="lg:h-[calc(100vh-var(--navbar-height))] h-[60vh] cursor-pointer object-cover opacity-90"
                   ></img>
-                  <div className="z-100 gap-2 flex items-center absolute text-2xl text-white/80 bottom-4 right-4">
+                  <div className="z-10 gap-2 flex items-center absolute text-2xl text-white/80 bottom-4 right-4">
                     <FcPlus />
                     <span>클릭하여 {friend?.thumbimage?.length - 1}장 더보기</span>
                   </div>
@@ -293,10 +302,10 @@ const Main = () => {
             {/* 이미지X 영상X */}
             {!friend?.thumbvideo && !friend?.thumbimage && (
               <>
-                <img
-                  src={backgroundPicture?.src || ""}
-                  className=" blur-md lg:h-[calc(100vh-var(--navbar-height))] h-[60vh] rounded-3xl cursor-pointer object-cover opacity-80"
-                ></img>
+                <div
+                  // src={backgroundPicture?.src || ""}
+                  className="lg:w-[70%] w-full blur-[1.32px] lg:h-[calc(100vh-var(--navbar-height))] h-[60vh] bg-gradient-to-r from-gray-600 to-gray-800"
+                ></div>
               </>)}
           </div>
         </div>
@@ -310,19 +319,25 @@ const Main = () => {
           >
             <div className="flex flex-col gap-4">
               <img
-                className="h-14 rounded-3xl w-14 object-cover"
+                className="h-14 rounded-2xl w-14 object-cover"
                 src={friend?.avatar || profilePic?.src}
                 alt="user-profile"
                 layout="responsive"
               />
-              <StyleModal />
+              <StyleModal
+              />
             </div>
 
 
             <div className="w-full">
-              <div className="text-xl font-bold flex gap-2 items-center justify-between flex-row">
+              <div
+                className="text-xl font-bold flex gap-2 items-center justify-between flex-row"
+                
+              >
                 <div className="flex flex-row items-center gap-2">
-                  <p>{friend?.username} </p>
+                  <p>
+                    {isTeamMember ? friend?.username : friend?.username?.slice(0, 1) + "○○"}
+                  </p>
                   {friend?.category && friend?.skills?.length !== 0 && myCareer?.length !== 0 && myEducation?.length !== 0 ?
                     <Tooltip
                       placement="bottom"
@@ -338,9 +353,11 @@ const Main = () => {
                 </div>
                 <p className="text-sm pr-3">{category[0]?.name}</p>
               </div>
-              <p className="font-normal text-xs text-gray-500">{friend?.email_using || friend?.email}</p>
+              <p className="font-normal text-xs text-gray-500">
+                {isTeamMember ? friend?.email_using || friend?.email : null}
+              </p>
               <div className="flex gap-2 items-start flex-col text-left w-full">
-                <div className="flex flex-row gap-3 pt-2">
+                <div className="flex flex-row gap-3 pt-2" >
                   {friend?.gender ?
                     (() => {
                       switch (friend?.gender) {
@@ -382,7 +399,7 @@ const Main = () => {
                   }
                 </div>
 
-                <div className="my-1 w-full text-gray-400 font-normal md:text-md text-sm">
+                <div className="my-1 w-full text-gray-400 font-normal md:text-md text-sm" >
                   {mainCoccoced && mainCoccoced?.length !== 0 ? mainCoccoced?.map((v) => (
                     <div key={nanoid()} className="text-left w-fit mr-2 inline-flex my-1 bg-gray-100 p-2 rounded-xl">
                       <div>
@@ -430,7 +447,7 @@ const Main = () => {
                   }
                 </div>
 
-                <div className="my-1 w-full text-gray-600 font-normal md:text-md text-sm">
+                <div className="my-1 w-full text-gray-600 font-normal md:text-md text-sm" >
                   {myEducations?.length !== 0 ? myEducations?.map((v) => (
                     <div key={v?.id} className="flex text-left my-1 bg-amber-50 p-2 rounded-xl">
                       <div>
@@ -470,36 +487,42 @@ const Main = () => {
                   }
                 </div>
 
-                <div className="my-1 w-full">
-                  {!!mySkills?.length !== 0 &&
+                <div className="my-1 w-full flex flex-wrap gap-1">
+                  {mySkills?.length !== 0 &&
                     <>
                       {mySkills?.map((v) => (
                         <span
-                          className="px-3 py-1.5 rounded-full bg-gray-500 text-white text-sm mr-1"
+                          className="px-3 py-1.5 rounded-full bg-gray-500 text-white text-sm"
                           key={v?.id}>{v?.name}</span>
                       ))
                       }
                     </>
                   }
-                  {mySkills?.length === 0 && <span className="text-gray-600 font-normal md:text-md text-sm">보유스킬 없음</span>}
+                  {mySkills?.length === 0 || !mySkills && <span className="text-gray-600 font-normal md:text-md text-sm">보유스킬 없음</span>}
                 </div>
 
-                <div className="my-1 w-full">
-                  {!!friend?.links?.length !== 0 &&
+                <div className="my-1 w-full flex flex-row items-center gap-1 flex-wrap">
+                  <BiLink className="h-5 w-5 text-gray-500 mr-1" />
+                  {friend?.links?.length && friend?.links?.length !== 0 ?
                     <>
                       {friend?.links?.map((v) => (
-                        <Link key={v} href={v}>
-                          <a
-                            className="w-fit px-3 py-1.5 rounded-full bg-blue-500 text-white text-[0.77rem] mr-1 flex flex-col mt-1"
+                        <button key={v}
+                          onClick={() => goLink(v)}
+                        // passHref
+                        >
+                          <span
+                            className="w-fit px-3 py-1.5 rounded-full bg-blue-500 text-white text-sm flex flex-col"
                             target="_blank"
                             rel="noopener noreferrer"
                           >
                             {v}
-                          </a>
-                        </Link>
+                          </span>
+                        </button>
                       ))
                       }
                     </>
+                    :
+                    <span className="text-gray-400 text-sm">링크없음</span>
                   }
                   {friend?.links?.length === 0 && <span className="text-gray-600 font-normal md:text-md text-sm">보유링크 없음</span>}
                 </div>
@@ -547,7 +570,7 @@ const Main = () => {
           </div>
           <div className="my-5 px-10">
             {user && user?.mycompany
-              && user?.userID !== friend?.id
+              && user?.userID !== friend?.id && user?.purpose === 1
               && (
                 <div className="items-center mt-8 flex justify-center w-full md:justify-start gap-2 lg:gap-0">
                   <div className="mb-4 flex items-center gap-3">

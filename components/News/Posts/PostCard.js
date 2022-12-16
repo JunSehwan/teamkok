@@ -15,7 +15,7 @@ import Comments from './Comments';
 import ProfileModal from './ProfileModal';
 import NoticeList from 'components/Common/NoticeList';
 import profilePic from 'public/image/icon/happiness.png';
-import Slider from './Slider';
+import Slider from 'components/Common/Slider';
 import { motion } from 'framer-motion';
 
 const PostCard = ({ post }) => {

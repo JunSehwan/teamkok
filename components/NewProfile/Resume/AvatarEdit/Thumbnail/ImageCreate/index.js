@@ -241,7 +241,7 @@ const index = ({ imageModalOpened, closeImageModal }) => {
             <div className="w-full">
               {loading ? (
                 <div>
-                  <div className='mx-auto w-[260px] h-[400px] flex flex-col justify-center items-center'>
+                  <div className='mx-auto w-[360px] h-[600px] flex flex-col justify-center items-center'>
                     <div className='-ml-[48px] mb-[48px]'>
                       <Spin />
                     </div>
@@ -254,7 +254,7 @@ const index = ({ imageModalOpened, closeImageModal }) => {
                 <div>
                   {!selectedImages || selectedImages?.length === 0 ? (
                     <label className="cursor-pointer">
-                      <div className='border-dashed mx-auto rounded-xl w-[260px] h-[400px] border-2 border-gray-200 flex flex-col justify-center items-center
+                      <div className='border-dashed mx-auto rounded-xl w-[360px] h-[600px] border-2 border-gray-200 flex flex-col justify-center items-center
               outline-none'>
                         <div className="flex flex-col items-center justify-center h-full py-[1rem]">
                           <div className="flex flex-col justify-center items-center">
@@ -284,7 +284,7 @@ const index = ({ imageModalOpened, closeImageModal }) => {
                           <p className="w-full text-gray-400 mt-4 text-sm leading-10 text-left">
                             ✔️ png or jpeg or webp<br />
                             ✔️ 이미지는 10장 미만 <br />
-                            ✔️ 추천 영상배율: 720x1280 <br />
+                            ✔️ 추천 이미지배율: 360x600 <br />
                           </p>
                           <p className="text-white bg-gradient-to-br from-pink-500 mt-8 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 w-52">
                             파일 선택

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useRef, useState, useCallback } from "react";
@@ -149,7 +150,7 @@ const FriendCard = ({ friend, show, setShow }) => {
   }, [friend?.educations])
 
 
-  const onVideoPress = () => {
+  const onVideoPress = useCallback(() => {
     if (playing) {
       videoRef?.current?.pause();
       setPlaying(false);
@@ -157,7 +158,8 @@ const FriendCard = ({ friend, show, setShow }) => {
       videoRef?.current?.play();
       setPlaying(true);
     }
-  };
+  }, [playing])
+
   useEffect(() => {
     if (videoRef?.current) {
       videoRef.current.muted = isVideoMuted;
@@ -206,6 +208,40 @@ const FriendCard = ({ friend, show, setShow }) => {
   }, [dispatch, friend?.userID, router, user])
 
 
+  const onSingleTap = useCallback(() => {
+    onVideoPress()
+  }, [onVideoPress])
+
+  var DELTA_TIME_THRESHOLD_MS = 700;
+  var timer = null;
+  var target;
+
+  const tap = useCallback((
+    e,
+    { onSingleTap, handleChangeDetailsPage }
+  ) => {
+
+    if (timer == null) {
+      // First tap
+      onSingleTap?.();
+      timer = setTimeout(() => {
+        timer = null;
+      }, DELTA_TIME_THRESHOLD_MS);
+    } else {
+      // Second tap
+      if (e.target === target) {
+        handleChangeDetailsPage?.();
+      }
+
+      clearTimeout(timer);
+      timer = null;
+    }
+    target = e.target;
+  }, [])
+
+  const isTeamMember = user && user?.mycompany && friend?.userID !== user?.userID && user?.purpose === 1
+  const isNormalMember = user && user?.purpose !== 1
+
   return (
     <div
 
@@ -214,19 +250,22 @@ const FriendCard = ({ friend, show, setShow }) => {
       viewport={{ once: true }}
       className="flex flex-row mb-6 relative"
     >
-      <TinderCard
-        // onSwipe={onSwipe}
-        // flickOnSwipe={true}
-        onCardLeftScreen={onCardLeftScreen}>
+      {/* <TinderCard */}
+      <div
+      // onSwipe={onSwipe}
+      // flickOnSwipe={true}
+      // onCardLeftScreen={onCardLeftScreen}
+      >
         <div
-          onDoubleClick={handleChangeDetailsPage}
+          // onDoubleClick={handleChangeDetailsPage}
           className=""
+          onClick={(e) => tap(e, { onSingleTap, handleChangeDetailsPage })}
 
 
         >
           <div
             className="w-[360px] min-w-[302px] overflow-hidden flex items-end gap-3 p-4 cursor-pointer font-semibold rounded-b-3xl 
-        absolute z-10 text-white bottom-0 left-0 right-0 bg-slate-700/40
+         z-[3] text-white absolute bottom-0 left-0 right-0 bg-slate-700/40
         ">
             <div className="w-full">
               <div className="flex w-full justify-between items-center mb-2 ">
@@ -246,7 +285,8 @@ const FriendCard = ({ friend, show, setShow }) => {
                 {/* 프로필 기본정보 */}
                 <div className="flex items-end gap-2 mb-2">
                   <div className="flex gap-2 items-center md:text-xl text-lg font-bold text-primary text-yellow-100">
-                    {friend?.username}
+                    {isTeamMember ? friend?.username : friend?.username?.slice(0, 1) + "○○"}
+
                     {friend?.category && friend?.skills?.length !== 0 && myCareer?.length !== 0 && myEducation?.length !== 0 ?
                       <Tooltip
                         placement="bottom"
@@ -277,12 +317,12 @@ const FriendCard = ({ friend, show, setShow }) => {
                       }
                     })(friend?.gender) : <span className="font-normal text-md">성별미등록</span>}
                 </div>
-                <div className="my-1.5">
+                <div className="my-1.5 flex flex-wrap w-full gap-1">
                   {!!friend?.skills?.length !== 0 &&
                     <>
                       {friend?.skills?.slice(0, 3)?.map((v) => (
                         <span
-                          className="px-2 py-1 rounded-full bg-gray-500 text-[0.77rem] mr-1"
+                          className="px-2 py-1 rounded-full bg-gray-500/60 text-sm font-normal"
                           key={v?.id}>{v?.name}</span>
                       ))
                       }
@@ -290,12 +330,12 @@ const FriendCard = ({ friend, show, setShow }) => {
                     </>
                   }
                   {friend?.skills?.length === 0 &&
-                    <span className="text-gray-300/70 font-normal md:text-[0.88rem]">보유스킬 없음</span>}
+                    null}
                 </div>
 
 
 
-                <div className="my-0.5 text-yellow-200 font-normal md:text-[0.88rem]">
+                <div className="text-yellow-200 font-normal text-sm md:text-[0.88rem]">
                   {myCareer ?
                     <div className="flex text-left">
                       <div>
@@ -319,7 +359,7 @@ const FriendCard = ({ friend, show, setShow }) => {
                   }
                 </div>
 
-                <div className="my-0.5 text-yellow-200 font-normal md:text-[0.88rem]">
+                <div className="text-yellow-200 font-normal text-sm md:text-[0.88rem]">
                   {myEducation ?
                     <div className="flex text-left">
                       <div>
@@ -365,11 +405,11 @@ const FriendCard = ({ friend, show, setShow }) => {
                         trigger="hover">
                         <span className="px-3 w-full text-center flex bg-amber-600/80 py-1 rounded-xl">
                           <span
-                            className="text-amber-100 font-semibold">💰{v?.salary}만원</span>
+                            className="text-amber-100">💰{v?.salary}만원</span>
                         </span>
                       </Tooltip>
                     ))
-                      : <span className="text-gray-200/50">정보없음</span>
+                      : null
                     }
                   </div>
                 </div>
@@ -393,38 +433,10 @@ const FriendCard = ({ friend, show, setShow }) => {
                   }
                 </div> */}
 
-                <Container className="flex flex-row items-center justify-between w-full">
-                  <div className="flex flex-1 gap-4 py-2.5">
-                    {friend?.thumbvideo && (
-                      <>
-                        {playing ? (
-                          <img
-                            className="w-5 h-5 animate-spin"
-                            src="https://cdn2.iconfinder.com/data/icons/digital-and-internet-marketing-3-1/50/109-512.png"
-                            alt="image"
-                          />
-                        ) : (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-5 h-5"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 01-.99-3.467l2.31-.66A2.25 2.25 0 009 15.553z"
-                            />
-                          </svg>
-                        )}
+                <Container className="flex flex-row items-center justify-between w-full"
+                  onDoubleClick={handleChangeDetailsPage}
+                >
 
-                        {/* <p className="font-semibold text-sm">{songName}</p> */}
-                      </>
-                    )}
-
-                  </div>
                   <TbHandClick
                     id="double"
                     className='w-5 h-5 text-sky-200/60' />
@@ -448,6 +460,7 @@ const FriendCard = ({ friend, show, setShow }) => {
               {friend?.thumbvideo && (
                 <>
                   <video
+                    // onProgress={}
                     onClick={onVideoPress}
                     onPointerDown={onVideoPress}
                     autoPlay={false}
@@ -503,7 +516,8 @@ const FriendCard = ({ friend, show, setShow }) => {
               {!friend?.thumbvideo && friend?.thumbimage && (
                 <>
                   <img
-                    src={friend?.thumbimage[0]?.src || backgroundPicture?.src}
+                    onClick={(e) => tap(e, { onSingleTap, handleChangeDetailsPage })}
+                    src={friend?.thumbimage[0] || backgroundPicture?.src}
                     className="w-[360px] min-w-[302px] h-[600px] rounded-3xl cursor-pointer object-cover opacity-90"
                   ></img>
 
@@ -511,6 +525,7 @@ const FriendCard = ({ friend, show, setShow }) => {
               {!friend?.thumbvideo && !friend?.thumbimage && (
                 <>
                   <div
+                    onClick={(e) => tap(e, { onSingleTap, handleChangeDetailsPage })}
                     className="bg-gradient-to-r from-gray-600 to-gray-800 w-[360px] blur-[1.32px] shadow-2xl text-white/50 min-w-[302px] h-[600px] rounded-3xl object-cover text-center flex items-center justify-center"
                   >
                     <span className="">No Image</span>
@@ -528,15 +543,70 @@ const FriendCard = ({ friend, show, setShow }) => {
 
 
         </div>
-      </TinderCard>
+      </div>
 
       {/* 버튼 */}
-      {user && user?.mycompany && friend?.userID !== user?.userID &&
+
+      {isNormalMember &&
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="ml-3 flex-col flex justify-center absolute right-[16px] sm:right-0 sm:top-0 top-[76px] sm:relative">
+          className="ml-3 flex-col flex justify-center absolute right-[16px] sm:right-0 sm:top-0 top-[200px] sm:relative z-[4]">
+          <div className="flex flex-col items-center justify-center gap-3">
+            <Tooltip
+              placement="left"
+              className="w-max"
+              content="관심없음"
+              trigger="hover"
+            >
+              <button className="
+                  rounded-full p-3 hover:bg-white bg-gray-300/60 border-solid border-gray-600 flex items-center justify-center"
+                onClick={onCardLeftScreen}
+              >
+                <motion.div
+                  whileHover={{ scale: 1.2 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <MdDoNotTouch className="w-6 h-6 text-gray-600" />
+                </motion.div>
+              </button>
+            </Tooltip>
+
+            <Like
+              friend={friend}
+            />
+            <Tooltip
+              placement="left"
+              className="w-max"
+              content="상세보기"
+              trigger="hover"
+            >
+              <div className="flex flex-col items-center justify-center">
+                <button className="
+                  rounded-full p-3 hover:bg-white bg-amber-300/30 border-solid border-amber-600 flex items-center justify-center "
+                  onClick={handleChangeDetailsPage}
+                >
+                  <motion.div
+                    whileHover={{ scale: 1.2 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <FaFingerprint className="w-6 h-6 text-amber-600" />
+                  </motion.div>
+                </button>
+                <span className="text-amber-200 text-xs">상세보기</span>
+              </div>
+            </Tooltip>
+          </div>
+        </motion.div>
+      }
+
+      {isTeamMember &&
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="ml-3 flex-col flex justify-center absolute right-[16px] sm:right-0 sm:top-0 top-[76px] sm:relative z-[4]">
           <div className="flex flex-col items-center justify-center gap-3">
             <Tooltip
               placement="left"

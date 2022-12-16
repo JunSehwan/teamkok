@@ -76,30 +76,6 @@ onAuthStateChanged(auth, (user) => {
     // ...
   }
 });
-// if (user !== null) {
-//   // The user object has basic properties such as display name, email, etc.
-//   const displayName = user.displayName;
-//   const email = user.email;
-//   const photoURL = user.photoURL;
-//   const emailVerified = user.emailVerified;
-
-//   // 제공업체별 사용자 프로필 정보 가져오기
-//   // if (user !== null) {
-//   //   user.providerData.forEach((profile) => {
-//   //     console.log("Sign-in provider: " + profile.providerId);
-//   //     console.log("  Provider-specific UID: " + profile.uid);
-//   //     console.log("  Name: " + profile.displayName);
-//   //     console.log("  Email: " + profile.email);
-//   //     console.log("  Photo URL: " + profile.photoURL);
-//   //   });
-//   // }
-
-//   // The user's ID, unique to the Firebase project. Do NOT use
-//   // this value to authenticate with your backend server, if
-//   // you have one. Use User.getToken() instead.
-//   const uid = user.uid;
-// }
-
 
 
 export async function getUser(userId) {
@@ -476,6 +452,20 @@ export async function updatePurpose(input) {
   );
   try {
     await updateUserDatabase("purpose", input);
+    return input;
+  } catch (error) {
+    console.error(error);
+    alert("update에 문제가 있습니다.");
+  }
+}
+// onBoarding 페이지
+export async function updateFirstMake(input) {
+  const user = auth.currentUser;
+  if (!user) return (
+    alert("로그인 후 가능합니다.")
+  );
+  try {
+    await updateUserDatabase("firstmake", input);
     return input;
   } catch (error) {
     console.error(error);
@@ -3036,174 +3026,172 @@ export async function modifyCoccoc(coccocResult, id) {
 
 
 
-// // Coccoc USER
-// export async function createCoccoc(
-//   result
-// ) {
-//   const user = auth.currentUser;
-//   await updateDoc(api.userByIdRef(user.uid), {
-//     coccocs: arrayUnion({
-//       targetId: result?.targetId,
-//       targetName: result?.targetName,
-//       targetAvatar: result?.targetAvatar,
-//       description: result?.description,
-//       job: result?.job,
-//       salary: result?.salary,
-//       type: result?.type,
-//       duedate: result?.duedate,
-//       company: result?.company,
-//       section: result?.section,
-//     }),
-//   });
-//   await updateDoc(api.userByIdRef(result?.targetId), {
-//     coccoced: arrayUnion({
-//       userId: user.uid,
-//       username: user.displayName,
-//       userAvatar: user?.photoURL,
-//       description: result?.description,
-//       job: result?.job,
-//       salary: result?.salary,
-//       type: result?.type,
-//       duedate: result?.duedate,
-//       company: result?.company,
-//       section: result?.section,
-//       mycompany: result?.mycompany,
-//       mysection: result?.mysection,
-//       companylogo: result?.companylogo,
-//     }),
-//   });
-//   const docRef = doc(db, "users", result?.targetId);
-//   const docSnap = await getDoc(docRef);
-//   if (docSnap.exists()) {
-//     const result = {
-//       ...docSnap.data(),
-//     }
-//     return result;
-//   }
-// }
+// for now mail will automatically be configured to my email
+export async function sendMailForSignUp(email, username) {
+  const mailRef = collection(db, "mail");
+  try {
+    await addDoc(mailRef, {
+      to: `${email}`,
+      from: "jobcoc관리자 - admin@jobcoc.com",
+      // or to: "someone@example.com
+      message: {
+        subject: `${username}님! 잡콕(JOBCOC) 회원가입을 환영합니다!`,
+        // text: '메시지를 확인해주세요',
+        html: `
+        <h1>WELCOME TO JOBCOC!</h1>
+        <br/>
+        프로필 입력 후에는 입사제안을 받거나 커리어조언을 받을 수 있습니다. 
+        <br/> 또한, 기업회원으로 가입 후에는 팀원 영입을 무료로 진행할 수 있습니다.
+        <br/><br/>잡콕 바로가기: <a href="https://jobcoc.com/">여기를</a> 클릭하세요.`
+      },
+      template: {
+        name: 'welcome',
+        data: {
+          fname: 'Nextpus',
+          msg: '개성있는 인재들을 보고싶다면? JOBCOC!'
+        }
+      }
+    })
+  } catch (e) {
+    console.log(e);
+    throw new Error('Something went wrong with sending email. Error Message: ', e.message);
+  }
+}
 
-// // Delete Coccoc USER
-// export async function removeCoccoc(
-//   result
-// ) {
-//   const user = auth.currentUser;
-//   await updateDoc(api.userByIdRef(result?.targetId), {
-//     coccoced: arrayRemove({
-//       userId: user.uid,
-//       username: user.displayName,
-//       userAvatar: user?.photoURL,
-//       description: result?.description,
-//       job: result?.job,
-//       salary: result?.salary,
-//       type: result?.type,
-//       duedate: result?.duedate,
-//       company: result?.company,
-//       section: result?.section,
-//       mycompany: result?.mycompany,
-//       mysection: result?.mysection,
-//       companylogo: result?.companylogo,
-//     }),
-//   });
-//   return await updateDoc(api.userByIdRef(user?.uid), {
-//     coccocs: arrayRemove({
-//       targetId: result?.targetId,
-//       targetName: result?.targetName,
-//       targetAvatar: result?.targetAvatar,
-//       description: result?.description,
-//       job: result?.job,
-//       salary: result?.salary,
-//       type: result?.type,
-//       duedate: result?.duedate,
-//       company: result?.company,
-//       section: result?.section,
-//     }),
-//   });
-// }
+// for now mail will automatically be configured to my email
+export async function sendMailForJobOffer(result) {
+  const mailRef = collection(db, "mail");
+  try {
+    await addDoc(mailRef, {
+      to: `${result?.targetEmail}`,
+      from: "jobcoc관리자 - admin@jobcoc.com",
+      // or to: "someone@example.com
+      message: {
+        subject: `${result?.targetName}님! ${result?.mycompany}로부터 채용 제안이 왔습니다.`,
+        // text: '메시지를 확인해주세요',
+        html: `${result?.mycompany}의 ${result?.section}으로의 입사제의가 도착했습니다.
+      메시지를 확인하고 응답하시려면 <a href="https://jobcoc.com/dashboard/joboffer">여기를</a> 클릭하세요.`
+      },
+      template: {
+        name: 'welcome',
+        data: {
+          fname: 'Nextpus',
+          msg: '개성있는 인재들을 보고싶다면? JOBCOC!'
+        }
+      }
+    })
+  } catch (e) {
+    console.log(e);
+    throw new Error('Something went wrong with sending email. Error Message: ', e.message);
+  }
+}
 
-// // Joboffer USER
-// export async function createJoboffer(
-//   result
-// ) {
-//   const user = auth.currentUser;
-//   await updateDoc(api.userByIdRef(user.uid), {
-//     joboffers: arrayUnion({
-//       targetId: result?.targetId,
-//       targetName: result?.targetName,
-//       targetAvatar: result?.targetAvatar,
-//       description: result?.description,
-//       job: result?.job,
-//       salary: result?.salary,
-//       type: result?.type,
-//       duedate: result?.duedate,
-//       company: result?.company,
-//       section: result?.section,
-//       space: result?.space,
-//     }),
-//   });
-//   await updateDoc(api.userByIdRef(result?.targetId), {
-//     joboffered: arrayUnion({
-//       userId: user.uid,
-//       username: user.displayName,
-//       userAvatar: user?.photoURL,
-//       description: result?.description,
-//       job: result?.job,
-//       salary: result?.salary,
-//       type: result?.type,
-//       duedate: result?.duedate,
-//       company: result?.company,
-//       section: result?.section,
-//       space: result?.space,
-//       mycompany: result?.mycompany,
-//       mysection: result?.mysection,
-//       companylogo: result?.companylogo,
-//     }),
-//   });
-//   const docRef = doc(db, "users", result?.targetId);
-//   const docSnap = await getDoc(docRef);
-//   if (docSnap.exists()) {
-//     const result = {
-//       ...docSnap.data(),
-//     }
-//     return result;
-//   }
-// }
+export async function sendMailForCoccoc(result) {
+  const mailRef = collection(db, "mail");
+  try {
+    await addDoc(mailRef, {
+      to: `${result?.targetEmail}`,
+      from: "jobcoc관리자 - admin@jobcoc.com",
+      // or to: "someone@example.com
+      message: {
+        subject: `${result?.targetName}님! ${result?.mycompany}에서 당신을 차기 입사후보자로 콕!찍었습니다.`,
+        // text: '메시지를 확인해주세요',
+        html: `${result?.mycompany}의 ${result?.section}에서 당신을 콕! 찍었습니다.
+      메시지를 확인하고 응답하시려면 <a href='https://jobcoc.com/dashboard/coccoc'>여기를</a> 클릭하세요.`
+      },
+      template: {
+        name: 'welcome',
+        data: {
+          fname: 'Nextpus',
+          msg: '개성있는 인재들을 보고싶다면? JOBCOC!'
+        }
+      }
+    })
+  } catch (e) {
+    console.log(e);
+    throw new Error('Something went wrong with sending email. Error Message: ', e.message);
+  }
+}
 
-// // Delete Joboffer USER
-// export async function removeJoboffer(
-//   result
-// ) {
-//   const user = auth.currentUser;
-//   await updateDoc(api.userByIdRef(result?.targetId), {
-//     joboffered: arrayRemove({
-//       userId: user.uid,
-//       username: user.displayName,
-//       userAvatar: user?.photoURL,
-//       description: result?.description,
-//       job: result?.job,
-//       salary: result?.salary,
-//       type: result?.type,
-//       duedate: result?.duedate,
-//       company: result?.company,
-//       section: result?.section,
-//       space: result?.space,
-//       mycompany: result?.mycompany,
-//       mysection: result?.mysection,
-//       companylogo: result?.companylogo,
-//     }),
-//   });
-//   return await updateDoc(api.userByIdRef(user?.uid), {
-//     joboffers: arrayRemove({
-//       targetId: result?.targetId,
-//       targetName: result?.targetName,
-//       targetAvatar: result?.targetAvatar,
-//       description: result?.description,
-//       job: result?.job,
-//       salary: result?.salary,
-//       type: result?.type,
-//       duedate: result?.duedate,
-//       company: result?.company,
-//       section: result?.section,
-//       space: result?.space,
-//     }),
-//   });
-// }
+export async function sendMailForAdvice(result) {
+  const mailRef = collection(db, "mail");
+  try {
+    await addDoc(mailRef, {
+      to: `${result?.targetEmail}`,
+      from: "jobcoc관리자 - admin@jobcoc.com",
+      // or to: "someone@example.com
+      message: {
+        subject: `${result?.targetName}님! 잡콕에서 전문가가 스펙에 관한 의견을 남겨주셨습니다.`,
+        // text: '메시지를 확인해주세요',
+        html: `누군가가 소중한 조언을 남겨주셨습니다.
+      메시지를 확인하고 응답하시려면 <a href='https://jobcoc.com/dashboard/advice'>여기를</a> 클릭하세요.`
+      },
+      template: {
+        name: 'welcome',
+        data: {
+          fname: 'Nextpus',
+          msg: '개성있는 인재들을 보고싶다면? JOBCOC!'
+        }
+      }
+    })
+  } catch (e) {
+    console.log(e);
+    throw new Error('Something went wrong with sending email. Error Message: ', e.message);
+  }
+}
+
+// for now mail will automatically be configured to my email
+export async function sendMailForJobOfferAnswer(result) {
+  const mailRef = collection(db, "mail");
+  try {
+    await addDoc(mailRef, {
+      to: `${result?.targetEmail}`,
+      from: "jobcoc관리자 - admin@jobcoc.com",
+      // or to: "someone@example.com
+      message: {
+        subject: `${result?.username}님! ${result?.targetName}님으로부터 채용 제안 답변이 왔습니다.`,
+        // text: '메시지를 확인해주세요',
+        html: `${result?.company}의 ${result?.section}으로의 입사제의에 대한 답변이 도착했습니다.
+      메시지를 확인하고 응답하시려면 <a href="https://jobcoc.com/dashboard/group">여기를</a> 클릭하세요.`
+      },
+      template: {
+        name: 'welcome',
+        data: {
+          fname: 'Nextpus',
+          msg: '개성있는 인재들을 보고싶다면? JOBCOC!'
+        }
+      }
+    })
+  } catch (e) {
+    console.log(e);
+    throw new Error('Something went wrong with sending email. Error Message: ', e.message);
+  }
+}
+
+// for now mail will automatically be configured to my email
+export async function sendMailForCoccocAnswer(result) {
+  const mailRef = collection(db, "mail");
+  try {
+    await addDoc(mailRef, {
+      to: `${result?.targetEmail}`,
+      from: "jobcoc관리자 - admin@jobcoc.com",
+      // or to: "someone@example.com
+      message: {
+        subject: `${result?.username}님! ${result?.targetName}님으로부터 콕!콕!에 대한 답장이 왔습니다.`,
+        // text: '메시지를 확인해주세요',
+        html: `${result?.company}의 ${result?.section}으로의 콕!콕!에 대한 답변이 도착했습니다.
+      메시지를 확인하고 응답하시려면 <a href="https://jobcoc.com/dashboard/group">여기를</a> 클릭하세요.`
+      },
+      template: {
+        name: 'welcome',
+        data: {
+          fname: 'Nextpus',
+          msg: '개성있는 인재들을 보고싶다면? JOBCOC!'
+        }
+      }
+    })
+  } catch (e) {
+    console.log(e);
+    throw new Error('Something went wrong with sending email. Error Message: ', e.message);
+  }
+}

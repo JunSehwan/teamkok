@@ -42,7 +42,7 @@ const index = ({moreDown}) => {
         >
           <button
             onClick={goToTop}
-            className={`p-3 rounded-full fixed top-36 right-4 md:right-14 bg-white/60 hover:bg-gray-200 shadow-lg flex flex-col justify-center items-center`}>
+            className={`p-3 rounded-full fixed top-36 right-4 md:right-14 bg-white/60 hover:bg-gray-200 shadow-lg flex flex-col justify-center items-center z-[8]`}>
             <BsFillCaretUpFill />
             <span>TOP</span>
           </button>

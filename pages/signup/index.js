@@ -16,15 +16,15 @@ const index = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { user, loading } = useSelector(state => state.user);
-  useEffect(() => {
-    if ((user || user?.userID)) {
-      if (user?.purpose === 1) {
-        router.push('/friends')
-      } else {
-        router.push('/news')
-      }
-    }
-  }, [router, user]);
+  // useEffect(() => {
+  //   if ((user || user?.userID)) {
+  //     if (user?.purpose === 1) {
+  //       router.push('/friends')
+  //     } else {
+  //       router.push('/news')
+  //     }
+  //   }
+  // }, [router, user]);
   useEffect(() => {
     const authStateListener = onAuthStateChanged(auth, async (user) => {
       dispatch(userLoadingStart());

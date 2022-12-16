@@ -3,7 +3,7 @@ import StyleList from 'components/Common/StyleList';
 import { useSelector } from 'react-redux';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { FcMindMap } from 'react-icons/fc';
+import { FcBiotech, FcMindMap } from 'react-icons/fc';
 import Survey from 'components/Common/Survey';
 import { Tooltip } from "flowbite-react";
 const StyleModal = () => {
@@ -58,7 +58,7 @@ const StyleModal = () => {
                 whileHover={{ scale: 1.2 }}
                 whileTap={{ scale: 0.9 }}
               >
-                <FcMindMap className="w-6 h-6 text-amber-600" />
+                <FcBiotech className="w-6 h-6 text-amber-600" />
               </motion.div>
             </button>
           </Tooltip>
@@ -66,11 +66,12 @@ const StyleModal = () => {
         <>
           {modal ?
             <div className="fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-[#00000090]">
-              <div className="w-[100%]  justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+              <div className="w-[100%] justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
               >
                 <div className="sticky w-[100%] mt-auto mb-auto mx-auto min-w-auto max-w-[920px]" ref={modalEl}>
                   <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                    <div className="flex items-start justify-between p-5 rounded-t">
+                    <div className="flex items-center justify-between p-5 rounded-t">
+                      <p className='font-bold text-2xl'>{friend?.username}님의 업무스타일</p>
                       <button
                         className="p-3 rounded-xl hover:bg-slate-200 ml-auto bg-transparent border-0 text-gray-500 hover:text-gray-700 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                         onClick={closeModal}

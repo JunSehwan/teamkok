@@ -12,7 +12,7 @@ const index = () => {
   return (
     <>
       <Page className='pt-[var(--navbar-height)] md:pb-auto lg:overflow-y-hidden' >
-        <div className='mx-auto w-fit text-left'>
+        <div className='mx-auto w-full text-left'>
           <Main />
         </div>
       </Page>

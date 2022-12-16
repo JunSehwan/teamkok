@@ -49,7 +49,7 @@ const index = ({ hide }) => {
   const toggleWide = useCallback(() => {
     setWide(prev => !prev);
   }, [])
-  
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -73,7 +73,7 @@ const index = ({ hide }) => {
           }
           <ul id="category" className={`${wide ? "flex-wrap" : "flex-nowrap"} flex flex-row w-[100%]`}>
             <li key="all" className="mr-[4px] border-gray-400 flex flex-row">
-              <button onClick={() => onChangeCategory(null)}
+              <button onClick={() => onChangeCategory("all")}
                 type='button'
                 className={null === category ? `bg-blue-500 text-white text-center transition duration-500 shadow ease-in-out transform select-none cursor-pointer hover:bg-blue-600 click:active:checked:focus:bg-blue-600 dark:bg-gray-800 rounded-full flex flex-1 items-center p-1 h-fit mb-1`
                   : `text-center transition duration-500 shadow ease-in-out transform select-none cursor-pointer bg-white border-solid-0.5 border-gray-100 hover:bg-gray-600 click:active:checked:focus:bg-gray-700 dark:bg-gray-800 text-gray-700 hover:text-white rounded-full flex flex-1 items-center p-1 h-fit mb-1`

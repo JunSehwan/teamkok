@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import PropTypes from 'prop-types';
+import { useRouter } from 'next/router';
 
 // components
 const modalSettings = (visible) => css`
@@ -127,6 +128,56 @@ const Modal = ({ onClose, title, children, visible, widths }) => {
   }, [visible]);
 
   if (!isOpen) { return null; }
+
+ 
+
+  // // 리로드할 시점(form 수정중이라던라 등등... 없어도 무관)
+
+  // const router = useRouter();
+  // const confirmMsg = `사이트에서 나가시겠습니까?\n변경사항이 저장되지 않을 수 있습니다.`;
+
+  // // 리로드 전에 메세지 띄워주기
+  // const handleBeforeUnload = useCallback((e) => {
+  //   (e || window.event).returnValue = confirmMsg;
+  //   return confirmMsg; // Gecko + Webkit, Safari, Chrome
+  // }, [confirmMsg])
+
+  // //라우터 바뀌기 전 이벤트(취소했을경우 넘어가지않음)
+  // const handleBeforeChangeRoute = useCallback((url) => {
+  //   if (router.pathname !== url && !confirm(confirmMsg)) {
+  //     router.events.emit("routeChangeError");
+  //     throw `사이트 변경 취소`;
+  //   }
+  // }, [confirmMsg, router.events, router.pathname]
+  // )
+
+  // useEffect(() => {
+  //   // 중요! 페이지 뒤로가기 시 url 은 변경되는 문제가 있는데 그걸 해결해줌
+  //   if (router.asPath !== window.location.pathname) {
+  //     window.history.pushState("", "", router.asPath);
+  //   }
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
+  //   router.events.on("routeChangeStart", handleBeforeChangeRoute);
+
+  //   // window.removeEventListener("beforeunload", handleBeforeUnload);
+  //   // router.events.off("routeChangeStart", handleBeforeChangeRoute);
+
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeoreUnload);
+  //     router.events.off("routeChangeStart", handleBeforeChangeRoute);
+  //   };
+  // }, [handleBeforeChangeRoute, handleBeforeUnload, router.asPath, router.events, router.pathname]);
+
+  // useEffect(() => {
+  //   // 새로고침 막기(조건 부여 가능)
+  //   window.onbeforeunload = function () {
+  //     return true;
+  //   };
+  //   return () => {
+  //     window.onbeforeunload = null;
+  //   };
+  // }, [])
+
 
 
   return (

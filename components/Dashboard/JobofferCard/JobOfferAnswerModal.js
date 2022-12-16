@@ -10,7 +10,7 @@ import profilePic from 'public/image/icon/happiness.png';
 import companyPic from 'public/image/company.png';
 import dayjs from 'dayjs';
 import { addConversation } from 'slices/chat';
-import { createConversation } from "firebaseConfig";
+import { createConversation, sendMailForJobOfferAnswer, getOtherUser } from "firebaseConfig";
 import LoadingPage from 'components/Common/Loading';
 import { useRouter } from 'next/router';
 
@@ -63,36 +63,67 @@ const index = ({ jobofferCon, jobofferOn, openJoboffer, closeJoboffer }) => {
   }, [dispatch, updateJobofferDone, closeJoboffer, jobofferOn])
 
 
+  const [friend, setFriend] = useState();
+  useEffect(() => {
+    async function fetchAndSetUser() {
+      const result = await getOtherUser(jobofferCon?.userId);
+      setFriend(result);
+    }
+    fetchAndSetUser();
+  }, [jobofferCon?.userId]);
+
   const onYes = useCallback(async (e) => {
     e.preventDefault();
     if (!user?.userID) {
       return alert('로그인이 필요합니다.');
     }
-    await modifyJoboffer(1, jobofferCon?.id).then((result) => {
+    await modifyJoboffer(1, jobofferCon?.id).then(async (result) => {
+      if (result) {
+        await sendMailForJobOfferAnswer(
+          {
+            targetEmail: friend?.email,
+            targetName: jobofferCon?.targetName,
+            company: jobofferCon?.company,
+            section: jobofferCon?.section,
+            username: jobofferCon?.username,
+          }
+        )
+      }
       dispatch(updateJoboffer(
         { id: jobofferCon?.id, answer: 1, read: true, readtime: result }
       ));
     })
-  }, [user?.userID, jobofferCon?.id, dispatch])
+  }, [user?.userID, jobofferCon?.id, jobofferCon?.targetName, jobofferCon?.company, jobofferCon?.section, jobofferCon?.username, dispatch, friend?.email])
 
   const onNo = useCallback(async (e) => {
     e.preventDefault();
     if (!user?.userID) {
       return alert('로그인이 필요합니다.');
     }
-    await modifyJoboffer(1, jobofferCon?.id).then((result) => {
+    await modifyJoboffer(2, jobofferCon?.id).then(async (result) => {
+      if (result) {
+        await sendMailForJobOfferAnswer(
+          {
+            targetEmail: friend?.email,
+            targetName: jobofferCon?.targetName,
+            company: jobofferCon?.company,
+            section: jobofferCon?.section,
+            username: jobofferCon?.username,
+          }
+        )
+      }
       dispatch(updateJoboffer(
         { id: jobofferCon?.id, answer: 2, read: true, readtime: result }
       ));
     })
-  }, [user?.userID, jobofferCon?.id, dispatch])
+  }, [user?.userID, jobofferCon?.id, jobofferCon?.targetName, jobofferCon?.company, jobofferCon?.section, jobofferCon?.username, dispatch, friend?.email])
 
   const onLater = useCallback(async (e) => {
     e.preventDefault();
     if (!user?.userID) {
       return alert('로그인이 필요합니다.');
     }
-    await modifyJoboffer(1, jobofferCon?.id).then((result) => {
+    await modifyJoboffer(3, jobofferCon?.id).then((result) => {
       dispatch(updateJoboffer(
         { id: jobofferCon?.id, answer: 3, read: true, readtime: result }
       ));

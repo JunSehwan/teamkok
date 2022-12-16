@@ -9,16 +9,15 @@ import AlertModal from 'components/Common/Modal/AlertModal';
 import { signOut } from 'slices/user';
 import profilePic from '/public/image/icon/happiness.png';
 import { useRouter } from 'next/router';
-import { getJobofferedByUserId, getConversationByUserId } from 'firebaseConfig';
+import { getJobofferedByUserId, getConversationByUserId, getCoccocedByUserId } from 'firebaseConfig';
 
+import { RiNewspaperFill, RiUserSearchFill } from "react-icons/ri";
 import { AiFillSetting } from "react-icons/ai";
 import { BsFillCaretDownFill } from "react-icons/bs";
-import { FaIdCard, FaBuilding, FaUserCircle } from "react-icons/fa";
+import { FaUserCircle } from "react-icons/fa";
 import { BsFillBellFill, BsQuestionCircleFill } from "react-icons/bs";
-import { HiUserGroup } from "react-icons/hi";
 import { MdMessage, MdDashboard } from "react-icons/md";
 import { IoLogOut } from "react-icons/io5";
-import useLastMessageSSS from "hooks/useLastMessageSSS";
 
 const index = ({ children }) => {
   const router = useRouter();
@@ -180,7 +179,8 @@ const index = ({ children }) => {
         if (user) {
           setData([]);
           const result = await getJobofferedByUserId(user?.userID);
-          setData(result);
+          const coccocresult = await getCoccocedByUserId(user?.userID);
+          setData([...result, ...coccocresult]);
         }
       } catch (e) {
         console.error(e);
@@ -189,7 +189,6 @@ const index = ({ children }) => {
     fetchAndSetUser();
   }, [user?.userID, findNotRead, user]);
   var findNotRead = data?.filter(obj => obj?.answer == 3 || !obj?.answer);
-
   const [conversationData, setConversationData] = useState();
   useEffect(() => {
     async function fetchAndSetUser() {
@@ -205,7 +204,7 @@ const index = ({ children }) => {
     }
     fetchAndSetUser();
   }, [user?.userID, findNotReadConversation, user]);
-  var findNotReadConversation = conversationData?.filter(obj => obj?.lastSender !== user?.userID);
+  var findNotReadConversation = conversationData?.filter(obj => (obj?.lastSender !== user?.userID && obj?.lastSeener !== user?.userID) && (obj?.lastSeener && obj?.lastSender));
 
 
 
@@ -289,7 +288,7 @@ const index = ({ children }) => {
                     className={`text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/friends" || router?.pathname?.includes("/friends") ? "text-[#4979f5]" : ""}`}
                     onClick={onClickFriends}>
                     <div className='flex flex-col items-center'>
-                      <FaIdCard className='w-6 h-6' />
+                      <RiUserSearchFill className='w-6 h-6' />
                       <span className='mt-[2px] text-xs hidden md:inline'>동료콕!</span>
                     </div>
                   </button>
@@ -299,7 +298,7 @@ const index = ({ children }) => {
                     className={`text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/news" || router?.pathname?.includes("/teamlist") ? "text-[#4979f5]" : ""}`}
                     onClick={onClickNews}>
                     <div className='flex flex-col items-center'>
-                      <HiUserGroup className='w-6 h-6' />
+                      <RiNewspaperFill className='w-6 h-6' />
                       <span className='mt-[2px] text-xs hidden md:inline'>팀소식콕!</span>
                     </div>
                   </button>

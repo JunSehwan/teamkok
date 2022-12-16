@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const First = ({ goNextStage, goNews }) => {
+const First = ({ goNextStageFirst, goNews }) => {
 
   
 
@@ -26,7 +26,7 @@ const First = ({ goNextStage, goNews }) => {
       
       <div className='w-full justify-center flex flex-col items-center px-2'>
         <button className="my-3 py-2 w-[12rem] text-gray-500 text-[14px] underline" onClick={goNews}>나중에 하기</button>
-        <button className='my-2 w-full text-md py-6 font-bold text-white  bg-[#4173f4] hover:bg-[#1C52DC]  focus:outline-none focus:shadow-outline rounded-lg' onClick={goNextStage}>시작하기</button>
+        <button className='my-2 w-full text-md py-6 font-bold text-white  bg-[#4173f4] hover:bg-[#1C52DC]  focus:outline-none focus:shadow-outline rounded-lg' onClick={goNextStageFirst}>시작하기</button>
       </div>
     </div>
   );

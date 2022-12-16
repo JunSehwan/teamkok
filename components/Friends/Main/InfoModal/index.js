@@ -1,5 +1,5 @@
 import React, { useCallback, useState, createRef, useEffect } from 'react';
-import { TbHandClick } from 'react-icons/tb';
+import { TbHandClick, TbTrafficLights } from 'react-icons/tb';
 import styled, { keyframes } from 'styled-components';
 import { updateServiceInfoSeen } from 'firebaseConfig';
 import { useSelector } from 'react-redux';
@@ -77,6 +77,7 @@ const index = () => {
   }, [])
   const noMoreSee = useCallback(async () => {
     await updateServiceInfoSeen(99);
+    setOpen(false);
   }, [])
 
   const modalEl = createRef();
@@ -95,7 +96,7 @@ const index = () => {
     <>
       {open && user?.infoseen !== 99 ?
         <Container
-          className="fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center"
+          className="fixed top-0 left-0 z-[9999] flex h-full w-full items-center justify-center bg-slate-800/70"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
         >
@@ -103,7 +104,7 @@ const index = () => {
           >
             <div className="sticky w-[100%] mt-auto mb-[25px] mx-auto max-w-[32rem] min-w-[320px]" ref={modalEl}>
               <div className="p-6 border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white/80 outline-none focus:outline-none">
-                <div className='flex flex-col sm:flex-row gap-2 w-full'>
+                <div className='flex flex-col sm:flex-row gap-4 w-full'>
                   <div className='w-full flex flex-col gap-3 items-center h-full justify-between'>
                     <>
                       <TbHandClick
@@ -116,6 +117,16 @@ const index = () => {
                   </div>
                   <div className='w-full flex flex-col gap-3 items-center h-full justify-between'>
                     <>
+                      <TbTrafficLights
+                        id="double"
+                        className='w-8 h-8 text-sky-700' />
+                      <div className="whitespace-normal leading-normal w-full overflow-hidden text-gray-600 dark:text-gray-100 text-left text-md py-1">
+                        팀담당자라면, 카드 우측 버튼을 통해 매력있는 인재를 찜해보세요!
+                      </div>
+                    </>
+                  </div>
+                  {/* <div className='w-full flex flex-col gap-3 items-center h-full justify-between'>
+                    <>
                       <TbHandClick
                         id="slide"
                         className='w-8 h-8 text-sky-700 ' />
@@ -123,16 +134,16 @@ const index = () => {
                         왼쪽으로 슬라이드하면 해당 인물 정보는 더이상 보이지 않습니다.
                       </div>
                     </>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="flex items-center justify-center mt-2 gap-4 w-full">
-                  <button type="button" onClick={closeModal} className="w-full py-2 px-4  bg-sky-600 hover:bg-sky-700 focus:ring-sky-500 focus:ring-offset-sky-200 text-white transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg ">
+                  <button type="button" onClick={noMoreSee} className="w-full py-2 px-4  bg-sky-600 hover:bg-sky-700 focus:ring-sky-500 focus:ring-offset-sky-200 text-white transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg ">
                     확인
                   </button>
                 </div>
-                <button type="button" onClick={noMoreSee} className="mt-3 w-full py-2 px-4 text-gray-600 transition ease-in duration-200 font-normal text-xs text-center focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg ">
+                {/* <button type="button" onClick={noMoreSee} className="mt-3 w-full py-2 px-4 text-gray-600 transition ease-in duration-200 font-normal text-xs text-center focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg ">
                   다신 보지않기
-                </button>
+                </button> */}
               </div>
             </div>
           </div>

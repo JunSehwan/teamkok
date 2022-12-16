@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'components/Common/Modal/Modal';
-import { createCoccoc } from 'firebaseConfig';
+import { createCoccoc, sendMailForCoccoc } from 'firebaseConfig';
 import { addCoccoc } from 'slices/coccoc';
 import AlertModal from 'components/Common/Modal/AlertModal';
 
@@ -152,7 +152,7 @@ const index = ({ coccocOn, openCoccoc, closeCoccoc, friendname, friend, detail }
 
 
 
-    const con = await createCoccoc(
+    await createCoccoc(
       {
         targetId: friend?.userID,
         targetName: friend?.username,
@@ -171,7 +171,19 @@ const index = ({ coccocOn, openCoccoc, closeCoccoc, friendname, friend, detail }
         mysection: user?.mysection,
         companylogo: user?.companylogo,
       }
-    );
+    ).then(async (result) => {
+      if (result) {
+        await sendMailForCoccoc(
+          {
+            targetEmail: friend?.email,
+            targetName: friend?.username,
+            mycompany: user?.mycompany,
+            username: user?.username,
+            section: section,
+          }
+        )
+      }
+    })
     if (detail === true) {
       dispatch(addCoccoc({
         targetId: friend?.userID,
@@ -213,7 +225,7 @@ const index = ({ coccocOn, openCoccoc, closeCoccoc, friendname, friend, detail }
 
     }
 
-  }, [user?.userID, user?.mycompany, user?.username, user?.avatar, user?.mysection, user?.companylogo, duedate, section, job, salary, type, friend?.userID, friend?.username, friend?.avatar, description, detail, dispatch])
+  }, [user?.userID, user?.username, user?.avatar, user?.mycompany, user?.mysection, user?.companylogo, duedate, section, job, salary, type, friend?.userID, friend?.username, friend?.avatar, friend?.email, description, detail, dispatch])
 
   // autoFocus 관련
   const inputElement = useRef(null);

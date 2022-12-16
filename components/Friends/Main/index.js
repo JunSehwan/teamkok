@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Friend from "./Friend";
 import Spin from 'components/Common/Spin';
 import { useDispatch, useSelector } from "react-redux";
-import { addLikeDoneFalse, addUnlikeDoneFalse, addAdviceDoneFalse, setUsers } from 'slices/user';
+import { addLikeDoneFalse, addUnlikeDoneFalse, addAdviceDoneFalse, setUsers, setScrollPosition } from 'slices/user';
 import { addJobofferDoneFalse } from 'slices/joboffer';
 import { addCoccocDoneFalse } from 'slices/coccoc';
 import toast from 'react-hot-toast';
@@ -92,6 +92,7 @@ const index = () => {
           top: scrollPosition, left: 0, behavior: 'smooth'
         })
       }, [500])
+      // dispatch(setScrollPosition(null))
     }
   }, [users, scrollPosition, dispatch, scrolling])
 

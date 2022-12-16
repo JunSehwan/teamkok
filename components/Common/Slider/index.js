@@ -63,41 +63,45 @@ function Slider({ photo, setSliderOn, sliderClose, sliderOn }) {
               </svg>
             </button>
             {/* 이전버튼 */}
-            <div className="absolute w-2 left-0 ml-2 z-10 text-5xl cursor-pointer select-none text-white">
-              <svg
-                onClick={prevSlide}
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-10 w-10 text-white bg-gray-700 shadow-lg hover:text-blue-600 hover:bg-blue-300 rounded-full"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z"
-                />
-              </svg>
-            </div>
-            <div className="absolute right-0 mr-2 z-10 text-5xl cursor-pointer select-none text-white">
-              <svg
-                onClick={nextSlide}
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-10 w-10 text-white bg-gray-700 shadow-lg hover:text-blue-600 hover:bg-blue-300 rounded-full"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </div>
 
+            {photo?.length > 1 &&
+              <>
+                <div className="absolute w-2 left-0 ml-2 z-10 text-5xl cursor-pointer select-none text-white">
+                  <svg
+                    onClick={prevSlide}
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-10 w-10 text-white bg-gray-700 shadow-lg hover:text-blue-600 hover:bg-blue-300 rounded-full"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z"
+                    />
+                  </svg>
+                </div>
+                <div className="absolute right-0 mr-2 z-10 text-5xl cursor-pointer select-none text-white">
+                  <svg
+                    onClick={nextSlide}
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-10 w-10 text-white bg-gray-700 shadow-lg hover:text-blue-600 hover:bg-blue-300 rounded-full"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </div>
+              </>
+            }
             {photo?.map((slide, index) => {
               return (
                 <div
@@ -117,8 +121,9 @@ function Slider({ photo, setSliderOn, sliderClose, sliderOn }) {
                         alt="slides"
                         className="max-h-full max-w-full
                         sm:max-w-[640px] md:max-w-[768px] lg:max-w-[1024px] xl:max-w-[1280px] 2xl:max-w-[1536px] 
-                        sm:max-h-[640px] md:max-h-[768px] lg:max-h-[1024px] xl:max-h-[1280px] 2xl:max-h-[1536px] 
-                        autoImage object-center bg-cover shadow z-0"
+                        autoImage object-center bg-cover shadow z-0
+                        object-contain h-[100vh]
+                        "
                       />
                     </AutoHeightImageWrapper>
                   )}

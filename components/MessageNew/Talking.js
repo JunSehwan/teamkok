@@ -9,7 +9,6 @@ const Talking = () => {
   const [inputSectionOffset, setInputSectionOffset] = useState(0);
   const [replyInfo, setReplyInfo] = useState(null);
   const { singleConversation } = useSelector(state => state.chat);
-
   return (
     <div className="flex h-[100vh] bg-[#F3F2EF]">
       <div className='pt-[var(--navbar-height)] flex xl:w-[1200px] lg:w-[960px] md:w-[720px] sm:w-[520px] w-full mx-auto'>
