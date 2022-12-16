@@ -37,6 +37,17 @@ function Slider({ photo, setSliderOn, sliderClose, sliderOn }) {
   // }, [current, nextSlide]);
 
 
+  useEffect(() => {
+    if (sliderOn) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [sliderOn]);
+
   const modalEl = createRef();
   const handleClickOutside = (event) => {
     if (sliderOn === true && !modalEl?.current?.contains(event.target))

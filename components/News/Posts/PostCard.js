@@ -248,7 +248,7 @@ const PostCard = ({ post }) => {
       whileInView={{ opacity: 1 }}
       transition={{ delay: 0.1, duration: 0.5 }}
       viewport={{ once: true }}
-      className="w-full max-w-2xl mx-auto break-inside rounded-xl bg-white flex flex-col bg-clip-border shadow-md mb-4">
+      className="w-full max-w-xl mx-auto break-inside rounded-xl bg-white flex flex-col bg-clip-border shadow-md mb-4">
       <div className="flex p-4 pb-6 items-center justify-between">
         <div className="flex">
           <ProfileModal
@@ -355,7 +355,7 @@ const PostCard = ({ post }) => {
               >
               </textarea>
               {descriptionError ? (
-                <p className="text-xs mb-[1.5rem] italic text-red-500">팀이야기를 얘기해주세요.</p>
+                <p className="text-xs mb-[1.5rem] italic text-red-500">팀이야기를 들려주세요.</p>
               ) : null}
               <div className='w-full mt-1 flex justify-end'>
                 <button
@@ -547,7 +547,7 @@ const PostCard = ({ post }) => {
       </div>
 
       {commentOpened &&
-        <form onSubmit={onSubmitComment} className="relative">
+        <form onSubmit={onSubmitComment} className="relative p-2">
           <textarea
             className="pt-2 pb-2 pl-3 w-full h-11 bg-slate-100 rounded-lg placeholder:text-slate-600 font-medium pr-20"
             type="text" placeholder="Write a comment"
@@ -578,7 +578,7 @@ const PostCard = ({ post }) => {
       {/* <!-- Comments content --> */}
       {/* <!-- Comment row --> */}
       {commentOpened && commentArr?.length > 0 ?
-        <div className="pt-6">
+        <div className="p-2 pt-6">
           {commentArr?.map((v) => (
             <div key={v?.docId}>
               <Comments

@@ -57,7 +57,7 @@ const Main = () => {
         hide={hide}
       />
       <div className=' md:px-8 pb-[70px] md:pb-auto pt-[calc(var(--navbar-height)+3.2rem)]'>
-        <div className="mt-[2.4rem] py-4 items-center flex justify-between max-w-[672px] mx-auto">
+        <div className="mt-[2.4rem] py-4 items-center flex justify-between max-w-xl mx-auto">
           <h2 className="text-xl text-gray-700 font-extrabold mb-2">팀이야기</h2>
           {user?.purpose === 4 ?
             <button type="button"

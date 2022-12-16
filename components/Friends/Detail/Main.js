@@ -332,7 +332,7 @@ const Main = () => {
             <div className="w-full">
               <div
                 className="text-xl font-bold flex gap-2 items-center justify-between flex-row"
-                
+
               >
                 <div className="flex flex-row items-center gap-2">
                   <p>
@@ -348,7 +348,7 @@ const Main = () => {
                     </Tooltip>
                     : null}
                   <div className="flex md:flex-row flex-col">
-                    <p className="font-normal text-sm">{myAge || "나이미상"}</p>
+                    <p className="font-normal text-sm">{myAge || "-"}</p>
                   </div>
                 </div>
                 <p className="text-sm pr-3">{category[0]?.name}</p>
@@ -357,7 +357,7 @@ const Main = () => {
                 {isTeamMember ? friend?.email_using || friend?.email : null}
               </p>
               <div className="flex gap-2 items-start flex-col text-left w-full">
-                <div className="flex flex-row gap-3 pt-2" >
+                <div className="flex flex-row gap-2 pt-2" >
                   {friend?.gender ?
                     (() => {
                       switch (friend?.gender) {
@@ -368,21 +368,21 @@ const Main = () => {
                     })(friend?.gender) : <span className="font-normal text-md">성별미등록</span>}
                   <span className="font-normal text-md">{friend?.address_sido || "거주지미등록"}</span>
                   <span className="text-sm text-gray-500">{(() => {
-                    switch (parseInt(user?.purpose)) {
+                    switch (parseInt(friend?.purpose)) {
                       case 1: return (<span className="">기업담당자</span>)
                       case 2: return (<span className="">구직자</span>)
                       case 3: return (<span className="">예비구직자(학습생)</span>)
                       case 4: return (<span className="">관찰자</span>)
                       default: null;
                     }
-                  })(parseInt(user?.purpose))}</span>
+                  })(parseInt(friend?.purpose))}</span>
                 </div>
 
 
-                <div className="my-1 w-full text-gray-600 font-normal md:text-md text-sm">
-                  <div className="text-sm text-gray-500">제안받은 연봉 </div>
+                <div className="w-full text-gray-600 font-normal md:text-md text-sm">
+                  <div className="text-sm text-gray-800">제안받은 연봉</div>
                   {mainJoboffered && mainJoboffered?.length !== 0 ? mainJoboffered?.map((v) => (
-                    <div key={nanoid()} className="text-left w-fit mr-2 inline-flex my-1 bg-lime-100 p-2 rounded-xl">
+                    <div key={nanoid()} className="text-left w-fit mr-2 inline-flex bg-lime-100 p-2 rounded-xl">
                       <div>
                         <div className="flex flex-col">
                           <div>
@@ -395,13 +395,14 @@ const Main = () => {
                       </div>
                     </div>
                   ))
-                    : <span>연봉정보없음</span>
+                    : <span className="text-gray-400">조만간 볼 수 있을거예요😀</span>
                   }
                 </div>
 
-                <div className="my-1 w-full text-gray-400 font-normal md:text-md text-sm" >
+                <div className="w-full text-gray-500 font-normal md:text-md text-sm" >
+                  <div className="text-sm text-gray-800">제안받은 연봉(콕콕)</div>
                   {mainCoccoced && mainCoccoced?.length !== 0 ? mainCoccoced?.map((v) => (
-                    <div key={nanoid()} className="text-left w-fit mr-2 inline-flex my-1 bg-gray-100 p-2 rounded-xl">
+                    <div key={nanoid()} className="text-left w-fit mr-2 inline-flex bg-gray-100 p-2 rounded-xl">
                       <div>
                         <div className="flex flex-col">
                           <div>
@@ -414,13 +415,13 @@ const Main = () => {
                       </div>
                     </div>
                   ))
-                    : <span>연봉정보없음</span>
+                    : <span className="text-gray-400">조만간 볼 수 있을거예요😀</span>
                   }
                 </div>
 
-                <div className="my-1 w-full text-gray-600 font-normal md:text-md text-sm">
+                <div className="w-full text-gray-600 font-normal md:text-md text-sm">
                   {myCareers?.length !== 0 ? myCareers?.map((v) => (
-                    <div key={nanoid()} className="flex text-left my-1 bg-slate-100 p-2 rounded-xl">
+                    <div key={nanoid()} className="my-1 flex text-left bg-slate-100 p-2 rounded-xl">
                       <div>
                         <div className="flex flex-col">
                           <div>
@@ -431,7 +432,7 @@ const Main = () => {
                               <span className="mr-1">{v?.position}</span>
                             </div>
                             <div className="font-normal text-sm text-gray-500">
-                              <span className="mr-1">{v?.job}</span>
+                              <span className="mr-1">{v?.job}</span>-&nbsp;
                               <span className="mr-1">{v?.start?.year}~{v?.end?.year == 9999 ? "현재" : v?.end?.year}</span>
                             </div>
                             {v?.description &&
@@ -447,9 +448,9 @@ const Main = () => {
                   }
                 </div>
 
-                <div className="my-1 w-full text-gray-600 font-normal md:text-md text-sm" >
+                <div className="w-full text-gray-600 font-normal md:text-md text-sm" >
                   {myEducations?.length !== 0 ? myEducations?.map((v) => (
-                    <div key={v?.id} className="flex text-left my-1 bg-amber-50 p-2 rounded-xl">
+                    <div key={v?.id} className="my-1 flex text-left bg-amber-50 p-2 rounded-xl">
                       <div>
                         <div className="flex flex-col">
                           <div>
@@ -471,7 +472,7 @@ const Main = () => {
                                     case 99: return (<span className="">기타</span>)
                                     default: null;
                                   }
-                                })(parseInt(v?.category))}</span>}
+                                })(parseInt(v?.category))}</span>}-&nbsp;
                               <span className="mr-1">{v?.start?.year}~{v?.end?.year == 9999 ? "현재" : v?.end?.year}</span>
                             </div>
                             {v?.description &&
@@ -487,12 +488,12 @@ const Main = () => {
                   }
                 </div>
 
-                <div className="my-1 w-full flex flex-wrap gap-1">
+                <div className="w-full flex flex-wrap gap-1">
                   {mySkills?.length !== 0 &&
                     <>
                       {mySkills?.map((v) => (
                         <span
-                          className="px-3 py-1.5 rounded-full bg-gray-500 text-white text-sm"
+                          className="px-3 py-1 rounded-full bg-slate-100 border border-solid border-slate-500 text-slate-500 text-sm"
                           key={v?.id}>{v?.name}</span>
                       ))
                       }
@@ -501,7 +502,7 @@ const Main = () => {
                   {mySkills?.length === 0 || !mySkills && <span className="text-gray-600 font-normal md:text-md text-sm">보유스킬 없음</span>}
                 </div>
 
-                <div className="my-1 w-full flex flex-row items-center gap-1 flex-wrap">
+                <div className="w-full flex flex-row items-center gap-1 flex-wrap">
                   <BiLink className="h-5 w-5 text-gray-500 mr-1" />
                   {friend?.links?.length && friend?.links?.length !== 0 ?
                     <>
@@ -522,7 +523,7 @@ const Main = () => {
                       }
                     </>
                     :
-                    <span className="text-gray-400 text-sm">링크없음</span>
+                    null
                   }
                   {friend?.links?.length === 0 && <span className="text-gray-600 font-normal md:text-md text-sm">보유링크 없음</span>}
                 </div>
