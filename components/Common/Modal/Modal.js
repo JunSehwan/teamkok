@@ -110,6 +110,8 @@ const slideOut = keyframes`
 
 const Modal = ({ onClose, title, children, visible, widths }) => {
 
+
+
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     let timeoutId;

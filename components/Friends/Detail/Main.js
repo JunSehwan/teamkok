@@ -347,13 +347,13 @@ const Main = () => {
                       <GoVerified className="text-blue-400 text-md" />
                     </Tooltip>
                     : null}
-                  <div className="flex md:flex-row flex-col">
+                  <div className="flex md:flex-row flex-cyol">
                     <p className="font-normal text-sm">{myAge || "-"}</p>
                   </div>
                 </div>
                 <p className="text-sm pr-3">{category[0]?.name}</p>
               </div>
-              <p className="font-normal text-xs text-gray-500">
+              <p className="font-normal text-sm text-gray-500">
                 {isTeamMember ? friend?.email_using || friend?.email : null}
               </p>
               <div className="flex gap-2 items-start flex-col text-left w-full">
@@ -719,7 +719,7 @@ const Main = () => {
                         strokeWidth={1.5}
                         stroke="currentColor"
                         className="w-4 h-4 text-white text-center"
-                      >
+                      > 
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"

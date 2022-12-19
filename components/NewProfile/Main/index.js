@@ -130,30 +130,30 @@ const index = () => {
                   </div>
 
                 </div>
-
-                <div className='space-y-2 mx-2'>
-                  <div className='font-semibold flex flex-row text-sm buttongroup bg-[#efeff2] rounded-xl p-[4px] text-gray-600 shadow-[inset 0px 2px 3px rgb(0 0 0 / 12%)]'>
-                    <button
-                      className={`w-full hover:bg-gray-200 hover:text-black py-2 ${user?.purpose == 2 ? "disable text-white font-bold bg-[#1890FF] shadow-md" : "visible"} rounded-lg `}
-                      onClick={() => onClickPurpose(2)}>
-                      <span>구직자</span>
-                      <p className={`text-xs text-cyan-500 ${user?.purpose == 2 ? "text-cyan-100" : ""}`}>구직중</p>
-                    </button>
-                    <button
-                      className={`w-full hover:bg-gray-200 hover:text-black py-2 ${user?.purpose == 3 ? "disable text-white font-bold bg-[#1890FF] shadow-md" : "visible"} rounded-lg `}
-                      onClick={() => onClickPurpose(3)}>
-                      <span>학습생</span>
-                      <p className={`text-xs text-cyan-500 ${user?.purpose == 3 ? "text-cyan-100" : ""}`}>향후 구직예정</p>
-                    </button>
-                    <button
-                      className={`w-full hover:bg-gray-200 hover:text-black py-2 ${user?.purpose == 4 ? "disable text-white font-bold bg-[#1890FF] shadow-md" : "visible"} rounded-lg `}
-                      onClick={() => onClickPurpose(4)}>
-                      <span>관찰자</span>
-                      <p className={`text-xs text-red-500 ${user?.purpose == 4 ? "text-red-100" : ""}`}>프로필 비공개</p>
-                    </button>
+                {user?.purpose !== 1 &&
+                  <div className='space-y-2 mx-2'>
+                    <div className='font-semibold flex flex-row text-sm buttongroup bg-[#efeff2] rounded-xl p-[4px] text-gray-600 shadow-[inset 0px 2px 3px rgb(0 0 0 / 12%)]'>
+                      <button
+                        className={`w-full hover:bg-gray-200 hover:text-black py-2 ${user?.purpose == 2 ? "disable text-white font-bold bg-[#1890FF] shadow-md" : "visible"} rounded-lg `}
+                        onClick={() => onClickPurpose(2)}>
+                        <span>구직자</span>
+                        <p className={`text-xs text-cyan-500 ${user?.purpose == 2 ? "text-cyan-100" : ""}`}>구직중</p>
+                      </button>
+                      <button
+                        className={`w-full hover:bg-gray-200 hover:text-black py-2 ${user?.purpose == 3 ? "disable text-white font-bold bg-[#1890FF] shadow-md" : "visible"} rounded-lg `}
+                        onClick={() => onClickPurpose(3)}>
+                        <span>학습생</span>
+                        <p className={`text-xs text-cyan-500 ${user?.purpose == 3 ? "text-cyan-100" : ""}`}>향후 구직예정</p>
+                      </button>
+                      <button
+                        className={`w-full hover:bg-gray-200 hover:text-black py-2 ${user?.purpose == 4 ? "disable text-white font-bold bg-[#1890FF] shadow-md" : "visible"} rounded-lg `}
+                        onClick={() => onClickPurpose(4)}>
+                        <span>관찰자</span>
+                        <p className={`text-xs text-red-500 ${user?.purpose == 4 ? "text-red-100" : ""}`}>프로필 비공개</p>
+                      </button>
+                    </div>
                   </div>
-                </div>
-
+                }
               </div>
             </div>
 

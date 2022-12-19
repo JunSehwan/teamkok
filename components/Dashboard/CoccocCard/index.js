@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import profilePic from 'public/image/icon/happiness.png';
 import Image from 'next/image';
 import CoccocAnswerModal from './CoccocAnswerModal';
+import { useRouter } from 'next/router';
 
 const ImageWrapper = styled.div`
 width: 100%;
@@ -23,7 +24,6 @@ position: relative;
   }
 }
 `
-
 const index = ({ coccocCon }) => {
 
   const [coccocOn, setCoccocOn] = useState(false);
