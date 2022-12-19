@@ -247,7 +247,7 @@ const Signup = () => {
               tel,
               id: res?.uid,
               avatar: res?.photoURL
-            }));  
+            }));
             const getMail = await sendMailForSignUp(
               email, username,
             );
@@ -612,7 +612,7 @@ const Signup = () => {
                             <p className="btn-text"><b>구글로 시작하기</b></p>
                           </button>
 
-                          {/* <button
+                          <button
                             onClick={signInWithKakaoHandler}
                             className="hover:bg-[#FEE50090] rounded-full kakao-btn flex flex-row items-center justify-center w-[70%] mx-auto p-2 bg-[#FEE500] shadow-lg h-[48px] disabled:!cursor-default disabled:!brightness-75"
                           >
@@ -620,7 +620,7 @@ const Signup = () => {
                               <Image width={25} height={25} unoptimized alt="kakao" className="kakao-icon" src="./kakao_bubble.png" />
                             </div>
                             <p className="btn-text"><b>카카오로 시작하기</b></p>
-                          </button> */}
+                          </button>
 
                         </div>
 

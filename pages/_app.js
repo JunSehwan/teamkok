@@ -9,12 +9,13 @@ import { wrapper } from "store/index";
 import NewNavbar from 'components/Common/NewNavbar';
 import { useRouter } from 'next/router';
 import * as gtag from "lib/gtag";
-import Script from 'next/script'
-import initialize from "lib/initialize";
+import Script from 'next/script';
+import kakaoInit from "lib/initialize";
 import AOS from "aos";
 import 'aos/dist/aos.css';
 
 const _app = ({ Component, pageProps }) => {
+  const router = useRouter()
 
   useEffect(() => {
     AOS.init({
@@ -23,7 +24,6 @@ const _app = ({ Component, pageProps }) => {
     });
   });
 
-  const router = useRouter()
   useEffect(() => {
     const handleRouteChange = (url) => {
       gtag.pageview(url)
@@ -37,15 +37,10 @@ const _app = ({ Component, pageProps }) => {
   // 리라우팅시 root페이지로 이동(동적페이지) - 방지를 위함
   useEffect(() => {
     router.push(window.location.href)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // 카카오 시작
-  // useEffect(() => {
-  //   !Kakao?.isInitialized() && Kakao?.init(process.env.NEXT_PUBLIC_KAKAO);
-  // }, [])
   useEffect(() => {
-    initialize();
+    kakaoInit();
   }, []);
 
   return (
@@ -76,12 +71,6 @@ const _app = ({ Component, pageProps }) => {
         <meta name="naver-site-verification" content="03f56ed31be86c0a262e8be9ed5c85cdcc2db12e" />
 
       </Head>
-      <script
-        src="https://t1.kakaocdn.net/kakao_js_sdk/2.0.1/kakao.min.js" async
-        integrity="sha384-eKjgHJ9+vwU/FCSUG3nV1RKFolUXLsc6nLQ2R1tD0t4YFPCvRmkcF8saIfOZNWf/" crossOrigin="anonymous" />
-      <Script src="https://developers.kakao.com/sdk/js/kakao.js"></Script>
-      {/* <Script src="https://developers.kakao.com/sdk/js/kakao.min.js"></Script> */}
-      {/* <Script src="https://unpkg.com/flowbite@1.5.4/dist/datepicker.js"></Script> */}
       <ThemeProvider theme={theme}>
         {/* <Provider store={store}> */}
         <NewNavbar>

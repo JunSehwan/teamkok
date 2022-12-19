@@ -62,7 +62,9 @@ class MyDocument extends Document {
             async
             src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_TRACKING_ID}`}
           />
-          
+          <script
+            src="https://t1.kakaocdn.net/kakao_js_sdk/2.0.1/kakao.min.js" async
+            integrity="sha384-eKjgHJ9+vwU/FCSUG3nV1RKFolUXLsc6nLQ2R1tD0t4YFPCvRmkcF8saIfOZNWf/" crossOrigin="anonymous" />
           <script
             dangerouslySetInnerHTML={{
               __html: `
