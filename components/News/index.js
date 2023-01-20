@@ -5,7 +5,7 @@ import { Toaster } from 'react-hot-toast';
 // import LeftBar from './LeftBar';
 // import Main from './Main';
 import toast from 'react-hot-toast';
-import { setAddDoneFalse } from 'slices/section';
+import { setAddDoneFalse, setAddSingoDoneFalse } from 'slices/section';
 import dynamic from "next/dynamic";
 // import Main from './Main'
 const Main = dynamic(
@@ -17,8 +17,9 @@ const Main = dynamic(
 const index = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { addDone } = useSelector(state => state.section);
+  const { addDone, addSingoDone } = useSelector(state => state.section);
   const addNotify = () => toast('새로운 소식을 등록했습니다!😀');
+  const addSingoNotify = () => toast('신고가 완료되었습니다. 해당 게시물에 대한 검토 후 적절한 처리가 이루어질 예정입니다.');
   useEffect(() => {
     if (addDone) {
       addNotify();
@@ -26,6 +27,12 @@ const index = () => {
     }
   }, [dispatch, addDone])
 
+  useEffect(() => {
+    if (addSingoDone) {
+      addSingoNotify();
+      dispatch(setAddSingoDoneFalse());
+    }
+  }, [dispatch, addSingoDone])
 
 
   return (

@@ -10,6 +10,7 @@ import profilePic from 'public/image/icon/happiness.png';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Singo from './Singo';
 // import CategoryList from 'components/Common/CategoryList';
 // import { hideConversationBar } from 'slices/chat';
 
@@ -45,45 +46,49 @@ const SelectConversation = ({ conversation, conversationId }) => {
     );
   if (conversation?.users?.length === 2)
     return (
-      <a
-        onClick={onClickDialog}
-      >
-        <div className={`text-black  hover:bg-slate-200 cursor-pointer relative flex items-stretch gap-2 py-3 px-4 transition duration-300 
+      <div className='flex w-full flex-row'>
+        <a
+          className='w-full'
+          onClick={onClickDialog}
+        >
+          <div className={`text-black  hover:bg-slate-200 cursor-pointer relative flex items-stretch gap-2 py-3 px-4 transition duration-300 
         ${conversationId === pid?.cid ? "bg-gray-200 font-bold border-solid border-l-4 border-blue-600" : ""
-          }`}>
-          <div className='flex flex-row items-center my-1 w-full'>
-            <img
-              width={40}
-              height={40}
-              className="h-10 w-10 flex-shrink-0 rounded-2xl object-cover"
-              src={filtered?.[0]?.data()?.avatar && filtered?.[0]?.data()?.avatar?.length !== 0 ? filtered?.[0]?.data()?.avatar : profilePic?.src}
-              alt=""
-            />
-            <div className="flex flex-grow flex-col ml-2 items-start gap-0.5 py-1 w-full">
-              {/* {category?.length !== 0 && <span className="ml-1 px-3 py-0.5 bg-sky-600 rounded-full text-white text-xs" >{category[0]?.name}</span>} */}
-              <p className="max-w-[320px] md:max-w-[200px] flex-grow overflow-hidden text-ellipsis whitespace-nowrap font-bold">
-                {filtered?.[0]?.data()?.username}
-              </p>
-              {lastMessageLoading ? (
-                <Skeleton className="w-2/3 flex-grow" />
-              ) : (
-                <p className="max-w-[320px] md:max-w-[200px] flex-grow overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-600">
-                  {lastMessage?.message}
+            }`}>
+            <div className='flex flex-row items-center my-1 w-full'>
+              <img
+                width={40}
+                height={40}
+                className="h-10 w-10 flex-shrink-0 rounded-2xl object-cover"
+                src={filtered?.[0]?.data()?.avatar && filtered?.[0]?.data()?.avatar?.length !== 0 ? filtered?.[0]?.data()?.avatar : profilePic?.src}
+                alt=""
+              />
+              <div className="flex flex-grow flex-col ml-2 items-start gap-0.5 py-1 w-full">
+                {/* {category?.length !== 0 && <span className="ml-1 px-3 py-0.5 bg-sky-600 rounded-full text-white text-xs" >{category[0]?.name}</span>} */}
+                <p className="max-w-[320px] md:max-w-[200px] flex-grow overflow-hidden text-ellipsis whitespace-nowrap font-bold">
+                  {filtered?.[0]?.data()?.username}
                 </p>
+                {lastMessageLoading ? (
+                  <Skeleton className="w-2/3 flex-grow" />
+                ) : (
+                  <p className="max-w-[320px] md:max-w-[200px] flex-grow overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-600">
+                    {lastMessage?.message}
+                  </p>
+                )}
+              </div>
+              {!lastMessageLoading && (
+                <>
+                  {lastMessage?.lastMessageId !== null &&
+                    lastMessage?.lastMessageId !==
+                    conversation?.seen[user?.userID] && (
+                      <div className="bg-red-500 absolute top-1/2 right-4 h-[10px] w-[10px] -translate-y-1/2 rounded-full"></div>
+                    )}
+                </>
               )}
             </div>
-            {!lastMessageLoading && (
-              <>
-                {lastMessage?.lastMessageId !== null &&
-                  lastMessage?.lastMessageId !==
-                  conversation?.seen[user?.userID] && (
-                    <div className="bg-red-500 absolute top-1/2 right-4 h-[10px] w-[10px] -translate-y-1/2 rounded-full"></div>
-                  )}
-              </>
-            )}
           </div>
-        </div>
-      </a>
+        </a>
+        <Singo conversation={conversation} />
+      </div>
     );
 
   return (
@@ -102,24 +107,27 @@ const SelectConversation = ({ conversation, conversationId }) => {
               alt=""
             />
           ) : (
-            <div className="relative flex min-w-[40px] max-w-[62px] flex-row">
-              <Image
-                className="absolute top-0 right-0 h-10 w-10 flex-shrink-0 rounded-full object-cover"
-                width={40}
-                height={40}
-                src={filtered?.[0]?.data()?.avatar || profilePic}
-                alt=""
-              />
-              <Image
-                className={`border-slate-400 group-hover:border-slate-400 absolute top-0 left-10 h-10 w-10 flex-shrink-0 rounded-full border-[3px] object-cover transition duration-300
+            <>
+              <div className="relative flex min-w-[40px] max-w-[62px] flex-row">
+                <Image
+                  className="absolute top-0 right-0 h-10 w-10 flex-shrink-0 rounded-full object-cover"
+                  width={40}
+                  height={40}
+                  src={filtered?.[0]?.data()?.avatar || profilePic}
+                  alt=""
+                />
+                <Image
+                  className={`border-slate-400 group-hover:border-slate-400 absolute top-0 left-10 h-10 w-10 flex-shrink-0 rounded-full border-[3px] object-cover transition duration-300
              ${conversationId === pid?.cid ? "!border-[#252F3C]" : ""
-                  }`}
-                width={40}
-                height={40}
-                src={filtered?.[1]?.data()?.avatar || profilePic}
-                alt=""
-              />
-            </div>
+                    }`}
+                  width={40}
+                  height={40}
+                  src={filtered?.[1]?.data()?.avatar || profilePic}
+                  alt=""
+                />
+              </div>
+
+            </>
           )}
           <div className="flex flex-grow flex-col ml-2 items-start gap-0.5 py-1 w-full">
             <p className="max-w-[320px] md:max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
@@ -148,6 +156,7 @@ const SelectConversation = ({ conversation, conversationId }) => {
           )}
         </div>
       </div>
+
     </a>
   );
 };

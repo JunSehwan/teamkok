@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import { HYDRATE } from 'next-redux-wrapper';
 
 export const initialState = {
-  mainPosts:[],
+  mainPosts: [],
+  mainSingos: [],
   addDone: false,
   updateDone: false,
   deleteDone: false,
@@ -12,6 +13,7 @@ export const initialState = {
   deleteCommentDone: false,
   addCommentDone: false,
   addReplyDone: false,
+  addSingoDone: false,
 };
 
 export const section = createSlice({
@@ -21,10 +23,16 @@ export const section = createSlice({
     addPost: (state, action) => {
       state.mainPosts.unshift(action.payload);
       state.addDone = true;
-
     },
     setAddDoneFalse: (state) => {
       state.addDone = false;
+    },
+    addSingo: (state, action) => {
+      state.mainSingos.unshift(action.payload);
+      state.addSingoDone = true;
+    },
+    setAddSingoDoneFalse: (state) => {
+      state.addSingoDone = false;
     },
     updatePost: (state, action) => {
       state.mainPosts.find((v) => v.id === action.payload.id).description = action.payload.description;
@@ -89,7 +97,6 @@ export const section = createSlice({
     },
     deleteComment(state, action) {
       state.mainComments = state.mainComments.filter(v => v.docId !== action.payload.commentId);
-
       state.deleteCommentDone = true;
       const target = state.mainPosts?.find((v) => v.id === action.payload.postId);
       target.numComments = target.numComments - 1;
@@ -98,7 +105,7 @@ export const section = createSlice({
       state.mainPosts = [];
       state.loadPostsDone = true;
     },
-    
+
   },
   extraReducers: {
     // The HYDRATE function is what manages the state between client and server
@@ -131,6 +138,8 @@ export const {
   deleteReply,
   deleteComment,
   setLoadPostEmpty,
+  addSingo,
+  setAddSingoDoneFalse,
 } = section.actions;
 
 export const useSectionState = () => useAppSelector((state) => state.section);

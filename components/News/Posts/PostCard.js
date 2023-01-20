@@ -23,6 +23,7 @@ import { BiLike } from 'react-icons/bi';
 import { FcDislike, FcLike } from 'react-icons/fc';
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
 import { MdComment, MdOutlineComment } from 'react-icons/md';
+import Singo from './Singo';
 
 const PostCard = ({ post }) => {
   const { user } = useSelector(state => state.user);
@@ -324,7 +325,7 @@ const PostCard = ({ post }) => {
           </button>
         </div>
         {/* More 버튼 */}
-        {user?.userID == post?.creatorId &&
+        {user?.userID == post?.creatorId ?
           <div className="flex">
             {!moreOpen ?
               <button
@@ -356,7 +357,13 @@ const PostCard = ({ post }) => {
                 </div>
               </div>
             }
+
           </div>
+          :
+          <Singo
+          post={post}
+          />
+          
         }
       </div>
       {removeConfirm ?

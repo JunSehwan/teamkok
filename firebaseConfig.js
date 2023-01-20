@@ -662,6 +662,7 @@ export const api = {
   annoynomusUsersRef: collection(db, "annoymous"),
   viewsRef: collection(db, "ViewsData"),
   educationsRef: collection(db, "educations"),
+  singosRef: collection(db, "singos"),
   jobofferRef: collection(db, "joboffers"),
   subscribeRef: collection(db, "subscribes"),
   coccocRef: collection(db, "coccocs"),
@@ -3213,5 +3214,26 @@ export async function sendMailForCoccocAnswer(result) {
   } catch (e) {
     console.log(e);
     throw new Error('Something went wrong with sending email. Error Message: ', e.message);
+  }
+}
+
+
+export async function createSingo(singo) {
+  const singoObject = await addDoc(api.singosRef,
+    { ...singo, timestamp: dayjs().format('YYYY-MM-DD HH:mm:ss') });
+
+  const docRef = doc(db, "singos", singoObject.id);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    const result = {
+      ...docSnap.data(),
+      id: singoObject.id,
+    }
+    // console.log("Document data:", docSnap.data());
+    return result;
+  } else {
+    // doc.data() will be undefined in this case
+    alert("No such document!");
   }
 }

@@ -37,14 +37,14 @@ function HeroHome() {
           {/* Section header */}
           <div className="text-center pb-12 md:pb-16">
             <h1 className="text-5xl md:text-6xl font-extrabold leading-snug mb-4" data-aos="zoom-y-out">
-              개성있는 프로필로<br />
+              커리어 코칭부터<br />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
-                빠르게 취업하기
+                취업까지!
               </span></h1>
             <div className="max-w-3xl mx-auto">
               <p className="text-xl text-gray-600 mb-8" data-aos="zoom-y-out" data-aos-delay="150">
-                자기소개 영상, 포트폴리오로 나의 경력을 어필할 수 있습니다.<br/>
-                또한, 동료들이 제안받는 연봉 수준을 확인하세요!
+                커리어, 이직관련 코칭을 받고,<br />
+                원하는 팀으로의 입사 제안을 받아보세요!
               </p>
               <div className="max-w-xs mx-auto sm:max-w-none sm:flex sm:justify-center" data-aos="zoom-y-out" data-aos-delay="300">
                 <div>

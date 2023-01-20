@@ -1,13 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import SideBar from "./SideBar";
 import Main from "./Main";
 import { Toaster } from 'react-hot-toast';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
+// import LeftBar from './LeftBar';
+// import Main from './Main';
+import { setAddDoneFalse, setAddSingoDoneFalse } from 'slices/section';
 
 const index = () => {
   const router = useRouter();
-
+  const dispatch = useDispatch();
+  const { addSingoDone } = useSelector(state => state.section);
+  const addSingoNotify = () => toast('신고가 완료되었습니다. 해당 인물과의 대화에 대한 검토 후 적절한 처리가 이루어질 예정입니다.');
+  useEffect(() => {
+    if (addSingoDone) {
+      addSingoNotify();
+      dispatch(setAddSingoDoneFalse());
+    }
+  }, [dispatch, addSingoDone])
   return (
     <>
       <div className="flex h-[100vh] bg-[#F3F2EF]">
