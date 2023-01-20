@@ -15,8 +15,8 @@ import {
 } from 'hooks/useMoveScroll';
 
 
+
 const index = () => {
-  const { user } = useSelector(state => state.user);
   const router = useRouter();
 
 

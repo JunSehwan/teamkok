@@ -540,7 +540,7 @@ const index = ({ jobofferOn, openJoboffer, closeJoboffer, friendname, friend, de
             <div className="mb-2 text-right">
               <div className="flex w-full justify-end">
                 <button onClick={closeJoboffer} type="button" className="mr-2 py-4 px-4 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-600 text-[14px]">Cancel</button>
-                <button type="button" onClick={openConfirmModal} className=" px-8 min-w-[144px] text-md py-4 font-bold text-white bg-[#4173f4] hover:bg-[#1C52DC]  focus:outline-none focus:shadow-outline rounded-lg">제안하기</button>
+                <button type="button" onClick={onSubmit} className=" px-8 min-w-[144px] text-md py-4 font-bold text-white bg-[#4173f4] hover:bg-[#1C52DC]  focus:outline-none focus:shadow-outline rounded-lg">제안하기</button>
               </div>
             </div>
           </div>

@@ -13,6 +13,9 @@ import Image from 'next/image';
 import ProgressBar from './ProgressBar';
 import { useRouter } from 'next/router';
 import IntroModal from './IntroModal';
+import { AiFillSafetyCertificate } from 'react-icons/ai';
+import Expert from '/public/image/icon/expertise.png';
+import { Tooltip } from 'flowbite-react';
 
 const ImageWrapper = styled.div`
 width: 100%;
@@ -83,9 +86,11 @@ const index = (
 
   const [introModalOpened, setIntroModalOpen] = useState(false);
   const openIntroModal = useCallback(() => {
+    document.body.style.overflow = "hidden";
     setIntroModalOpen(true);
   }, [])
   const closeIntroModal = useCallback(() => {
+    document.body.style.overflow = "unset";
     setIntroModalOpen(false);
   }, [])
 
@@ -109,7 +114,7 @@ const index = (
             <div className='px-2 sm:px-4'>
               <ProgressBar />
             </div>
-            <div id="profile" className="space-y-3 flex flex-col w-[62px] h-[118px] mx-auto">
+            <div id="profile" className="space-y-3 flex flex-col w-full items-center h-[118px] mx-auto">
               <div className='w-[62px] h-[62px]'>
                 <ImageWrapper className='w-[62px] h-[62px]'>
                   <Image
@@ -123,21 +128,39 @@ const index = (
                   </Image>
                 </ImageWrapper>
               </div>
-              <div>
-                <h2
-                  className="font-medium text-md md:text-lg text-center text-[#1890FF]"
-                >
-                  {user?.username}
-                </h2>
-                <p className="text-sm md:text-md text-gray-500 text-center">{(() => {
-                  switch (parseInt(user?.purpose)) {
-                    case 1: return (<span className="">기업담당자</span>)
-                    case 2: return (<span className="">구직자</span>)
-                    case 3: return (<span className="">예비구직자</span>)
-                    case 4: return (<span className="">관찰자</span>)
-                    default: null;
-                  }
-                })(parseInt(user?.purpose))}</p>
+              <div className='w-full '>
+                <div className='flex flex-row items-center justify-center'>
+                  <h2
+                    className="font-medium text-md md:text-lg text-center text-[#1890FF]"
+                  >
+                    {user?.username}
+                  </h2>
+                  {user?.companycomplete && (
+                    <Tooltip
+                      placement="bottom"
+                      className="w-max"
+                      content="전문가인증"
+                      trigger="hover"
+                    >
+                      <Image
+                        alt="expert"
+                        className="avatar w-7 h-7 rounded-md object-cover"
+                        width={24} height={24}
+                        unoptimized
+                        src={Expert} />
+                    </Tooltip>
+                  )}
+                </div>
+                <p className="text-sm md:text-md text-gray-500 text-center">
+                  {(() => {
+                    switch (parseInt(user?.purpose)) {
+                      case 1: return (<span className="">기업전문가</span>)
+                      case 2: return (<span className="">구직자</span>)
+                      case 3: return (<span className="">예비구직자</span>)
+                      case 4: return (<span className="">관찰자</span>)
+                      default: null;
+                    }
+                  })(parseInt(user?.purpose))}</p>
               </div>
 
             </div>
@@ -165,7 +188,7 @@ const index = (
                 </div>
               </div>
             }
-            <ul className="space-y-2">
+            <ul className="">
 
               <li>
                 <div className={`flex items-center justify-between p-2 py-3 text-[14px] font-normal text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700
@@ -260,14 +283,14 @@ const index = (
                 <button
                   onClick={openIntroModal}
                   className='flex flex-row px-6 py-2 border-gray-400 border-[1px] border-solid rounded-full hover:bg-gray-100 mx-auto items-center'
-                ><BiTransfer className='mr-0.5' />그룹회원으로 변경</button>
+                ><AiFillSafetyCertificate className='mr-0.5' />전문가 인증받기</button>
               </div>
               :
               <div className='w-full my-1 text-gray-500 text-base'>
                 <button
                   onClick={goGroup}
                   className='flex flex-row px-6 py-2 border-gray-400 border-[1px] border-solid rounded-full hover:bg-gray-100 mx-auto items-center'
-                ><BiTransfer className='mr-0.5' />그룹페이지</button>
+                ><AiFillSafetyCertificate className='mr-0.5' />전문가 정보변경</button>
               </div>
             }
           </div>
@@ -372,14 +395,14 @@ const index = (
                 <div className='w-full my-1 text-gray-500 text-base'>
                   <button
                     onClick={openIntroModal}
-                    className='flex flex-row px-6 py-2 border-gray-400 border-[1px] border-solid rounded-full hover:bg-gray-100 mx-auto items-center'
+                    className='flex flex-row px-3 py-2 border-gray-400 border-[1px] border-solid rounded-full hover:bg-gray-100 mx-auto items-center'
                   ><BiTransfer className='mr-0.5' />그룹회원으로 변경</button>
                 </div>
                 :
                 <div className='w-full my-1 text-gray-500 text-base'>
                   <button
                     onClick={goGroup}
-                    className='flex flex-row px-6 py-2 border-gray-400 border-[1px] border-solid rounded-full hover:bg-gray-100 mx-auto items-center'
+                    className='flex flex-row px-3 py-2 border-gray-400 border-[1px] border-solid rounded-full hover:bg-gray-100 mx-auto items-center'
                   ><BiTransfer className='mr-0.5' />그룹페이지</button>
                 </div>
               }

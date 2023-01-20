@@ -11,11 +11,11 @@ const index = () => {
 
   return (
     <>
-      <Page className='pt-[var(--navbar-height)] md:pb-auto' >
+      <div className='pt-[var(--navbar-height)] md:pb-auto' >
         <div className='mx-auto w-fit text-left pt-[5.4rem]'>
           <Main />
         </div>
-      </Page>
+      </div>
       <Toaster
         position='bottom-center'
         toastOptions={{
@@ -32,9 +32,5 @@ const index = () => {
   );
 };
 
-
-const Page = styled.div`
-
-`;
 
 export default index;

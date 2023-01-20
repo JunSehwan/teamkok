@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { MdSpaceDashboard } from 'react-icons/md';
 import { FaBuilding } from 'react-icons/fa';
@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { AiOutlineComment } from 'react-icons/ai';
 import { TbHandFinger } from 'react-icons/tb';
-import { BsFillPersonBadgeFill } from 'react-icons/bs';
+import { BsFillPersonBadgeFill, BsEnvelopeOpenFill, BsEnvelopeFill } from 'react-icons/bs';
 
 
 const SideBar = styled.aside`
@@ -59,10 +59,10 @@ const index = (
                  ${router.pathname === "/dashboard" ? "bg-slate-200" : "bg-transparent"}`}>
                   <Link className='flex-shrink-0' href="/dashboard">
                     <a className={`w-full flex flex-row justify-center p-2 py-3 items-center ${router.pathname === "/dashboard" ? "text-gray-700" : "text-gray-500"}`}>
-                      <MdSpaceDashboard
+                      <BsEnvelopeFill
                         className="flex-shrink-0 w-6 h-6  transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                      ></MdSpaceDashboard>
-                      <span className="flex-1 ml-3 whitespace-nowrap">대시보드</span>
+                      ></BsEnvelopeFill>
+                      <span className="flex-1 ml-3 whitespace-nowrap">수신함</span>
                     </a>
                   </Link>
                 </div>
@@ -115,17 +115,17 @@ const index = (
                   </button> */}
                 </div>
               </li>
-              {user?.purpose === 1 && (<>
+              {(user?.purpose === 1 || user?.purpose === 5) && (<>
 
                 <li>
-                  <div className={`flex items-center justify-between text-[14px] font-normal text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700
+                  <div className={`mt-2 flex items-center justify-between text-[14px] font-normal text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700
                  ${router.pathname === "/dashboard/group" ? "bg-slate-200" : "bg-transparent"}`}>
                     <Link className='flex-shrink-0 ' href="/dashboard/group">
                       <a className={`w-full flex flex-row justify-center p-2 py-3 items-center ${router.pathname === "/dashboard/group" ? "text-gray-700" : "text-gray-500"}`}>
-                        <FaBuilding
+                        <BsEnvelopeOpenFill
                           className="flex-shrink-0 w-6 h-6  transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                        ></FaBuilding>
-                        <span className="flex-1 ml-3 whitespace-nowrap">그룹페이지</span>
+                        ></BsEnvelopeOpenFill>
+                        <span className="flex-1 ml-3 whitespace-nowrap">발신함</span>
                       </a>
                     </Link>
                     {/* <button onClick={() => setResumeOpen(prev => !prev)} className="w-8 h-8 inline-flex justify-center z-1 hover:bg-gray-300 p-2 rounded-full items-center text-md font-medium text-gray-400 dark:bg-gray-700 dark:text-gray-300">

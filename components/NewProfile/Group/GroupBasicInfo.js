@@ -108,13 +108,13 @@ const GroupBasicInfo = () => {
   return (
     <div className='py-8'>
       <h3 className='sm:text-[2.3rem] text-[1.8rem] text-gray-700 my-4 w-full pl-2'>
-        🏢팀계정 기초정보</h3>
-      <p className='ml-2 my-1 text-gray-500 text-[1.2rem] leading-8'>팀에 대한 기초정보</p>
+        🏢전문가 인증 기초정보</h3>
+      {/* <p className='ml-2 my-1 text-gray-500 text-[1.2rem] leading-8'>소속팀에 대한 기초정보</p> */}
 
       <div className='py-4 px-2'>
         <div className="py-4">
           <label className="block mb-4 text-md font-bold text-gray-700 " htmlFor="mycompany">
-            어떤 회사(그룹)에서 근무중이십니까?
+            어떤 회사에서 근무중이십니까?
           </label>
           <input
             className={mycompanyError ?
@@ -156,7 +156,7 @@ const GroupBasicInfo = () => {
 
         <div className="py-4">
           <label className="block mb-4 text-md font-bold text-gray-700 " htmlFor="mysection">
-            팀명을 적어주세요.
+            소속 팀명을 적어주세요.
           </label>
           <input
             className={mysectionError ?

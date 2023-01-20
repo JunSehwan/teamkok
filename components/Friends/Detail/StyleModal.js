@@ -7,7 +7,7 @@ import { FcBiotech, FcMindMap } from 'react-icons/fc';
 import Survey from 'components/Common/Survey';
 import { Tooltip } from "flowbite-react";
 const StyleModal = () => {
-  const { friend } = useSelector(state => state.user);
+  const { user, friend } = useSelector(state => state.user);
   const styleObject = StyleList?.filter(obj => obj.number == friend?.style);
 
   const [modal, setModal] = useState(false);
@@ -51,14 +51,14 @@ const StyleModal = () => {
             content="스타일 확인"
             trigger="hover"
           >
-            <button className="rounded-full p-3 hover:bg-white bg-amber-300/60 border-solid border-amber-600 flex items-center justify-center flex-col"
+            <button className="rounded-full p-3 hover:bg-white bg-blue-300/60 border-solid border-blue-600 flex items-center justify-center flex-col"
               onClick={openModal}
             >
               <motion.div
                 whileHover={{ scale: 1.2 }}
                 whileTap={{ scale: 0.9 }}
               >
-                <FcBiotech className="w-6 h-6 text-amber-600" />
+                <FcBiotech className="w-6 h-6 text-blue-600" />
               </motion.div>
             </button>
           </Tooltip>
@@ -71,7 +71,8 @@ const StyleModal = () => {
                 <div className="sticky w-[100%] mt-auto mb-auto mx-auto min-w-auto max-w-[920px]" ref={modalEl}>
                   <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                     <div className="flex items-center justify-between p-5 rounded-t">
-                      <p className='font-bold text-2xl'>{friend?.username}님의 업무스타일</p>
+                      {/* <p className='font-bold text-2xl'>{user?.purpose !== 1 ? friend?.username?.slice(0, 1) + "○○" : friend?.username}님의 업무스타일</p> */}
+                      <p className='font-bold text-2xl w-full text-center'>{friend?.username}님의 업무스타일</p>
                       <button
                         className="p-3 rounded-xl hover:bg-slate-200 ml-auto bg-transparent border-0 text-gray-500 hover:text-gray-700 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                         onClick={closeModal}
@@ -91,7 +92,7 @@ const StyleModal = () => {
                               <div className="flex h-full items-center w-full">
                                 <div className="mx-[auto] border-gray-400 flex flex-row mb-2 w-[100%]">
                                   <div
-                                    className="flex-col sm:flex-row bg-sky-100 text-left transition duration-500 shadow ease-in-out transform hover:-translate-y-1 hover:shadow-lg select-none cursor-pointer hover:bg-sky-200 click:active:checked:focus:bg-sky-300 dark:bg-gray-800 rounded-md flex flex-1 items-center p-4 w-full"
+                                    className="flex-col sm:flex-row bg-stone-100 text-left transition duration-500 shadow ease-in-out transform hover:-translate-y-1 hover:shadow-lg select-none cursor-pointer hover:bg-stone-200 dark:bg-gray-800 rounded-md flex flex-1 items-center p-4 w-full"
                                   >
                                     <div className="flex flex-col h-10 justify-center items-center">
                                       {styleObject[0]?.src &&
@@ -164,15 +165,22 @@ const StyleModal = () => {
                           }
                         </div>
                       </div>
+                      <div className='pt-4 w-full'>
+                        <button
+                          className='w-full text-slate-700 py-3 text-md rounded-lg bg-slate-200 hover:bg-slate-300'
+                          onClick={closeModal}>확인
+                        </button>
+                      </div>
                     </div>
+
                   </div>
                 </div>
               </div>
             </div>
             : null}
         </>
-
       </div>
+
     </div>
   );
 };

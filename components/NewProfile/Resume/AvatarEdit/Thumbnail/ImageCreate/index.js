@@ -7,7 +7,6 @@ import { MdDelete } from "react-icons/md";
 import Spin from 'components/Common/Spin';
 import { doc, updateDoc, } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable, getStorage } from "firebase/storage";
-import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { db, storage } from 'firebaseConfig';
 import { BsFillCloudUploadFill } from 'react-icons/bs';
@@ -20,7 +19,6 @@ const index = ({ imageModalOpened, closeImageModal }) => {
   const dispatch = useDispatch();
   const { user, patchThumbimageDone } = useSelector(state => state.user);
 
-  const updatenotify = () => toast('업데이트 완료!');
   const [selectedImages, setSelectedImages] = useState([]);
   const [images, setImages] = useState([])
   const [progress, setProgress] = useState(0);
@@ -130,7 +128,6 @@ const index = ({ imageModalOpened, closeImageModal }) => {
 
   useEffect(() => {
     if (patchThumbimageDone) {
-      updatenotify();
       setLoading(false);
       setSelectedImages([])
       setImages([])
@@ -138,9 +135,8 @@ const index = ({ imageModalOpened, closeImageModal }) => {
       setURLs([])
       closeImageModal();
       setFinish(false);
-      dispatch(patchThumbimageDoneFalse())
     }
-  }, [patchThumbimageDone, closeImageModal, dispatch])
+  }, [closeImageModal, dispatch, patchThumbimageDone])
 
   return (
     <Modal
@@ -241,7 +237,7 @@ const index = ({ imageModalOpened, closeImageModal }) => {
             <div className="w-full">
               {loading ? (
                 <div>
-                  <div className='mx-auto w-[360px] h-[600px] flex flex-col justify-center items-center'>
+                  <div className='mx-auto w-full md:w-[360px] h-[600px] flex flex-col justify-center items-center'>
                     <div className='-ml-[48px] mb-[48px]'>
                       <Spin />
                     </div>
@@ -254,7 +250,7 @@ const index = ({ imageModalOpened, closeImageModal }) => {
                 <div>
                   {!selectedImages || selectedImages?.length === 0 ? (
                     <label className="cursor-pointer">
-                      <div className='border-dashed mx-auto rounded-xl w-[360px] h-[600px] border-2 border-gray-200 flex flex-col justify-center items-center
+                      <div className='border-dashed mx-auto rounded-xl w-full md:w-[360px] h-[600px] border-2 border-gray-200 flex flex-col justify-center items-center
               outline-none'>
                         <div className="flex flex-col items-center justify-center h-full py-[1rem]">
                           <div className="flex flex-col justify-center items-center">

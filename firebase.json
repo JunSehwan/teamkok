@@ -19,11 +19,15 @@
     "appAssociation": "AUTO",
     "rewrites": [
       {
+        "source": "/sitemap.xml",
+        "function": "myApp"
+      },
+      {
         "source": "/**",
         "destination": "/index.html",
         "dynamicLinks": true
       },
-      { "source": "/board/**", "dynamicLinks": true }
+      { "source": "/friends/detail/**", "dynamicLinks": true }
     ]
   },
   "storage": {

@@ -353,6 +353,7 @@ export async function updateMycompanyInfo(mycompany, myposition, mysection, myty
     await updateUserDatabase("mytype", mytype);
     await updateUserDatabase("companyemail", companyemail);
     await updateUserDatabase("companycomplete", true);
+    await updateUserDatabase("purpose", 1);
 
     return ({
       mycompany: mycompany,
@@ -360,7 +361,8 @@ export async function updateMycompanyInfo(mycompany, myposition, mysection, myty
       mysection: mysection,
       mytype: mytype,
       companyemail: companyemail,
-      companycomplete: true
+      companycomplete: true,
+      purpose: 1
     })
   } catch (error) {
     console.error(error);
@@ -458,6 +460,21 @@ export async function updatePurpose(input) {
     alert("update에 문제가 있습니다.");
   }
 }
+
+export async function updateCliptype(input) {
+  const user = auth.currentUser;
+  if (!user) return (
+    alert("로그인 후 가능합니다.")
+  );
+  try {
+    await updateUserDatabase("cliptype", input);
+    return input;
+  } catch (error) {
+    console.error(error);
+    alert("update에 문제가 있습니다.");
+  }
+}
+
 // onBoarding 페이지
 export async function updateFirstMake(input) {
   const user = auth.currentUser;
@@ -840,6 +857,7 @@ export async function getFriends() {
       liked: doc.data().liked || [],
       advices: doc.data().advices || [],
       adviced: doc.data().adviced || [],
+      cliptype: doc.data().cliptype,
       // coccocs: doc.data().coccocs || [],
       // coccoced: doc.data().coccoced || [],
       // joboffers: doc.data().joboffers || [],
@@ -919,6 +937,7 @@ export async function getUsers() {
       liked: doc.data().liked || [],
       advices: doc.data().advices || [],
       adviced: doc.data().adviced || [],
+      cliptype: doc.data().cliptype,
       // coccocs: doc.data().coccocs || [],
       // coccoced: doc.data().coccoced || [],
       // joboffers: doc.data().joboffers || [],
@@ -1006,6 +1025,7 @@ export async function getCategoryUsers(categoryFilter) {
       liked: doc.data().liked || [],
       advices: doc.data().advices || [],
       adviced: doc.data().adviced || [],
+      cliptype: doc.data().cliptype,
       // coccocs: doc.data().coccocs || [],
       // coccoced: doc.data().coccoced || [],
       // joboffers: doc.data().joboffers || [],

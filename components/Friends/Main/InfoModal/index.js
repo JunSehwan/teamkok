@@ -111,7 +111,7 @@ const index = () => {
                         id="double"
                         className='w-8 h-8 text-sky-700 ' />
                       <div className="whitespace-normal leading-normal w-full overflow-hidden text-gray-600 dark:text-gray-100 text-left text-md py-1">
-                        카드 하단부 더블클릭시 상세보기가 가능합니다.
+                        카드를 더블클릭시 상세보기가 가능합니다.
                       </div>
                     </>
                   </div>
@@ -121,7 +121,7 @@ const index = () => {
                         id="double"
                         className='w-8 h-8 text-sky-700' />
                       <div className="whitespace-normal leading-normal w-full overflow-hidden text-gray-600 dark:text-gray-100 text-left text-md py-1">
-                        팀담당자라면, 카드 우측 버튼을 통해 매력있는 인재를 찜해보세요!
+                        팀 담당자라면, 카드 우측 버튼을 통해 매력있는 인재를 찜해보세요!
                       </div>
                     </>
                   </div>

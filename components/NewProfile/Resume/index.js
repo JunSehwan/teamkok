@@ -18,7 +18,7 @@ const index = (
   }
 ) => {
 
-
+ 
   return (
     <div className='pt-[var(--navbar-height)] md:px-8 pb-[70px] md:pb-auto'>
       <div ref={element1}>

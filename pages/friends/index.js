@@ -82,6 +82,7 @@ const index = () => {
         liked: docData.liked,
         advices: docData.advices,
         adviced: docData.adviced,
+        cliptype: docData.cliptype,
 
       };
       dispatch(setUser(currentUser));
@@ -155,6 +156,7 @@ const index = () => {
         liked: docData.liked,
         advices: docData.advices,
         adviced: docData.adviced,
+        cliptype: docData.cliptype,
 
       };
       dispatch(setUser(currentUser));

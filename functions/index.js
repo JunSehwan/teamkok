@@ -3,6 +3,8 @@ const admin = require("firebase-admin");
 const axios = require('axios');
 const dayjs = require('dayjs');
 const serviceAccount = require("./admin-sdk.json");
+const express = require('express');
+const apps = express();
 
 const app = admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
@@ -11,7 +13,7 @@ const app = admin.initializeApp({
 const auth = admin.auth(app);
 const logI = functions.logger.info;
 const logE = functions.logger.error;
-
+const isDev = process.env.NODE_ENV !== 'production'
 async function fetchKakaoAccessToken(code) {
   try {
     const res = await axios({
@@ -22,8 +24,8 @@ async function fetchKakaoAccessToken(code) {
         code: code,
         grant_type: "authorization_code",
         client_id: process.env.KAKAO_LOGIN_CLIENT_ID,
-        redirect_uri: "http://localhost:3060/auth/kakaologin",
-        // redirect_uri: "https://jobcoc.com/auth/kakaologin",
+        // redirect_uri: "http://localhost:3060/auth/kakaologin",
+        redirect_uri: "https://jobcoc.com/auth/kakaologin",
       }
     })
     return res?.data;
@@ -129,3 +131,98 @@ exports.kakaoLogin = functions
     }
     return await auth.createCustomToken(user.uid, { provider: "KAKAO" });
   });
+
+
+// exports.buildSitemap = functions.https.onRequest(async (request, response) => {
+
+//   let sitemapHeader = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
+
+//   let basucURL = `<url><loc>https://jobcoc.com</loc><lastmod>2022-12-29</lastmod></url>`;
+//   let blogURL = `<url><loc>https://jobcoc.com/news</loc><lastmod>2022-12-29</lastmod></url>`;
+//   let projectsURL = `<url><loc>https://jobcoc.com/friends</loc><lastmod>2022-12-29</lastmod></url>`;
+//   let aboutURL = `<url><loc>https://jobcoc.com/about</loc><lastmod>2022-12-29</lastmod></url>`;
+//   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//   // Reading data dynamically from the database
+//   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//   let snapshot = await admin.database().ref('users').once('userID');
+//   let posts = snapshot.val();
+//   let postURLs = Object.keys(posts).reduce((acc, url) => {
+
+//     acc = acc + `<url><loc>https://jobcoc.com/friends/detail/${url}</loc><lastmod>${posts[url].timestamp}</lastmod></url>`;
+
+//     return acc;
+
+//   }, '');
+//   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+//   let sitemapFooter = `</urlset>`;
+
+//   let sitemapString = sitemapHeader + basucURL + blogURL + projectsURL + aboutURL + postURLs + sitemapFooter;
+//   logI("# sitemapString", sitemapString);
+//   response.set('Content-Type', 'text/xml');
+//   response.status(200).send(sitemapString);
+
+// });
+
+apps.get('/sitemap.xml', async (request, response) => {
+  let sitemapHeader = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
+
+  let basucURL = `<url><loc>https://jobcoc.com</loc><lastmod>2022-12-29</lastmod></url>`;
+  let blogURL = `<url><loc>https://jobcoc.com/news</loc><lastmod>2022-12-29</lastmod></url>`;
+  let projectsURL = `<url><loc>https://jobcoc.com/friends</loc><lastmod>2022-12-29</lastmod></url>`;
+  let aboutURL = `<url><loc>https://jobcoc.com/about</loc><lastmod>2022-12-29</lastmod></url>`;
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // Reading data dynamically from the database
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  let snapshot = await admin.database().ref('users').once('userID');
+  let posts = snapshot.val();
+  let postURLs = Object.keys(posts).reduce((acc, url) => {
+
+    acc = acc + `<url><loc>https://jobcoc.com/friends/detail/${url}</loc><lastmod>${posts[url].timestamp}</lastmod></url>`;
+
+    return acc;
+
+  }, '');
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  let sitemapFooter = `</urlset>`;
+
+  let sitemapString = sitemapHeader + basucURL + blogURL + projectsURL + aboutURL + postURLs + sitemapFooter;
+  logI("# sitemapString", sitemapString);
+  response.set('Content-Type', 'text/xml');
+  response.status(200).send(sitemapString);
+
+})
+exports.myApp = functions.https.onRequest(apps);
+
+
+// export const generateSitemap = functions.region('us-central1').https.onRequest((req, res) => {
+
+//   const afStore = admin.firestore();
+//   const promiseArray: Promise<any>[] = [];
+
+//   const stream = new SitemapStream({ hostname: 'https://www.example.com' });
+//   const fixedLinks: any[] = [
+//     { url: `/start/`, changefreq: 'hourly', priority: 1 },
+//     { url: `/help/`, changefreq: 'weekly', priority: 1 }
+//   ];
+
+//   const userLinks: any[] = [];
+
+//   promiseArray.push(afStore.collection('users').where('active', '==', true).get().then(querySnapshot => {
+//     querySnapshot.forEach(doc => {
+//       if (doc.exists) {
+//         userLinks.push({ url: `/user/${doc.id}`, changefreq: 'daily', priority: 1 });
+//       }
+//     });
+//   }));
+
+//   return Promise.all(promiseArray).then(() => {
+//     const array = fixedLinks.concat(userLinks);
+//     return streamToPromise(Readable.from(array).pipe(stream)).then((data: any) => {
+//       res.set('Content-Type', 'text/xml');
+//       res.status(200).send(data.toString());
+//       return;
+//     });
+//   });
+// });

@@ -47,7 +47,7 @@ const LeftMessage = ({ message, conversation, index, docs, setReplyInfo }) => {
             setReplyInfo(message);
           }
         }}
-        className={`group relative flex items-stretch gap-2 px-8 ${Object.keys(message?.reactions || {}).length > 0 ? "mb-2" : ""
+        className={`group relative flex items-stretch gap-2 px-4 ${Object.keys(message?.reactions || {}).length > 0 ? "mb-2" : ""
           }`}
       >
         {conversation?.users?.length > 2 && (

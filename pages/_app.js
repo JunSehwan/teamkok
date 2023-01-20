@@ -37,6 +37,7 @@ const _app = ({ Component, pageProps }) => {
   // 리라우팅시 root페이지로 이동(동적페이지) - 방지를 위함
   useEffect(() => {
     router.push(window.location.href)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -68,7 +69,8 @@ const _app = ({ Component, pageProps }) => {
         <meta name="msapplication-TileColor" content="#ffffff" />
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png"></meta>
         <meta name="theme-color" content="#ffffff"></meta>
-        <meta name="naver-site-verification" content="03f56ed31be86c0a262e8be9ed5c85cdcc2db12e" />
+        <meta name="facebook-domain-verification" content="4jl845pue91m5vt6u2tj4b4u6m9198" />
+        <meta name="naver-site-verification" content="56323464638cac2ad4a3cf6def8439d06ff33966" />
 
       </Head>
       <ThemeProvider theme={theme}>

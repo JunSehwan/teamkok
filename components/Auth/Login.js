@@ -136,7 +136,7 @@ const Login = () => {
   const db = getFirestore();
 
   const signInWithKakaoHandler = useCallback(() => {
-    const redirectUri = `${location.origin}/auth/kakaologin`;
+    const redirectUri = `${location?.origin}/auth/kakaologin`;
     Kakao.Auth.authorize({ redirectUri });
   }, [])
 
@@ -291,6 +291,8 @@ const Login = () => {
 
 
 
+
+                </form>
                   <div className="text-center text-[14px] text-gray-500">
 
                     비밀번호를 잊어버렸나요?
@@ -312,6 +314,7 @@ const Login = () => {
                   <div className="w-fit bg-white mt-[-24px] px-8 mx-auto text-md text-gray-500">소셜 계정 로그인</div>
                   <div className='mt-4 mb-4 gap-4 p-2 flex flex-col min-w-full items-center'>
                     <button
+                      type="button"
                       onClick={signInWithGoogleHandler}
                       className="hover:bg-slate-50 rounded-full google-btn flex flex-row items-center justify-center w-[70%] mx-auto p-2 bg-white shadow-lg h-[48px] disabled:!cursor-default disabled:!brightness-75"
                     >
@@ -323,6 +326,7 @@ const Login = () => {
                     </button>
 
                     <button
+                      type="button"
                       onClick={signInWithKakaoHandler}
                       className="hover:bg-[#FEE50090] rounded-full kakao-btn flex flex-row items-center justify-center w-[70%] mx-auto p-2 bg-[#FEE500] shadow-lg h-[48px] disabled:!cursor-default disabled:!brightness-75"
                     >
@@ -333,8 +337,6 @@ const Login = () => {
                     </button>
 
                   </div>
-
-                </form>
 
                 <div className="g-signin2" data-width="300" data-height="200" data-longtitle="true" />
 

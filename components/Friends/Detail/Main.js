@@ -6,10 +6,10 @@ import toast, { Toaster } from "react-hot-toast";
 import Router, { useRouter } from "next/router";
 import Image from "next/image";
 import { nanoid } from 'nanoid'
-import { BsBackspace, BsFillBackspaceFill, BsFillPlayFill, } from "react-icons/bs";
+import { BsFillPlayFill, } from "react-icons/bs";
 import styled from "styled-components";
 import { GoVerified } from "react-icons/go";
-import { HiVolumeOff, HiVolumeUp } from "react-icons/hi";
+// import { HiVolumeOff, HiVolumeUp } from "react-icons/hi";
 import { AiOutlineDingtalk } from "react-icons/ai";
 import { FaRegHandPointUp } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,7 +19,7 @@ import { BsFillHeartFill, BsHeart, BsStarFill } from 'react-icons/bs';
 import { likeUser, unlikeUser } from 'firebaseConfig';
 import { likeToDetailUser, unlikeToDetailUser } from 'slices/user';
 import { Tooltip } from "flowbite-react";
-import Link from "next/link";
+// import Link from "next/link";
 import CategoryList from 'components/Common/CategoryList';
 import Joboffer from '../Main/Friend/Joboffer'
 import Coccoc from '../Main/Friend/Coccoc'
@@ -30,8 +30,10 @@ import { addJobofferDoneFalse } from 'slices/joboffer';
 import { addCoccocDoneFalse } from 'slices/coccoc';
 import Slider from 'components/Common/Slider';
 import { FcPlus } from "react-icons/fc";
-import { MdOutlineClose } from "react-icons/md";
-import { BiLink } from "react-icons/bi";
+import { MdOutlineClose, MdSchool } from "react-icons/md";
+// import { BiLink } from "react-icons/bi";
+import Expert from '/public/image/icon/expertise.png';
+import { HiOutlineOfficeBuilding } from "react-icons/hi";
 
 const Main = () => {
   const router = useRouter();
@@ -219,7 +221,11 @@ const Main = () => {
     }
   }, [domainRegex])
 
-  const isTeamMember = user && user?.mycompany && friend?.userID !== user?.userID && user?.purpose === 1
+  const isTeamMember = user && user?.mycompany && user?.userID !== friend?.userID && (user?.purpose === 1 || user?.purpose === 5)
+
+  const goBack = useCallback(() => {
+    router.back();
+  }, [router])
 
   return (
     <motion.div
@@ -231,14 +237,15 @@ const Main = () => {
       <Toaster />
       <div className="relative flex-2 w-full lg:w-9/12 flex justify-center items-center bg-no-repeat bg-cover bg-center bg-gradient-to-r from-gray-900 to-gray-700">
         <div className="opacity-90 absolute top-4 left-4 flex gap-6 z-[5]">
-          <button className="cursor-pointer opacity-80 p-2 flex justify-center items-center shadow-inner rounded-full bg-gray-100 hover:bg-gray-200" onClick={() => router.back()}>
+          <button className="cursor-pointer opacity-80 p-2 flex justify-center items-center shadow-inner rounded-full bg-gray-100 hover:bg-gray-200" onClick={goBack}>
             <MdOutlineClose className="text-gray-600 font-bold text-lg" />
           </button>
         </div>
 
         <div className="relative">
           <div className="lg:h-[calc(100vh-var(--navbar-height))] h-[60vh]">
-            {friend?.thumbvideo && (
+            {(friend?.cliptype == "video" && friend?.thumbvideo) || (!friend?.cliptype && friend?.thumbvideo) ||
+              (friend?.thumbvideo && !friend?.thumbimage) ? (
               <>
                 <video
                   autoPlay={true}
@@ -270,18 +277,19 @@ const Main = () => {
                   )}
                 </div> */}
               </>
-            )}
+            ) : null}
 
-            {!friend?.thumbvideo &&
-              friend?.thumbimage ?
+            {(friend?.cliptype == "image" && friend?.thumbimage?.length === 1) ||
+              (!friend?.thumbvideo &&
+                friend?.thumbimage?.length === 1) ?
               <>
                 <img
                   src={friend?.thumbimage[0] || backgroundPicture?.src}
                   className="lg:h-[calc(100vh-var(--navbar-height))] h-[60vh] cursor-pointer object-cover opacity-90"
                 ></img>
               </>
-              : !friend?.thumbvideo &&
-                friend?.thumbimage && friend?.thumbimage?.length >= 2 ?
+              : (friend?.cliptype == "image" && friend?.thumbimage?.length >= 2) ||
+                (!friend?.thumbvideo && friend?.thumbimage && friend?.thumbimage?.length >= 2) ?
                 <button
                   className="flex justify-between flex-col gap-2 hover:opacity-90 relative"
                   onClick={onClickSlider}
@@ -290,9 +298,9 @@ const Main = () => {
                     src={friend?.thumbimage[0] || backgroundPicture?.src}
                     className="lg:h-[calc(100vh-var(--navbar-height))] h-[60vh] cursor-pointer object-cover opacity-90"
                   ></img>
-                  <div className="z-10 gap-2 flex items-center absolute text-2xl text-white/80 bottom-4 right-4">
+                  <div className="z-10 gap-2 flex items-center absolute text-md text-white/80 bottom-4 right-4">
                     <FcPlus />
-                    <span>클릭하여 {friend?.thumbimage?.length - 1}장 더보기</span>
+                    <span className="text-md">클릭하여 {friend?.thumbimage?.length - 1}장 더보기</span>
                   </div>
                 </button>
                 : null
@@ -314,7 +322,7 @@ const Main = () => {
       <div className="relative w-full md:w-full lg:w-[700px] md:h-[calc(100vh-var(--navbar-height))]">
         <Container className="lg:h-[calc(100vh-var(--navbar-height))] lg:overflow-y-scroll">
           <div
-            className="flex gap-4 mb-4 bg-white w-full pl-3 pt-6"
+            className="flex gap-4 mb-4 bg-white w-full px-2 pt-6"
           /*    onClick={handleChangePage} */
           >
             <div className="flex flex-col gap-4">
@@ -334,10 +342,26 @@ const Main = () => {
                 className="text-xl font-bold flex gap-2 items-center justify-between flex-row"
 
               >
-                <div className="flex flex-row items-center gap-2">
+                <div className="flex flex-row items-center gap-1">
                   <p>
-                    {isTeamMember ? friend?.username : friend?.username?.slice(0, 1) + "○○"}
+                    {/* {isTeamMember ? friend?.username : friend?.username?.slice(0, 1) + "○○"} */}
+                    {friend?.username}
                   </p>
+                  {friend?.companycomplete && (
+                    <Tooltip
+                      placement="bottom"
+                      className="w-max"
+                      content="전문가인증"
+                      trigger="hover"
+                    >
+                      <Image
+                        alt="expert"
+                        className="avatar rounded-md object-cover"
+                        width={29} height={29}
+                        unoptimized
+                        src={Expert} />
+                    </Tooltip>
+                  )}
                   {friend?.category && friend?.skills?.length !== 0 && myCareer?.length !== 0 && myEducation?.length !== 0 ?
                     <Tooltip
                       placement="bottom"
@@ -379,50 +403,53 @@ const Main = () => {
                 </div>
 
 
-                <div className="w-full text-gray-600 font-normal md:text-md text-sm">
-                  <div className="text-sm text-gray-800">제안받은 연봉</div>
+                <div className="w-full text-gray-600 md:text-md text-sm">
+                  <div className="text-sm text-gray-600">제안받은 연봉1 (입사제안)</div>
                   {mainJoboffered && mainJoboffered?.length !== 0 ? mainJoboffered?.map((v) => (
-                    <div key={nanoid()} className="text-left w-fit mr-2 inline-flex bg-lime-100 p-2 rounded-xl">
+                    <div key={nanoid()} className="text-left w-fit mr-1 mt-1 border border-solid border-yellow-700/50 inline-flex bg-yellow-100 p-1 px-2 rounded-full">
                       <div>
                         <div className="flex flex-col">
                           <div>
-                            <div className="font-bold ">
+                            <div className="font-medium">
                               <span
-                                className="mr-1">💰 {v?.salary}만원</span>
+                                className="mr-1">💰{(Math.round(v?.salary))?.toLocaleString()}만원</span>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   ))
-                    : <span className="text-gray-400">조만간 볼 수 있을거예요😀</span>
+                    : <span className="text-gray-400">아직 없어요 👀</span>
                   }
                 </div>
 
-                <div className="w-full text-gray-500 font-normal md:text-md text-sm" >
-                  <div className="text-sm text-gray-800">제안받은 연봉(콕콕)</div>
+                <div className="w-full text-gray-500 md:text-md text-sm" >
+                  <div className="text-sm text-gray-600">제안받은 연봉2 (콕콕)</div>
                   {mainCoccoced && mainCoccoced?.length !== 0 ? mainCoccoced?.map((v) => (
-                    <div key={nanoid()} className="text-left w-fit mr-2 inline-flex bg-gray-100 p-2 rounded-xl">
+                    <div key={nanoid()} className="text-left w-fit mr-1 mt-1 border border-solid border-yellow-700/50 inline-flex bg-yellow-100 p-1 px-2 rounded-full">
                       <div>
                         <div className="flex flex-col">
                           <div>
-                            <div className="font-bold ">
+                            <div className="font-medium">
                               <span
-                                className="mr-1">💰 {v?.salary}만원</span>
+                                className="mr-1">💰{(Math.round(v?.salary))?.toLocaleString()}만원</span>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   ))
-                    : <span className="text-gray-400">조만간 볼 수 있을거예요😀</span>
+                    : <span className="text-gray-400">아직 없어요 👀</span>
                   }
                 </div>
 
                 <div className="w-full text-gray-600 font-normal md:text-md text-sm">
                   {myCareers?.length !== 0 ? myCareers?.map((v) => (
-                    <div key={nanoid()} className="my-1 flex text-left bg-slate-100 p-2 rounded-xl">
-                      <div>
+                    <div key={nanoid()} className="my-1 flex text-left bg-stone-200/50 p-2 rounded-xl">
+                      <div className="flex flex-row items-start justify-start">
+                        <div className="px-2">
+                          <HiOutlineOfficeBuilding className="w-5 h-5" />
+                        </div>
                         <div className="flex flex-col">
                           <div>
                             <div className="font-bold ">
@@ -432,8 +459,8 @@ const Main = () => {
                               <span className="mr-1">{v?.position}</span>
                             </div>
                             <div className="font-normal text-sm text-gray-500">
-                              <span className="mr-1">{v?.job}</span>-&nbsp;
-                              <span className="mr-1">{v?.start?.year}~{v?.end?.year == 9999 ? "현재" : v?.end?.year}</span>
+                              <p className="mr-1">{v?.start?.year}~{v?.end?.year == 9999 ? "현재" : v?.end?.year}</p>
+                              <p className="mr-1">{v?.job}</p>
                             </div>
                             {v?.description &&
                               <div className="font-normal text-sm text-gray-500 overflow-hidden text-ellipsis">
@@ -450,8 +477,11 @@ const Main = () => {
 
                 <div className="w-full text-gray-600 font-normal md:text-md text-sm" >
                   {myEducations?.length !== 0 ? myEducations?.map((v) => (
-                    <div key={v?.id} className="my-1 flex text-left bg-amber-50 p-2 rounded-xl">
-                      <div>
+                    <div key={v?.id} className="my-1 flex text-left bg-stone-200/50 p-2 rounded-xl">
+                      <div className="flex flex-row items-start justify-start">
+                        <div className="px-2">
+                          <MdSchool className="w-5 h-5" />
+                        </div>
                         <div className="flex flex-col">
                           <div>
                             <div className="font-bold ">
@@ -493,7 +523,7 @@ const Main = () => {
                     <>
                       {mySkills?.map((v) => (
                         <span
-                          className="px-3 py-1 rounded-full bg-slate-100 border border-solid border-slate-500 text-slate-500 text-sm"
+                          className="px-3 py-1 rounded-lg bg-stone-500 text-stone-100 text-sm"
                           key={v?.id}>{v?.name}</span>
                       ))
                       }
@@ -503,7 +533,7 @@ const Main = () => {
                 </div>
 
                 <div className="w-full flex flex-row items-center gap-1 flex-wrap">
-                  <BiLink className="h-5 w-5 text-gray-500 mr-1" />
+                  {/* <BiLink className="h-5 w-5 text-gray-500 mr-1" /> */}
                   {friend?.links?.length && friend?.links?.length !== 0 ?
                     <>
                       {friend?.links?.map((v) => (
@@ -542,7 +572,7 @@ const Main = () => {
 
           <div className="px-10">
           </div>
-          <div className="px-10 py-2.5 flex gap-4">
+          {/* <div className="px-10 py-2.5 flex gap-4">
             {friend?.thumbvideo && (
               <>
                 {isPlaying ? (
@@ -568,13 +598,13 @@ const Main = () => {
                   </svg>
                 )}</>
             )}
-          </div>
-          <div className="my-5 px-10">
+          </div> */}
+          <div className="my-5 px-2">
             {user && user?.mycompany
               && user?.userID !== friend?.id && user?.purpose === 1
               && (
-                <div className="items-center mt-8 flex justify-center w-full md:justify-start gap-2 lg:gap-0">
-                  <div className="mb-4 flex items-center gap-3">
+                <div className="items-center mt-8 flex justify-center w-full md:justify-center gap-2 lg:gap-0">
+                  <div className="flex items-center gap-2">
                     {!liked ?
                       (<Tooltip
                         placement="bottom"

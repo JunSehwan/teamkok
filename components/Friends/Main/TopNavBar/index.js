@@ -1,13 +1,18 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import CategoryCapsule from './CategoryCapsule';
 import CategoryList from "components/Common/CategoryList";
-import { changeCategoryFilter, setScrollPosition } from 'slices/user';
+import { changeCategoryFilter, setScrollPosition, setUsers } from 'slices/user';
 import { nanoid } from 'nanoid'
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { HiOutlineBookOpen } from "react-icons/hi";
 import { MdUnfoldLess, MdUnfoldMore } from "react-icons/md";
+import { getCategoryUsers, getFriends } from 'firebaseConfig';
+
+const Container = styled.div`
+transition: 0.4s ease;
+`
 
 const StyledContainer = styled.ul`
  ::-webkit-scrollbar {
@@ -31,33 +36,77 @@ const StyledContainer = styled.ul`
     cursor: pointer;
   }
 `
+const throttle = function (callback, waitTime) {
+  let timerId = null;
+  return (e) => {
+    if (timerId) return;
+    timerId = setTimeout(() => {
+      callback.call(this, e);
+      timerId = null;
+    }, waitTime);
+  };
+};
 
-
-const index = ({ hide }) => {
+const index = () => {
   const dispatch = useDispatch();
   // 카테고리 검색
   const [category, setCategory] = useState(null);
-
-  const onChangeCategory = useCallback((e) => {
+  const { categoryFilter } = useSelector(state => state.user);
+  const onChangeCategory = useCallback(async (e) => {
     dispatch(setScrollPosition(0));
     setCategory(e);
     setWide(false);
     dispatch(changeCategoryFilter(e));
     window.scrollTo({ top: 0, behavior: "smooth" });
+
   }, [dispatch])
 
+  useEffect(() => {
+    async function fetchAndSetUser() {
+      if (categoryFilter) {
+        const result = await getCategoryUsers(categoryFilter);
+        dispatch(setUsers(result));
+      }
+      if (categoryFilter === null) {
+        const result = await getFriends();
+        dispatch(setUsers(result));
+      }
+    }
+    fetchAndSetUser();
+  }, [categoryFilter, dispatch, category]);
 
+  // 펼치기 접기
   const [wide, setWide] = useState(false);
   const toggleWide = useCallback(() => {
     setWide(prev => !prev);
   }, [])
 
+  // 스크롤 내리면 메뉴바 안보이게
+  const [hide, setHide] = useState(false);
+  const [pageY, setPageY] = useState(0);
+  const documentRef = useRef(document);
+
+  const handleScroll = () => {
+    const { pageYOffset } = window;
+    const deltaY = pageYOffset - pageY;
+    const hide = pageYOffset !== 0 && deltaY >= 0;
+    setHide(hide);
+    setPageY(pageYOffset);
+  };
+
+  const throttleScroll = throttle(handleScroll, 50);
+
+  useEffect(() => {
+    documentRef?.current?.addEventListener('scroll', throttleScroll);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => documentRef?.current?.removeEventListener('scroll', throttleScroll);
+  }, [pageY, throttleScroll]);
+
+
+
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
-      className={`${hide && "hidden"} z-[5] transition-all w-full mt-[calc(var(--navbar-height)-3px)] fixed transition-[0.4s ease] top-0 left-0 block bg-gradient-to-t from-slate-50/60 to-slate-200/90 bg-opacity-90`}>
+    <Container
+      className={`${hide && "hidden"} transition-all ease-in-out delay-150 w-full mt-[var(--navbar-height)] fixed transition-[0.4s ease] top-0 left-0 block bg-gradient-to-t from-stone-400/60 to-stone-300/90 bg-opacity-90 z-[5]`}>
       <div className="mx-auto w-full flex justify-center shadow border-b-1">
 
         <StyledContainer className='overflow-x-auto flex items-center pb-3 pt-4 relative mx-2 w-full'>
@@ -105,7 +154,7 @@ const index = ({ hide }) => {
 
         </StyledContainer>
       </div>
-    </motion.div >
+    </Container >
   );
 };
 

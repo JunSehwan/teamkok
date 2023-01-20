@@ -55,7 +55,7 @@ const index = ({ hide }) => {
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
-      className={`${hide && "hidden"} z-[5] transition-all w-full mt-[calc(var(--navbar-height)-3px)] fixed transition-[0.4s ease] top-0 left-0 block bg-gradient-to-t from-slate-50/60 to-slate-200/90 bg-opacity-90`}>
+      className={`${hide && "hidden"} z-[5] transition-all w-full mt-[var(--navbar-height)] fixed transition-[0.4s ease] top-0 left-0 block bg-gradient-to-t from-stone-400/60 to-stone-300/90 bg-opacity-90`}>
       <div className="mx-auto w-full flex justify-center shadow border-b-1">
 
         <StyledContainer className='overflow-x-auto flex items-center pb-3 pt-4 relative mx-2 w-full'>

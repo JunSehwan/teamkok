@@ -114,8 +114,6 @@ const index = () => {
             </div>
           </div>
         </div>
-
-
         <Thumbnail />
 
       </div>

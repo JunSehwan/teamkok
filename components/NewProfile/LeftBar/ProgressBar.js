@@ -10,21 +10,28 @@ const ProgressBar = () => {
   const { mySkills } = useSelector(state => state.skill);
   const [alert, setAlert] = useState(false);
   const checkAlert = useCallback(() => {
-    if (user?.gender && user?.phonenumber && user?.category && user?.avatar
-      && myCareers?.length !== 0 && myEducations?.length !== 0 && mySkills?.length !== 0
-      ) {
-      setAlert(false);}
-      else {
-        setAlert(true);
-      }
-  }, [myCareers?.length, myEducations?.length, mySkills?.length, user?.avatar, user?.category, user?.gender, user?.phonenumber])
+    if (
+      user?.purpose
+      // && user?.phonenumber
+      // && user?.category
+      // && user?.avatar
+      && myCareers?.length !== 0
+      // && myEducations?.length !== 0
+      // && mySkills?.length !== 0
+    ) {
+      setAlert(false);
+    }
+    else {
+      setAlert(true);
+    }
+  }, [myCareers?.length, user?.purpose])
 
 
-const [basicErr, setbasicErr] = useState(false);
-const [avatarErr, setavatarErr] = useState(false);
-const [careerErr, setcareerErr] = useState(false);
-const [educationErr, seteducationErr] = useState(false);
-const [skillErr, setskillErr] = useState(false);
+  const [basicErr, setbasicErr] = useState(false);
+  const [avatarErr, setavatarErr] = useState(false);
+  const [careerErr, setcareerErr] = useState(false);
+  const [educationErr, seteducationErr] = useState(false);
+  const [skillErr, setskillErr] = useState(false);
 
   const checkBasic = useCallback(() => {
     if (user?.gender && user?.phonenumber && user?.category) {
@@ -100,7 +107,7 @@ const [skillErr, setskillErr] = useState(false);
       setPercent(prev => prev)
     }
   }, [user?.additionalMent, user?.links?.length]);
- 
+
   useEffect(() => {
     setPercent(0);
     checkBasic();
@@ -129,12 +136,12 @@ const [skillErr, setskillErr] = useState(false);
 
       <div className="w-full bg-slate-100 h-1 mb-3 mt-2">
         <div
-          className={`bg-sky-400 h-1 rounded transition-all ease-out duration-1000 ${percent && `w-[${(percent/100)*100}%]`}`}
+          className={`bg-sky-400 h-1 rounded transition-all ease-out duration-1000 ${percent && `w-[${(percent / 100) * 100}%]`}`}
         >
         </div>
       </div>
 
-      {basicErr && <p className="text-red-700 font-semibold text-xs">기본정보, 카테고리 미등록</p>}
+      {basicErr && <p className="text-red-700 font-semibold text-xs">기본정보 또는 카테고리 미등록</p>}
       {avatarErr && <p className="text-red-700 font-semibold text-xs">프로필사진 미등록</p>}
       {careerErr && <p className="text-red-700 font-semibold text-xs">경력 미작성</p>}
       {educationErr && <p className="text-red-700 font-semibold text-xs">학력 미작성</p>}

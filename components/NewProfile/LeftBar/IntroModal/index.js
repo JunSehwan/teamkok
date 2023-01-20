@@ -9,8 +9,9 @@ import { useRouter } from 'next/router';
 const index = ({ introModalOpened, closeIntroModal }) => {
   const router = useRouter();
   const goGroup = useCallback(() => {
+    closeIntroModal();
     router.push('/profile/group')
-  }, [router])
+  }, [closeIntroModal, router])
   return (
     <Modal
       onClose={closeIntroModal}
@@ -27,9 +28,9 @@ const index = ({ introModalOpened, closeIntroModal }) => {
           <div className='w-full'>
 
             <h3 className='sm:text-[2.1rem] text-[1.8rem] text-gray-700 my-4 w-full'>
-              👨‍👦‍👦그룹페이지</h3>
+              기업전문가 인증✨</h3>
             <p className='ml-2 my-1 text-gray-500 text-[1.2rem] leading-8'>인재를 영입하고자 한다면 그룹회원으로 등록하세요.</p>
-            <span className='ml-2 my-1 '>팀(기업)에 대한 정보를 작성하신 후에 인재리스트 "동료콕!"페이지에서 영입할만한 인재들을 탐색해보세요.</span>
+            <span className='ml-2 my-1 '>소속된 팀(기업)에 대한 정보를 작성하여 전문가 인증을 받으세요.(팀원 영입시 구직자에게 신뢰를 줄 수 있습니다!)</span>
 
             <div className='image my-4'>
               <img src={company?.src || company || ""}
@@ -41,7 +42,7 @@ const index = ({ introModalOpened, closeIntroModal }) => {
           <div className="w-full justify-end flex items-center">
             <button onClick={goGroup}
               className="my-2 px-6 text-md py-4 font-bold text-white bg-[#4173f4] hover:bg-[#1C52DC]  focus:outline-none focus:shadow-outline rounded-lg">
-              그룹페이지로 이동</button>
+              현업전문가 인증하기</button>
           </div>
         </motion.div>
       </div>

@@ -4,6 +4,7 @@ import PostForm from './PostForm';
 import Posts from './Posts';
 import TopNavBar from './TopNavBar';
 import BtnToTop from 'components/Common/BtnToTop';
+import { FcAdvertising } from 'react-icons/fc';
 
 const throttle = function (callback, waitTime) {
   let timerId = null;
@@ -56,21 +57,25 @@ const Main = () => {
       <TopNavBar
         hide={hide}
       />
-      <div className=' md:px-8 pb-[70px] md:pb-auto pt-[calc(var(--navbar-height)+3.2rem)]'>
-        <div className="mt-[2.4rem] py-4 items-center flex justify-between max-w-xl mx-auto">
-          <h2 className="text-xl text-gray-700 font-extrabold mb-2">팀이야기</h2>
-          {user?.purpose === 4 ?
-            <button type="button"
-              onClick={onOpenForm}
-              className="flex items-center mb-2 md:mb-0 bg-blue-500 border border-blue-500 px-3 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-lg hover:shadow-lg hover:bg-blue-600">
-              <svg xmlns="http://www.w3.org/2000/svg" className="mr-[4px] h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-              </svg>
-              <p className='font-bold'>
-                새로운 그룹소식
-              </p>
-            </button>
-            : null}
+      <div className='px-1 md:px-8 pb-[70px] md:pb-auto pt-[calc(var(--navbar-height)+3.2rem)]'>
+        <div className="mt-[2.4rem] py-4 flex justify-between max-w-xl mx-auto items-center">
+          <h2 className="text-2xl text-blue-700 font-extrabold flex flex-row">
+            <span>잡톡!</span>
+            <FcAdvertising className=''></FcAdvertising>
+            <span className="ml-16 animate-ping absolute inline-flex h-5 w-5 rounded-full bg-sky-300 opacity-65"></span>
+          </h2>
+          {/* {user?.purpose === 1 ? */}
+          <button type="button"
+            onClick={onOpenForm}
+            className="flex items-center mb-2 md:mb-0 bg-blue-500 border border-blue-500 px-3 py-2 text-sm shadow-md font-medium tracking-wider text-white rounded-lg hover:shadow-sm hover:bg-blue-600">
+            <svg xmlns="http://www.w3.org/2000/svg" className="mr-[4px] h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+            <p className='font-bold'>
+              글 작성하기
+            </p>
+          </button>
+          {/* : null} */}
           {openForm ?
             <PostForm
               onCloseForm={onCloseForm}
@@ -78,6 +83,7 @@ const Main = () => {
             />
             : null}
         </div>
+        <p className="text-md text-gray-500 max-w-xl mx-auto mb-8">궁금하거나 재밌는 회사이야기를 나누어보아요!😛</p>
         <Posts />
       </div>
       <BtnToTop />

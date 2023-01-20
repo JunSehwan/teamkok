@@ -4,11 +4,39 @@ import { auth, updateUserBasicInfo, } from 'firebaseConfig';
 import { updateBasicProfile, updateBasicProfileFalse } from 'slices/user';
 import toast, { Toaster } from 'react-hot-toast';
 import hangjungdong from 'components/Common/Address';
+import { patchThumbimageDoneFalse, patchThumbvideoDoneFalse, updateCliptypeFalse } from 'slices/user';
 
 const index = () => {
 
-  const { user, updateBasicProfileSuccess } = useSelector(state => state.user);
+  const { user, updateBasicProfileSuccess, patchThumbimageDone, patchThumbvideoDone, updateCliptypeDone } = useSelector(state => state.user);
   const dispatch = useDispatch();
+
+  const updateClipNotify = () => toast('Clip유형 업데이트 완료!');
+  useEffect(() => {
+    if (updateCliptypeDone) {
+      updateClipNotify();
+      dispatch(updateCliptypeFalse())
+    }
+  }, [dispatch, updateCliptypeDone])
+
+
+  const updatenotify = () => toast('이미지 업데이트 완료!');
+  useEffect(() => {
+    if (patchThumbimageDone) {
+      updatenotify();
+      dispatch(patchThumbimageDoneFalse())
+    }
+  }, [dispatch, patchThumbimageDone])
+
+  const updatenotifyVideo = () => toast('비디오 업데이트 완료!');
+  useEffect(() => {
+    if (patchThumbvideoDone) {
+      updatenotifyVideo();
+      dispatch(patchThumbvideoDoneFalse())
+    }
+  }, [dispatch, patchThumbvideoDone])
+
+
   const avatarNotify = () => toast('기초정보 업데이트 완료');
 
   useEffect(() => {

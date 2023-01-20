@@ -12,12 +12,13 @@ import { useRouter } from 'next/router';
 import { getJobofferedByUserId, getConversationByUserId, getCoccocedByUserId } from 'firebaseConfig';
 
 import { RiNewspaperFill, RiUserSearchFill } from "react-icons/ri";
-import { AiFillSetting } from "react-icons/ai";
-import { BsFillCaretDownFill } from "react-icons/bs";
-import { FaUserCircle } from "react-icons/fa";
+import { AiFillMessage, AiFillSetting, AiOutlineMessage } from "react-icons/ai";
+import { BsFillBriefcaseFill, BsFillCaretDownFill, BsFillPersonBadgeFill, BsMegaphoneFill } from "react-icons/bs";
+import { FaRegPaperPlane, FaUserCircle } from "react-icons/fa";
 import { BsFillBellFill, BsQuestionCircleFill } from "react-icons/bs";
 import { MdMessage, MdDashboard } from "react-icons/md";
 import { IoLogOut } from "react-icons/io5";
+import { BiNews } from 'react-icons/bi';
 
 const index = ({ children }) => {
   const router = useRouter();
@@ -272,11 +273,11 @@ const index = ({ children }) => {
                 <div className="flex items-center justify-center md:flex">
 
                   <button
-                    className={`relative text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/dashboard" || router?.pathname?.includes("/dashboard") ? "text-[#4979f5]" : ""}`}
+                    className={`relative text-gray-400 md:min-w-[89.33px] hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/dashboard" || router?.pathname?.includes("/dashboard") ? "text-[#4979f5]" : ""}`}
                     onClick={onClickDashboard}>
                     <div className='flex flex-col items-center'>
                       <MdDashboard className='w-6 h-6' />
-                      <span className='mt-[2px] text-xs hidden md:inline'>대시보드</span>
+                      <span className='mt-[2px] text-sm hidden md:inline'>대시보드</span>
                     </div>
                     {findNotRead && findNotRead?.length !== 0 &&
                       <div className='top-[17px] p-0.5 text-white bg-red-500 flex mr-[-41px] mt-[-20px] shadow text-center text-xs rounded-full w-[18px] h-[18px] items-center justify-center z-5 absolute'>
@@ -285,25 +286,25 @@ const index = ({ children }) => {
                     }
                   </button>
                   <button
-                    className={`text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/friends" || router?.pathname?.includes("/friends") ? "text-[#4979f5]" : ""}`}
+                    className={`text-gray-400 md:min-w-[89.33px] hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/friends" || router?.pathname?.includes("/friends") ? "text-[#4979f5]" : ""}`}
                     onClick={onClickFriends}>
                     <div className='flex flex-col items-center'>
-                      <RiUserSearchFill className='w-6 h-6' />
-                      <span className='mt-[2px] text-xs hidden md:inline'>동료콕!</span>
+                      <BsFillPersonBadgeFill className='w-6 h-6' />
+                      <span className='mt-[2px] text-sm hidden md:inline'>잡콕!</span>
                     </div>
                   </button>
                   {/* FaBuilding
                   TiNews */}
                   <button
-                    className={`text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/news" || router?.pathname?.includes("/teamlist") ? "text-[#4979f5]" : ""}`}
+                    className={`text-gray-400 md:min-w-[89.33px] hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/news" || router?.pathname?.includes("/teamlist") ? "text-[#4979f5]" : ""}`}
                     onClick={onClickNews}>
                     <div className='flex flex-col items-center'>
-                      <RiNewspaperFill className='w-6 h-6' />
-                      <span className='mt-[2px] text-xs hidden md:inline'>팀소식콕!</span>
+                      <BsFillBriefcaseFill className='w-6 h-6' />
+                      <span className='mt-[2px] text-sm hidden md:inline'>잡톡!</span>
                     </div>
                   </button>
                   {/* <button
-                    className={`sm:flex hidden text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/teamlist" || router?.pathname?.includes("/teamlist") ? "text-[#4979f5]" : ""}`}
+                    className={`sm:flex hidden text-gray-400 md:min-w-[89.33px] hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/teamlist" || router?.pathname?.includes("/teamlist") ? "text-[#4979f5]" : ""}`}
                     onClick={onClickTeams}>
                     <div className='flex flex-col items-center'>
                       <FaBuilding className='w-6 h-6' />
@@ -312,11 +313,11 @@ const index = ({ children }) => {
                   </button> */}
 
                   <button
-                    className={`relative text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/message" || router?.pathname?.includes("/message") ? "text-[#4979f5]" : ""}`}
+                    className={`relative text-gray-400 md:min-w-[89.33px] hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/message" || router?.pathname?.includes("/message") ? "text-[#4979f5]" : ""}`}
                     onClick={onClickMessage}>
                     <div className='flex flex-col items-center'>
-                      <MdMessage className='w-6 h-6' />
-                      <span className='mt-[2px] text-xs hidden md:inline'>메시지</span>
+                      <AiOutlineMessage className='w-6 h-6' />
+                      <span className='mt-[2px] text-sm hidden md:inline'>메시지</span>
                     </div>
                     {findNotReadConversation && findNotReadConversation?.length !== 0 &&
                       <div className='top-[17px] p-0.5 text-white bg-red-500 flex mr-[-41px] mt-[-20px] shadow text-center text-xs rounded-full w-[18px] h-[18px] items-center justify-center z-5 absolute'>
@@ -326,7 +327,7 @@ const index = ({ children }) => {
                   </button>
 
                   {/* <button
-                    className={`sm:flex hidden text-gray-400 hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/alarm" && "text-[#4979f5]"}`}
+                    className={`sm:flex hidden text-gray-400 md:min-w-[89.33px] hover:text-gray-700 px-[2.2vw] transition-all ${router?.pathname === "/alarm" && "text-[#4979f5]"}`}
                     onClick={onClickAlarm}>
                     <div className='flex flex-col items-center'>
                       <BsFillBellFill className='w-6 h-6' />

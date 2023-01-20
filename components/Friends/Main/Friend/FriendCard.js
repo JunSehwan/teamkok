@@ -28,6 +28,8 @@ import { nanoid } from 'nanoid'
 import { setScrollPosition } from 'slices/user';
 import styled, { keyframes } from 'styled-components';
 import Like from './Like';
+import Image from "next/image";
+import Expert from '/public/image/icon/expertise.png';
 
 const TinderCard = dynamic(
   () => {
@@ -239,19 +241,25 @@ const FriendCard = ({ friend, show, setShow }) => {
     target = e.target;
   }, [])
 
-  const isTeamMember = user && user?.mycompany && friend?.userID !== user?.userID && user?.purpose === 1
-  const isNormalMember = user && user?.purpose !== 1
+  const isTeamMember = user && user?.mycompany && user?.userID !== friend?.userID && (user?.purpose === 1 || user?.purpose === 5)
+  const isNormalMember = user && (user?.purpose !== 1 && user?.purpose !== 5)
 
   return (
     <div
+      onClick={onVideoPress}
+      onDoubleClick={handleChangeDetailsPage}
+      onMouseEnter={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}
 
       // initial={{ opacity: 0 }}
       // whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
-      className="flex flex-row mb-6 relative"
+      className="flex flex-row mb-6 relative cursor-pointer"
     >
       {/* <TinderCard */}
       <div
+
+        className=""
       // onSwipe={onSwipe}
       // flickOnSwipe={true}
       // onCardLeftScreen={onCardLeftScreen}
@@ -260,73 +268,85 @@ const FriendCard = ({ friend, show, setShow }) => {
           // onDoubleClick={handleChangeDetailsPage}
           className=""
           onClick={(e) => tap(e, { onSingleTap, handleChangeDetailsPage })}
-
-
         >
           <div
-            className="w-[360px] min-w-[302px] overflow-hidden flex items-end gap-3 p-4 cursor-pointer font-semibold rounded-b-3xl 
-         z-[3] text-white absolute bottom-0 left-0 right-0 bg-slate-700/40
+            className="w-[360px] min-w-[302px] overflow-hidden flex items-end gap-3 p-4 cursor-pointer font-semibold rounded-b-3xl z-1 
+         text-white absolute bottom-0 left-0 right-0 bg-slate-600/40
         ">
             <div className="w-full">
-              <div className="flex w-full justify-between items-center mb-2 ">
+              <div className="flex w-full justify-start gap-3 items-center mb-2 ">
                 <div
-                  className="w-14 h-14 rounded-3xl shadow-inner"
+                  className="w-14 h-14 rounded-2xl shadow-inner"
                 >
                   <img
-                    className="h-14 rounded-3xl w-14 object-cover"
+                    className="h-14 rounded-2xl w-14 object-cover"
                     src={friend?.avatar || profilePic?.src}
                     alt="user-profile"
                     layout="responsive"
                   />
                 </div>
-
+                {category[0] &&
+                  <p className="px-2 ml-1 py-1 rounded-full bg-white/50 text-black/70 shadow text-sm">
+                    {category[0]?.name}</p>}
               </div>
               <div>
                 {/* 프로필 기본정보 */}
-                <div className="flex items-end gap-2 mb-2">
-                  <div className="flex gap-2 items-center md:text-xl text-lg font-bold text-primary text-yellow-100">
-                    {isTeamMember ? friend?.username : friend?.username?.slice(0, 1) + "○○"}
-
+                <div className="flex items-end gap-2">
+                  <div className="flex gap-1 items-center md:text-lg text-sm font-bold text-lime-100 flex-row">
+                    {/* {isTeamMember ? friend?.username : friend?.username?.slice(0, 1) + "○○"} */}
+                    <span>{friend?.username}</span>
+                    {friend?.companycomplete && (
+                      <Tooltip
+                        placement="bottom"
+                        className="w-max"
+                        content="전문가인증"
+                        trigger="hover"
+                      >
+                        <Image
+                          alt="expert"
+                          className="avatar rounded-md object-cover"
+                          width={29} height={29}
+                          unoptimized
+                          src={Expert} />
+                      </Tooltip>
+                    )}
                     {friend?.category && friend?.skills?.length !== 0 && myCareer?.length !== 0 && myEducation?.length !== 0 ?
                       <Tooltip
                         placement="bottom"
                         className="w-max"
                         content="JOBCOC 인증"
                         trigger="hover">
-                        <GoVerified className="text-blue-400 text-md" />
+                        <GoVerified className="text-blue-400 text-lg" />
                       </Tooltip>
                       : null}
                   </div>
-                  {category[0] &&
-                    <p className="px-2 ml-1 py-1 rounded-full bg-white/80 text-black/70 shadow-inner text-md">
-                      {category[0]?.name}</p>}
+
                   {/* <p className="font-medium text-xs hidden md:block">
                     {friend?.email}
                   </p> */}
                 </div>
                 <div className="flex gap-2 mb-2 items-center">
-                  <p className="font-normal text-md">{myAge || "나이미상"}</p>
-
-                  <p className="font-normal text-md">{friend?.address_sido || "거주지미등록"}</p>
+                  {myAge !== null && <p className="font-normal text-sm">{myAge || "나이미상"}</p>}
+                  <p className="font-normal text-sm">{friend?.address_sido || "거주지미등록"}</p>
                   {friend?.gender ?
                     (() => {
                       switch (friend?.gender) {
-                        case "male": return (<span className="font-normal text-md">남🙋‍♂️</span>)
-                        case "female": return (<span className="font-normal text-md">여🙋‍♀️</span>)
+                        case "male": return (<span className="font-normal text-sm">남🙋‍♂️</span>)
+                        case "female": return (<span className="font-normal text-sm">여🙋‍♀️</span>)
                         default: null;
                       }
-                    })(friend?.gender) : <span className="font-normal text-md">성별미등록</span>}
+                    })(friend?.gender) : <span className="font-normal text-sm">성별미등록</span>}
                 </div>
                 <div className="my-1.5 flex flex-wrap w-full gap-1">
                   {!!friend?.skills?.length !== 0 &&
                     <>
-                      {friend?.skills?.slice(0, 3)?.map((v) => (
+                      {friend?.skills?.slice(0, 4)?.map((v) => (
                         <span
-                          className="px-2 py-1 rounded-full bg-gray-500/60 text-sm font-normal"
+                          className="px-2 py-1 rounded-full bg-gray-500/70 text-sm font-normal"
                           key={v?.id}>{v?.name}</span>
                       ))
                       }
-                      {friend?.skills?.length > 4 && <span className="text-gray-500 text-sm">...</span>}
+                      {friend?.skills?.length > 5 && <span className="text-gray-500 text-sm">...</span>}
                     </>
                   }
                   {friend?.skills?.length === 0 &&
@@ -343,9 +363,9 @@ const FriendCard = ({ friend, show, setShow }) => {
                           <div>
                             <span
                               className="mr-1">{myCareer?.name}</span>
-                            <span className="mr-1">{myCareer?.job}</span>
                             <span className="mr-1">{myCareer?.start?.year}~{myCareer?.end?.year == 9999 ? "현재" : myCareer?.end?.year}</span>
                             <span className="mr-1">(총 {friend?.careers?.length}개)</span>
+                            {/* <p className="mr-1">{myCareer?.job}</p> */}
                           </div>
                         </div>
 
@@ -395,7 +415,7 @@ const FriendCard = ({ friend, show, setShow }) => {
                 )}
 
                 <div className="my-2 text-white font-normal md:text-md text-sm">
-                  <div className=" grid grid-cols-3 gap-0.5">
+                  <div className=" flex flex-row gap-1">
                     {friend?.joboffered && friend?.joboffered?.length !== 0 ? friend?.joboffered?.slice(0, 3)?.map((v) => (
                       <Tooltip
                         key={nanoid()}
@@ -433,14 +453,15 @@ const FriendCard = ({ friend, show, setShow }) => {
                   }
                 </div> */}
 
-                <Container className="flex flex-row items-center justify-between w-full"
+                <Container className="flex flex-row items-center justify-end w-full"
                   onDoubleClick={handleChangeDetailsPage}
                 >
 
                   <TbHandClick
                     id="double"
-                    className='w-5 h-5 text-sky-200/60' />
-                  <span className="text-sky-200/50 text-xs ml-1">Double</span>
+                    className='w-5 h-5 text-sky-200/70' />
+                  <span className="text-sky-200/70 text-xs ml-1">Double</ span>
+
                 </Container>
 
               </div>
@@ -449,7 +470,7 @@ const FriendCard = ({ friend, show, setShow }) => {
         </div>
 
 
-        <div className="flex gap-4 relative">
+        <div className="flex gap-4 relative z-[-1]">
           <div
             onMouseEnter={() => setIsHover(true)}
             onMouseLeave={() => setIsHover(false)}
@@ -457,7 +478,8 @@ const FriendCard = ({ friend, show, setShow }) => {
           >
 
             <div className="bg-black rounded-3xl shadow-2xl">
-              {friend?.thumbvideo && (
+              {(friend?.cliptype == "video" && friend?.thumbvideo) || (!friend?.cliptype && friend?.thumbvideo) ||
+                (friend?.thumbvideo && !friend?.thumbimage) ? (
                 <>
                   <video
                     // onProgress={}
@@ -512,8 +534,9 @@ const FriendCard = ({ friend, show, setShow }) => {
                     </motion.div>
                   )}
                 </>
-              )}
-              {!friend?.thumbvideo && friend?.thumbimage && (
+              ) : null}
+              {(friend?.cliptype == "image" && friend?.thumbimage) ||
+                (!friend?.cliptype && !friend?.thumbvideo && friend?.thumbimage) ? (
                 <>
                   <img
                     onClick={(e) => tap(e, { onSingleTap, handleChangeDetailsPage })}
@@ -521,7 +544,7 @@ const FriendCard = ({ friend, show, setShow }) => {
                     className="w-[360px] min-w-[302px] h-[600px] rounded-3xl cursor-pointer object-cover opacity-90"
                   ></img>
 
-                </>)}
+                </>) : null}
               {!friend?.thumbvideo && !friend?.thumbimage && (
                 <>
                   <div
@@ -602,11 +625,12 @@ const FriendCard = ({ friend, show, setShow }) => {
       }
 
       {isTeamMember &&
+        // {user?.userID !== friend?.userID &&
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="ml-3 flex-col flex justify-center absolute right-[16px] sm:right-0 sm:top-0 top-[76px] sm:relative z-[4]">
+          className="ml-3 flex-col flex justify-center absolute right-[16px] sm:right-0 sm:top-0 top-[76px] sm:relative">
           <div className="flex flex-col items-center justify-center gap-3">
             <Tooltip
               placement="left"

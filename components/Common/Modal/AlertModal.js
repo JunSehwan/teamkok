@@ -21,7 +21,7 @@ const AlertModal = ({ title, contents, contents_second, closeOutsideClick, openM
     <>
       {openModal ?
 
-        <div className="fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-[#00000090]">
+        <div className="fixed top-0 left-0 z-[50] flex h-full w-full items-center justify-center bg-[#00000090]">
           <div className="w-[100%] justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
           >
             <motion.div

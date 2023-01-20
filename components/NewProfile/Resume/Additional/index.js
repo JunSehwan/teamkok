@@ -129,7 +129,7 @@ const index = ({ goNextStage, goNews, goPrevStage, goCertStage }) => {
 
             <div className="py-4">
               <label className="block mb-4 text-md font-bold text-gray-700 " htmlFor="additionalMent">
-                마지막으로, {user?.username}님에 대한 짧은 소개를 작성해주세요.
+                마지막으로, {user?.username}님에 대한 짧은 소개, 혹은 <span className="text-blue-700">커리어 고민</span>을 남겨주세요!
               </label>
               <textarea
                 className="block w-full h-32 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

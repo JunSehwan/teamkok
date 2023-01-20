@@ -65,7 +65,7 @@ const index = ({ coccocCon, coccocOn, openCoccoc, closeCoccoc }) => {
           </h3>
           :
           <h3 className='sm:text-[2.0rem] text-[1.6rem] text-gray-700 my-4 w-full'>
-            아직 답변을 받지 않았습니다.
+            답변을 받지 않았습니다.
           </h3>
         }
         <p className='text-gray-700 my-2 w-full'>

@@ -106,7 +106,7 @@ const index = ({ jobofferCon, jobofferOn, openJoboffer, closeJoboffer }) => {
             </h3>
             :
             <h3 className='sm:text-[2.0rem] text-[1.6rem] text-gray-700 my-4 w-full'>
-              {resultDay}일 {resultHour}시간 {resultMin}분 {resultSec}초까지 응답해주세요!
+              {resultDay}일 {resultHour}시간 {resultMin}분 {resultSec}초까지 응답을 기다립니다.
             </h3>
         }
         <p className='text-gray-700 my-2 w-full'>

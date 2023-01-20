@@ -16,6 +16,10 @@ import NoticeList from 'components/Common/NoticeList';
 import profilePic from 'public/image/icon/happiness.png';
 import Slider from 'components/Common/Slider';
 import { motion } from 'framer-motion';
+import { Tooltip } from 'flowbite-react';
+import Expert from '/public/image/icon/expertise.png';
+import { MdComment, MdOutlineComment } from 'react-icons/md';
+import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
 
 const PostCard = ({ post }) => {
   const { user } = useSelector(state => state.user);
@@ -248,7 +252,7 @@ const PostCard = ({ post }) => {
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       className="w-full max-w-2xl mx-auto break-inside rounded-xl bg-white flex flex-col bg-clip-border shadow-2xl mb-4">
-      <div className="flex p-4 pb-6 items-center justify-between">
+      <div className="flex p-4 items-center justify-between">
         <div className="flex">
             <div className="inline-block mr-3" href="#">
               {/* <Image width={30} height={30} alt="pic" className="rounded-full max-w-none w-12 h-12" src={post?.photo[0]} /> */}
@@ -269,49 +273,69 @@ const PostCard = ({ post }) => {
                 />
               )}
             </div>
-            <div className="flex flex-col">
-              <div>
+          <div className="flex flex-col">
+            <div>
+              <div className='flex flex-row items-center'>
                 <a className="inline-block text-lg text-blue-700 font-bold">
                   {post?.creatorName}
                 </a>
-                {post?.mycompany &&
-                  <span className="text-gray-600 font-semibold text ml-1">
-                    {post?.mycompany} &nbsp;&middot;&nbsp;
-                    {post?.mysection}
-                  </span>
-                }
-              </div>
-              <div className="text-slate-500 text-sm">
-                {createTime}
+                {post?.companycomplete && (
+                  <Tooltip
+                    placement="bottom"
+                    className="w-max"
+                    content="전문가인증"
+                    trigger="hover"
+                  >
+                    <Image
+                      alt="expert"
+                      className="avatar w-7 h-7 rounded-md object-cover"
+                      width={24} height={24}
+                      unoptimized
+                      src={Expert} />
+                  </Tooltip>
+                )}
+
               </div>
             </div>
+            <div className="text-slate-500">
+              {post?.mycompany &&
+                <span className="text-gray-600 text-md">
+                  {post?.mycompany}&nbsp;
+                  {post?.mysection}&nbsp;&nbsp;
+                </span>
+              }
+              <span className='text-slate-400 text-sm'>
+                {createTime}
+              </span>
+            </div>
+          </div>
         </div>
         {/* More 버튼 */}
         {user?.userID == post?.creatorId &&
           <div className="flex">
             {!moreOpen ?
               <button
-                className="p-3 rounded-full hover:bg-gray-100 text-gray-600"
+                className="p-2 rounded-full hover:bg-gray-100 text-gray-600"
                 onClick={onOpenMore}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
                 </svg>
               </button>
               :
               <div className="relative flex w-[100%] justify-end">
-                <div className="relative shadow-inner bg-white rounded-full w-fit p-3 flex flex-row">
-                  <button className="p-2 ml-1 hover:bg-blue-100 text-blue-600 rounded-full " onClick={onClickModify}>
+                <div className="relative shadow-inner bg-white rounded-full w-fit p-2 flex flex-row">
+                  <button className="p-1 ml-1 hover:bg-blue-100 text-blue-600 rounded-full " onClick={onClickModify}>
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
                   </button>
-                  <button className="p-2 ml-1 hover:bg-orange-100 text-orange-600 rounded-full " onClick={onClickRemove}>
+                  <button className="p-1 ml-1 hover:bg-orange-100 text-orange-600 rounded-full " onClick={onClickRemove}>
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
                   </button>
-                  <button className="p-2 ml-1 hover:bg-gray-100 text-gray-600 rounded-full " onClick={onCloseMore}>
+                  <button className="p-1 ml-1 hover:bg-gray-100 text-gray-600 rounded-full " onClick={onCloseMore}>
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -498,36 +522,30 @@ const PostCard = ({ post }) => {
 
       <div className="p-4 flex flex-row-reverse items-center justify-between gap-3">
         {/* 좋아요 */}
-        <div className="inline-flex items-center gap-2">
+        <div className="inline-flex items-center gap-3">
           <div className="flex items-center">
             {!liked ?
-              <button className="mr-1" type="button" onClick={onLike}>
-                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-rose-600 fill-slate-50 h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-                </svg>
+              <button className="mr-1 hover:scale-110 transition-all flex items-center" type="button" onClick={onLike}>
+                <AiOutlineLike className="w-6 h-6 fill-gray-700" />
+                <span className="text-sm text-gray-700 ml-1">{post?.likes?.length > 0 ? post?.likes?.length : 0}</span>
               </button>
               :
-              <button className="mr-1" type="button" onClick={onUnlike}>
-                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-none fill-rose-500 h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-                </svg>
-              </button>}
-            <span className="text-md text-gray-600 font-bold mr-2">{post?.likes?.length > 0 ? post?.likes?.length : null}</span>
+              <button className="mr-1 hover:scale-110 transition-all flex items-center" type="button" onClick={onUnlike}>
+                <AiFillLike className="w-6 h-6 fill-gray-700" />
+                <span className="text-sm text-gray-700 ml-1">{post?.likes?.length > 0 ? post?.likes?.length : 0}</span>
+              </button>
+            }
           </div>
           <div className="flex items-center">
             {!commentOpened ?
-              <button className="mr-1 flex items-center " type="button" onClick={openCommentForm}>
-                <svg xmlns="http://www.w3.org/2000/svg" className="fill-gray-500 h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z" clipRule="evenodd" />
-                </svg>
-                <span className="text-md text-gray-500 font-bold ml-1">댓글 {post?.numComments || "0"}개</span>
+              <button className="mr-1 hover:scale-110 transition-all flex items-center " type="button" onClick={openCommentForm}>
+                <MdOutlineComment className="w-6 h-6 fill-gray-700" />
+                <span className="text-sm text-gray-700 ml-1">{post?.numComments || "0"}</span>
               </button>
               :
-              <button className="mr-1 flex items-center " type="button" onClick={closeCommentForm}>
-                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-gray-500 h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-                </svg>
-                <span className="text-md text-gray-500 font-bold ml-1">댓글 {post?.numComments || "0"}개</span>
+              <button className="mr-1 hover:scale-110 transition-all flex items-center " type="button" onClick={closeCommentForm}>
+                <MdComment className="w-6 h-6 fill-gray-700" />
+                <span className="text-sm text-gray-700 ml-1">{post?.numComments || "0"}</span>
               </button>
             }
           </div>

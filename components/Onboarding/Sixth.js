@@ -7,10 +7,10 @@ import { IoMdArrowRoundBack } from 'react-icons/io';
 
 const Sixth = ({ goNextStage, goNews, goPrevStage, goCertStage }) => {
 
-  const { addDone, myEducation } = useSelector(state => state.education);
+  const { addDone, myEducations } = useSelector(state => state.education);
   const { user } = useSelector(state => state.user);
   const dispatch = useDispatch();
-  const noEducations = myEducation?.length === 0;
+  const noEducations = !myEducations || myEducations?.length === 0;
   useEffect(() => {
     if (addDone) {
       setName("");
@@ -249,7 +249,7 @@ const Sixth = ({ goNextStage, goNews, goPrevStage, goCertStage }) => {
             className="w-full"
             onSubmit={onSubmit}
           >
-            <div className='overflow-y-auto py-4 px-2'>
+            <div className='overflow-y-auto py-4 px-2 h-[55vh] md:h-[60vh]'>
               <div className="max-w-[720px] py-4">
                 <label
                   className="block mb-2 text-md font-bold text-gray-700 "

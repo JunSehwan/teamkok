@@ -55,12 +55,12 @@ const index = ({ jobofferCon, jobofferOn, openJoboffer, closeJoboffer }) => {
   const { user } = useSelector(state => state.user);
 
   const { updateJobofferDone } = useSelector(state => state.joboffer);
-  useEffect(() => {
-    if (updateJobofferDone && jobofferOn) {
+  // useEffect(() => {
+  //   if (updateJobofferDone && jobofferOn) {
 
-      closeJoboffer();
-    }
-  }, [dispatch, updateJobofferDone, closeJoboffer, jobofferOn])
+  //     // closeJoboffer();
+  //   }
+  // }, [dispatch, updateJobofferDone, closeJoboffer, jobofferOn])
 
 
   const [friend, setFriend] = useState();
@@ -273,7 +273,7 @@ const index = ({ jobofferCon, jobofferOn, openJoboffer, closeJoboffer }) => {
                   </div>
                   <div>
                     <div className='text-md flex flex-col gap-1 text-end'>
-                      <div className='flex flex-row gap-2'>
+                      <div className='flex flex-col gap-2 md:flex-row'>
                         <span className='text-gray-700'>{jobofferCon?.mycompany}</span>
                         <span className='text-gray-700'>{jobofferCon?.mysection}</span>
                       </div>
@@ -294,7 +294,7 @@ const index = ({ jobofferCon, jobofferOn, openJoboffer, closeJoboffer }) => {
               <div className='text-gray-500'>이미 답변기간이 끝났습니다.</div>
             </div>
             :
-            jobofferCon?.answer == 1 || jobofferCon?.answer == 2 ?
+            jobofferCon?.answer == 2 ?
               <>
                 <div className="flex w-full justify-end my-4">
                   <div className='text-gray-500'>답변을 완료하였습니다.</div>
@@ -315,37 +315,65 @@ const index = ({ jobofferCon, jobofferOn, openJoboffer, closeJoboffer }) => {
                 </div>
               </>
               :
-              <>
-                <div className="flex flex-col md:flex-row w-full justify-end gap-2 items-center">
-                  <button
-                    onClick={openDialog}
-                    type="button"
-                    className="w-full md:max-w-[250px] px-6 min-w-[144px] text-md py-4 font-bold  text-white bg-gray-900 hover:bg-black focus:outline-none focus:shadow-outline rounded-lg">
-                    대화하기
-                  </button>
-                  <button
-                    onClick={onLater}
-                    type="button"
-                    className="w-full md:max-w-[250px] px-6 min-w-[144px] text-md py-4 font-bold text-gray-600 bg-white hover:bg-gray-100 focus:outline-none focus:shadow-outline rounded-lg 
+              jobofferCon?.answer == 1 ?
+                <>
+                  <div className="flex w-full justify-end my-4">
+                    <div className='text-gray-500'>답변을 완료하였습니다.</div>
+                  </div>
+                  <div className='flex flex-col md:flex-row w-full justify-end gap-2 items-center'>
+                    <button
+                      onClick={onNo}
+                      type="button"
+                      className="w-full md:max-w-[250px] px-6 min-w-[144px] text-md py-4 font-bold text-gray-600 bg-white hover:bg-gray-100 focus:outline-none focus:shadow-outline rounded-lg 
                     ">
-                    나중에
-                  </button>
-                  <button
-                    onClick={onNo}
-                    type="button"
-                    className="w-full md:max-w-[250px] px-6 min-w-[144px] text-md py-4 font-bold text-gray-600 bg-white hover:bg-gray-100 focus:outline-none focus:shadow-outline rounded-lg 
+                      거절로 변경하기
+                    </button>
+                    <button
+                      onClick={closeJoboffer}
+                      type="button"
+                      className="w-full px-6 min-w-[144px] text-md py-4 font-bold  text-gray-700 bg-gray-200 hover:bg-gray-300 focus:outline-none focus:shadow-outline rounded-lg">
+                      확인
+                    </button>
+                    <button
+                      onClick={openDialog}
+                      type="button"
+                      className="w-full px-6 min-w-[144px] text-md py-4 font-bold  text-white bg-gray-900 hover:bg-black focus:outline-none focus:shadow-outline rounded-lg">
+                      대화하기
+                    </button>
+                  </div>
+                </>
+                :
+                <>
+                  <div className="flex flex-col md:flex-row w-full justify-end gap-2 items-center">
+                    <button
+                      onClick={openDialog}
+                      type="button"
+                      className="w-full md:max-w-[250px] px-6 min-w-[144px] text-md py-4 font-bold  text-white bg-gray-900 hover:bg-black focus:outline-none focus:shadow-outline rounded-lg">
+                      대화하기
+                    </button>
+                    <button
+                      onClick={onLater}
+                      type="button"
+                      className="w-full md:max-w-[250px] px-6 min-w-[144px] text-md py-4 font-bold text-gray-600 bg-white hover:bg-gray-100 focus:outline-none focus:shadow-outline rounded-lg 
                     ">
-                    거절합니다.
-                  </button>
-                  <button
-                    onClick={onYes}
-                    type="button"
-                    className="w-full md:max-w-[250px] px-6 min-w-[144px] text-md py-4 font-bold text-white bg-[#4173f4] hover:bg-[#1C52DC]  focus:outline-none focus:shadow-outline rounded-lg">
-                    좋습니다!
-                  </button>
+                      나중에
+                    </button>
+                    <button
+                      onClick={onNo}
+                      type="button"
+                      className="w-full md:max-w-[250px] px-6 min-w-[144px] text-md py-4 font-bold text-gray-600 bg-white hover:bg-gray-100 focus:outline-none focus:shadow-outline rounded-lg 
+                    ">
+                      거절합니다.
+                    </button>
+                    <button
+                      onClick={onYes}
+                      type="button"
+                      className="w-full md:max-w-[250px] px-6 min-w-[144px] text-md py-4 font-bold text-white bg-[#4173f4] hover:bg-[#1C52DC]  focus:outline-none focus:shadow-outline rounded-lg">
+                      좋습니다!
+                    </button>
 
-                </div>
-              </>
+                  </div>
+                </>
           }
         </div>
       </div>

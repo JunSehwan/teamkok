@@ -22,7 +22,7 @@ const index = ({ coccocCon, coccocOn, openCoccoc, closeCoccoc }) => {
   const { updateCoccocDone } = useSelector(state => state.coccoc);
   useEffect(() => {
     if (updateCoccocDone && coccocOn) {
-      closeCoccoc();
+      // closeCoccoc();
     }
   }, [dispatch, updateCoccocDone, closeCoccoc, coccocOn])
 
@@ -226,7 +226,7 @@ const index = ({ coccocCon, coccocOn, openCoccoc, closeCoccoc }) => {
                   </div>
                   <div>
                     <div className='text-md flex flex-col gap-1 text-end'>
-                      <div className='flex flex-row gap-2'>
+                      <div className='flex flex-col gap-2 md:flex-row'>
                         <span className='text-gray-700'>{coccocCon?.mycompany}</span>
                         <span className='text-gray-700'>{coccocCon?.mysection}</span>
                       </div>

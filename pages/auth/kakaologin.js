@@ -74,7 +74,6 @@ export default function KakaoLogin() {
                 }
               ))
               if (result?.length === 0) {
-                console.log(result, "result1")
                 setDoc(doc(db, "users", userDB.uid), {
                   id: userDB?.uid,
                   username: userDB?.displayName,
@@ -90,7 +89,6 @@ export default function KakaoLogin() {
                 }));
               }
               if (result?.length !== 0) {
-                console.log(result, "result2")
                 const gettingInfo = await getUser(userDB.uid);
                 dispatch(signUp(
                   gettingInfo

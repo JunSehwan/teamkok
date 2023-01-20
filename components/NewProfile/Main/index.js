@@ -13,6 +13,8 @@ import Image from 'next/image';
 import profilePic from 'public/image/icon/happiness.png';
 import { updatePurpose } from 'firebaseConfig';
 import { updateUserPurpose, updatePurposeFalse } from 'slices/user';
+import Expert from '/public/image/icon/expertise.png';
+import { Tooltip } from 'flowbite-react';
 
 
 const ImageWrapper = styled.div`
@@ -88,7 +90,7 @@ const index = () => {
 
   return (
     <>
-      <div className='pt-[var(--navbar-height)] pb-[70px] md:pb-auto' >
+      <div className='pt-[var(--navbar-height)] pb-[70px] md:pb-auto px-2' >
         <div className='py-4'>
           <div className='mx-auto text-left'>
 
@@ -98,7 +100,7 @@ const index = () => {
                 <div className='px-2 sm:px-4'>
                   <ProgressBar />
                 </div>
-                <div id="profile" className="space-y-3 flex flex-col w-[62px] h-[118px] mx-auto">
+                <div id="profile" className="space-y-3 flex flex-col w-full items-center h-[118px] mx-auto">
                   <div className='w-[62px] h-[62px]'>
                     <ImageWrapper className='w-[62px] h-[62px]'>
                       <Image
@@ -112,23 +114,40 @@ const index = () => {
                       </Image>
                     </ImageWrapper>
                   </div>
-                  <div>
-                    <h2
-                      className="font-medium text-md md:text-lg text-center text-[#1890FF]"
-                    >
-                      {user?.username}
-                    </h2>
-                    <p className="text-sm md:text-md text-gray-500 text-center">{(() => {
-                      switch (parseInt(user?.purpose)) {
-                        case 1: return (<span className="">기업담당자</span>)
-                        case 2: return (<span className="">구직자</span>)
-                        case 3: return (<span className="">학습생</span>)
-                        case 4: return (<span className="">관찰자</span>)
-                        default: null;
-                      }
-                    })(parseInt(user?.purpose))}</p>
+                  <div className='w-full '>
+                    <div className='flex flex-row items-center justify-center'>
+                      <h2
+                        className="font-medium text-md md:text-lg text-center text-[#1890FF]"
+                      >
+                        {user?.username}
+                      </h2>
+                      {user?.companycomplete && (
+                        <Tooltip
+                          placement="bottom"
+                          className="w-max"
+                          content="전문가인증"
+                          trigger="hover"
+                        >
+                          <Image
+                            alt="expert"
+                            className="avatar w-7 h-7 rounded-md object-cover"
+                            width={24} height={24}
+                            unoptimized
+                            src={Expert} />
+                        </Tooltip>
+                      )}
+                    </div>
+                    <p className="text-sm md:text-md text-gray-500 text-center">
+                      {(() => {
+                        switch (parseInt(user?.purpose)) {
+                          case 1: return (<span className="">기업전문가</span>)
+                          case 2: return (<span className="">구직자</span>)
+                          case 3: return (<span className="">예비구직자</span>)
+                          case 4: return (<span className="">관찰자</span>)
+                          default: null;
+                        }
+                      })(parseInt(user?.purpose))}</p>
                   </div>
-
                 </div>
                 {user?.purpose !== 1 &&
                   <div className='space-y-2 mx-2'>

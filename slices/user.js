@@ -40,6 +40,7 @@ export const initialState = {
   addPointDone: false,
   updateInfoSeen: false,
   updatePurposeDone: false,
+  updateCliptypeDone: false,
   patchMycompanyInfoDone: false,
   patchMycompanyAdditionalInfoDone: false,
   patchCategoryDone: false,
@@ -156,6 +157,13 @@ export const user = createSlice({
     updateUserStyle(state, action) {
       state.user.style = action.payload;
       state.updateStyleDone = true;
+    },
+    updateUserCliptype(state, action) {
+      state.user.cliptype = action.payload;
+      state.updateCliptypeDone = true;
+    },
+    updateCliptypeFalse(state, action) {
+      state.updateCliptypeDone = false;
     },
     updateUserPurpose(state, action) {
       state.user.purpose = action.payload;
@@ -323,15 +331,15 @@ export const user = createSlice({
     likeToUser(state, action) {
       const target = state.users?.find((v) => v?.userID === action.payload.targetId);
       target?.liked?.unshift({ userId: action.payload.userId, username: action.payload.username, userAvatar: action.payload.userAvatar });
-      const me = state.users?.find((v) => v?.userID === action.payload.userId);
-      me?.likes?.unshift({ userId: action.payload.targetId, username: action.payload.targetName, userAvatar: action.payload.targetAvatar });
+      // const me = state.users?.find((v) => v?.userID === action.payload.userId);
+      // me?.likes?.unshift({ userId: action.payload.targetId, username: action.payload.targetName, userAvatar: action.payload.targetAvatar });
       state.addLikeDone = true;
     },
     unlikeToUser(state, action) {
       const target = state.users.find((v) => v?.userID === action.payload.targetId);
-      target.liked = target.liked.filter((v) => v?.userId !== action.payload.userId);
-      const me = state.users.find((v) => v?.userID === action.payload.userId);
-      me.likes = me.likes.filter((v) => v?.userId !== action.payload.targetId);
+      target.liked = target?.liked?.filter((v) => v?.userId !== action.payload.userId);
+      // const me = state.users.find((v) => v?.userID === action.payload.userId);
+      // me.likes = me?.likes?.filter((v) => v?.userId !== action.payload.targetId);
       state.addUnlikeDone = true;
     },
     addLikeDoneFalse(state) {
@@ -668,6 +676,8 @@ export const {
   addUnlikeDoneFalse,
   setScrollPositionDone,
   changeCategoryFilter,
+  updateUserCliptype,
+  updateCliptypeFalse,
 } = user.actions;
 
 export const useUserState = () => useAppSelector((state) => state.user);

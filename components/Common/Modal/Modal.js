@@ -6,14 +6,14 @@ import { useRouter } from 'next/router';
 // components
 const modalSettings = (visible) => css`
   visibility: ${visible ? 'visible' : 'hidden'};
-  z-index: 15;
+  z-index: 150;
   animation: ${visible ? fadeIn : fadeOut} 0.35s ease-out;
   transition: visibility 0.15s ease-out;
 `;
 
 const modalSlideSettings = (visible) => css`
   visibility: ${visible ? 'visible' : 'hidden'};
-  z-index: 15;
+  z-index: 150;
   animation: ${visible ? fadeIn : fadeOut} 450ms cubic-bezier(0.4, 0.0, 0.2, 1) 0ms;
   animation: ${visible ? slideIn : slideOut} 450ms cubic-bezier(0.4, 0.0, 0.2, 1) 0ms;
   transition: visibility 450ms cubic-bezier(0.4, 0.0, 0.2, 1) 0ms;
@@ -33,7 +33,8 @@ const Background = styled.div`
 const ModalSection = styled.div`
   position: fixed;
   margin: 0 auto;
-  margin-top:12px;
+  margin-top: 12px;
+  z-index: 999;
   
   /* background-color: rgba(255, 255, 255, 1); */
   background: rgb(255,255,255);
@@ -131,7 +132,7 @@ const Modal = ({ onClose, title, children, visible, widths }) => {
 
   if (!isOpen) { return null; }
 
- 
+
 
   // // 리로드할 시점(form 수정중이라던라 등등... 없어도 무관)
 
@@ -190,33 +191,33 @@ const Modal = ({ onClose, title, children, visible, widths }) => {
             visible={visible} onClick={onClose}
             aria-labelledby="modal-title" role="dialog" aria-modal="true" />
 
-          <ModalSection className="relative md:p-6 mt-8 inset-0 overflow-y-hidden rounded-lg w-full h-full"
+          <ModalSection className="fixed md:p-6 mt-8 inset-0 overflow-y-hidden rounded-lg w-full h-full"
             visible={visible}
             widths={widths}>
-
-            <Title className='w-full'>
-              <div className="flex items-start justify-between p-5 rounded-t">
-                <div className="relative rounded border w-full">
-                  <h2 className="text-blue-800 text-2xl py-2 font-bold tracking-normal leading-tight w-full text-center">{title}</h2>
+            <div className='relative w-full h-full'>
+              <Title className='w-full'>
+                <div className="flex items-start justify-between p-2 rounded-t">
+                  <div className="relative rounded border w-full">
+                    <h2 className="text-blue-800 text-2xl py-2 font-bold tracking-normal leading-tight w-full text-center">{title}</h2>
+                  </div>
+                  <button
+                    className="p-3 rounded-xl hover:bg-slate-200 ml-auto bg-transparent border-0 text-gray-500 hover:text-gray-700 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                    onClick={onClose}
+                  >
+                    <span className="bg-transparent opacity-100 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </span>
+                  </button>
                 </div>
-                <button
-                  className="p-3 rounded-xl hover:bg-slate-200 ml-auto bg-transparent border-0 text-gray-500 hover:text-gray-700 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                  onClick={onClose}
-                >
-                  <span className="bg-transparent opacity-100 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </span>
-                </button>
-              </div>
-            </Title>
+              </Title>
 
-            <Content className='relative min-h-0 overflow-y-auto pb-[80px] pr-0'>
-              {children}
-            </Content>
+              <Content className='relative min-h-0 overflow-y-auto pb-[80px] pr-0'>
+                {children}
+              </Content>
 
-            {/* <Footer className='px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse'>
+              {/* <Footer className='px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse'>
               <>
                 {onCancel ? <button
                   type="button"
@@ -229,6 +230,7 @@ const Modal = ({ onClose, title, children, visible, widths }) => {
                   확인</button> : null}
               </>
             </Footer> */}
+            </div>
           </ModalSection>
         </>
       </>

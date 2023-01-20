@@ -7,7 +7,6 @@ import { MdDelete } from "react-icons/md";
 import Spin from 'components/Common/Spin';
 import { doc, updateDoc, } from "firebase/firestore";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
-import toast, { Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
 import useSelectFile from "hooks/useSelectFile";
 import { db, storage, } from 'firebaseConfig';
@@ -25,25 +24,18 @@ const index = ({ videoModalOpened, closeVideoModal }) => {
   const { selectedFile, setSelectedFile, onSelectedFile } = useSelectFile();
   const selectedFileRef = useRef(null);
 
-  const { patchThumbvideoDone } = useSelector(state => state.user);
 
-  useEffect(() => {
-    if (patchThumbvideoDone) {
-      updatenotify();
-    }
-  })
-  const updatenotify = () => toast('업데이트 완료!');
 
   const handlePost = async (e) => {
     if (selectedFile) {
       setLoading(true);
       try {
         if (selectedFile) {
-          const imageRef = ref(storage, `users/${user?.userID}/thumbvideo`);
+          const videoRef = ref(storage, `users/${user?.userID}/thumbvideo`);
 
-          const resultUrl = await uploadString(imageRef, selectedFile, "data_url").then(
+          const resultUrl = await uploadString(videoRef, selectedFile, "data_url").then(
             async (snapshot) => {
-              const downloadUrl = await getDownloadURL(imageRef);
+              const downloadUrl = await getDownloadURL(videoRef);
               await updateDoc(doc(db, "users", user?.userID), {
                 thumbvideo: downloadUrl,
               });
@@ -78,7 +70,7 @@ const index = ({ videoModalOpened, closeVideoModal }) => {
           className="rounded-lg xl:h-[80vh] flex w-full flex-col justify-center items-center gap-4 p-6 pt-3"
         >
           <div>
-            <div className="border-dashed rounded-xl border-4 border-gray-200 flex flex-col justify-center items-center  outline-none w-[360px] h-[600px] pl-10 pr-10 cursor-pointer hover:border-red-300 hover:bg-gray-100">
+            <div className="border-dashed rounded-xl border-4 border-gray-200 flex flex-col justify-center items-center outline-none w-full md:w-[360px] h-[600px] pl-10 pr-10 cursor-pointer hover:border-red-300 hover:bg-gray-100">
               {loading ? (
                 <>
                   <div className='-ml-[48px] mb-[48px]'>
@@ -130,15 +122,16 @@ const index = ({ videoModalOpened, closeVideoModal }) => {
                       <input
                         type="file"
                         name="upload-video"
+                        accept="video/mp4,video/mkv, video/x-m4v,video/*"
                         ref={selectedFileRef}
                         className="w-0 h-0"
                         onChange={onSelectedFile}
                       />
                     </label>
                   ) : (
-                    <div className=" rounded-3xl w-[360px]  p-4 flex flex-col gap-6 justify-center items-center">
+                    <div className=" rounded-3xl w-full md:w-[360px]  p-4 flex flex-col gap-6 justify-center items-center">
                       <video
-                        className="rounded-xl h-[600px] w-[360px] mt-16 bg-black"
+                        className="rounded-xl h-[600px] w-full md:w-[360px] mt-16 bg-black"
                         controls
                         loop
                         src={selectedFile}
@@ -159,7 +152,7 @@ const index = ({ videoModalOpened, closeVideoModal }) => {
               )}
             </div>
             {wrongFileType && (
-              <p className="text-center text-xl text-red-400 font-semibold mt-4 w-[360px]">
+              <p className="text-center text-xl text-red-400 font-semibold mt-4 w-full md:w-[360px]">
                 video 유형의 파일을 선택해주세요. (mp4 or webm or ogg)
               </p>
             )}

@@ -7,7 +7,8 @@
     "build": "NODE_ENV=production ANALYZE=true next build && next export",
     "export": "next export",
     "start": "NODE_ENV=production next start -p 3060",
-    "lint": "next lint"
+    "lint": "next lint",
+    "serve": "firebase serve -p 3060"
   },
   "author": "JunSehwan",
   "license": "ISC",

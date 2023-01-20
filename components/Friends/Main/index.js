@@ -12,15 +12,15 @@ import BtnToTop from 'components/Common/BtnToTop';
 import GoNext from './GoNext';
 import TopNavBar from './TopNavBar';
 import { getCategoryUsers, getFriends } from 'firebaseConfig';
+import ScrollPosition from './ScrollPosition';
 
 const index = () => {
 
-  const { users, scrolling } = useSelector((state) => state.user);
+  const { users, scrolling, scrollPosition } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const { addAdviceDone, addLikeDone, addUnlikeDone, categoryFilter } = useSelector(state => state.user);
   const { addJobofferDone } = useSelector(state => state.joboffer);
   const { addCoccocDone } = useSelector(state => state.coccoc);
-  const { scrollPosition } = useSelector(state => state.user);
 
   const likeNotify = () => toast('좋아요!');
   const unlikeNotify = () => toast('좋아요 취소');
@@ -28,19 +28,19 @@ const index = () => {
   const coccocNotify = () => toast('콕!하기 성공!😍');
   const jobofferNotify = () => toast('입사제안하기 성공!😍');
 
-  useEffect(() => {
-    async function fetchAndSetUser() {
-      if (categoryFilter) {
-        const result = await getCategoryUsers(categoryFilter);
-        dispatch(setUsers(result));
-      }
-      if (!categoryFilter) {
-        const result = await getFriends();
-        dispatch(setUsers(result));
-      }
-    }
-    fetchAndSetUser();
-  }, [categoryFilter, dispatch]);
+  // useEffect(() => {
+  //   async function fetchAndSetUser() {
+  //     if (categoryFilter) {
+  //       const result = await getCategoryUsers(categoryFilter);
+  //       dispatch(setUsers(result));
+  //     }
+  //     if (categoryFilter === null) {
+  //       const result = await getFriends();
+  //       dispatch(setUsers(result));
+  //     }
+  //   }
+  //   fetchAndSetUser();
+  // }, [categoryFilter, dispatch]);
 
 
   useEffect(() => {
@@ -85,21 +85,10 @@ const index = () => {
   )
 
 
-  useEffect(() => {
-    if (users && scrollPosition && scrolling) {
-      setTimeout(() => {
-        window.scrollTo({
-          top: scrollPosition, left: 0, behavior: 'smooth'
-        })
-      }, [500])
-      // dispatch(setScrollPosition(null))
-    }
-  }, [users, scrollPosition, dispatch, scrolling])
-
 
 
   return (
-    <>
+    <><ScrollPosition />
       <TopNavBar />
       {/* {!loading ? ( */}
       {users?.length !== 0 &&

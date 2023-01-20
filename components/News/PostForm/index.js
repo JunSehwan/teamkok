@@ -137,7 +137,6 @@ const index = ({ onCloseForm, openForm }) => {
     setImaging(false);
   }, [images, onFirebaseImage])
 
-console.log(category)
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
     if (URLs?.length === 0 && description?.length === 0) {
@@ -161,6 +160,7 @@ console.log(category)
       mysection: user?.mysection,
       description: description,
       category: category,
+      companycomplete: user?.companycomplete
       // description: JSONresult,
     };
 
@@ -168,7 +168,7 @@ console.log(category)
     // const imageCon = await uploadPicture(images, con?.id);
     dispatch(addPost(con));
 
-  }, [URLs, description, category, user?.userID, user?.mycompany, user?.mysection, dispatch])
+  }, [URLs, description, category, user?.userID, user?.mycompany, user?.mysection, user?.companycomplete, dispatch])
 
   useEffect(() => {
     if (addDone) {
@@ -183,7 +183,16 @@ console.log(category)
       viewport={{ once: true }}
       className="overflow-y-auto min-w-screen h-screen animated fadeIn faster fixed left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover t-0 r-0">
       <div className="fixed bg-black opacity-80 inset-0 z-0"></div>
-      <div className="w-full max-w-2xl md:p-3 relative mx-auto my-auto rounded-xl shadow-lg bg-white">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{
+          duration: 0.5,
+          delay: 0.5,
+          ease: [0, 0.71, 0.2, 1.01]
+        }}
+        exit={{ opacity: 0 }}
+        className="w-full max-w-2xl md:p-3 relative mx-auto my-auto rounded-xl shadow-lg bg-white">
         {imaging ?
           <div className="w-full max-w-2xl md:p-3 relative mx-auto my-auto rounded-xl">
             {/* <!--content--> */}
@@ -357,7 +366,7 @@ console.log(category)
 
               </div>
               {/* 이미지 업로드버튼 */}
-              <div className="flex items-center text-blue-600 justify-between py-4 px-4 border-t">
+              <div className="flex items-center text-blue-600 justify-between py-2 px-2 border-t">
                 <div className="flex items-center">
                   <div className="flex text-2xl">
                     <label className="flex items-center justify-center p-3 hover:bg-blue-100 rounded-full cursor-pointer" htmlFor="upload">
@@ -413,7 +422,7 @@ console.log(category)
             </form>
           </>
         }
-      </div>
+      </motion.div>
     </motion.div>
   );
 };
